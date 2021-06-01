@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: VisitPlainsHouse
+  m_EditorClassIdentifier: 
+  questName: Supplies delivery
+  questDescription: One more thing to ask of you. The house to the South-West requested
+    we deliver some food to them a while back, but none of these folks seem willing
+    to do it. Do you mind taking some over for me? You can buy it from the shop,
+    here's some gold.
+  questCompleteDialogue: 'Oh, did the guard ask you to deliver these? Thank you my
+    dear, no one else in that damned village seems to be up to walking 3 meters down
+    the road.
+
+    *She rolls her eyes*'
+  nextQuests: []
+  rewards:
+  - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
+    Quantity: 1
+  objectives:
+  - {fileID: 11400000, guid: 096936a195bdf2c4fba769094e2b2e8f, type: 2}
+  handInNPCName: PlainsWoman
+  handOutNPCName: VillageGuard
+  questLineName: 
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1

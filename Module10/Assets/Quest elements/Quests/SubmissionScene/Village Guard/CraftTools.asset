@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: CraftTools
+  m_EditorClassIdentifier: 
+  questName: Craft tools
+  questDescription: Got those tools yet? If you do make 'em, some show me and I'll
+    lend you my lantern. Ain't got no use for it now.
+  questCompleteDialogue: 'Good going, soldier! As promised, here''s my lantern.
+
+
+    Take
+    good care of it for me.'
+  nextQuests:
+  - {fileID: 11400000, guid: 272a83299c881e9419fda1bcfe77ce45, type: 2}
+  rewards:
+  - Item: {fileID: 11400000, guid: 7c386b3b8cdb925468f0e7be7a5e082a, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: 5a86715d1aa7a024d914679571e7564b, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: f9b8adbe7bc1087428585c5e61dea451, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: 4fac35ef5ec53a0428ddcec516a37518, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
+    Quantity: 4
+  objectives:
+  - {fileID: 11400000, guid: baa7f43eedc8cae48a3f774bc8dc8509, type: 2}
+  - {fileID: 11400000, guid: 9b2a0a59f3f570c41ba3fc6890fdd7a8, type: 2}
+  - {fileID: 11400000, guid: 8fe3c925a8fd5254b9c10c26fe17fcea, type: 2}
+  handInNPCName: VillageGuard
+  handOutNPCName: VillageGuard
+  questLineName: 
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1

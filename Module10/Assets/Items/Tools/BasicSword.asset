@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
+  m_Name: BasicSword
+  m_EditorClassIdentifier: 
+  m_id: basicSword
+  m_uiName: Basic Sword
+  m_uiDescription: 
+  m_stackSize: 1
+  m_weight: 0.5
+  m_sprite: {fileID: 21300000, guid: 2fc7c1a934b69e84ab5fa76bf05508fc, type: 3}
+  m_heldItemGameObject: {fileID: 4898281670870417890, guid: e3bfd926b17b5ab40aca30e762776450, type: 3}
+  m_customisable: 0
+  m_currencyItemId: 
+  m_currencyItemQuantity: 0
+  m_customFloatProperties: []
+  m_customStringProperties: []

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
+  m_Name: WoodHalfWall
+  m_EditorClassIdentifier: 
+  m_id: woodHalfWall
+  m_uiName: Wood Half Wall
+  m_uiDescription: 
+  m_stackSize: 64
+  m_weight: 0.6
+  m_sprite: {fileID: 21300000, guid: 796800a10dd0dfe46b1de989ee4d213c, type: 3}
+  m_heldItemGameObject: {fileID: 495591538548869442, guid: 4296200dda95d0e439ddad5a9b97e6b0, type: 3}
+  m_customisable: 0
+  m_currencyItemId: 
+  m_currencyItemQuantity: 0
+  m_customFloatProperties: []
+  m_customStringProperties: []

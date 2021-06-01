@@ -1,0 +1,10 @@
+Scriptable Objects save themselves in a weird way, so every time you press Play they'll update and save - basically you (currently) have to reset everything between tests
+
+A quest line consists of a list of quests that are completed in order. The next cannot be "accepted" until the current one is completed & handed in
+
+Each quest has a list of objectives (e.g. go to the blue and purple nodes before returning)
+
+The quest giver can have a mix of quest lines and stand-alone objectives - all stand-alones ("quests to give") can be accepted at any time
+
+TEST
+

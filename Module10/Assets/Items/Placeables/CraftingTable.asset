@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
+  m_Name: CraftingTable
+  m_EditorClassIdentifier: 
+  m_id: craftingTable
+  m_uiName: Crafting Table
+  m_uiDescription: Used to craft items
+  m_stackSize: 1
+  m_weight: 1
+  m_sprite: {fileID: 21300000, guid: a3b220215aef46d4ca5f88807aeaa7a6, type: 3}
+  m_heldItemGameObject: {fileID: 9183455674282970198, guid: d40386fa6fcb0344496dd1ff35fa9a25, type: 3}
+  m_customisable: 0
+  m_currencyItemId: 
+  m_currencyItemQuantity: 0
+  m_customFloatProperties: []
+  m_customStringProperties: []

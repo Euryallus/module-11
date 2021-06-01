@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: GetDocuments
+  m_EditorClassIdentifier: 
+  questName: Forgery, right off the bat
+  questDescription: You DO have your documents, don't you? Who am I kidding, if you
+    don't I'll turn a blind eye to you using someone elses. They don't pay me enough
+    for me to care.
+  questCompleteDialogue: 'Nice, pleased to meet you... Mr. Du Bois. You''re looking
+    spritely for your age!
+
+    *He winks at you*
+
+    Go right in, here''s the key.
+    Come talk to me when you''ve finished taking a look.'
+  nextQuests:
+  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
+  rewards:
+  - Item: {fileID: 11400000, guid: e074e694386e5fe4eb5c65092c640cd3, type: 2}
+    Quantity: 1
+  objectives:
+  - {fileID: 11400000, guid: 253f1d3ff6def0b428fd0416f7c073c4, type: 2}
+  handInNPCName: VillageGuard
+  handOutNPCName: VillageGuard
+  questLineName: 
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1

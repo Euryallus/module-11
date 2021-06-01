@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: GoToSmallVillage
+  m_EditorClassIdentifier: 
+  questName: Find the leader of the small village
+  questDescription: 'You see that small village really far away? I''ve got a friend
+    down there who I''d like you to meet, he''s the leader of that village. You won''t
+    miss him, he''s quite blue. A while ago he said he needed some help with something,
+    I''d like you to go down there if possible.
+
+    He normally sits in a locked
+    house by himself, you''re going to need a key to get in, take my spare.'
+  questCompleteDialogue: Wow, you did it! Thank you
+  nextQuests: []
+  handInNPCName: MountainMan
+  handOutNPCName: MountainMan
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  questLineName: 
+  rewards: []
+  objectives:
+  - {fileID: 11400000, guid: 3b54e2d8ce2ad1b4e8f9f55348fb91da, type: 2}

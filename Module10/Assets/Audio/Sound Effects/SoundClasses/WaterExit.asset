@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
+  m_Name: WaterExit
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: aee8348aa24e112439af67dc49dca795, type: 3}
+  - {fileID: 8300000, guid: f9d00b4d81be1d04cb2e2298a9d1f6dc, type: 3}
+  m_id: waterExit
+  m_volumeRange:
+    Min: 0.4
+    Max: 0.6
+  m_pitchRange:
+    Min: 0.98
+    Max: 1.15

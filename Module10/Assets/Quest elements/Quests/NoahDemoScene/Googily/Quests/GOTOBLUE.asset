@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: GOTOBLUE
+  m_EditorClassIdentifier: 
+  questName: Go to the BLUE node
+  questDescription: Please go to the blue node for me
+  questCompleteDialogue: Thanks!
+  nextQuests:
+  - {fileID: 11400000, guid: 8b27de8a97601884bb1113627e1cf88a, type: 2}
+  - {fileID: 11400000, guid: ab1b7d7adba7280408699c3c026e62e8, type: 2}
+  handInNPCName: Googily
+  handOutNPCName: Googily
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  questLineName: 
+  rewards:
+  - Item: {fileID: 11400000, guid: fa47ba5214aa1e34fab5746060e118c5, type: 2}
+    Quantity: 3
+  objectives:
+  - {fileID: 11400000, guid: 4eccc8731ce241845a5c908fcb35ab2f, type: 2}

@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: menuSkybox
+  m_Shader: {fileID: -6465566751694194690, guid: 01c11a194aaffe843a46f0ccb4f5d957, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _SampleTexture2D_08bc249f958f4831afbccb823be51026_Texture_1:
+        m_Texture: {fileID: 2800000, guid: eb3afd1f52cfc15499b8be1fc07ee330, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_c66d88a095ca4f1db10228a97983c88b_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 2d62da7fa3e705f44a47f167e9c77909, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_e6817264a10f468b86558dc08d744277_Texture_1:
+        m_Texture: {fileID: 2800000, guid: cadac0b178b3bf849aba8a1cd635d76b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f5a6feb934514df1b05aa24a98034e11_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 6baccadfedf86c24aae5072926159456, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_04cdd461fa264a5087215c639b42b3bc: 10
+    - Vector1_11641d4348584a4386bf478a59a7e98c: 0.98
+    - Vector1_175a54a40501484a8a5d3e134d507ced: 0
+    - Vector1_4ac907d4a28249d594c537c09b14f84d: 1
+    - Vector1_4b15ea321a3a4e4abf5988e1b4c80d11: 1
+    - Vector1_4cb94bb6e2f34afbae3432e3987aa196: 70
+    - Vector1_6558ee236d4f47bd93fbf4b9825b5098: 1
+    - Vector1_695924b639ca41c39446273bfb721f1b: 0.3
+    - Vector1_752c4a8e4d754bfb88d9964425600bba: 0.05
+    - Vector1_834c1ffc420b4b199d8d342c25ca7e54: 0.02
+    - Vector1_83ef928f9e7d4b1cba747f32d3257d3d: 0
+    - Vector1_b6b10b474b61427e9ac7eb1c63d9a3a5: 0.1
+    - Vector1_c097f57af82a49e3b857008e346034e8: 1
+    - Vector1_c4e7ea415a604beeba6288e4ed06a275: 1
+    - Vector1_c9cab302de0646af8130a0739fd549e3: 0
+    - Vector1_cd33fcd99a2449128bfed658c8515f4a: 0.73
+    - Vector1_d56be57f24c54339b528e3b2f7126cc8: 1
+    - Vector1_e084a9c704c445509cd77f82aafe4474: 0.4
+    - Vector1_e4a30a21b5964607aaa0b0f919fccc67: 1
+    - Vector1_ec62f272cc94400fb24ad4ec6fc87914: 50
+    - Vector1_eeecf3d04cb84d2b96ff5292b6ab5e38: 1
+    - Vector1_efc6a682ce554170bb28f19f458932f0: 50
+    m_Colors:
+    - Color_1d916e9d66894d67b8b51deb5995c1bc: {r: 0.8443396, g: 1, b: 0.9911097, a: 1}
+    - Color_2dcf774329894640ac6eb2f030507fe2: {r: 2.9960785, g: 0.4392157, b: 0, a: 1}
+    - Color_348f6738551e4e4abeffa713184effea: {r: 0.43867922, g: 0.7251957, b: 1, a: 1}
+    - Color_3ba68f1723fb4bf58d611499100f00d9: {r: 0.22932266, g: 0.16470589, b: 0.8980392, a: 1}
+    - Color_6b88381f4da247038a59edf309ff1bf5: {r: 0.0069419676, g: 0.02622617, b: 0.03773582, a: 1}
+    - Color_6c04b932a1c44d2d91f1896036f61757: {r: 0, g: 0.7811766, b: 2.297397, a: 1}
+    - Color_81261544a4014807b5ddf8953030feb7: {r: 0, g: 0, b: 0, a: 1}
+    - Color_d8aa0fabed6f4e5dacd4fe12c129c4b4: {r: 0.20274118, g: 0.38397014, b: 0.6415094, a: 1}
+    - Color_d93037eefbb94f7e8795148662b4c99c: {r: 0.6148985, g: 0.7430349, b: 0.8867924, a: 1}
+    - Color_e343113068014aaeb6caa18c49b79111: {r: 0.23064256, g: 0.42251232, b: 0.6698113, a: 1}
+    - Color_e41763509ce64cd095ccfdf439c40240: {r: 0.04392132, g: 0.11629714, b: 0.1981132, a: 1}
+    - Color_e9ff46fc1e4843a7b1c35f38db6a4865: {r: 0, g: 0, b: 0, a: 1}
+    - Vector2_03a7cca7eb3d4cdd8e28661faecddfa7: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_66fc66a4e8334eae9e607439710df2f5: {r: 0, g: 0, b: 0, a: 0}
+    - _CloudOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _StarsOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _SunDirection: {r: 0.5, g: -0.5, b: -0.5, a: 0}
+  m_BuildTextureStacks: []

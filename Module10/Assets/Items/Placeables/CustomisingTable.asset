@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
+  m_Name: CustomisingTable
+  m_EditorClassIdentifier: 
+  m_id: customisingTable
+  m_uiName: Customising Table
+  m_uiDescription: Used to customise items
+  m_stackSize: 1
+  m_weight: 1
+  m_sprite: {fileID: 21300000, guid: 36a84acf3135fa54ea7c3d2380c3668f, type: 3}
+  m_heldItemGameObject: {fileID: 2132717157424752051, guid: 3db00028d406eea4694944fc563e619e, type: 3}
+  m_customisable: 0
+  m_currencyItemId: 
+  m_currencyItemQuantity: 0
+  m_customFloatProperties: []
+  m_customStringProperties: []

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: CreateToolsBully
+  m_EditorClassIdentifier: 
+  questName: Make me tools!
+  questDescription: 'Make me a pickaxe, axe and hammer! '
+  questCompleteDialogue: 'Here''s your dumb ring back, now get out lost '
+  nextQuests: []
+  handInNPCName: BigBully
+  handOutNPCName: BigBully
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  questLineName: 
+  rewards:
+  - Item: {fileID: 11400000, guid: 7818febcdbd492a4b85d324aad50d283, type: 2}
+    Quantity: 1
+  objectives:
+  - {fileID: 11400000, guid: 816d7aa2ed75f2c4bbe64a5a9bc631b2, type: 2}
+  - {fileID: 11400000, guid: 271e61fb6b6f7484ca493ce057b90315, type: 2}
+  - {fileID: 11400000, guid: 822dc5f9e9f04b048adefc3a5d2eed6a, type: 2}

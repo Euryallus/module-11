@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
+  m_Name: Coins
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: f7cb383c3ee4be146b962fda84840ead, type: 3}
+  - {fileID: 8300000, guid: 0a5bd687f5731fd4f90246dea90981e0, type: 3}
+  - {fileID: 8300000, guid: 93d01f0db02f8d04c9a31841e11a014b, type: 3}
+  m_id: coins
+  m_volumeRange:
+    Min: 1
+    Max: 1
+  m_pitchRange:
+    Min: 1
+    Max: 1.05

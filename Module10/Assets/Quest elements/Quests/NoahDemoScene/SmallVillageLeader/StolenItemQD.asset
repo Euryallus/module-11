@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a89370bf0629614478e9fe967124bf9e, type: 3}
+  m_Name: StolenItemQD
+  m_EditorClassIdentifier: 
+  taskName: Retrive the Stolen Item!
+  taskComplete: 0
+  objectiveType: 0
+  toCollect:
+    Item: {fileID: 11400000, guid: a9d48937fe42a2345a071f15fbdf497b, type: 2}
+    Quantity: 1

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
+  m_Name: Footstep
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: 1a47c9dfd66b0944bab860ff9e7ab85a, type: 3}
+  - {fileID: 8300000, guid: 746f65302a09fcd46ae57c6626ac8155, type: 3}
+  - {fileID: 8300000, guid: 37e847b4108919441a3643962ae4a2e0, type: 3}
+  - {fileID: 8300000, guid: 2e8589b8931c484499cfa6e94afd4988, type: 3}
+  - {fileID: 8300000, guid: 96d3acfd29d149a44866c5a4fbb93f94, type: 3}
+  m_id: footstep
+  m_volumeRange:
+    Min: 0.35
+    Max: 0.4
+  m_pitchRange:
+    Min: 0.95
+    Max: 1.07

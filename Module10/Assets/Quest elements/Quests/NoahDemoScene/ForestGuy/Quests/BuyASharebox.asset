@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: BuyASharebox
+  m_EditorClassIdentifier: 
+  questName: Retrieving supplies
+  questDescription: Ah yes, thank you for your help! I have one more thing to ask
+    of you - could you get an old man some nuggets? The shop over there sells them!
+  questCompleteDialogue: Oh sweet lord, thank you!
+  nextQuests: []
+  handInNPCName: ForestMan
+  handOutNPCName: ForestMan
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  questLineName: helpForestDude
+  rewards:
+  - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
+    Quantity: 2
+  objectives:
+  - {fileID: 11400000, guid: c40fde79a2aaa354e9f4727ee467cced, type: 2}
+  - {fileID: 11400000, guid: 24103b24aa542584081d050c7114b96b, type: 2}

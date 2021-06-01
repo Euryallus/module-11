@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2246740e49653c448acfd3bff328a85, type: 3}
+  m_Name: StolenItemLT
+  m_EditorClassIdentifier: 
+  m_minItems: 1
+  m_maxItems: 1
+  m_itemPool:
+  - Item: {fileID: 11400000, guid: a9d48937fe42a2345a071f15fbdf497b, type: 2}
+    Weight: 0
+    MinimumQuantity: 0

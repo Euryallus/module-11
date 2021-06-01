@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: GetValuableItemNPC1
+  m_EditorClassIdentifier: 
+  questName: 'Get back the ring! '
+  questDescription: It would mean the world to me if you could look for it, if you're
+    ever out in the plains. I'll pay you for your time.
+  questCompleteDialogue: I never thought I'd see this again! Thank you so much. Please,
+    take some food and money in return
+  nextQuests:
+  - {fileID: 11400000, guid: d142f890a186f09488decf9e7c2ee494, type: 2}
+  rewards:
+  - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
+    Quantity: 3
+  - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
+    Quantity: 5
+  objectives:
+  - {fileID: 11400000, guid: fc5f11081253e814e8fe7a7287994a40, type: 2}
+  handInNPCName: villageNPC1
+  handOutNPCName: villageNPC1
+  questLineName: 
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1

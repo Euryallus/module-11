@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: Retrive the stole item
+  m_EditorClassIdentifier: 
+  questName: Retrive the stolen item!
+  questDescription: 'In that cave to the left of this village is a stolen item of
+    mine. I''d like you to get it back for me. Do it, and I''ll give you something
+    in return... '
+  questCompleteDialogue: I could not have done it without you. Thank you. Please,
+    take this as a token of my gratitude.
+  nextQuests: []
+  handInNPCName: SmallVillageLeader
+  handOutNPCName: SmallVillageLeader
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  questLineName: 
+  rewards:
+  - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
+    Quantity: 10
+  - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
+    Quantity: 10
+  objectives:
+  - {fileID: 11400000, guid: aef09e401c55b0c4a83488d4072a712d, type: 2}
