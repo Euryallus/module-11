@@ -11,13 +11,15 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Changed for Mod11
+// - Removed itemcontainer, slots are now merged with inventory container
+
 public class HotbarPanel : UIPanel, IPersistentObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
     [SerializeField] private List<ContainerSlotUI>  slotsUI;            // Slots that make up the hotbar
-    [SerializeField] private ItemContainer          itemContainer;      // ItemContainer that handles adding/removing/storing items in the hotbar
     [SerializeField] private GameObject             itemEatPanel;       // Panel that appears next to the hotbar when the player eats while their inventory is open
     [SerializeField] private CanvasGroup            parentCanvasGroup;  // Parent canvas group containing the hotbar and stat panels
 
@@ -25,20 +27,22 @@ public class HotbarPanel : UIPanel, IPersistentObject
 
     #region Properties
 
-    public ItemContainer ItemContainer { get { return itemContainer; } }
+    public List<ContainerSlotUI>    SlotsUI { get { return slotsUI; } }
 
     #endregion
 
     public event Action<Item, ContainerSlotUI> HeldItemChangedEvent;    // Event that is invoked when the held item is changed
 
-    private int         selectedSlotIndex;      // Index of the selected hotbar slot
-    private HandSlotUI  handSlot;               // Player's hand slot for picking up/moving items
+    private int             selectedSlotIndex;      // Index of the selected hotbar slot
+    private HandSlotUI      handSlot;               // Player's hand slot for picking up/moving items
+    private ItemContainer   inventoryItemContainer;
 
     protected override void Awake()
     {
         base.Awake();
 
-        handSlot = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+        handSlot                = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+        inventoryItemContainer  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().ItemContainer;
     }
 
     protected override void Start()
@@ -50,10 +54,10 @@ public class HotbarPanel : UIPanel, IPersistentObject
 
         itemEatPanel.SetActive(false);
 
-        itemContainer.LinkSlotsToUI(slotsUI);
+        // Update slot selection when an item is added/removed from the container in case a different item is being held
+        inventoryItemContainer.ContainerStateChangedEvent += UpdateCurrentSlotSelection;
 
-        itemContainer.ContainerStateChangedEvent += UpdateCurrentSlotSelection;
-
+        // Select the first slot by default
         SelectSlot(0);
 
         // Show the UI panel without adding to the counter that prevents certain player input when
@@ -123,24 +127,6 @@ public class HotbarPanel : UIPanel, IPersistentObject
         // Hide the parent canvas group containing this hotbar and stat panels, and allow UI behind it to be interacted with
         parentCanvasGroup.alpha = 0.0f;
         parentCanvasGroup.blocksRaycasts = false;
-    }
-
-    public bool ContainsQuantityOfItem(ItemGroup items)
-    {
-        // Returns true if the item container contains the given items
-        return itemContainer.ContainsQuantityOfItem(items, out _);
-    }
-
-    public bool RemoveItemFromHotbar(string itemId)
-    {
-        // Attempts to remove the item with the given id from the item container
-        return itemContainer.TryRemoveItemFromContainer(itemId);
-    }
-
-    public bool RemoveItemFromHotbar(Item item)
-    {
-        // Overload for the above function, allowing an item to be passed instead of a string id
-        return RemoveItemFromHotbar(item.Id);
     }
 
     private void CheckForPlayerInput()
@@ -217,7 +203,7 @@ public class HotbarPanel : UIPanel, IPersistentObject
     {
         // Returns the item in the selected slot, or null if there is none
 
-        ContainerSlot selectedSlot = itemContainer.Slots[selectedSlotIndex];
+        ContainerSlot selectedSlot = inventoryItemContainer.Slots[selectedSlotIndex];
 
         if (selectedSlot.ItemStack.StackSize > 0)
         {

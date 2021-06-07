@@ -54,10 +54,11 @@ public class Bow : Weapon
     public override void EndSecondaryAbility()
     {
         base.EndSecondaryAbility();
+
         InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
 
         //Checks inventory for required arrows - if found, remove arrows from inventory & fire arrow
-        if (inventory.ContainsQuantityOfItem(arrowRequired))
+        if (inventory.ContainsQuantityOfItem(arrowRequired, out _))
         {
             GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
             // Velocity of arrow is proportional to time being drawn back (clamped to arrowReleaseVelocity)
@@ -69,15 +70,19 @@ public class Bow : Weapon
             isHeld = false;
             cooldown = 0f;
 
-            inventory.RemoveItemFromInventory(arrowRequired.Item);
+            for (int i = 0; i < arrowRequired.Quantity; i++)
+            {
+                inventory.TryRemoveItem(arrowRequired.Item);
+            }
         }
         else
         {
             transform.localScale = new Vector3(1, 1, 1);
             // No arrows are available
-            Debug.LogWarning("No arrow in inventory!");
+            Debug.LogWarning("No arrow in inventory or hotbar!");
 
         }
+
         // Resets bow scale
         transform.localScale = new Vector3(1, 1, 1);
 

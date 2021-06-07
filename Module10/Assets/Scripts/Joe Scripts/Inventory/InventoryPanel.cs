@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 // ||=======================================================================||
 // || InventoryPanel: The panel that displays the contents of the           ||
@@ -13,6 +14,9 @@ using TMPro;
 // || Written by Joseph Allen                                               ||
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
+
+// EDITED FOR MODULE 11:
+// - Combined hotbar and inventory slotsUI lists to both be linked with a single itemContainer
 
 // InventoryShowMode defines different ways that the inventory panel can be displayed
 public enum InventoryShowMode
@@ -28,7 +32,7 @@ public class InventoryPanel : UIPanel
     // Variables in this region are set in the inspector
 
     [SerializeField] private List<ContainerSlotUI>  slotsUI;                // All slots that make up the inventory
-    [SerializeField] private ItemContainer          itemContainer;          // ItemContainer that handles adding/removing/storing items
+    [SerializeField] private ItemContainer          itemContainer;          // ItemContainer that handles adding/removing/storing items in the inventory/hotbar
 
     [SerializeField] private LayoutElement          customiseLayoutElement; // Layout element attached to the customisation UI panel that is a child of the main inventory panel
     [SerializeField] private CanvasGroup            customiseCanvasGroup;   // Canvas group attached to the panel described above
@@ -53,6 +57,7 @@ public class InventoryPanel : UIPanel
     private PlayerMovement  playerMovement;      // Reference to the PlayerMovement script attached to the player character
     private float           totalWeight = 0.0f;  // The weight of all items in the inventory combined
     private HandSlotUI      handSlotUI;          // The slot that allows the player to hold/move items
+    private HotbarPanel     hotbarPanel;         // The script on the hotbar
 
     protected override void Awake()
     {
@@ -68,9 +73,13 @@ public class InventoryPanel : UIPanel
 
         playerMovement  = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         handSlotUI      = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+        hotbarPanel     = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
+
+        // Get a combined list of ContainerSlotUI for the hotbar and main inventory space
+        List<ContainerSlotUI> allSlotsUI = hotbarPanel.SlotsUI.Concat(slotsUI).ToList();
 
         // Link all of the UI slot elements to the slot objects in the item container
-        itemContainer.LinkSlotsToUI(slotsUI);
+        itemContainer.LinkSlotsToUI(allSlotsUI);
 
         // Update the inventory weight values/UI on start to show the inventory is empty
         UpdateTotalInventoryWeight();
@@ -99,34 +108,28 @@ public class InventoryPanel : UIPanel
         }
     }
 
-    public void AddItemToInventory(Item item)
+    public bool TryAddItem(Item item)
     {
         // Adds an item to the item container
-        itemContainer.TryAddItemToContainer(item);
+        return itemContainer.TryAddItemToContainer(item);
     }
 
-    public void AddItemToInventory(string itemId)
-    {
-        // Same as above function, but takes a string id instead of item object
-        itemContainer.TryAddItemToContainer(ItemManager.Instance.GetItemWithId(itemId));
-    }
-
-    public bool RemoveItemFromInventory(Item item)
+    public bool TryRemoveItem(Item item)
     {
         // Removes an item to the item container
-        return RemoveItemFromInventory(item.Id);
+        return itemContainer.TryRemoveItemFromContainer(item.Id);
     }
 
-    public bool RemoveItemFromInventory(string itemId)
+    public bool ContainsQuantityOfItem(ItemGroup itemGroup, out List<ContainerSlot> containingSlots)
     {
-        // Same as above function, but takes a string id instead of item object
-        return itemContainer.TryRemoveItemFromContainer(itemId);
+        // Checks if the inventory/hotbar container has a certain quantity of an item
+        return itemContainer.ContainsQuantityOfItem(itemGroup, out containingSlots);
     }
 
-    public bool ContainsQuantityOfItem(ItemGroup itemGroup)
+    public int CheckForQuantityOfItem(Item item)
     {
-        // Checks if the inventory's container has a certain quantity of an item
-        return itemContainer.ContainsQuantityOfItem(itemGroup, out _);
+        // Returns the number of the given item in the inventory/hotbar item container
+        return itemContainer.CheckForQuantityOfItem(item); 
     }
 
     private void CheckForShowHideInput()

@@ -48,7 +48,6 @@ public class ShopBuyPanel : MonoBehaviour
     #endregion
 
     private InventoryPanel      inventoryPanel;             // The player's inventory panel
-    private HotbarPanel         hotbarPanel;                // The player's hotbar panel
     private ShopNPC             shopNPC;                    // The NPC the player talked to when acessing this shop
     private ShopType            shopType;                   // The shop type - defines what items are sold at the shop
     private PressEffectButton[] categoryButtons;            // Buttons for selecting the different item categories for the shop
@@ -57,8 +56,7 @@ public class ShopBuyPanel : MonoBehaviour
     private int                 selectedCategoryIndex = -1; // The index of the selected category in the shop type's categories array
                                                                
     private bool                itemPurchasable;            // Whether the selected item can be purchased
-    private int                 inventoryCurrencyQuantity;  // Amount of the required currency in the player's inventory
-    private int                 hotbarCurrencyQuantity;     // Amount of the required currency in the player's hotbar
+    private int                 playerCurrencyQuantity;     // Amount of the required currency in the player's inventory
 
     private const int ItemsPerRow           = 5;    // Number of items to display in each row of the shop's UI
     private const int MaxDisplayableItems   = 20;   // Maximum number of items that can be displayed in a single category
@@ -67,7 +65,6 @@ public class ShopBuyPanel : MonoBehaviour
     {
         // Get references to the player's inventory and hotbar
         inventoryPanel  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-        hotbarPanel     = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
     }
 
     private void Update()
@@ -146,8 +143,7 @@ public class ShopBuyPanel : MonoBehaviour
 
         // Update the values for the quantity of currency items in the player's inventory and hotbar
         //   since each category can use a different currency type
-        inventoryCurrencyQuantity   = inventoryPanel.ItemContainer.CheckForQuantityOfItem(selectedCategory.CurrencyItem);
-        hotbarCurrencyQuantity      = hotbarPanel.ItemContainer.CheckForQuantityOfItem(selectedCategory.CurrencyItem);
+        playerCurrencyQuantity = inventoryPanel.CheckForQuantityOfItem(selectedCategory.CurrencyItem);
 
         // Update the currency UI to show the values calculated above
         UpdateCurrencyUI();
@@ -234,7 +230,7 @@ public class ShopBuyPanel : MonoBehaviour
             buyButtonText.text = "Buy " + shopItem.Item.UIName + " for " + shopItem.Price + " " + shopType.Categories[selectedCategoryIndex].CurrencyItem.UIName;
 
             // Check if the player has enough currency in their inventory/hotbar to buy the item
-            itemPurchasable = ((inventoryCurrencyQuantity + hotbarCurrencyQuantity) >= shopItem.Price);
+            itemPurchasable = (playerCurrencyQuantity >= shopItem.Price);
 
             // Change the colour of the buy button depending on if the item can be bought
             if(itemPurchasable)
@@ -263,7 +259,7 @@ public class ShopBuyPanel : MonoBehaviour
         currencyTitleText.text = "Remaining " + currencyItem.UIName + ":";
 
         currencyIcon.sprite = currencyItem.Sprite;
-        currencyQuantityText.text = (hotbarCurrencyQuantity + inventoryCurrencyQuantity).ToString();
+        currencyQuantityText.text = playerCurrencyQuantity.ToString();
     }
 
     public void ButtonBuy()
@@ -275,22 +271,16 @@ public class ShopBuyPanel : MonoBehaviour
             // Remove spent currency
             for (int i = 0; i < selectedItem.Price; i++)
             {
-                if(inventoryCurrencyQuantity > 0)
+                if(playerCurrencyQuantity > 0)
                 {
                     // Favour removing the currency item from the player's inventory before their hotbar
-                    inventoryPanel.RemoveItemFromInventory(shopType.Categories[selectedCategoryIndex].CurrencyItem);
-                    inventoryCurrencyQuantity--;
-                }
-                else if(hotbarCurrencyQuantity > 0)
-                {
-                    // There is no currency left in the inventory, take it from the hotbar instead
-                    hotbarPanel.RemoveItemFromHotbar(shopType.Categories[selectedCategoryIndex].CurrencyItem);
-                    hotbarCurrencyQuantity--;
+                    inventoryPanel.TryRemoveItem(shopType.Categories[selectedCategoryIndex].CurrencyItem);
+                    playerCurrencyQuantity--;
                 }
             }
 
             // Add the purchased item to the player's inventory
-            inventoryPanel.AddItemToInventory(selectedItem.Item);
+            inventoryPanel.TryAddItem(selectedItem.Item);
 
             // Re-select the selected item to repeat checks and confirm if they can/cannot buy it now
             SelectItem(selectedItem);

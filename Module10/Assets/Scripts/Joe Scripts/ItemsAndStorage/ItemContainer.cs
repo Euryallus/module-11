@@ -159,9 +159,6 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
         if (firstStackableSlot == -1 && firstEmptySlot == -1)
         {
             // No empty or stackable slots, meaning the inventory is full and the item could not be added
-            //   - has no effect for now, just a warning
-            Debug.LogWarning("INVENTORY FULL!");
-
             return false;
         }
         else

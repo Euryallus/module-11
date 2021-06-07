@@ -133,8 +133,10 @@ public class QuestManager : MonoBehaviour, IPersistentObject
         // Displays quest complete UI (rewards & handInDialogue)
         UI.DisplayQuestComplete(quest);
 
+        InventoryPanel  inventory   = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+
         //Cycles each objective in quest, if any "collect" quests exist make a note of what needs removing from player inventory
-        foreach(QuestObjective objective in quest.objectives)
+        foreach (QuestObjective objective in quest.objectives)
         {
             if(objective.objectiveType == QuestObjective.Type.Collect)
             {
@@ -143,10 +145,10 @@ public class QuestManager : MonoBehaviour, IPersistentObject
                 // Attempts to remove items from inventory
                 for (int i = 0; i < ob.toCollect.Quantity; i++)
                 {
-                    if(!GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().RemoveItemFromInventory(ob.toCollect.Item))
+                    if (!inventory.TryRemoveItem(ob.toCollect.Item))
                     {
-                        // Warns dev if item isnt in inventory
-                        Debug.LogWarning("none in inventory");
+                        // Warns dev if item isnt in inventory or hotbar
+                        Debug.LogWarning("none in inventory or hotbar");
                     }
                 }
             }
@@ -159,9 +161,8 @@ public class QuestManager : MonoBehaviour, IPersistentObject
             {
                 for (int i = 0; i < stack.Quantity; i++)
                 {
-                    inventory.AddItemToInventory(stack.Item);
+                    inventory.TryAddItem(stack.Item);
                 }
-            
             }
         }
     }

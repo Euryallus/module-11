@@ -20,7 +20,7 @@ public class Collectable : MonoBehaviour
             for (int i = 0; i < group.Quantity; i++)
             {
                 // Cycles each ItemGroup in the array collectionOnPickup and adds [x] quantity of said item to the player's inventory
-                GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().AddItemToInventory(group.Item);
+                GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().TryAddItem(group.Item);
             }
         }
 

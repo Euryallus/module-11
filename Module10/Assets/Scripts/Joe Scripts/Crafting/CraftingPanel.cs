@@ -43,20 +43,21 @@ public class CraftingPanel : UIPanel
     private CraftingItemButton          selectedButton;             // The button corresponding to the selected recipe
     private List<ContainerSlot>[]       slotsContainingRecipeItems; // An array containing lists on inventory slots, the array index corresponds to the index of
                                                                     //   the recipe item that requires items from the slot(s) that are in the list to be crafted
-
     protected override void Awake()
     {
         base.Awake();
 
         // Don't allow this panel to block certain UI related input events when being shown, the parent InventoryPanel will handle this
         isBlockingPanel = false;
-
-        InventoryPanel.ItemContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
     }
 
     protected override void Start()
     {
         base.Start();
+
+        // Check if the crafting setup is valid each time an item is added to/removed from the inventory/hotbar
+        InventoryPanel.ItemContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
+        //hotbarPanel.ItemContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
 
         // Deselect all recipes by default
         SelectRecipe(null, null);
@@ -135,7 +136,7 @@ public class CraftingPanel : UIPanel
                 // Create a new item preview for each of the required items
                 GameObject itemPreviewGameObject = Instantiate(prefabRequiredItemPreview, requiredItemsContent);
 
-                if (InventoryPanel.ItemContainer.ContainsQuantityOfItem(requiredItems[i], out List<ContainerSlot> containingSlots))
+                if (InventoryPanel.ContainsQuantityOfItem(requiredItems[i], out List<ContainerSlot> containingSlots))
                 {
                     // The player has the necessary amount of the current item in their inventory, show that on the preview
                     itemPreviewGameObject.GetComponent<CraftingItemPreview>().Setup(true, requiredItems[i]);
@@ -205,7 +206,7 @@ public class CraftingPanel : UIPanel
         for (int i = 0; i < SelectedRecipe.ResultItem.Quantity; i++)
         {
             // Attempt to add the crafted item to the player's inventory
-            if (InventoryPanel.ItemContainer.TryAddItemToContainer(SelectedRecipe.ResultItem.Item))
+            if (InventoryPanel.TryAddItem(SelectedRecipe.ResultItem.Item))
             {
                 // Successfully added item to inventory
             }

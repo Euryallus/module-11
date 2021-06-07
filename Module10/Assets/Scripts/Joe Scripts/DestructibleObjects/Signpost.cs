@@ -58,7 +58,7 @@ public class Signpost : PlaceableDestructible
         InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
 
         // Give the player back the item used to placed the sign, which includes custom text properties
-        inventory.AddItemToInventory(relatedItemId);
+        inventory.TryAddItem(ItemManager.Instance.GetItemWithId(relatedItemId));
     }
 
     public override void AddDataToWorldSave(SaveData saveData)

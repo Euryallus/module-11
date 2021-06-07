@@ -69,13 +69,15 @@ public class ItemInfoPopup : MonoBehaviour
         }
     }
 
-    public void ShowPopup(string itemId)
+    public void ShowPopupWithItemInfo(string itemId)
     {
+        // For showing popups with info about an item with the given id
+
         Item item = ItemManager.Instance.GetItemWithId(itemId);
 
         if (canShow)
         {
-            //The popup can be shown
+            // The popup can be shown
 
             if (item != null)
             {
@@ -87,10 +89,26 @@ public class ItemInfoPopup : MonoBehaviour
                 // Item is null, show an error popup
                 UpdatePopupInfo("Error: Unknown Item", "", false, "", new CustomFloatProperty[] { }, new CustomStringProperty[] { });
             }
-        }
 
-        // The popup is now being shown
-        showing = true;
+            // The popup is now being shown
+            showing = true;
+        }
+    }
+
+    public void ShowPopupWithText(string mainText, string secondaryText = "")
+    {
+        // For showing popups with any specified text
+
+        if(canShow)
+        {
+            // The popup can be shown
+
+            // Display the given text on the popup
+            UpdatePopupInfo(mainText, secondaryText);
+
+            // The popup is now being shown
+            showing = true;
+        }
     }
 
     public void HidePopup()
@@ -102,6 +120,8 @@ public class ItemInfoPopup : MonoBehaviour
     private void UpdatePopupInfo(string itemName, string itemDescription, bool customItem, string baseItemId,
                                     CustomFloatProperty[] customFloatProperties, CustomStringProperty[] customStringProperties)
     {
+        // Updates popup UI to display various info about an item
+
         // Set item name text
         itemNameText.text = itemName;
 
@@ -139,6 +159,24 @@ public class ItemInfoPopup : MonoBehaviour
             // Item has no custom properties, hide customPropertiesText
             customPropertiesText.gameObject.SetActive(false);
         }
+    }
+
+    private void UpdatePopupInfo(string mainText, string secondaryText)
+    {
+        // Updates popup UI to display any generic text rather than info about an item
+
+        // Use item name text to display main text
+        itemNameText.text = mainText;
+
+        // Show description text if any secondary text was given
+        itemDescriptionText.gameObject.SetActive(!string.IsNullOrEmpty(secondaryText));
+
+        // Use item description text to display secondary text
+        itemDescriptionText.text = secondaryText;
+
+        // Hide all other text that would be used for showing various info about an item
+        itemCustomisedText.gameObject.SetActive(false);
+        customPropertiesText.gameObject.SetActive(false);
     }
 
     private void ShowCustomPropertyInfo(CustomFloatProperty[] customFloatProperties, CustomStringProperty[] customStringProperties)

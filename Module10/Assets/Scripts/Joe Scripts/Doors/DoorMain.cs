@@ -254,10 +254,10 @@ public class DoorMain : MonoBehaviour, IPersistentObject, IExternalTriggerListen
             ItemGroup requiredItemGroup = new ItemGroup(unlockItem, 1);
 
             // Check if the required item is in the player's inventory/hotbar
-            bool itemInInventory = playerInventory.ContainsQuantityOfItem(requiredItemGroup);
-            bool itemInHotbar    = playerHotbar.ContainsQuantityOfItem(requiredItemGroup);
 
-            if (itemInInventory || itemInHotbar)
+            bool itemInInventory = playerInventory.ContainsQuantityOfItem(requiredItemGroup, out _);
+
+            if (itemInInventory)
             {
                 // The player has the required item, unlock the door
                 unlocked = true;
@@ -266,15 +266,8 @@ public class DoorMain : MonoBehaviour, IPersistentObject, IExternalTriggerListen
                 NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.DoorUnlocked, new string[] { unlockItem.UIName });
 
                 // Remove the item from the inventory or hotbar
-                if (itemInInventory)
-                {
-                    playerInventory.RemoveItemFromInventory(unlockItem);
-                }
-                else
-                {
-                    playerHotbar.RemoveItemFromHotbar(unlockItem);
-                }
-                
+                playerInventory.TryRemoveItem(unlockItem);
+
                 // The door can now be opened
                 return true;
             }
