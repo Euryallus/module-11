@@ -50,7 +50,7 @@ public class Chest : InteractableWithOutline
 
         // Also show the inventory panel with an offset to it doesn't overlap with the chest UI
         //   This allows the player to drag items between the chest and their inventory
-        inventoryPanel.Show(InventoryShowMode.InventoryOnly, 150.0f);
+        inventoryPanel.Show(InventoryShowMode.InventoryOnly, 140.0f);
     }
 
     protected virtual void SetupChest()

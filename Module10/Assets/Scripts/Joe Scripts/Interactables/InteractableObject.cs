@@ -137,12 +137,12 @@ public abstract class InteractableObject : MonoBehaviour
         if (!string.IsNullOrEmpty(tooltipNameText))
         {
             // Tooltip name text was set, display the name above the 'Press E to interact' text
-            interactTooltip.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltipNameText;
+            interactTooltip.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tooltipNameText;
         }
         else
         {
             // No tooltip name text was set, disable the GameObject that would usually display this text
-            interactTooltip.transform.GetChild(0).gameObject.SetActive(false);
+            interactTooltip.transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 

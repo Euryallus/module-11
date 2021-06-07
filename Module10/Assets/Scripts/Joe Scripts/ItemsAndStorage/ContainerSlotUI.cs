@@ -13,6 +13,9 @@ using UnityEngine.EventSystems;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+//Updated for Mod11:
+//  - Allowed item stacks to be 'swapped' when clicking on a slot that contains items with items in the hand slot
+
 public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     #region InspectorVariables
@@ -132,14 +135,17 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
         if (selected)
         {
             // Slot is selected, show a slightly thicker outline with the selected colour
-            outline.effectDistance = new Vector2(2f, 2f);
-            outline.effectColor = selectedOutlineColour;
+            outline.enabled = true;
+            //outline.effectDistance = new Vector2(2.0f, 2.0f);
+            //outline.effectColor = selectedOutlineColour;
         }
         else
         {
             // Slot is not selected, show a thinner outline with the standard colour
-            outline.effectDistance = Vector2.one;
-            outline.effectColor = standardOutlineColour;
+            outline.enabled = false;
+
+            //outline.effectDistance = Vector2.one;
+            //outline.effectColor = standardOutlineColour;
         }
     }
 
@@ -187,20 +193,41 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 // Check if the player clicked with the right mouse button
                 bool rightClick = (eventData.button == PointerEventData.InputButton.Right);
 
-                if (clickToRemoveItems && slot.ItemStack.StackSize > 0)
+                bool handSlotContainsItems = (handSlotUI.Slot.ItemStack.StackSize > 0);
+
+                if (slot.ItemStack.StackSize > 0 && clickToRemoveItems)
                 {
                     // Clicking to remove items is allowed
 
-                    // The linked slot contains some items, try and move them to the hand slot
-                    slot.MoveItemsToOtherSlot(handSlotUI.Slot, rightClick);
+                    if(clickToAddItems && handSlotContainsItems && (handSlotUI.Slot.ItemStack.StackItemsID != slot.ItemStack.StackItemsID) &&
+                        (slot.ItemStack.MaxStackSize == 0 || (slot.ItemStack.StackSize == handSlotUI.Slot.ItemStack.StackSize)))
+                    {
+                        // The hand slot and the slot linked to this both contain items, swap stacks
+                        //  (swapping is only allowed for stacks with no maximum stack size (MaxStackSize == 0), or where stacks are equal in size, to prevent invalid swaps)
+                        ContainerSlot tempSlot = new ContainerSlot(0, null);
+                        slot.MoveItemsToOtherSlot(tempSlot);
+                        handSlotUI.Slot.MoveItemsToOtherSlot(slot);
+                        tempSlot.MoveItemsToOtherSlot(handSlotUI.Slot);
+
+                        AudioManager.Instance.PlaySoundEffect2D("buttonClickTiny1");
+                    }
+                    else
+                    {
+                        // Hand slot is empty but the linked slot contains some items, try and move them to the hand slot
+                        slot.MoveItemsToOtherSlot(handSlotUI.Slot, rightClick);
+
+                        AudioManager.Instance.PlaySoundEffect2D("buttonClickTiny1");
+                    }
                 }
 
-                else if (clickToAddItems && handSlotUI.Slot.ItemStack.StackSize > 0)
+                else if (handSlotContainsItems && clickToAddItems)
                 {
                     // Clicking to add items is allowed
 
                     // The hand slot contains some items, try and move them to the linked slot
                     handSlotUI.Slot.MoveItemsToOtherSlot(slot, rightClick);
+
+                    AudioManager.Instance.PlaySoundEffect2D("buttonClickTiny2");
                 }
             }
             else
