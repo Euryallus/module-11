@@ -15,6 +15,7 @@ MonoBehaviour:
   objectiveType: 1
   taskName: Collect documents
   taskComplete: 0
+  saveTaskComplete: 0
   toCollect:
     Item: {fileID: 11400000, guid: f30e85d72e6ddc441aa5a61a4fa9e5cd, type: 2}
     Quantity: 1

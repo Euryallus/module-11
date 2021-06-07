@@ -15,6 +15,7 @@ MonoBehaviour:
   objectiveType: 1
   taskName: Find sword
   taskComplete: 0
+  saveTaskComplete: 0
   toCollect:
     Item: {fileID: 11400000, guid: 2a20ce22c7ba9544aa4d2027db145312, type: 2}
     Quantity: 1

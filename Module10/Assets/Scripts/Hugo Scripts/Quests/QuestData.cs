@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Used to store data about a quest
-// Development window:  Prototype phase
+// Development window:  Prototype phase & production phase
 // Inherits from:       ScriptableObject
 
 [CreateAssetMenu(fileName = "Quest data", menuName = "Quests/Quest data/New single quest", order = 1)]
@@ -34,8 +34,36 @@ public class QuestData : ScriptableObject
                         public bool questHandedIn = false;                                      // Flags if quest has been handed in yet
                         public bool handInToGiver = true;                                       // Used to determine if quest needs handing in to NPC or is completed as soon as all objectives are met
 
+    [Header("SAVE DATA")]
+    [SerializeField] private bool savedQuestCompleted;
+    [SerializeField] private bool savedQuestHandedIn;
 
-    // Returns whether all quest objectives have been completed
+    public void SaveProgress()
+    {
+        savedQuestCompleted = questCompleted;
+        savedQuestHandedIn  = questHandedIn;
+
+        //TODO: for each objective, save status
+
+        foreach (QuestObjective objective in objectives)
+        {
+            objective.SaveProgress();
+        }
+    }
+
+    public void LoadProgress()
+    {
+        questCompleted = savedQuestCompleted;
+        questHandedIn  = savedQuestHandedIn;
+
+        //TODO: for each objective, load status
+        foreach(QuestObjective objective in objectives)
+        {
+            objective.LoadProgress();
+        }
+    }    
+           
+    // ReturList<QuestObjective> objectives = new List<QuestObjective>();ns whether all quest objectives have been completed
     public bool CheckCompleted()
     {
         int objectiveCount = 0;
@@ -60,14 +88,5 @@ public class QuestData : ScriptableObject
         // If all quests have been completed, flag questCompleted as true
         questCompleted = (objectiveCount == objectives.Count);
         return questCompleted;
-
-        //if(objectiveCount == objectives.Count)
-        //{
-        //    questCompleted = true;
-        //    return true;
-        //}
-        //
-        //return false;
-        
     }
 }

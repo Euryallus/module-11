@@ -38,3 +38,5 @@ MonoBehaviour:
   questCompleted: 0
   questHandedIn: 0
   handInToGiver: 1
+  savedQuestCompleted: 0
+  savedQuestHandedIn: 0

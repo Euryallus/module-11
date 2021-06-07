@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b63cd15c48c3e41909ab791916da71, type: 3}
   m_Name: Player data
   m_EditorClassIdentifier: 
-  pendingQuest: {fileID: 11400000, guid: fa05cb99784721b4ba3653f739d13d43, type: 2}
-  offer: {fileID: 11400000, guid: 863790949db486b428cd5174f109f656, type: 2}
+  pendingQuest: {fileID: 0}
+  offer: {fileID: 0}
   questBacklog: []
   completedQuests: []
   questGivers:
@@ -33,3 +33,32 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df01235c2b0fbdd4f9a8d8380dbd7b07, type: 2}
   - {fileID: 11400000, guid: 863790949db486b428cd5174f109f656, type: 2}
   - {fileID: 11400000, guid: f0c8b27e64be46c4fa1b0272092ab8eb, type: 2}
+  quests:
+  - {fileID: 11400000, guid: 9301281eda2e5fb4baf96738d2fddd5d, type: 2}
+  - {fileID: 11400000, guid: 3186995896ff64a43bd122676ac0bfc0, type: 2}
+  - {fileID: 11400000, guid: a8597668fc6c1ae44a7727dfe7c57f20, type: 2}
+  - {fileID: 11400000, guid: 8ba2362e261b5a149a18865a5079884b, type: 2}
+  - {fileID: 11400000, guid: 82c5f4830ec6bf243803b865c53127da, type: 2}
+  - {fileID: 11400000, guid: eb2b0fc0388290d4482111ccaaab437a, type: 2}
+  - {fileID: 11400000, guid: 9c2362113b55bb841a804e93892376b4, type: 2}
+  - {fileID: 11400000, guid: 9c1abd4e5e921d146948260bda4c7e98, type: 2}
+  - {fileID: 11400000, guid: fa05cb99784721b4ba3653f739d13d43, type: 2}
+  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
+  - {fileID: 11400000, guid: 0c446f35a0b7fcf4faa076bab6880f0a, type: 2}
+  - {fileID: 11400000, guid: 3e28e3dd196f5634588eb76d884b7937, type: 2}
+  - {fileID: 11400000, guid: d142f890a186f09488decf9e7c2ee494, type: 2}
+  - {fileID: 11400000, guid: e494a4fa86161414080c55f999b6c105, type: 2}
+  - {fileID: 11400000, guid: 69163dca5732ab247bcd41375faadae2, type: 2}
+  - {fileID: 11400000, guid: f66063750b9284f4ca674fc7944c6db4, type: 2}
+  - {fileID: 11400000, guid: b2cb650d35243724d9ef42b157817df8, type: 2}
+  - {fileID: 11400000, guid: 8b27de8a97601884bb1113627e1cf88a, type: 2}
+  - {fileID: 11400000, guid: 9f8fc51f76f7b9f44851116b9f424d92, type: 2}
+  - {fileID: 11400000, guid: 9f8fc51f76f7b9f44851116b9f424d92, type: 2}
+  - {fileID: 11400000, guid: ab1b7d7adba7280408699c3c026e62e8, type: 2}
+  - {fileID: 11400000, guid: 72699fe43c8785f47bcf03c2041d9807, type: 2}
+  - {fileID: 11400000, guid: 36fce758606aa1d4a8cfba7e74691f63, type: 2}
+  - {fileID: 11400000, guid: 4f4107648ae1df249b65a9295d7abdc1, type: 2}
+  - {fileID: 11400000, guid: bc879299d8e1c7a4bb6872ae7524ab57, type: 2}
+  - {fileID: 11400000, guid: 272a83299c881e9419fda1bcfe77ce45, type: 2}
+  savedQuestBacklog: []
+  savedCompletedQuests: []

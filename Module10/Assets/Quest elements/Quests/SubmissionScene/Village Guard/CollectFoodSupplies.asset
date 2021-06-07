@@ -15,6 +15,7 @@ MonoBehaviour:
   objectiveType: 1
   taskName: Collect supplies
   taskComplete: 0
+  saveTaskComplete: 0
   toCollect:
     Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
     Quantity: 2

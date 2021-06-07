@@ -15,6 +15,7 @@ MonoBehaviour:
   objectiveType: 1
   taskName: Craft pickaxe
   taskComplete: 0
+  saveTaskComplete: 0
   toCollect:
     Item: {fileID: 11400000, guid: 5a86715d1aa7a024d914679571e7564b, type: 2}
     Quantity: 1

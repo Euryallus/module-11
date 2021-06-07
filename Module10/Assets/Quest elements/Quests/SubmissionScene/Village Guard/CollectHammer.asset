@@ -15,6 +15,7 @@ MonoBehaviour:
   objectiveType: 1
   taskName: Craft hammer
   taskComplete: 0
+  saveTaskComplete: 0
   toCollect:
     Item: {fileID: 11400000, guid: f9b8adbe7bc1087428585c5e61dea451, type: 2}
     Quantity: 1
