@@ -13,6 +13,7 @@ public class ItemStack
     public string   StackItemsID    { get { return m_stackItemsId; } }
     public int      StackSize       { get { return m_stackSize; } }
     public float    StackWeight     { get { return m_stackWeight; } }
+    public int      MaxStackSize    { get { return m_maxStackSize; } }
 
     #endregion
 

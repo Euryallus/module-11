@@ -379,7 +379,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentObject
                     // Either no currency is required or the player has added the required amount/type of currency item
                     //  - customising setup is valid!
 
-                    infoText.text = "<color=#464646>Customising " + itemToCustomise.UIName + ".</color>";
+                    infoText.text = "<color=#FFFFFF>Customising " + itemToCustomise.UIName + ".</color>";
 
                     return true;
                 }
@@ -412,7 +412,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentObject
     {
         // Standard info text to display when nothing is being customised
 
-        infoText.text = "<color=#464646>Place an item in the first slot to customise it.</color>";
+        infoText.text = "<color=#FFFFFF>Place an item in the first slot to customise it.</color>";
     }
 
     public void OnCustomNameInputChanged(string value)

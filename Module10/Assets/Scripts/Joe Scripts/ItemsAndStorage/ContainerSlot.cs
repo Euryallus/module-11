@@ -8,6 +8,9 @@ using System;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+//Updated for Mod11:
+//  - Tweaks to allow moving items to slots with no slotUI set
+
 public class ContainerSlot
 {
     #region Properties
@@ -64,10 +67,16 @@ public class ContainerSlot
             }
         }
 
-        // Update the UI of this slot and the slot that items are being moved to
+        // Update the UI of this slot and the slot that items are being moved to (if they are connected to UI elements)
         //   so they accurately display the amount if items in each one
-        slotUI.UpdateUI();
-        otherSlot.SlotUI.UpdateUI();
+        if(slotUI != null)
+        {
+            slotUI.UpdateUI();
+        }
+        if(otherSlot.SlotUI != null)
+        {
+            otherSlot.SlotUI.UpdateUI();
+        }
 
         // Items were moved, invoke the ItemsMovedEvent for both slots if they are not null
         ItemsMovedEvent?.Invoke();

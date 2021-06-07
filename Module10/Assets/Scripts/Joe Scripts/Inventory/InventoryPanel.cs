@@ -72,6 +72,9 @@ public class InventoryPanel : UIPanel
         // Link all of the UI slot elements to the slot objects in the item container
         itemContainer.LinkSlotsToUI(slotsUI);
 
+        // Update the inventory weight values/UI on start to show the inventory is empty
+        UpdateTotalInventoryWeight();
+
         //Hide the UI panel by default
         Hide();
     }
