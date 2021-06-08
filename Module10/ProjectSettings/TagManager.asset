@@ -27,6 +27,7 @@ TagManager:
   - ModularPiece
   - DamageDisplay
   - ChestPanel
+  - LaunchIndicator
   layers:
   - Default
   - TransparentFX

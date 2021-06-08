@@ -71,6 +71,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fe6e0cbd764826b4280ee1d32d271e27, type: 2}
   - {fileID: 11400000, guid: 99b04b6fabf76ea49a5c1f6e1973c7c6, type: 2}
   - {fileID: 11400000, guid: 6f5a0ad31f3faaf40b4604a4821a64f4, type: 2}
+  - {fileID: 11400000, guid: 5dc3129b862ba2647bada08eda8aaffa, type: 2}
+  - {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
+  - {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
+  - {fileID: 11400000, guid: 2a83b5bd37541be4db1e4a5a15cb3050, type: 2}
   sceneMusicSetup:
   - SceneName: MainMenu
     PlayMode: 2

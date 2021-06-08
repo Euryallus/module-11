@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 4740927130316203150}
   - component: {fileID: 5781619595027664628}
   - component: {fileID: 7990771386612133257}
+  - component: {fileID: 6518946934753917683}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -317,6 +318,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepSpeedMultiplier: 0.4
+--- !u!114 &6518946934753917683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399754590433321695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56d5f44ae1dc6e459a1da5a149c31ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerKey: 113
+  chargeTime: 0.5
+  cooldownTime: 5
+  initialFoodDecrease: 0.1
+  continuousFoodDecrease: 0
+  chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
+  chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
+  abilityTriggerSound: {fileID: 11400000, guid: 2a83b5bd37541be4db1e4a5a15cb3050, type: 2}
+  prefabLaunchIndicator: {fileID: 5471077257805614410, guid: 2f3f530dde1702e4891d824138cee50f, type: 3}
 --- !u!1 &3399754590781465955
 GameObject:
   m_ObjectHideFlags: 0

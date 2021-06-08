@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
+  m_Name: Eat
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: 854e7e6b60e10fd4e9fe1781e9b7879f, type: 3}
+  - {fileID: 8300000, guid: a003216a1673e304fa71f587a5835af9, type: 3}
+  - {fileID: 8300000, guid: 3d0e4378f4863ee43be8f0b7b6d901cd, type: 3}
+  m_id: eat
+  m_volumeRange:
+    Min: 0.55
+    Max: 0.6
+  m_pitchRange:
+    Min: 0.95
+    Max: 1.1

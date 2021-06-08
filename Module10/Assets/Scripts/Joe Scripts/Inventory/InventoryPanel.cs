@@ -32,7 +32,7 @@ public class InventoryPanel : UIPanel
     // Variables in this region are set in the inspector
 
     [SerializeField] private List<ContainerSlotUI>  slotsUI;                // All slots that make up the inventory
-    [SerializeField] private ItemContainer          itemContainer;          // ItemContainer that handles adding/removing/storing items in the inventory/hotbar
+    [SerializeField] private ItemContainer          itemContainer;          // ItemContainer that handles adding/removing/storing items in the hotbar and inventory
 
     [SerializeField] private LayoutElement          customiseLayoutElement; // Layout element attached to the customisation UI panel that is a child of the main inventory panel
     [SerializeField] private CanvasGroup            customiseCanvasGroup;   // Canvas group attached to the panel described above
@@ -79,6 +79,7 @@ public class InventoryPanel : UIPanel
         List<ContainerSlotUI> allSlotsUI = hotbarPanel.SlotsUI.Concat(slotsUI).ToList();
 
         // Link all of the UI slot elements to the slot objects in the item container
+        //   The item container is shared between the hotbar and main inventory space
         itemContainer.LinkSlotsToUI(allSlotsUI);
 
         // Update the inventory weight values/UI on start to show the inventory is empty
