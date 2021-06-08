@@ -53,18 +53,21 @@ public class LaunchAbility : PlayerAbility
 
     protected override void AbilityStart()
     {
-        base.AbilityStart();
-
-        //TODO: Make this upgradable/not hard-coded
-        float launchForce = 30.0f;
-
-        // Launch the player into the air
-        playerMovement.SetJumpVelocity(launchForce);
-
         // Stop showing launch indicator
         if (launchIndicator != null)
         {
             Destroy(launchIndicator);
+        }
+
+        if (playerMovement.PlayerIsGrounded())
+        {
+            base.AbilityStart();
+
+            //TODO: Make this upgradable/not hard-coded
+            float launchForce = 30.0f;
+
+            // Launch the player into the air
+            playerMovement.SetJumpVelocity(launchForce);
         }
     }
 

@@ -30,11 +30,12 @@ public abstract class PlayerAbility : MonoBehaviour
 
     #endregion
 
-    protected AbilityIndicator uiIndicator;
-    protected float charge;
-    protected float cooldown;
-    protected bool charging;
-    private PlayerStats playerStats;    // Reference to the player stats script
+    protected   AbilityIndicator    uiIndicator;
+    protected   float               charge;
+    protected   float               cooldown;
+    protected   bool                charging;
+    protected   bool                abilityActive;
+    private     PlayerStats         playerStats;    // Reference to the player stats script
 
     protected virtual void Start()
     {
@@ -53,49 +54,58 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(cooldown >= 1.0f)
+        if (abilityActive)
         {
             if (Input.GetKey(triggerKey))
             {
-                if (!charging)
-                {
-                    ChargeStart();
-                }
-
-                if (charge < 1.0f)
-                {
-                    SetChargeAmount(charge + Time.deltaTime / chargeTime);
-                }
-                else
-                {
-                    ChargeEnd();
-
-                    SetCooldownAmount(0.0f);
-
-                    if (abilityTriggerSound != null)
-                    {
-                        AudioManager.Instance.PlaySoundEffect2D(abilityTriggerSound);
-                    }
-
-                    AbilityStart();
-                }
+                AbilityActive();
             }
             else
             {
-                if (charging)
-                {
-                    ChargeEnd();
-
-                    if (chargeEndSound != null)
-                    {
-                        AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
-                    }
-                }
+                AbilityEnd();
             }
         }
         else
         {
-            SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
+            if (cooldown >= 1.0f)
+            {
+                if (Input.GetKey(triggerKey))
+                {
+                    if (!charging)
+                    {
+                        ChargeStart();
+                    }
+
+                    if (charge < 1.0f)
+                    {
+                        SetChargeAmount(charge + Time.deltaTime / chargeTime);
+                    }
+                    else
+                    {
+                        ChargeEnd();
+
+                        SetCooldownAmount(0.0f);
+
+                        AbilityStart();
+                    }
+                }
+                else
+                {
+                    if (charging)
+                    {
+                        ChargeEnd();
+
+                        if (chargeEndSound != null)
+                        {
+                            AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
+            }
         }
     }
 
@@ -117,8 +127,26 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void AbilityStart()
     {
-        // Reduce player food level when the launch ability is used
+        abilityActive = true;
+
+        // Reduce player food level by initialFoodDecrease when the ability is first triggered
         playerStats.DecreaseFoodLevel(initialFoodDecrease);
+
+        if (abilityTriggerSound != null)
+        {
+            AudioManager.Instance.PlaySoundEffect2D(abilityTriggerSound);
+        }
+    }
+
+    protected virtual void AbilityActive()
+    {
+        // Reduce player food level by continuousFoodDecrease each frame while the ability is being used
+        playerStats.DecreaseFoodLevel(continuousFoodDecrease * Time.deltaTime);
+    }
+
+    protected virtual void AbilityEnd()
+    {
+        abilityActive = false;
     }
 
     private void StartChargeSound()

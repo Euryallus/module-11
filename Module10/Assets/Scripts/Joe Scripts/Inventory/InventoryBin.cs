@@ -45,6 +45,8 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
                 // Update hand slot UI to show the player they are no longer holding items
                 handSlotUI.UpdateUI();
+
+                AudioManager.Instance.PlaySoundEffect2D("bin");
             }
             else
             {
