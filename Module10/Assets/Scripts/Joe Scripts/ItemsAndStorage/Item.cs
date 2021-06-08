@@ -22,6 +22,7 @@ public class Item : ScriptableObject
     public float                        Weight { get { return m_weight; } }
     public Sprite                       Sprite { get { return m_sprite; } }
     public GameObject                   HeldItemGameObject { get { return m_heldItemGameObject; } }
+    public bool                         CanThrowAway { get { return m_canThrowAway; } set { m_canThrowAway = value; } }
     public bool                         Customisable { get { return m_customisable; } }
     public string                       CurrencyItemId { get { return m_currencyItemId; } }
     public int                          CurrencyItemQuantity { get { return m_currencyItemQuantity; } }
@@ -60,6 +61,9 @@ public class Item : ScriptableObject
 
     [SerializeField] [Tooltip("The GameObject to be instantiated when the player holds this item, leave blank if no held item should be shown")]
     private GameObject m_heldItemGameObject;
+
+    [SerializeField] [Tooltip("Whether this item can be permanently thrown away")]
+    private bool m_canThrowAway = true;
 
     [Space]
     [Header("Player Customisation")]

@@ -41,6 +41,9 @@ public class EatItemPanel : MonoBehaviour, IPointerDownHandler
 
                     // Update the hand slot UI to show the item was removed
                     handSlotUI.UpdateUI();
+
+                    // Play an eating sound
+                    AudioManager.Instance.PlaySoundEffect2D("eat");
                 }
                 else
                 {

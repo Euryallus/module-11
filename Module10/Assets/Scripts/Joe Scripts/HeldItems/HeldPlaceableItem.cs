@@ -275,16 +275,16 @@ public class HeldPlaceableItem : HeldItem
             placeableDestructible.SetupAsPlacedObject();
         }
 
-        // Remove the item from the player's hotbar so one item cannot be used multiple times
-        RemoveItemFromHotbar();
+        // Remove the item from the player's hotbar/inventory so one item cannot be used multiple times
+        RemoveItemFromInventory();
 
         return placedGameObj;
     }
 
-    protected virtual void RemoveItemFromHotbar()
+    protected virtual void RemoveItemFromInventory()
     {
-        // Remove the item from the player's hotbar
-        HotbarPanel hotbar = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
-        hotbar.RemoveItemFromHotbar(item);
+        // Remove the item from the player's hotbar/inventory (both use the same ItemContainer)
+        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+        inventory.TryRemoveItem(item);
     }
 }

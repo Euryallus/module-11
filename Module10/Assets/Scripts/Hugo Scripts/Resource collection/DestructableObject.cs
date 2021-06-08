@@ -58,7 +58,7 @@ public class DestructableObject : MonoBehaviour
         {
             for (int i = 0; i < stack.Quantity; i++)
             {
-                inventory.AddItemToInventory(stack.Item);
+                inventory.TryAddItem(stack.Item);
                 // Flagged destroyed as true
                 destroyed = true;
             }

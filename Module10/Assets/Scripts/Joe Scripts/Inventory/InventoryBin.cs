@@ -11,8 +11,14 @@ using UnityEngine.EventSystems;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class InventoryBin : MonoBehaviour, IPointerDownHandler
+// Edited in module 11: some items cannot be binned, shows notification when trying to throw away one of these items
+
+public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public ItemContainer ParentContainer { get { return parentContainer; } }
+
+    [SerializeField] private ItemContainer parentContainer;
+
     public void OnPointerDown(PointerEventData eventData)
     {
         // Called when the bin is clicked
@@ -25,14 +31,37 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler
 
         if (handStackSize > 0)
         {
-            //The hand stack contains at least one item, remove all items from it
-            for (int i = 0; i < handStackSize; i++)
-            {
-                handSlotUI.Slot.ItemStack.TryRemoveItemFromStack();
-            }
+            Item itemBeingBinned = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
 
-            //Update hand slot UI to show the player they are no longer holding items
-            handSlotUI.UpdateUI();
+            if(itemBeingBinned.CanThrowAway)
+            {
+                // The item type being held can be thrown away
+
+                // The hand stack contains at least one item, remove all items from it
+                for (int i = 0; i < handStackSize; i++)
+                {
+                    handSlotUI.Slot.ItemStack.TryRemoveItemFromStack();
+                }
+
+                // Update hand slot UI to show the player they are no longer holding items
+                handSlotUI.UpdateUI();
+
+                AudioManager.Instance.PlaySoundEffect2D("bin");
+            }
+            else
+            {
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantThrowAwayItem, new string[] { itemBeingBinned.UIName });
+            }
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", "Click while holding item(s)");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        parentContainer.ItemInfoPopup.HidePopup();
     }
 }

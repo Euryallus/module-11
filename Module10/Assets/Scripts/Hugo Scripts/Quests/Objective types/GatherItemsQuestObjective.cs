@@ -22,7 +22,7 @@ public class GatherItemsQuestObjective : QuestObjective
         // References player's inventory
         InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
 
-        // Returns if inventory contains item(s) listed in toCollect
-        return (inventory.ItemContainer.CheckForQuantityOfItem(toCollect.Item) >= toCollect.Quantity);
+        // Returns if inventory or hotbar contains item(s) listed in toCollect
+        return (inventory.CheckForQuantityOfItem(toCollect.Item) >= toCollect.Quantity);
     }
 }

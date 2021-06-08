@@ -16,6 +16,7 @@ public enum NotificationMessageType
     CantDestroyObject,
 
     CantAffordItem,
+    CantThrowAwayItem,
 
     SaveSuccess,
     AutoSaveSuccess,
@@ -62,6 +63,7 @@ public class NotificationManager : MonoBehaviour
         { NotificationMessageType.CantDestroyObject,   "This object cannot be destroyed." },
 
         { NotificationMessageType.CantAffordItem,      "You cannot purchase this item - * * required." },
+        { NotificationMessageType.CantThrowAwayItem,   "* cannot be thrown away." },
 
         { NotificationMessageType.SaveSuccess,         "Progress saved successfully.\nSpawn point set." },
         { NotificationMessageType.AutoSaveSuccess,     "Your progress has been auto-saved.\nSpawn point set." },

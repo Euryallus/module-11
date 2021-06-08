@@ -51,7 +51,7 @@ public class CraftingItemButton : MonoBehaviour, IPointerEnterHandler, IPointerE
         if (parentPanel.Showing)
         {
             // Show a popup with info about the item to be crafted on hover
-            parentPanel.InventoryPanel.ItemContainer.ItemInfoPopup.ShowPopup(recipe.ResultItem.Item.Id);
+            parentPanel.InventoryPanel.ItemContainer.ItemInfoPopup.ShowPopupWithItemInfo(recipe.ResultItem.Item.Id);
         }
     }
 

@@ -160,7 +160,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 {
                     // Player is hovering over the slot while it contains some items, show an info popup
                     //   that displays the name/description of the item in the slot
-                    slot.ParentContainer.ItemInfoPopup.ShowPopup(slot.ItemStack.StackItemsID);
+                    slot.ParentContainer.ItemInfoPopup.ShowPopupWithItemInfo(slot.ItemStack.StackItemsID);
                 }
             }
             else
