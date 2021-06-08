@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class AbilityIndicator : MonoBehaviour
 {
-    [SerializeField] private Image chargeImage;
-    [SerializeField] private Image cooldownImage;
-
-    //private float charge;
-    //private float cooldown;
+    [SerializeField] private Image              chargeImage;
+    [SerializeField] private Image              cooldownImage;
+    [SerializeField] private TextMeshProUGUI    keyPromptText;
 
     public void SetChargeAmount(float charge)
     {
@@ -19,5 +16,10 @@ public class AbilityIndicator : MonoBehaviour
     public void SetCooldownAmount(float cooldown)
     {
         cooldownImage.fillAmount = cooldown;
+    }
+
+    public void SetKeyPromptText(string text)
+    {
+        keyPromptText.text = text;
     }
 }

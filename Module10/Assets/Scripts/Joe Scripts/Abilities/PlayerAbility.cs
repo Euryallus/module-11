@@ -50,6 +50,8 @@ public abstract class PlayerAbility : MonoBehaviour
 
         SetChargeAmount(0.0f);
         SetCooldownAmount(1.0f);
+
+        uiIndicator.SetKeyPromptText(triggerKey.ToString());
     }
 
     protected virtual void Update()
