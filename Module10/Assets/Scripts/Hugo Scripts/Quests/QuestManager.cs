@@ -261,6 +261,7 @@ public class QuestManager : MonoBehaviour, IPersistentObject
         {
             // Adds to the HUD UI and marks as completed if quest is flagged as completed
             UI.AddHUDQuestName(quest.questName);
+            questMenuUI.AddQuestButton(quest);
 
             if (quest.questCompleted)
             {

@@ -1491,6 +1491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questDisplay: {fileID: 0}
   buttonTitle: {fileID: 0}
+  ui: {fileID: 0}
 --- !u!1 &4884584923031933638
 GameObject:
   m_ObjectHideFlags: 0
