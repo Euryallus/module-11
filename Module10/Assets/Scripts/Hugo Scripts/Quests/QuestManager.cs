@@ -21,6 +21,8 @@ public class QuestManager : MonoBehaviour, IPersistentObject
 
                         private bool runupdate = true;              // Flags when checking quests completion isnt needed (e.g. when handing in a different quest)
 
+    [SerializeField] private QuestMenuUI questMenuUI;
+
     private void Start()
     {
         SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
@@ -61,6 +63,7 @@ public class QuestManager : MonoBehaviour, IPersistentObject
             playerQuestData.offer.questsToGive.RemoveAt(0);
             // Add quest data to HUD
             UI.AddHUDQuestName(playerQuestData.pendingQuest.questName);
+            questMenuUI.AddQuestButton(playerQuestData.pendingQuest);
 
             // Resets refs to quest giver & quest being offered (as quest has been accepted)
             playerQuestData.offer = null;
@@ -117,6 +120,7 @@ public class QuestManager : MonoBehaviour, IPersistentObject
     {
         // Removes quest from UI and flags quest as having been handed in
         UI.RemoveHUDQuestName(quest.questName);
+        questMenuUI.RemoveButton(quest);
 
         Debug.Log("REMOVED " + quest.questName);
 
