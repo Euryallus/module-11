@@ -114,26 +114,29 @@ public class QuestUI : MonoBehaviour
     // Adds quest name to HUD side bar
     public void AddHUDQuestName(string name)
     {
-        // Creates new HUD quest name object, enables it & sets transform parent
-        TMP_Text newName = Instantiate(defaultName);
-        newName.transform.gameObject.SetActive(true);
-        newName.transform.SetParent(questMarkerBackground.transform);
-
-        // If there are already quest names in list, adjust position to be at bottom of list
-        if(questNamesHUD.Count != 0)
+        if(questNamesHUD.Count < 6)
         {
-            newName.rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - ((questNameHeight + 5) * questNamesHUD.Count));
-        }
-        else
-        {
-            // If no other names are in the list, set to top of list (*default* position)
-            newName.rectTransform.anchoredPosition = defaultName.rectTransform.anchoredPosition;
-        }
+            // Creates new HUD quest name object, enables it & sets transform parent
+            TMP_Text newName = Instantiate(defaultName);
+            newName.transform.gameObject.SetActive(true);
+            newName.transform.SetParent(questMarkerBackground.transform);
 
-        // Set display name to corrispond with quest
-        newName.text = name;
-        // Add new naame to list
-        questNamesHUD.Add(newName);
+            // If there are already quest names in list, adjust position to be at bottom of list
+            if(questNamesHUD.Count != 0)
+            {
+                newName.rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - ((questNameHeight + 5) * questNamesHUD.Count));
+            }
+            else
+            {
+                // If no other names are in the list, set to top of list (*default* position)
+                newName.rectTransform.anchoredPosition = defaultName.rectTransform.anchoredPosition;
+            }
+
+            // Set display name to corrispond with quest
+            newName.text = name;
+            // Add new naame to list
+            questNamesHUD.Add(newName);
+        }
     }
 
     // Changes quest HUD display to reflect when quest is complete but not handed in

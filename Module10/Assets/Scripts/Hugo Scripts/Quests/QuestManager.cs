@@ -247,9 +247,9 @@ public class QuestManager : MonoBehaviour, IPersistentObject
 
     public void OnLoadSetup(SaveData saveData)
     {
-        playerQuestData.LoadProgress();
-
-        Debug.Log("LOADED SAVES");
+        //playerQuestData.LoadProgress();
+        //
+        //Debug.Log("LOADED SAVES");
     }
 
     public void OnLoadConfigure(SaveData saveData)

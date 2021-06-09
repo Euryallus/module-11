@@ -68,6 +68,12 @@ public class QuestMenuUI : MonoBehaviour
         GameObject newButton = Instantiate(buttonPrefab, questButtonContainer.transform);
 
         buttons.Add(newButton);
+
+
+        Vector2 buttonDimensions = buttonPrefab.GetComponent<RectTransform>().sizeDelta;
+        questButtonContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonDimensions.x, (buttonDimensions.y + 20f) * buttons.Count);
+        
+
         SortButtonPosition();
 
         newButton.GetComponent<QuestMenuButton>().buttonTitle.text = questToAdd.questName;

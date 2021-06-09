@@ -14,15 +14,25 @@ public class QuestGiverData : ScriptableObject
     public string QuestGiverName;                                   // Unique name of the quest giver
     public List<QuestData> questsToGive = new List<QuestData>();    // List of quests NPC has to offer at any given point
 
-    [SerializeField] List<QuestData> saveQuestsToGive = new List<QuestData>();
+    [SerializeField] private List<QuestData> saveQuestsToGive = new List<QuestData>();
 
     public void SaveProgress()
     {
-        saveQuestsToGive = questsToGive;
+        saveQuestsToGive = new List<QuestData>();
+
+        foreach (QuestData quest in questsToGive)
+        {
+            saveQuestsToGive.Add(quest);
+        }
     }
 
     public void LoadProgress()
     {
-        questsToGive = saveQuestsToGive;
+        questsToGive = new List<QuestData>();
+
+        foreach (QuestData quest in saveQuestsToGive)
+        {
+            questsToGive.Add(quest);
+        }
     }
 }

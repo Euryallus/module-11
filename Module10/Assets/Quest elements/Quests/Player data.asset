@@ -14,9 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pendingQuest: {fileID: 0}
   offer: {fileID: 0}
-  questBacklog:
-  - {fileID: 11400000, guid: fa05cb99784721b4ba3653f739d13d43, type: 2}
-  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
+  questBacklog: []
   completedQuests: []
   questGivers:
   - {fileID: 11400000, guid: 52aa68ba7f2b98b4c950b08211cc6d0e, type: 2}

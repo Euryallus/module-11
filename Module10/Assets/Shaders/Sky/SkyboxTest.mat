@@ -85,7 +85,7 @@ Material:
     - Color_e9ff46fc1e4843a7b1c35f38db6a4865: {r: 0, g: 0, b: 0, a: 1}
     - Vector2_03a7cca7eb3d4cdd8e28661faecddfa7: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_66fc66a4e8334eae9e607439710df2f5: {r: 0, g: 0, b: 0, a: 0}
-    - _CloudOffset: {r: 0, g: 0.26898813, b: 0, a: 0}
+    - _CloudOffset: {r: 0, g: 0, b: 0, a: 0}
     - _StarsOffset: {r: 0, g: 0, b: 0, a: 0}
     - _SunDirection: {r: 0.5, g: -0.5, b: -0.5, a: 0}
   m_BuildTextureStacks: []
