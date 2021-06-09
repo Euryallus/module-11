@@ -75,8 +75,8 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
             {
                 // The player was hit by the obstacle, kill them and give the death cause that was set in the inspector
 
-                PlayerDeath playerDeath = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeath>();
-                playerDeath.KillPlayer(deathCause);
+                PlayerStats playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+                playerStats.DecreaseHealth(1.0f, deathCause);
             }
         }
     }

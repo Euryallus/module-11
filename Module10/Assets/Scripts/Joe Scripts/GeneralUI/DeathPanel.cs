@@ -41,6 +41,9 @@ public class DeathPanel : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1.0f;
 
+        // The game is being reloaded after a player death
+        SaveLoadManager.Instance.LoadingAfterDeath = true;
+
         // Reload the active scene and hence reset progress to where the player last saved
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }

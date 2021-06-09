@@ -251,6 +251,7 @@ MonoBehaviour:
   fullThreshold: 0.9
   starveDamage: 0.05
   starveDamageInterval: 2
+  healthIncreaseSpeed: 0.04
   drownDamage: 0.1
   drownDamageInterval: 2
   baseTimeToDrown: 60
@@ -261,6 +262,7 @@ MonoBehaviour:
   breathLevelSlider: {fileID: 0}
   breathSliderFill: {fileID: 0}
   breathCanvasGroup: {fileID: 0}
+  damageEffectPrefab: {fileID: 3342926187353654585, guid: 38135b846d9b4854d825cb5f5717235e, type: 3}
 --- !u!114 &8688783702949859633
 MonoBehaviour:
   m_ObjectHideFlags: 0

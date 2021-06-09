@@ -2216,7 +2216,7 @@ MonoBehaviour:
   animator: {fileID: 7383264812999431759}
   impactParticles: {fileID: 0}
   impactSound: {fileID: 11400000, guid: 30abf47adca9a1b45aaea8b1b9eb9a1a, type: 2}
-  deathCause: 3
+  deathCause: 6
   cameraShakeMultiplier: 0
   mode: 1
   continuousInverval: 4

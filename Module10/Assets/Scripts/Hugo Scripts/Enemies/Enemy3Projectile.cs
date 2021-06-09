@@ -98,7 +98,7 @@ public class Enemy3Projectile : MonoBehaviour
                 // If player is in hit array, suffer damage
                 if (hit.gameObject.CompareTag("Player"))
                 {
-                    hit.gameObject.GetComponent<PlayerStats>().DecreaseHealth(0.2f);
+                    hit.gameObject.GetComponent<PlayerStats>().DecreaseHealth(0.2f, PlayerDeathCause.EnemyProjectile);
                 }
             }
 

@@ -12,13 +12,18 @@ using UnityEngine.UI;
 // || Additional code by Hugo Bailey (see comments).                        ||
 // ||=======================================================================||
 
+// Edited for mod11:
+// - Added damage effect
+// - Health now increases over time based on food level
+// - Player dies when health reached 0
+
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerStats : MonoBehaviour, IPersistentObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
 
-    [Header("Hunger Options (See tooltips for info)")]
+    [Header("Hunger (See tooltips for info)")]
 
     [SerializeField] [Tooltip("The number of seconds it will take for the player to starve if they are idle.")]
     private float   baseTimeToStarve        = 600.0f;
@@ -38,8 +43,12 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     [SerializeField] [Tooltip("How frequently (in seconds) the player takes damage when starving.")]
     private float   starveDamageInterval    = 2.0f;
 
-    // Drowning-related variables added by Hugo:
+    [Header("Health")]
+    [SerializeField] [Tooltip("How quickly the player's health will increase over time (adjusted based on food level).")]
+    private float   healthIncreaseSpeed     = 0.04f;
 
+    // Drowning-related variables added by Hugo:
+    [Header("Drowning")]
     [SerializeField]  [Tooltip("How much the player's health decreases by every [drownDamageInterval] seconds when starving.")]
     private float   drownDamage             = 0.1f;
 
@@ -47,7 +56,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private float   drownDamageInterval     = 2.0f;
 
     [SerializeField] [Tooltip("Time player takes to drown")]
-    private float baseTimeToDrown           = 60.0f;
+    private float   baseTimeToDrown         = 60.0f;
 
     [Header("UI")]
     [SerializeField] private Slider      healthSlider;       // The slider showing health
@@ -57,11 +66,11 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     [SerializeField] private Slider      breathLevelSlider;  // The slider showing breath
     [SerializeField] private Image       breathSliderFill;   // The fill bar for the above slider
     [SerializeField] private CanvasGroup breathCanvasGroup;  // Canvas group for showing/hiding the breath indicator
-        
-
+    [SerializeField] private GameObject  damageEffectPrefab; // Prefab showing a red vignette flash effect that is instantiated when the player takes damage
 
     #endregion
 
+    private Transform       canvasTransform;
     private float           health    = 1.0f;       // The player's health (0 = death, 1 = full)
     private float           foodLevel = 1.0f;       // The player's food level (0 = starving, 1 = full)
                                                        
@@ -84,6 +93,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
         // Get player movement script and animators for various UI elements
 
         playerMovement = GetComponent<PlayerMovement>();
+        canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
 
         healthSliderAnimator    = healthSliderFill.gameObject.GetComponent<Animator>();
 
@@ -114,6 +124,8 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
 
         UpdateFoodLevel(foodLevelDecreaseAmount);
 
+        UpdateHealth();
+
         // Breath/drowning code added by hugo
         UpdateBreathLevel(breathDecreaseAmount);
 
@@ -124,7 +136,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
 
     public void OnSave(SaveData saveData)
     {
-        // Save the player's food level, health and breath
+        //Save the player's food level, health and breath
 
         saveData.AddData("playerFoodLevel", foodLevel);
 
@@ -135,27 +147,32 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
 
     public void OnLoadSetup(SaveData saveData)
     {
-        // Load the player's food level, health and breath
-        //  Stat levels will be left at their default values if loading fails
+        // Only load in health/food/breath values if the game is being loaded from the menu
+        //   rather than after a death. If the player died, values will instead be set to their
+        //   default values to restore full health/hunger
 
-        bool loadSuccess;
-
-        float loadedFoodLevel = saveData.GetData<float>("playerFoodLevel", out loadSuccess);
-        if (loadSuccess)
+        if (!SaveLoadManager.Instance.LoadingAfterDeath)
         {
-            foodLevel = loadedFoodLevel;
-        }
+            //Load the player's food level, health and breath
+            //  Stat levels will be left at their default values if loading fails
 
-        float loadedHealth = saveData.GetData<float>("playerHealth", out loadSuccess);
-        if (loadSuccess)
-        {
-            health = loadedHealth;
-        }
+            float loadedFoodLevel = saveData.GetData<float>("playerFoodLevel", out bool loadSuccess);
+            if (loadSuccess)
+            {
+                foodLevel = loadedFoodLevel;
+            }
 
-        float loadedBreath = saveData.GetData<float>("playerBreath", out loadSuccess);
-        if (loadSuccess)
-        {
-            breath = loadedBreath;
+            float loadedHealth = saveData.GetData<float>("playerHealth", out loadSuccess);
+            if (loadSuccess)
+            {
+                health = loadedHealth;
+            }
+
+            float loadedBreath = saveData.GetData<float>("playerBreath", out loadSuccess);
+            if (loadSuccess)
+            {
+                breath = loadedBreath;
+            }
         }
     }
 
@@ -190,10 +207,15 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
             //  Player has been starving for starveDamageInterval, take damage and reset the timer
             if (starveDamageTimer >= starveDamageInterval)
             {
-                DecreaseHealth(starveDamage);
+                DecreaseHealth(starveDamage, PlayerDeathCause.Starved);
                 starveDamageTimer = 0.0f;
             }
         }
+    }
+
+    private void UpdateHealth()
+    {
+        IncreaseHealth(Time.deltaTime * healthIncreaseSpeed * foodLevel);
     }
 
     private void UpdateBreathLevel(float breathDecreaseAmount)
@@ -223,7 +245,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
                 //  Player has been drowning for drownDamageInterval, take damage and reset the timer
                 if (drownDamageTimer >= drownDamageInterval)
                 {
-                    DecreaseHealth(drownDamage);
+                    DecreaseHealth(drownDamage, PlayerDeathCause.Drowned);
                     drownDamageTimer = 0.0f;
                 }
             }
@@ -257,13 +279,22 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
         health = Mathf.Clamp(health, 0.0f, 1.0f);
     }
 
-    public void DecreaseHealth(float amount)
+    public void DecreaseHealth(float amount, PlayerDeathCause potentialDeathCause)
     {
         // Decrease health by the given amount, ensuring it stays between 0.0 and 1.0
 
         health -= amount;
 
         health = Mathf.Clamp(health, 0.0f, 1.0f);
+
+        if(health == 0.0f)
+        {
+            GetComponent<PlayerDeath>().KillPlayer(potentialDeathCause);
+        }
+        else
+        {
+            Instantiate(damageEffectPrefab, canvasTransform);
+        }
     }
 
     // Increase/DecreaseBreath and UpdateBreathUI Added by Hugo
@@ -288,7 +319,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private void UpdateBreathUI()
     {
         // Lerp the breath slider value towards breath so the value smoothly changes
-        breathLevelSlider.value = Mathf.Lerp(breathLevelSlider.value, breath, Time.deltaTime * 25.0f);
+        breathLevelSlider.value = Mathf.Lerp(breathLevelSlider.value, breath, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the breath slider bar or background red depending on how low the level is
         breathSliderAnimator.SetBool("Flash", (breath < StatWarningThreshold));
@@ -299,7 +330,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private void UpdateFoodLevelUI()
     {
         // Lerp the food slider value towards foodLevel so the value smoothly changes
-        foodLevelSlider.value = Mathf.Lerp(foodLevelSlider.value, foodLevel, Time.deltaTime * 25.0f);
+        foodLevelSlider.value = Mathf.Lerp(foodLevelSlider.value, foodLevel, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the food slider bar or background red depending on how low the level is
         foodSliderAnimator.SetBool("Flash", (foodLevel < StatWarningThreshold));
@@ -310,7 +341,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private void UpdateHealthUI()
     {
         // Lerp the health slider value towards health so the value smoothly changes
-        healthSlider.value = Mathf.Lerp(healthSlider.value, health, Time.deltaTime * 25.0f);
+        healthSlider.value = Mathf.Lerp(healthSlider.value, health, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the health slider red if health is getting low
         healthSliderAnimator.SetBool("Flash", (health < StatWarningThreshold));

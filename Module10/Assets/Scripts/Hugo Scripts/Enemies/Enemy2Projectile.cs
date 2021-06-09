@@ -113,7 +113,7 @@ public class Enemy2Projectile : MonoBehaviour
             // If player is in hit array, suffer damage
             if(hit.gameObject.CompareTag("Player"))
             {
-                hit.gameObject.GetComponent<PlayerStats>().DecreaseHealth(explosionDamage);
+                hit.gameObject.GetComponent<PlayerStats>().DecreaseHealth(explosionDamage, PlayerDeathCause.EnemyProjectile);
                 // Drop out of function once player is hit
                 return;
             }

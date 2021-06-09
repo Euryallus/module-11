@@ -26,11 +26,18 @@ public class SaveLoadManager : MonoBehaviour
 
     #endregion
 
+    #region Properties
+
+    public bool LoadingAfterDeath { get { return loadingAfterDeath; } set { loadingAfterDeath = value; } }
+
+    #endregion
+
     public event Action<SaveData>   SaveObjectsEvent;           // Event invoked when objects are saved
     public event Action<SaveData>   LoadObjectsSetupEvent;      // Event invoked for the first stage of object loading
     public event Action<SaveData>   LoadObjectsConfigureEvent;  // Event invoked for the second stage of object loading
 
-    private string saveDirectory;                       // Path where save files are stored
+    private string  saveDirectory;      // Path where save files are stored
+    private bool    loadingAfterDeath;  // Whether the game is being reloaded after the player dies
 
     private Dictionary<string, int> playerPrefsDefaultIntValues = new Dictionary<string, int>()
     {
@@ -218,7 +225,11 @@ public class SaveLoadManager : MonoBehaviour
         // Loading is done, hide the load panel and re-enable player controls
         loadingPanel.LoadDone();
 
+        // Re-enable the character coltroller so the player can move
         playerCharControl.enabled = true;
+
+        // Reset loading after death bool
+        loadingAfterDeath = false;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

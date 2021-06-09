@@ -377,7 +377,7 @@ public class EnemyBase : MonoBehaviour
             {
                 if(playerStats!= null)
                 {
-                    playerStats.DecreaseHealth(baseDamage);
+                    playerStats.DecreaseHealth(baseDamage, PlayerDeathCause.Enemy);
                 }
 
             }

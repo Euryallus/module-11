@@ -4,7 +4,10 @@ using UnityEngine;
 // PlayerDeathCause: All of the possible death reasons that can be shown
 public enum PlayerDeathCause
 {
-    Starved,       
+    Starved,
+    Drowned,
+    Enemy,
+    EnemyProjectile,
     FellOutOfWorld,
     Crushed,       
     Skewered,
@@ -37,7 +40,22 @@ public class PlayerDeath : MonoBehaviour
     {
         { PlayerDeathCause.Starved,         new WeightedString[]    {
                                                                         new WeightedString("You starved.", 100),
-                                                                        new WeightedString("If you had just eaten some nuggets we wouldn't be in this situation.", 1)
+                                                                        new WeightedString("Maybe eat next time.", 1)
+                                                                    } },
+
+        { PlayerDeathCause.Drowned,         new WeightedString[]    {
+                                                                        new WeightedString("You drowned.", 100),
+                                                                        new WeightedString("HOLDING MY BREATH CHALLENGE (GONE WRONG) (NOT CLICKBAIT)", 1)
+                                                                    } },
+
+         { PlayerDeathCause.Enemy,          new WeightedString[]    {
+                                                                        new WeightedString("You were killed by an enemy.", 100),
+                                                                        new WeightedString("That was embarrassing.", 1)
+                                                                    } },
+
+        { PlayerDeathCause.EnemyProjectile, new WeightedString[]    {
+                                                                        new WeightedString("You were killed by an enemy projectile.", 100),
+                                                                        new WeightedString("You should try moving out of the way next time.", 1)
                                                                     } },
 
         { PlayerDeathCause.FellOutOfWorld,  new WeightedString[]    {
