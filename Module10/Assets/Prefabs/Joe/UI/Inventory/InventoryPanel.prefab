@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f60e15cee75d84e8ac90156d3d82b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPanel: {fileID: 3083255714923588027}
   parentContainer: {fileID: 2017352706499166436}
 --- !u!1 &1342875392897293873
 GameObject:
@@ -552,6 +553,7 @@ MonoBehaviour:
   sliderStandardColour: {r: 0.047169805, g: 0.12971692, b: 0.18867922, a: 0.9019608}
   sliderFullColour: {r: 1, g: 0, b: 0.16355896, a: 1}
   maxWeight: 100
+  itemStackPickupPrefab: {fileID: 3642118955671359745, guid: 81820206238b6be42a729fe02923b0d2, type: 3}
 --- !u!225 &5078108334871479629
 CanvasGroup:
   m_ObjectHideFlags: 0

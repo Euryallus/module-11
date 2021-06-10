@@ -159,14 +159,30 @@ public class QuestManager : MonoBehaviour, IPersistentObject
         }
 
         // If quest has rewards, cycle each item in rewards & add to inventory
-        if(quest.rewards.Count != 0)
+        if (quest.rewards.Count != 0)
         {
+            // Added by Joe: Keeps track of any item groups that cannot be added to the player's inventory and should instead be dropped
+            List<ItemGroup> dropItemGroups = new List<ItemGroup>();
+
             foreach (ItemGroup stack in quest.rewards)
             {
+                ItemGroup dropItemGroup = new ItemGroup(stack.Item, 0);
+
                 for (int i = 0; i < stack.Quantity; i++)
                 {
-                    inventory.TryAddItem(stack.Item);
+                    if(!inventory.TryAddItem(stack.Item))
+                    {
+                        dropItemGroup.Quantity++;
+                    }
                 }
+
+                dropItemGroups.Add(dropItemGroup);
+            }
+
+            if (dropItemGroups.Count > 0)
+            {
+                // Drop any item groups that couldn't be added to the player's inventory
+                inventory.DropItemGroups(dropItemGroups);
             }
         }
     }

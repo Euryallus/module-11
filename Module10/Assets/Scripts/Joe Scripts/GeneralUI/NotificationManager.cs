@@ -18,6 +18,8 @@ public enum NotificationMessageType
     CantAffordItem,
     CantThrowAwayItem,
 
+    NoSpaceItemsDropped,
+
     SaveSuccess,
     AutoSaveSuccess,
     SaveError
@@ -64,6 +66,8 @@ public class NotificationManager : MonoBehaviour
 
         { NotificationMessageType.CantAffordItem,      "You cannot purchase this item - * * required." },
         { NotificationMessageType.CantThrowAwayItem,   "* cannot be thrown away." },
+
+        { NotificationMessageType.NoSpaceItemsDropped,  "Not enough space in your inventory. Some items were dropped." },
 
         { NotificationMessageType.SaveSuccess,         "Progress saved successfully.\nSpawn point set." },
         { NotificationMessageType.AutoSaveSuccess,     "Your progress has been auto-saved.\nSpawn point set." },

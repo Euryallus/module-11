@@ -30,7 +30,8 @@ public class DebugUI : MonoBehaviour
         {
             // The item id was valid, add the item to the player's inventoryS
             InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-            inventory.TryAddItem(itemToSpawn);
+
+            inventory.AddOrDropItem(itemToSpawn);
         }
     }
 }

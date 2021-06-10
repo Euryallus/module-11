@@ -6,6 +6,8 @@
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+using System;
+
 public class ItemStack
 {
     #region Properties
@@ -16,6 +18,8 @@ public class ItemStack
     public int      MaxStackSize    { get { return m_maxStackSize; } }
 
     #endregion
+
+    public  event Action    ItemAddedEvent;    // Event invoked when an item is added to the stack
 
     private string          m_stackItemsId; // Id of the item type the stack holds
     private int             m_stackSize;    // Number of items in the stack
@@ -79,7 +83,7 @@ public class ItemStack
         }
     }
 
-    public bool AddItemToStack(string itemId, bool checkIfValid = true)
+    public bool AddItemToStack(string itemId, bool checkIfValid = true, bool triggerAddedEvent = true)
     {
         if ( !checkIfValid || (checkIfValid && CanAddItemToStack(itemId)) )
         {
@@ -105,6 +109,11 @@ public class ItemStack
                     // There is a parent container for the slot containing this stack,
                     //   notify it that the sate of its contents has changed
                     m_slot.ParentContainer.ContainerStateChanged();
+                }
+
+                if(triggerAddedEvent && ItemAddedEvent != null)
+                {
+                    ItemAddedEvent.Invoke();
                 }
 
                 // Item was added

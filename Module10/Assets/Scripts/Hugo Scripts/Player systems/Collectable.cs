@@ -16,16 +16,34 @@ public class Collectable : InteractableWithOutline
     public override void Interact()
     {
         base.Interact();
-        foreach(ItemGroup group in collectedOnPickup)
+
+        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+
+        // Added by Joe: Keeps track of any item groups that cannot be added to the player's inventory and should instead be dropped
+        List<ItemGroup> dropItemGroups = new List<ItemGroup>();
+
+        foreach (ItemGroup group in collectedOnPickup)
         {
+            ItemGroup dropItemGroup = new ItemGroup(group.Item, 0);
+
             for (int i = 0; i < group.Quantity; i++)
             {
-                // Cycles each ItemGroup in the array collectionOnPickup and adds [x] quantity of said item to the player's inventory
-                GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().TryAddItem(group.Item);
+                if (!inventory.TryAddItem(group.Item))
+                {
+                    dropItemGroup.Quantity++;
+                }
             }
+
+            dropItemGroups.Add(dropItemGroup);
         }
 
-        // When all items are added, object destroys itself
+        if (dropItemGroups.Count > 0)
+        {
+            // Drop any item groups that couldn't be added to the player's inventory
+            inventory.DropItemGroups(dropItemGroups);
+        }
+
+        // When all items are added/dropped, object destroys itself
         Destroy(gameObject);
     }
 }

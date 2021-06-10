@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5615559941694038738}
   - component: {fileID: 4656784017249419435}
   m_Layer: 0
-  m_Name: _WorldSave
+  m_Name: WorldSave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,3 +50,5 @@ MonoBehaviour:
   modularWoodRoofPrefab: {fileID: 5722558148426266811, guid: bc75ca168185b3145984b14b51cd8a7e, type: 3}
   modularWoodStairsPrefab: {fileID: 24749052556340869, guid: 7aa8e0f63072e2a4cb9010b2f2dab61e, type: 3}
   craftingTablePrefab: {fileID: 5581585384562596166, guid: 44d735ee1d475cd4dbfbcbc30356c928, type: 3}
+  customisingTablePrefab: {fileID: 3792199794413623929, guid: e0ab6406eb088314597e764ad76b2dcc, type: 3}
+  itemStackPickupPrefab: {fileID: 3642118955671359745, guid: 81820206238b6be42a729fe02923b0d2, type: 3}

@@ -54,18 +54,36 @@ public class DestructableObject : MonoBehaviour
     {
         // Adds item dropped to inventory
         InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-        foreach(ItemGroup stack in itemDroppedOnDestroy)
+
+        // Added by Joe: Keeps track of any item groups that cannot be added to the player's inventory and should instead be dropped
+        List<ItemGroup> dropItemGroups = new List<ItemGroup>();
+
+        foreach (ItemGroup stack in itemDroppedOnDestroy)
         {
             for (int i = 0; i < stack.Quantity; i++)
             {
-                inventory.TryAddItem(stack.Item);
+                ItemGroup dropItemGroup = new ItemGroup(stack.Item, 0);
+
+                if (!inventory.TryAddItem(stack.Item))
+                {
+                    dropItemGroup.Quantity++;
+                }
+
+                dropItemGroups.Add(dropItemGroup);
+
                 // Flagged destroyed as true
                 destroyed = true;
             }
         }
 
+        if (dropItemGroups.Count > 0)
+        {
+            // Drop any item groups that couldn't be added to the player's inventory
+            inventory.DropItemGroups(dropItemGroups);
+        }
+
         // If particles have been defined, instantiate them at position desired (e.g. splinters, leaves etc.)
-        if(destroyParticlesPrefab != null)
+        if (destroyParticlesPrefab != null)
         {
             ParticleGroup particleGroup = Instantiate(destroyParticlesPrefab, destroyParticlesTransform.position, Quaternion.identity).GetComponent<ParticleGroup>();
             particleGroup.PlayEffect();

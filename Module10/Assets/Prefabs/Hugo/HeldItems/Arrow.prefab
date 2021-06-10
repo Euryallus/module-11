@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 2849598008623633143}
   - component: {fileID: 4087339205649486100}
   - component: {fileID: 3418198188494725226}
+  - component: {fileID: 5223389805107658324}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -158,6 +159,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594670394bc0924458c36f5b6901fa04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionRange: 5
+  interactTooltipPrefab: {fileID: 0}
+  interactTooltipOffset: {x: 0, y: 0, z: 0}
+  tooltipNameText: 
+  interactionSound: pop
   collectedOnPickup:
   - Item: {fileID: 11400000, guid: f8dacc19b588066429ff07ce85f7aa67, type: 2}
     Quantity: 1
@@ -174,6 +180,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.04318874, y: 0.044955183, z: 0.61004984}
   m_Center: {x: 0.00081238337, y: 0.00007083826, z: -0.0129983425}
+--- !u!114 &5223389805107658324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6257517664087781903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &6442993617091003126
 PrefabInstance:
   m_ObjectHideFlags: 0

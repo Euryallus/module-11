@@ -17,6 +17,7 @@ using System.Linq;
 
 // EDITED FOR MODULE 11:
 // - Combined hotbar and inventory slotsUI lists to both be linked with a single itemContainer
+// - Added item stack dropping
 
 // InventoryShowMode defines different ways that the inventory panel can be displayed
 public enum InventoryShowMode
@@ -45,6 +46,8 @@ public class InventoryPanel : UIPanel
     [SerializeField] private Color                  sliderFullColour;       //  Colour of the slider image when the inventory is full
 
     [SerializeField] private float                  maxWeight;              //  Maximum amount of weight this inventory can hold
+
+    [SerializeField] private GameObject             itemStackPickupPrefab;
 
     #endregion
 
@@ -109,15 +112,27 @@ public class InventoryPanel : UIPanel
         }
     }
 
+    public bool AddOrDropItem(Item item)
+    {
+        bool addedItem = TryAddItem(item);
+
+        if(!addedItem)
+        {
+            DropItemGroup(new ItemGroup(item, 1));
+        }
+
+        return addedItem;
+    }
+
     public bool TryAddItem(Item item)
     {
-        // Adds an item to the item container
+        // Attempts to add an item to the item container if there is enough space
         return itemContainer.TryAddItemToContainer(item);
     }
 
     public bool TryRemoveItem(Item item)
     {
-        // Removes an item to the item container
+        // Attempts to remove an item to the item container if one can be found
         return itemContainer.TryRemoveItemFromContainer(item.Id);
     }
 
@@ -131,6 +146,35 @@ public class InventoryPanel : UIPanel
     {
         // Returns the number of the given item in the inventory/hotbar item container
         return itemContainer.CheckForQuantityOfItem(item); 
+    }
+
+    public void DropItemGroup(ItemGroup groupToDrop, bool showDropNotification = true)
+    {
+        if(groupToDrop.Quantity > 0)
+        {
+            Debug.Log("Dropping " + groupToDrop.Quantity + " " + groupToDrop.Item.UIName);
+
+            const float dropPosOffset = 0.4f;
+
+            ItemStackPickup stackPickup = Instantiate(itemStackPickupPrefab, playerMovement.transform.position
+                                                        - new Vector3(Random.Range(-dropPosOffset, dropPosOffset), 1.25f, Random.Range(-dropPosOffset, dropPosOffset)),
+                                                        Quaternion.identity).GetComponent<ItemStackPickup>();
+
+            stackPickup.Setup(groupToDrop, this);
+
+            if(showDropNotification)
+            {
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.NoSpaceItemsDropped);
+            }
+        }
+    }
+
+    public void DropItemGroups(List<ItemGroup> groupsToDrop)
+    {
+        for (int i = 0; i < groupsToDrop.Count; i++)
+        {
+            DropItemGroup(groupsToDrop[i]);
+        }
     }
 
     private void CheckForShowHideInput()

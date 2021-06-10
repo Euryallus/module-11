@@ -280,7 +280,7 @@ public class ShopBuyPanel : MonoBehaviour
             }
 
             // Add the purchased item to the player's inventory
-            inventoryPanel.TryAddItem(selectedItem.Item);
+            inventoryPanel.AddOrDropItem(selectedItem.Item);
 
             // Re-select the selected item to repeat checks and confirm if they can/cannot buy it now
             SelectItem(selectedItem);

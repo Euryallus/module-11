@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class FaceCamera : MonoBehaviour
 {
-    private Transform playerMainCameraTransform;
-
-    private void Start()
-    {
-        playerMainCameraTransform = Camera.main.transform;
-    }
-
     private void LateUpdate()
-    {    
-        if(playerMainCameraTransform != null)
+    {
+        Camera playerCamera = Camera.main;
+
+        if (playerCamera != null)
         {
-            transform.LookAt(playerMainCameraTransform.position);
+            transform.forward = playerCamera.transform.forward;
         }
     }
 }

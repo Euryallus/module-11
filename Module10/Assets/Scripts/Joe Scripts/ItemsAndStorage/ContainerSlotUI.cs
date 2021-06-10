@@ -48,6 +48,12 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
 
     protected   ContainerSlot   slot;           // The container slot this UI element is linked to
     private     HandSlotUI      handSlotUI;     // The slot that allows the player to hold/move items
+    private     Animator        animator;
+
+    protected virtual void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -66,6 +72,8 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
         //   so changes to the object can be reflected in the UI
         this.slot = slot;
         slot.SlotUI = this;
+
+        slot.ItemStack.ItemAddedEvent += OnItemAdded;
     }
 
     public void UpdateUI()
@@ -236,6 +244,11 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 ErrorNotLinked();
             }
         }
+    }
+
+    private void OnItemAdded()
+    {
+        animator.SetTrigger("Bounce");
     }
 
     private void ErrorNotLinked()

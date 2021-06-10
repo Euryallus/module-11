@@ -35,7 +35,7 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
             if(itemBeingBinned.CanThrowAway)
             {
-                // The item type being held can be thrown away
+                // The item type being held can be binned
 
                 // The hand stack contains at least one item, remove all items from it
                 for (int i = 0; i < handStackSize; i++)

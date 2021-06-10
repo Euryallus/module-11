@@ -19,6 +19,7 @@ MonoBehaviour:
   m_weight: 0
   m_sprite: {fileID: 21300000, guid: 4c8dda4fa2293a741a8d9ce3abb266cb, type: 3}
   m_heldItemGameObject: {fileID: 0}
+  m_canThrowAway: 0
   m_customisable: 0
   m_currencyItemId: 
   m_currencyItemQuantity: 0

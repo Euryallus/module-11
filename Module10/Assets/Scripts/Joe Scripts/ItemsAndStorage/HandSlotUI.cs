@@ -19,25 +19,16 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Animator))]
 public class HandSlotUI : ContainerSlotUI
 {
-    private Animator animator;
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         // Link to a new slot object that is not a child of any other UI panel
         LinkToContainerSlot(new ContainerSlot(0, null));
-
-        animator = GetComponent<Animator>();
-
-        slot.ItemsMovedEvent += OnItemsMoved;
     }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
         // No pointer down behaviour for hand slots
-    }
-
-    private void OnItemsMoved()
-    {
-        animator.SetTrigger("Bounce");
     }
 }

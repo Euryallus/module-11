@@ -203,18 +203,22 @@ public class CraftingPanel : UIPanel
             }
         }
 
-        for (int i = 0; i < SelectedRecipe.ResultItem.Quantity; i++)
+        int resultItemsDropCount = 0;
+
+        for (int i = 0; i < selectedRecipe.ResultItem.Quantity; i++)
         {
             // Attempt to add the crafted item to the player's inventory
-            if (InventoryPanel.TryAddItem(SelectedRecipe.ResultItem.Item))
+            if (InventoryPanel.TryAddItem(selectedRecipe.ResultItem.Item))
             {
                 // Successfully added item to inventory
             }
             else
             {
-                // Inventory too full to add item. TODO: Drop item instead
-                Debug.LogWarning("INVENTORY TOO FULL FOR ITEM. ITEM SHOULD BE DROPPED INSTEAD");
+                // Inventory too full to add item. Drop item instead
+                resultItemsDropCount++;
             }
         }
+
+        InventoryPanel.DropItemGroup(new ItemGroup(selectedRecipe.ResultItem.Item, resultItemsDropCount));
     }
 }

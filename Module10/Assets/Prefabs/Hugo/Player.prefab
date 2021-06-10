@@ -252,9 +252,9 @@ MonoBehaviour:
   starveDamage: 0.05
   starveDamageInterval: 2
   healthIncreaseSpeed: 0.04
-  drownDamage: 0.1
+  drownDamage: 0.2
   drownDamageInterval: 2
-  baseTimeToDrown: 60
+  baseTimeToDrown: 30
   healthSlider: {fileID: 0}
   healthSliderFill: {fileID: 0}
   foodLevelSlider: {fileID: 0}

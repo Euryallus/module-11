@@ -115,7 +115,7 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
             // Add items based on the loaded values
             for (int j = 0; j < stackSize; j++)
             {
-                slots[i].ItemStack.AddItemToStack(itemId, false);
+                slots[i].ItemStack.AddItemToStack(itemId, false, false);
             }
 
             // If slots are linked to UI, update it for each one to reflect changes
@@ -147,8 +147,11 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
         ContainerStateChangedEvent?.Invoke();
     }
 
-    public bool TryAddItemToContainer(Item item)
+    public bool CanAddItemToContainer(Item item, out int firstValidSlotIndex)
     {
+        // Returns true/false depending on if an item can be added to the container
+        //   (Note: Does not add the item, just checks if there is enough space TO add it)
+
         // Step 1 - loop through all slots to find valid ones
 
         FindValidContainerSlots(item, out int firstEmptySlot, out int firstStackableSlot);
@@ -158,7 +161,8 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
 
         if (firstStackableSlot == -1 && firstEmptySlot == -1)
         {
-            // No empty or stackable slots, meaning the inventory is full and the item could not be added
+            // No empty or stackable slots, meaning the inventory is full and the item cannot be added
+            firstValidSlotIndex = -1;
             return false;
         }
         else
@@ -176,15 +180,28 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
                 chosenSlotIndex = firstEmptySlot;
             }
 
-            // Add the item to the chosen slot
-            slots[chosenSlotIndex].ItemStack.AddItemToStack(item.Id);
+            // Item can be added to the chosen slot
+            firstValidSlotIndex = chosenSlotIndex;
 
-            // Update slot UI to show new item
-            slots[chosenSlotIndex].SlotUI.UpdateUI();
-
-            // Item added successfully
             return true;
         }
+    }
+
+    public bool TryAddItemToContainer(Item item)
+    {
+        // Check if the item can be added to the container, and which slot it should be added to
+        bool canAdd = CanAddItemToContainer(item, out int firstValidSlotIndex);
+
+        if(canAdd)
+        {
+            // The item can be added - add it to the valid slot that was found
+            slots[firstValidSlotIndex].ItemStack.AddItemToStack(item.Id);
+
+            // Update slot UI to show new item
+            slots[firstValidSlotIndex].SlotUI.UpdateUI();
+        }
+
+        return canAdd;
     }
 
     public bool TryRemoveItemFromContainer(string itemId)

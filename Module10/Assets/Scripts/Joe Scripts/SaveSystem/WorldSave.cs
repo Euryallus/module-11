@@ -28,6 +28,7 @@ public class WorldSave : MonoBehaviour, IPersistentObject
     [SerializeField] private GameObject modularWoodStairsPrefab;
     [SerializeField] private GameObject craftingTablePrefab;
     [SerializeField] private GameObject customisingTablePrefab;
+    [SerializeField] private GameObject itemStackPickupPrefab;
 
     #endregion
 
@@ -117,7 +118,7 @@ public class WorldSave : MonoBehaviour, IPersistentObject
     {
 
         // Base ids of all player placed objects that can be loaded:
-        string[]    idsToLoad       = new string[] { "sign", "modularPiece", "craftingTable" };
+        string[]    idsToLoad       = new string[] { "sign", "modularPiece", "craftingTable", "itemStackPickup" };
 
         bool        loadingObjects  = true;         // Whether objects are currently being loaded
         int         idToLoadIndex   = 0;            // Index for the id of the object type currently being load in the above idsToLoad array
@@ -152,6 +153,10 @@ public class WorldSave : MonoBehaviour, IPersistentObject
 
                     case "customisingTable":
                         LoadPlacedCustomisingTable(currentElement as TransformSaveData);
+                        break;
+
+                    case "itemStackPickup":
+                        LoadItemStackPickup(currentElement as ItemStackPickupSaveData);
                         break;
                 }
             }
@@ -242,6 +247,18 @@ public class WorldSave : MonoBehaviour, IPersistentObject
 
         // Setup the customising table script
         customisingTable.SetupAsPlacedObject();
+    }
+
+    private void LoadItemStackPickup(ItemStackPickupSaveData data)
+    {
+        // Instantiate the item stack GameObject with the saved position/rotation
+        ItemStackPickup itemStackPickup = Instantiate(itemStackPickupPrefab, new Vector3(data.Position[0], data.Position[1], data.Position[2]),
+                                                Quaternion.Euler(data.Rotation[0], data.Rotation[1], data.Rotation[2])).GetComponent<ItemStackPickup>();
+
+        InventoryPanel inventoryPanel = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+
+        // Setup the customising table script
+        itemStackPickup.Setup(data.ItemId, data.ItemQuantity, inventoryPanel);
     }
 
     private void MovePlayerToSpawnPoint()

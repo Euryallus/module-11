@@ -9,7 +9,8 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 {
     public ItemContainer ParentContainer { get { return parentContainer; } }
 
-    [SerializeField] private ItemContainer parentContainer;
+    [SerializeField] private InventoryPanel inventoryPanel;
+    [SerializeField] private ItemContainer  parentContainer;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -23,7 +24,21 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
         if (handStackSize > 0)
         {
+            // The hand stack contains at least one item, remove all items from it
+            for (int i = 0; i < handStackSize; i++)
+            {
+                handSlotUI.Slot.ItemStack.TryRemoveItemFromStack();
+            }
+
+            // Update hand slot UI to show the player they are no longer holding items
+            handSlotUI.UpdateUI();
+
+            Item itemTypeToDrop = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
+
             // Drop items
+            inventoryPanel.DropItemGroup(new ItemGroup(itemTypeToDrop, handStackSize), false);
+
+            AudioManager.Instance.PlaySoundEffect2D("throw");
         }
     }
 
