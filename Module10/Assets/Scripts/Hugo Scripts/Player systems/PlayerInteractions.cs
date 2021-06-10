@@ -31,12 +31,6 @@ public class PlayerInteractions : MonoBehaviour
                         npcManager.InteractWithNPC(hitNPC);
                     }
                 }
-
-                // If raycast hits a Collectable object, call PickUp function
-                if (raycastHit.transform.gameObject.GetComponent<Collectable>() != null)
-                {
-                    raycastHit.transform.gameObject.GetComponent<Collectable>().PickUp();
-                }
             }
         }
     }

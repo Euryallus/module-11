@@ -8,13 +8,14 @@ using UnityEngine;
 // Development window:  Prototype phase
 // Inherits from:       MonoBehaviour
 
-public class Collectable : MonoBehaviour
+public class Collectable : InteractableWithOutline
 {
     [SerializeField] private List<ItemGroup> collectedOnPickup = new List<ItemGroup>(); // List of items & quantities the player recieves when they interact with the object
 
     // Called using PlayerInteractions
-    public void PickUp()
+    public override void Interact()
     {
+        base.Interact();
         foreach(ItemGroup group in collectedOnPickup)
         {
             for (int i = 0; i < group.Quantity; i++)

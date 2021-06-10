@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 427918}
   - component: {fileID: 3337044}
   - component: {fileID: 2333542}
-  - component: {fileID: 64797991509124010}
   - component: {fileID: 2718821765292813465}
   - component: {fileID: 6976279674343380778}
+  - component: {fileID: 1113443911341304852}
+  - component: {fileID: 8553983193790617491}
   m_Layer: 0
   m_Name: SM_Prop_Crate_01
   m_TagString: MovableObj
@@ -84,20 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64797991509124010
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 123248}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43118516143974124, guid: ffa09088abdfa9341a6adf8a0ead237c, type: 2}
 --- !u!54 &2718821765292813465
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -126,9 +113,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a24fa3f3dfaf64fa92caecb211635c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionRange: 5
+  interactTooltipPrefab: {fileID: 0}
+  interactTooltipOffset: {x: 0, y: 0, z: 0}
+  tooltipNameText: 
+  interactionSound: buttonClickMain1
   isHeld: 0
   target: {fileID: 0}
   rb: {fileID: 2718821765292813465}
   jointSpring: 5
   jointDamper: 10
   movementDampen: 0.3
+  hand: {fileID: 0}
+--- !u!114 &1113443911341304852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.3254717, g: 0.56129456, b: 1, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &8553983193790617491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123248}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7996949, y: 0.79969436, z: 0.79934573}
+  m_Center: {x: 0.00000014901161, y: 0.39984718, z: 0.000000074505806}

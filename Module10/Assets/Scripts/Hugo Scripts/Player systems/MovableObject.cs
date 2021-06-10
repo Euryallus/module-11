@@ -9,7 +9,7 @@ using UnityEngine;
 // Inherits from:       MonoBehaviour
 
 [RequireComponent(typeof(Rigidbody))]
-public class MovableObject : MonoBehaviour
+public class MovableObject : InteractableWithOutline
 {
     [HideInInspector]   public bool isHeld;         // Flags if player is currently holding the object
     [SerializeField]    private Transform target;   // Ref. to transform of the player's ""hand"" - position the object moves towards
@@ -22,10 +22,15 @@ public class MovableObject : MonoBehaviour
                         private SpringJoint joint;                          // Ref. to own spring joint
                         private Vector3 currentVelocity = Vector3.zero;     // Current velocity of object (used & altered by Vector3.SmoothDamp)
 
-    void Start()
+    [SerializeField]    private Transform hand;
+
+    protected override void Start()
     {
+        base.Start();
         isHeld = false;
         rb = gameObject.GetComponent<Rigidbody>();
+
+        hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
     }
 
     private void FixedUpdate()
@@ -48,31 +53,50 @@ public class MovableObject : MonoBehaviour
         }
     }
 
-    // Sets target position to players hand, turns off grav & sets isHeld to true
-    public void PickUp(Transform hand)
+    protected override void Update()
     {
-        handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
-        transform.parent = hand.transform;
+        if(isHeld && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            ThrowObject(transform.position - GameObject.FindGameObjectWithTag("Player").transform.position);
+        }
 
-        joint = gameObject.AddComponent<SpringJoint>();
-        joint.spring = jointSpring;
-        joint.damper = jointDamper;
+        if (isHeld && Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            DropObject();
+        }
 
-        joint.connectedBody = handTarget;
+        base.Update();
+    }
 
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
+    // Sets target position to players hand, turns off grav & sets isHeld to true
+    public override void Interact()
+    {
+        if(!isHeld)
+        {
+            base.Interact();
+            handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
+            transform.parent = hand.transform;
+
+            joint = gameObject.AddComponent<SpringJoint>();
+            joint.spring = jointSpring;
+            joint.damper = jointDamper;
+
+            joint.connectedBody = handTarget;
+
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
 
 
-        // ""Resets"" velocity when object is held to avoid issues when moving around
-        rb.velocity = Vector3.zero;
-        // Sets target to the player's "hand" and disables gravity on the object, flags isHeld
-        target = hand;
-        rb.useGravity = false;
-        isHeld = true;
+            // ""Resets"" velocity when object is held to avoid issues when moving around
+            rb.velocity = Vector3.zero;
+            // Sets target to the player's "hand" and disables gravity on the object, flags isHeld
+            target = hand;
+            rb.useGravity = false;
+            isHeld = true;
+        }
     }
 
     // Sets item down where it is and re-enables grav.
-    public void DropObject(Vector3 direction)
+    public void DropObject()
     {
         rb.constraints = RigidbodyConstraints.None;
 
@@ -91,6 +115,6 @@ public class MovableObject : MonoBehaviour
         Destroy(joint);
         isHeld = false;
         rb.useGravity = true;
-        rb.AddForce(direction.normalized * 600);
+        rb.AddForce(direction.normalized * 300);
     }
 }
