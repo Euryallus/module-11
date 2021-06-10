@@ -16,30 +16,7 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
     {
         // Called when the button is clicked
 
-        // Get the slot used for holding/moving items
-        HandSlotUI handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
-
-        // Get the number of items in the player's hand
-        int handStackSize = handSlotUI.Slot.ItemStack.StackSize;
-
-        if (handStackSize > 0)
-        {
-            // The hand stack contains at least one item, remove all items from it
-            for (int i = 0; i < handStackSize; i++)
-            {
-                handSlotUI.Slot.ItemStack.TryRemoveItemFromStack();
-            }
-
-            // Update hand slot UI to show the player they are no longer holding items
-            handSlotUI.UpdateUI();
-
-            Item itemTypeToDrop = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
-
-            // Drop items
-            inventoryPanel.DropItemGroup(new ItemGroup(itemTypeToDrop, handStackSize), false);
-
-            AudioManager.Instance.PlaySoundEffect2D("throw");
-        }
+        inventoryPanel.DropItemsInHand(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

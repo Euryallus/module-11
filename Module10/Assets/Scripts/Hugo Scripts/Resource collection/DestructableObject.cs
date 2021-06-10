@@ -79,7 +79,7 @@ public class DestructableObject : MonoBehaviour
         if (dropItemGroups.Count > 0)
         {
             // Drop any item groups that couldn't be added to the player's inventory
-            inventory.DropItemGroups(dropItemGroups);
+            inventory.DropItemGroups(dropItemGroups, true, true);
         }
 
         // If particles have been defined, instantiate them at position desired (e.g. splinters, leaves etc.)

@@ -82,4 +82,9 @@ public class ContainerSlot
         ItemsMovedEvent?.Invoke();
         otherSlot.ItemsMovedEvent?.Invoke();
     }
+
+    public bool IsEmpty()
+    {
+        return (string.IsNullOrEmpty(itemStack.StackItemsID) || itemStack.StackSize == 0);
+    }
 }

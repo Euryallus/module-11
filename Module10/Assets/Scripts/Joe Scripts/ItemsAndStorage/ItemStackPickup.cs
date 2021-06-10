@@ -14,6 +14,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
     private string          itemId;
     private int             itemQuantity;
     private bool            playerInTrigger;
+    private bool            canPickup;
     private InventoryPanel  inventory;
 
     private void Start()
@@ -31,7 +32,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
         inventory.ItemContainer.ContainerStateChangedEvent -= OnInventoryStateChanged;
     }
 
-    public void Setup(ItemGroup itemGroup, InventoryPanel playerInventory, bool spawningBelowPlayer = true)
+    public void Setup(ItemGroup itemGroup, InventoryPanel playerInventory, bool allowInstantPickup = true)
     {
         itemId          = itemGroup.Item.Id;
         itemQuantity    = itemGroup.Quantity;
@@ -39,7 +40,8 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
         inventory       = playerInventory;
         inventory.ItemContainer.ContainerStateChangedEvent += OnInventoryStateChanged;
 
-        playerInTrigger = spawningBelowPlayer;
+        playerInTrigger = !allowInstantPickup;
+        canPickup       = allowInstantPickup;
 
         itemSpriteRenderer.sprite = itemGroup.Item.Sprite;
 
@@ -50,7 +52,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
     {
         // Try picking up items when inventory state changes in case there is
         //   now more space in the inventory than there was previously
-        if(playerInTrigger)
+        if(playerInTrigger && canPickup)
         {
             TryPickupItems();
         }
@@ -72,7 +74,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
     {
         Item item = ItemManager.Instance.GetItemWithId(id);
 
-        Setup(new ItemGroup(item, quantity), playerInventory, false);
+        Setup(new ItemGroup(item, quantity), playerInventory);
     }
 
     public void AddDataToWorldSave(SaveData saveData)
@@ -122,6 +124,10 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
     {
         if(!playerInTrigger && other.CompareTag("Player"))
         {
+            // Allow pickups the first time the player enters the trigger, which may be
+            //   as soon as the item is dropped or after leaving and re-entering depending on
+            //   in allowInstantPickup was true when setting up
+            canPickup       = true;
             playerInTrigger = true;
 
             TryPickupItems();

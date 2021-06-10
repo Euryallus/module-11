@@ -112,13 +112,13 @@ public class InventoryPanel : UIPanel
         }
     }
 
-    public bool AddOrDropItem(Item item)
+    public bool AddOrDropItem(Item item, bool showDropNotification, bool allowInstantPickup)
     {
         bool addedItem = TryAddItem(item);
 
         if(!addedItem)
         {
-            DropItemGroup(new ItemGroup(item, 1));
+            DropItemGroup(new ItemGroup(item, 1), showDropNotification, allowInstantPickup);
         }
 
         return addedItem;
@@ -148,7 +148,7 @@ public class InventoryPanel : UIPanel
         return itemContainer.CheckForQuantityOfItem(item); 
     }
 
-    public void DropItemGroup(ItemGroup groupToDrop, bool showDropNotification = true)
+    public void DropItemGroup(ItemGroup groupToDrop, bool showDropNotification, bool allowInstantPickup)
     {
         if(groupToDrop.Quantity > 0)
         {
@@ -160,7 +160,7 @@ public class InventoryPanel : UIPanel
                                                         - new Vector3(Random.Range(-dropPosOffset, dropPosOffset), 1.25f, Random.Range(-dropPosOffset, dropPosOffset)),
                                                         Quaternion.identity).GetComponent<ItemStackPickup>();
 
-            stackPickup.Setup(groupToDrop, this);
+            stackPickup.Setup(groupToDrop, this, allowInstantPickup);
 
             if(showDropNotification)
             {
@@ -169,12 +169,34 @@ public class InventoryPanel : UIPanel
         }
     }
 
-    public void DropItemGroups(List<ItemGroup> groupsToDrop)
+    public void DropItemGroups(List<ItemGroup> groupsToDrop, bool showDropNotification, bool allowInstantPickup)
     {
         for (int i = 0; i < groupsToDrop.Count; i++)
         {
-            DropItemGroup(groupsToDrop[i]);
+            DropItemGroup(groupsToDrop[i], showDropNotification, allowInstantPickup);
         }
+    }
+
+    public void DropItemsInHand(bool allowInstantPickup)
+    {
+        // Get the number of items in the player's hand
+        int handStackSize = handSlotUI.Slot.ItemStack.StackSize;
+
+        // The hand stack contains at least one item, remove all items from it
+        for (int i = 0; i < handStackSize; i++)
+        {
+            handSlotUI.Slot.ItemStack.TryRemoveItemFromStack();
+        }
+
+        // Update hand slot UI to show the player they are no longer holding items
+        handSlotUI.UpdateUI();
+
+        Item itemTypeToDrop = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
+
+        // Drop items
+        DropItemGroup(new ItemGroup(itemTypeToDrop, handStackSize), false, allowInstantPickup);
+
+        AudioManager.Instance.PlaySoundEffect2D("throw");
     }
 
     private void CheckForShowHideInput()
@@ -250,6 +272,12 @@ public class InventoryPanel : UIPanel
     public override void Hide()
     {
         base.Hide();
+
+        if(!handSlotUI.Slot.IsEmpty())
+        {
+            // The player is holding some items while closing the inventory panel - drop items
+            DropItemsInHand(true);
+        }
 
         //Allow the player to move and lock their cursor to screen centre
         playerMovement.StartMoving();

@@ -219,6 +219,6 @@ public class CraftingPanel : UIPanel
             }
         }
 
-        InventoryPanel.DropItemGroup(new ItemGroup(selectedRecipe.ResultItem.Item, resultItemsDropCount));
+        InventoryPanel.DropItemGroup(new ItemGroup(selectedRecipe.ResultItem.Item, resultItemsDropCount), true, true);
     }
 }

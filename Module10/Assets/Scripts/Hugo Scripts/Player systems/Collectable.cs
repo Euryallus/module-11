@@ -40,7 +40,7 @@ public class Collectable : InteractableWithOutline
         if (dropItemGroups.Count > 0)
         {
             // Drop any item groups that couldn't be added to the player's inventory
-            inventory.DropItemGroups(dropItemGroups);
+            inventory.DropItemGroups(dropItemGroups, true, true);
         }
 
         // When all items are added/dropped, object destroys itself
