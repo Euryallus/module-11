@@ -26,6 +26,12 @@ public abstract class InteractableObject : MonoBehaviour
 
     #endregion
 
+    #region Properties
+
+    public bool CanInteract { get { return canInteract; } set { canInteract = value; } }
+
+    #endregion
+
     private bool        mouseOver;                  // Whether the mouse is currently over the object (at any distance)
     private bool        hoveringInRange;            // True if the mouse pointer is over the object AND the player is within range
     private float       hoverTimer;                 // How many seconds the player has been hovering over the object
@@ -37,7 +43,10 @@ public abstract class InteractableObject : MonoBehaviour
     private GameObject  interactTooltip;            // The instantiated interact tooltip, null if not active
     private Vector3     localInteractTooltipOffset; // interactTooltipOffset converted to local space
 
+    protected bool      canInteract = true;
+
     private const float InteractPopupDelay = 0.3f;  // The amount of time the player has to hover over the object before interactTooltip is shown
+
 
     protected virtual void Start()
     {
@@ -52,6 +61,11 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected virtual void Update()
     {
+        if(!canInteract)
+        {
+            return;
+        }
+
         // Interactables can only be interacted with when the cursor is locked (i.e. the player is moving around the world/not in a menu)
         if(Cursor.lockState == CursorLockMode.Locked)
         {
@@ -61,7 +75,7 @@ public abstract class InteractableObject : MonoBehaviour
             if (hoveringInRange)
             {
                 //  Ensure no input field is selected to prevent unintended behaviour when pressing E while typing
-                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected)
+                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
                 {
                     // The player has pressed E while hovering over the object, interact with it
                     Interact();

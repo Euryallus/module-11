@@ -40,7 +40,7 @@ public class QuestMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O) && !InputFieldSelection.AnyFieldSelected)
+        if(Input.GetKeyDown(KeyCode.O) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
         {
             displayed = !displayed;
             group.alpha = displayed ? 1f : 0f;

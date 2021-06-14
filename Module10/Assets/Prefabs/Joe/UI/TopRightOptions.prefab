@@ -1147,7 +1147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 439, y: 0}
+  m_AnchoredPosition: {x: 619.5012, y: 0}
   m_SizeDelta: {x: 199.99998, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &7132407292391334741
@@ -1547,7 +1547,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 218340878300977208}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameSceneUI, Assembly-CSharp
         m_MethodName: PauseAndShowPauseUI
         m_Mode: 1
@@ -1569,7 +1569,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9034304044804875081}
   - component: {fileID: 7592817511869668701}
-  - component: {fileID: 218340878300977208}
   m_Layer: 5
   m_Name: TopRightOptions
   m_TagString: Untagged
@@ -1624,17 +1623,3 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &218340878300977208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9034304044804875080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3784f9695ab85a14486958522f46ecf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pausePanelPrefab: {fileID: 4612070044059357827, guid: 2ef119a99697c7e41844e286e90ee510, type: 3}
-  optionsPanelPrefab: {fileID: 8769966552428237176, guid: dad8ad0468ec2aa45ac549a068e429f0, type: 3}
