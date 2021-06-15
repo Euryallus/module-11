@@ -106,8 +106,8 @@ public class OptionsPanel : MonoBehaviour
         if(openType == OptionsOpenType.GameScenePause)
         {
             // Hide this options panel and re-show the pause menu
-            GameSceneMenuUI.Instance.PauseAndShowPauseUI();
-            GameSceneMenuUI.Instance.HideOptionsUI();
+            GameSceneUI.Instance.PauseAndShowPauseUI();
+            GameSceneUI.Instance.HideOptionsUI();
         }
         else if(openType == OptionsOpenType.MainMenu)
         {

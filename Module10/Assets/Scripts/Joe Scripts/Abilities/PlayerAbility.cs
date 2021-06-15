@@ -56,6 +56,9 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (GameSceneUI.Instance.ShowingCinematicsCanvas)
+            return;
+
         if (abilityActive)
         {
             if (Input.GetKey(triggerKey))

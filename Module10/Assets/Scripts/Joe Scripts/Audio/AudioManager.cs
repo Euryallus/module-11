@@ -275,16 +275,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayLoopingSoundEffect(string soundId, string loopId)
+    public void PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default)
     {
         // Starts playing a sound with soundId that will loop until StopLoopingSoundEffect is called with the given loopId
-        PlaySoundEffect(soundId, LoopType.Loop(loopId), false);
+        PlaySoundEffect(soundId, LoopType.Loop(loopId), use3DSpace, sourcePosition);
     }
 
-    public void PlayLoopingSoundEffect(SoundClass sound, string loopId)
+    public void PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default)
     {
         // Starts playing a sound that will loop until StopLoopingSoundEffect is called with the given loopId
-        PlaySoundEffect(sound, LoopType.Loop(loopId), false);
+        PlaySoundEffect(sound, LoopType.Loop(loopId), use3DSpace, sourcePosition);
     }
 
     public void StopLoopingSoundEffect(string loopId)

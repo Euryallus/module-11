@@ -132,7 +132,7 @@ public class HotbarPanel : UIPanel, IPersistentObject
     private void CheckForPlayerInput()
     {
         // Number keys input - only allow input if not typing in an input field
-        if (!InputFieldSelection.AnyFieldSelected)
+        if (!InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
         {
             for (int i = 1; i <= slotsUI.Count; i++)
             {

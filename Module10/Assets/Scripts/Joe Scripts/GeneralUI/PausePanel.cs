@@ -26,16 +26,16 @@ public class PausePanel : MonoBehaviour
     {
         // Hide this pause panel to return to gameplay
 
-        GameSceneMenuUI.Instance.HidePauseUI();
+        GameSceneUI.Instance.HidePauseUI();
     }
 
     public void ButtonOptions()
     {
         // Show the options menu UI
-        GameSceneMenuUI.Instance.ShowOptionsUI();
+        GameSceneUI.Instance.ShowOptionsUI();
 
         // Hide this pause panel
-        GameSceneMenuUI.Instance.HidePauseUI(false);
+        GameSceneUI.Instance.HidePauseUI(false);
     }
 
 
