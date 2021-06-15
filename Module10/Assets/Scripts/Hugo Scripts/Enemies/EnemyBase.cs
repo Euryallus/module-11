@@ -59,6 +59,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]    protected float patrolSpeed;                    // Speed enemy patrols at
     [SerializeField]    protected float defaultSpeed;                   // Speed enemy moves when searching / engaged
                         protected bool findingNewPos = false;           // Flags if enemy is waiting at point before selecting a new one
+                        protected bool isFrozen = false;
 
     public bool canSee = false;
 
@@ -187,7 +188,7 @@ public class EnemyBase : MonoBehaviour
                 TurnTowards(player);
 
                 // Once cooldown is over, attack player & reset cooldown
-                if (attackCooldown > timeBetweenAttacks)
+                if (attackCooldown > timeBetweenAttacks && isFrozen != true)
                 {
 
                     Attack();
@@ -276,18 +277,20 @@ public class EnemyBase : MonoBehaviour
     // Begins searching behaviour
     public virtual void StartSearching(Vector3 searchPos)
     {
-        // Sets player last seen position to pos. passed as parameter
-        playerLastSeen = searchPos;
-        // Sets first search destination to be that position
-        GoTo(playerLastSeen);
-        // Resets points count to 0
-        searchPointsVisited = 0;
-        // Sets state to "search"
-        currentState = EnemyState.search;
-
-        // Resets agents speed to "max"
-        agent.speed = defaultSpeed;
-
+        if(isFrozen == false)
+        {
+            // Resets agents speed to "max"
+            agent.speed = defaultSpeed;
+            
+            // Sets player last seen position to pos. passed as parameter
+            playerLastSeen = searchPos;
+            // Sets first search destination to be that position
+            GoTo(playerLastSeen);
+            // Resets points count to 0
+            searchPointsVisited = 0;
+            // Sets state to "search"
+            currentState = EnemyState.search;
+        }
         // Debug help
         Debug.Log(gameObject.name + " started searching " + searchPos);
     }
@@ -296,16 +299,20 @@ public class EnemyBase : MonoBehaviour
     public virtual void StartPatrolling()
     {
         // SearchPointsVisited = 0;
-        // Sets agent speed to patrol speed (slower than engaged speed"
-        agent.speed = patrolSpeed;
 
-        // Stops any co-routine left from search func.
-        StopCoroutine("WaitAndMove");
+        if(isFrozen == false)
+        {
+            // Sets agent speed to patrol speed (slower than engaged speed"
+            agent.speed = patrolSpeed;
+            
+            // Stops any co-routine left from search func.
+            StopCoroutine("WaitAndMove");
+            // Calls co-routine to move in [x] seconds to random pos. centred around central hub
+            StartCoroutine(WaitAndMove(patrolWanderDistance, centralHubPos, 1.0f));
 
-        // Calls co-routine to move in [x] seconds to random pos. centred around central hub
-        WaitAndMove(patrolWanderDistance, centralHubPos, 1.0f);
-        // Sets current state to "patrol"
-        currentState = EnemyState.patrol;
+            // Sets current state to "patrol"
+            currentState = EnemyState.patrol;
+        }
     }
 
     // Checks if player is visible using view angle specified and view distance
@@ -366,22 +373,22 @@ public class EnemyBase : MonoBehaviour
     // Base attack - when within range, raycasts towards player, & if it hits player loses health (only works for melee)
     public virtual void Attack()
     {
-        // Raycasts from enemy to player - if it hits, the player can be hurt
-        if(Physics.Raycast(transform.position, player.transform.position - transform.position, out RaycastHit hit, attackDistance))
-        {
-            // Debug assist
-            Debug.LogWarning("Hit " + hit.transform.name);
-
-            // If hit player & the player has health script, do damage
-            if(hit.transform.CompareTag("Player"))
+            // Raycasts from enemy to player - if it hits, the player can be hurt
+            if (Physics.Raycast(transform.position, player.transform.position - transform.position, out RaycastHit hit, attackDistance))
             {
-                if(playerStats!= null)
-                {
-                    playerStats.DecreaseHealth(baseDamage, PlayerDeathCause.Enemy);
-                }
+                // Debug assist
+                Debug.LogWarning("Hit " + hit.transform.name);
 
+                // If hit player & the player has health script, do damage
+                if(hit.transform.CompareTag("Player"))
+                {
+                    if(playerStats!= null)
+                    {
+                        playerStats.DecreaseHealth(baseDamage, PlayerDeathCause.Enemy);
+                    }
+
+                }
             }
-        }
     }
 
     // Checks if point passed is on navmesh (not currently used - very costly)
@@ -436,5 +443,23 @@ public class EnemyBase : MonoBehaviour
         findingNewPos = false;
         // Tells agent to go to random position around origin 
         GoToRandom(maxDistance, newPointOrigin);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("FreezeAbility"))
+        {
+            agent.speed = 0f;
+            isFrozen = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("FreezeAbility"))
+        {
+            isFrozen = false;
+            StartSearching(playerLastSeen);
+        }
     }
 }

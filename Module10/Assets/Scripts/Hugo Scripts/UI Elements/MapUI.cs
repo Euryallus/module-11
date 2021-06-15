@@ -24,15 +24,15 @@ public class MapUI : MonoBehaviour
         cg = gameObject.GetComponent<CanvasGroup>();
 
         // TEST ONLY - re-fills map when game starts
-        //for (int y = 0; y < mapMask.height; y++)
-        //{
-        //    for (int x = 0; x < mapMask.width; x++)
-        //    {
-        //        Color color = new Color(0, 0, 0, 1);
-        //        mapMask.SetPixel(x, y, color);
-        //    }
-        //}
-        //mapMask.Apply();
+        for (int y = 0; y < mapMask.height; y++)
+        {
+            for (int x = 0; x < mapMask.width; x++)
+            {
+                Color color = new Color(0, 0, 0, 1);
+                mapMask.SetPixel(x, y, color);
+            }
+        }
+        mapMask.Apply();
 
         // Assigns centre of map to middle of texture
         centre = new Vector2(mapMask.width / 2, mapMask.height / 2);
