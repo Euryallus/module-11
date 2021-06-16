@@ -29,6 +29,7 @@ TagManager:
   - ChestPanel
   - LaunchIndicator
   - FreezeIndicator
+  - SlamIndicator
   layers:
   - Default
   - TransparentFX

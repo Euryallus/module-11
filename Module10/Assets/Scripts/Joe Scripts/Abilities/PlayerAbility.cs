@@ -59,9 +59,11 @@ public abstract class PlayerAbility : MonoBehaviour
         if (GameSceneUI.Instance.ShowingCinematicsCanvas)
             return;
 
+        bool triggerKeyPressed = GetTriggerKeyInput();
+
         if (abilityActive)
         {
-            if (Input.GetKey(triggerKey))
+            if (triggerKeyPressed)
             {
                 AbilityActive();
             }
@@ -74,7 +76,7 @@ public abstract class PlayerAbility : MonoBehaviour
         {
             if (cooldown >= 1.0f)
             {
-                if (Input.GetKey(triggerKey))
+                if (triggerKeyPressed)
                 {
                     if (!charging)
                     {
@@ -112,6 +114,11 @@ public abstract class PlayerAbility : MonoBehaviour
                 SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
             }
         }
+    }
+
+    private bool GetTriggerKeyInput()
+    {
+        return Input.GetKey(triggerKey) && (!InputFieldSelection.AnyFieldSelected) && (!UIPanel.AnyBlockingPanelShowing());
     }
 
     protected virtual void ChargeStart()
