@@ -1,13 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject optionsPanelPrefab;
+    [SerializeField] private GameObject     optionsPanelPrefab;
+    [SerializeField] private Sprite[]       logoSprites;
+    [SerializeField] private Image          logoImage;
 
     private GameObject optionsPanel;
+
+    private void Start()
+    {
+        int rand = Random.Range(0, 100);
+
+        if(rand > 0)
+        {
+            logoImage.sprite = logoSprites[0];
+        }
+        else
+        {
+            logoImage.sprite = logoSprites[1];
+        }
+    }
 
     private void Update()
     {
