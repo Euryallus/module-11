@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuestGiverName: VillageGuard
   questsToGive:
-  - {fileID: 11400000, guid: d142f890a186f09488decf9e7c2ee494, type: 2}
-  - {fileID: 11400000, guid: 69163dca5732ab247bcd41375faadae2, type: 2}
-  saveQuestsToGive: []
+  - {fileID: 11400000, guid: fa05cb99784721b4ba3653f739d13d43, type: 2}
+  saveQuestsToGive:
+  - {fileID: 11400000, guid: fa05cb99784721b4ba3653f739d13d43, type: 2}

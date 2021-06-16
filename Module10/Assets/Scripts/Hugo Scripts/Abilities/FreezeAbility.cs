@@ -5,16 +5,13 @@ using UnityEngine;
 public class FreezeAbility : PlayerAbility
 {
     [Header("Freeze details")]
-    public float freezeRadius = 5f;
-    [SerializeField]    private GameObject triggerVolPrefab;
-                        private GameObject triggerVol;
 
-    [SerializeField]    private GameObject freezeIndicatorPrefab;
-                        private GameObject freezeIndicator;
+    [SerializeField]    private GameObject iceLancePrefab;
+                        private GameObject spawnedIceLance;
 
-    [SerializeField] private float bubbleUpTime;
-    private float activeTime = 0f;
-
+    [SerializeField] private float range = 50f;
+    [SerializeField] private float FreezeDuration = 5f;
+    private EnemyBase hit;
 
 
     // Start is called before the first frame update
@@ -28,40 +25,24 @@ public class FreezeAbility : PlayerAbility
     {
         base.Update();
 
-        if(charging)
-        {
-            if(freezeIndicator != null)
-            {
-                freezeIndicator.transform.localScale -= new Vector3(Time.deltaTime / chargeTime, 0.0f,
-                                                                    Time.deltaTime / chargeTime);
-            }
-        }
-
-        if(triggerVol != null)
-        {
-            activeTime += Time.deltaTime;
-            if(activeTime >= bubbleUpTime)
-            {
-                Destroy(triggerVol);
-            }
-        }
     }
 
     protected override void ChargeStart()
     {
         base.ChargeStart();
-        freezeIndicator = Instantiate(freezeIndicatorPrefab, transform);
+        spawnedIceLance = Instantiate(iceLancePrefab, transform);
+        spawnedIceLance.transform.position = GameObject.FindGameObjectWithTag("PlayerHand").transform.position;
+
     }
 
     protected override void ChargeEnd()
     {
         base.ChargeEnd();
 
-        if(freezeIndicator != null)
+        if(charging)
         {
-            Destroy(freezeIndicator);
+            Destroy(spawnedIceLance);
         }
-
     }
 
     protected override void FindUIIndicator()
@@ -72,16 +53,38 @@ public class FreezeAbility : PlayerAbility
     protected override void AbilityStart()
     {
         base.AbilityStart();
-        activeTime = 0f;
 
-        if (freezeIndicator != null)
+        if(spawnedIceLance!= null)
         {
-            Destroy(freezeIndicator);
+            GameObject playerCam = gameObject.GetComponent<PlayerMovement>().playerCamera;
+
+            RaycastHit hit;
+            Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, range);
+
+            Vector3 direction = spawnedIceLance.transform.forward;
+
+            if (hit.transform != null)
+            {
+                direction = spawnedIceLance.transform.position - hit.point;
+                Debug.Log(direction);
+            }
+
+            spawnedIceLance.GetComponent<IceLanceObject>().Launch(direction.normalized, gameObject.GetComponent<FreezeAbility>());
         }
+    }
 
-        triggerVol = Instantiate(triggerVolPrefab, transform.position + new Vector3(0, -1, 0), Quaternion.identity);
-        triggerVol.transform.localScale = new Vector3(freezeRadius, freezeRadius, freezeRadius);
+    public void FreezeEnemy(EnemyBase enemyObj)
+    {
+        hit = enemyObj;
+        enemyObj.StopAgentMovement();
 
+        StartCoroutine(UnFreezeEnemy());
+    }
+
+    IEnumerator UnFreezeEnemy()
+    {
+        yield return new WaitForSeconds(FreezeDuration);
+        hit.StartAgentMovement();
     }
 
 }

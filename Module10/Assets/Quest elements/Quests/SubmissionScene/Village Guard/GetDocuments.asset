@@ -23,7 +23,8 @@ MonoBehaviour:
 
     Go right in, here''s the key.
     Come talk to me when you''ve finished taking a look.'
-  nextQuests: []
+  nextQuests:
+  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
   rewards:
   - Item: {fileID: 11400000, guid: e074e694386e5fe4eb5c65092c640cd3, type: 2}
     Quantity: 1

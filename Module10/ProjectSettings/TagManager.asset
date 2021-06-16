@@ -28,7 +28,6 @@ TagManager:
   - DamageDisplay
   - ChestPanel
   - LaunchIndicator
-  - FreezeAbility
   - FreezeIndicator
   layers:
   - Default

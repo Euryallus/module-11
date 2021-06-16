@@ -166,10 +166,12 @@ public class EnemyBase : MonoBehaviour
     public virtual void StationaryUpdate()
     {
         // Unless player is spotted, do nothing
-        if(CheckForPlayer())
-        {
-            currentState = EnemyState.engaged;
-        }
+        //if(CheckForPlayer())
+        //{
+        //    currentState = EnemyState.engaged;
+        //}
+
+
     }
 
     public virtual void EngagedUpdate()
@@ -445,21 +447,39 @@ public class EnemyBase : MonoBehaviour
         GoToRandom(maxDistance, newPointOrigin);
     }
 
-    private void OnTriggerEnter(Collider other)
+   //private void OnTriggerEnter(Collider other)
+   //{
+   //    if(other.CompareTag("FreezeAbility"))
+   //    {
+   //        agent.speed = 0f;
+   //        isFrozen = true;
+   //    }
+   //}
+   //
+   //private void OnTriggerExit(Collider other)
+   //{
+   //    if (other.CompareTag("FreezeAbility"))
+   //    {
+   //        isFrozen = false;
+   //        StartSearching(playerLastSeen);
+   //    }
+   //}
+
+    public void StopAgentMovement()
     {
-        if(other.CompareTag("FreezeAbility"))
+        if (agent.enabled == true)
         {
-            agent.speed = 0f;
-            isFrozen = true;
+            agent.enabled = false;
         }
+
+        StopAllCoroutines();
+
+        currentState = EnemyState.stationary;
     }
 
-    private void OnTriggerExit(Collider other)
+    public void StartAgentMovement()
     {
-        if (other.CompareTag("FreezeAbility"))
-        {
-            isFrozen = false;
-            StartSearching(playerLastSeen);
-        }
+        agent.enabled = true;
+        Engage();
     }
 }

@@ -14,8 +14,9 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("General refs")]
 
-    [SerializeField]    private GameObject playerCamera;    // Reference to player camera (used for forward vect)
+
     [SerializeField]    private Volume postProcessing;      // Post processing volume (used for water post processing)
+                        public GameObject playerCamera;    // Reference to player camera (used for forward vect)
 
     [Header("Player movement speeds")]
 
