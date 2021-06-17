@@ -380,12 +380,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 116
   chargeTime: 0.5
-  cooldownTime: 5
+  cooldownTime: 20
   initialFoodDecrease: 0.1
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
-  abilityTriggerSound: {fileID: 11400000, guid: 13d1a629e2e42324383bd7710e4c4046, type: 2}
+  abilityTriggerSound: {fileID: 11400000, guid: dbb7cb54d7021f84ebed9f2b12a50d81, type: 2}
+  shockwaveEffectPrefab: {fileID: 4075053582509977862, guid: ce69302e3847b4b42b5b4f3bd1669ddf, type: 3}
+  impactEffectPrefab: {fileID: 9126577410416506552, guid: 426ac2ac68647ee43a8301af5e22b073, type: 3}
+  playerCameraShake: {fileID: 4740927130316203150}
+  effectRadius: 15
+  enemyLiftHeight: 6
 --- !u!1 &3399754590781465955
 GameObject:
   m_ObjectHideFlags: 0

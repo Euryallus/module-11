@@ -8,6 +8,8 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for Mod11: added CanShowUIPanel
+
 [RequireComponent(typeof(CanvasGroup))]
 public class UIPanel : MonoBehaviour
 {

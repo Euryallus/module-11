@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for Mod11: now inherits from UIPanel
+
 public class PausePanel : UIPanel
 {
     [SerializeField] private CanvasGroup mainCanvasGroup;        // Canvas group on the main panel with pause option buttons (resume/menu/quit etc.)

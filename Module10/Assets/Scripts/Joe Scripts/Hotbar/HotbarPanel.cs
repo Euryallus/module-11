@@ -148,6 +148,7 @@ public class HotbarPanel : UIPanel, IPersistentObject
             }
         }
 
+        // Check that the player is not using a scrollbar/has their pointer inside a scroll area
         if(!ScrollAreaSelection.AnyScrollAreaSelected)
         {
             // Scroll input

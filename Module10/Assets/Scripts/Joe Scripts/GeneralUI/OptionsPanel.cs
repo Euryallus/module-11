@@ -19,6 +19,8 @@ public enum OptionsOpenType
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for Mod11: now inherits from UIPanel
+
 public class OptionsPanel : UIPanel
 {
     #region InspectorVariables
