@@ -80,7 +80,7 @@ public class FreezeAbility : PlayerAbility
     public void FreezeEnemy(EnemyBase enemyObj)
     {
         hit = enemyObj;
-        enemyObj.StopAgentMovement();
+        enemyObj.Freeze();
 
         StartCoroutine(UnFreezeEnemy());
     }
@@ -88,7 +88,12 @@ public class FreezeAbility : PlayerAbility
     IEnumerator UnFreezeEnemy()
     {
         yield return new WaitForSeconds(FreezeDuration);
-        hit.StartAgentMovement();
+        if(hit != null)
+        {
+            hit.UnFreeze();
+            hit = null;
+        }
+
     }
 
 }

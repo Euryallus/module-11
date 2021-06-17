@@ -31,6 +31,7 @@ public class EnemyHealth : MonoBehaviour
         // This func. will be expanded as the weapons system becomes more complex and enemy animations / models are implemented
 
         // By default, just destroys the enemy
+        gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
         Destroy(gameObject);
     }
 }

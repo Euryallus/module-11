@@ -28,6 +28,8 @@ public class EnemyBase : MonoBehaviour
     [Range(1.0f, 360f)]
     [SerializeField]    protected float viewAngle               = 120f; // View cone angle enemy can see (e.g. 60 degrees to the left & 60 degrees to the right)
     [SerializeField]    protected float stationaryTurnSpeed     = 5f;   // Speed at which enemy rotates to face player when stationary
+    [SerializeField]    protected GameObject freezeIcePrefab;
+                        private GameObject freezeIce;
 
     [Header("Enemy behaviour properties")]
 
@@ -454,23 +456,42 @@ public class EnemyBase : MonoBehaviour
         GoToRandom(maxDistance, newPointOrigin);
     }
 
-   //private void OnTriggerEnter(Collider other)
-   //{
-   //    if(other.CompareTag("FreezeAbility"))
-   //    {
-   //        agent.speed = 0f;
-   //        isFrozen = true;
-   //    }
-   //}
-   //
-   //private void OnTriggerExit(Collider other)
-   //{
-   //    if (other.CompareTag("FreezeAbility"))
-   //    {
-   //        isFrozen = false;
-   //        StartSearching(playerLastSeen);
-   //    }
-   //}
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if(other.CompareTag("FreezeAbility"))
+    //    {
+    //        agent.speed = 0f;
+    //        isFrozen = true;
+    //    }
+    //}
+    //
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("FreezeAbility"))
+    //    {
+    //        isFrozen = false;
+    //        StartSearching(playerLastSeen);
+    //    }
+    //}
+
+    public void Freeze()
+    {
+        StopAgentMovement();
+
+        if(freezeIce == null)
+        {
+            freezeIce = Instantiate(freezeIcePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+        }
+    }
+
+    public void UnFreeze()
+    {
+        StartAgentMovement();
+        if(freezeIce != null)
+        {
+            Destroy(freezeIce);
+        }
+    }
 
     public void StopAgentMovement()
     {

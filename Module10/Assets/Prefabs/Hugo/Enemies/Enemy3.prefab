@@ -639,6 +639,7 @@ MonoBehaviour:
   viewDistance: 25
   viewAngle: 120
   stationaryTurnSpeed: 5
+  freezeIcePrefab: {fileID: 3222182312808410388, guid: 50e1c8667c47cde4f97aa4ba03ccd8ec, type: 3}
   difficulty: 3
   noOfSearchPoints: 8
   searchPointsVisited: 0

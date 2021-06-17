@@ -55,6 +55,7 @@ public class IceLanceObject : MonoBehaviour
          if (collision.transform.gameObject.GetComponent<EnemyBase>())
          {
              parent.FreezeEnemy(collision.transform.gameObject.GetComponent<EnemyBase>());
+             Destroy(gameObject);
          }
          else
          {
