@@ -86,7 +86,7 @@ public class FreezeAbility : PlayerAbility
             // The targeted enemy is currently suspended in the air - apply an ice material, thendrop and kill it
             enemyObj.MeshRenderer.material = freezeMaterial;
 
-            GetComponent<SlamAbility>().DropAndKillSuspendedEnemy(enemyObj);
+            GetComponent<SlamAbility>().DropAndKillSuspendedEnemy(enemyObj, true);
 
             AudioManager.Instance.PlaySoundEffect3D("iceSmash", enemyObj.gameObject.transform.position);
         }

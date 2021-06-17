@@ -16,6 +16,7 @@ public class SlamAbility : PlayerAbility
     [Header("Slam Ability")]
     [SerializeField] private GameObject     shockwaveEffectPrefab;  // GameObject instantiated when the ability is used
     [SerializeField] private GameObject     impactEffectPrefab;     // GameObject instantiated when the ability is used
+    [SerializeField] private GameObject     frozenImpactParticles;  // Particles spawned when a frozen enemy hits the ground
     [SerializeField] private CameraShake    playerCameraShake;      // Reference to the script on the player that handles camera shake
     [SerializeField] private float          effectRadius = 15.0f;
     [SerializeField] private float          enemyLiftHeight = 6.0f;
@@ -177,16 +178,16 @@ public class SlamAbility : PlayerAbility
         }
     }
 
-    public void DropAndKillSuspendedEnemy(EnemyBase enemy)
+    public void DropAndKillSuspendedEnemy(EnemyBase enemy, bool frozen)
     {
         if(enemy.Suspended && targetedEnemies.Contains(enemy))
         {
             // Drop the enemy and apply a huge amount of damage to kill it once it lands
-            StartCoroutine(DropEnemyCoroutine(targetedEnemies.IndexOf(enemy), 0.0f, 100.0f));
+            StartCoroutine(DropEnemyCoroutine(targetedEnemies.IndexOf(enemy), 0.0f, frozen, 100.0f));
         }
     }
 
-    private IEnumerator DropEnemyCoroutine(int enemyIndex, float startDelay, float damageOverride = -1.0f)
+    private IEnumerator DropEnemyCoroutine(int enemyIndex, float startDelay, bool frozen = false, float damageOverride = -1.0f)
     {
         if(targetedEnemies[enemyIndex] != null)
         {
@@ -205,6 +206,12 @@ public class SlamAbility : PlayerAbility
                 dropProgress += Time.deltaTime * DropSpeed;
 
                 yield return null;
+            }
+
+            if(frozen)
+            {
+                AudioManager.Instance.PlaySoundEffect3D("iceBreak", enemyToDrop.gameObject.transform.position);
+                Instantiate(frozenImpactParticles, enemyToDrop.gameObject.transform.position, Quaternion.identity);
             }
 
             float enemyDamage = (damageOverride == -1.0f ? enemyDropDamage : damageOverride);

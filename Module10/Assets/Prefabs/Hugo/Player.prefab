@@ -389,6 +389,7 @@ MonoBehaviour:
   abilityTriggerSound: {fileID: 11400000, guid: dbb7cb54d7021f84ebed9f2b12a50d81, type: 2}
   shockwaveEffectPrefab: {fileID: 4075053582509977862, guid: ce69302e3847b4b42b5b4f3bd1669ddf, type: 3}
   impactEffectPrefab: {fileID: 9126577410416506552, guid: 426ac2ac68647ee43a8301af5e22b073, type: 3}
+  frozenImpactParticles: {fileID: 6834227122792210565, guid: 18d78fc91fb9ed74db364d097bd993f3, type: 3}
   playerCameraShake: {fileID: 4740927130316203150}
   effectRadius: 15
   enemyLiftHeight: 6
