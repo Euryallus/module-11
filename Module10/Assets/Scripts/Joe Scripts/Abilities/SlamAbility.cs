@@ -72,7 +72,7 @@ public class SlamAbility : PlayerAbility
     {
         Instantiate(shockwaveEffectPrefab, transform);
 
-        playerCameraShake.ShakeCameraForTime(1.0f, CameraShakeType.ReduceOverTime);
+        playerCameraShake.ShakeCameraForTime(1.2f, CameraShakeType.ReduceOverTime, 0.07f);
 
         yield return new WaitForSeconds(0.3f);
 
