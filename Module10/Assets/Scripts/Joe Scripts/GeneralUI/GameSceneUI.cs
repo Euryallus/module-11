@@ -37,11 +37,8 @@ public class GameSceneUI : MonoBehaviour
     #endregion
 
     private PlayerMovement   playerMovement;             // Reference to the player movement script for disabling movement when the pause menu is open
-    private GameObject       pausePanel;                 // UI panel shown when the game is paused
-    private GameObject       optionsPanel;               // UI panel containing options that can be edited during gameplay
-
-    private bool             pausePanelShowing;         // Whether the pause panel is currently being shown
-    private bool             optionsPanelShowing;       // Whether the options panel is currently being shown
+    private PausePanel       pausePanel;                 // UI panel shown when the game is paused
+    private OptionsPanel     optionsPanel;               // UI panel containing options that can be edited during gameplay
 
     private bool             showingCinematicsCanvas;
     private CinematicsCanvas cinematicsCanvas;
@@ -73,12 +70,12 @@ public class GameSceneUI : MonoBehaviour
         {
             // Esc key was pressed while not editing an input field
 
-            if (pausePanelShowing)
+            if (pausePanel != null && pausePanel.Showing)
             {
                 // The pause panel is showing, hide it/unpause the game
                 HidePauseUI();
             }
-            else if (optionsPanelShowing)
+            else if (optionsPanel != null && optionsPanel.Showing)
             {
                 // The options pane is showing, hide it/unpause the game
                 HideOptionsUI();
@@ -127,8 +124,8 @@ public class GameSceneUI : MonoBehaviour
     public void PauseAndShowPauseUI()
     {
         // Instantiate/show the pause panel
-        pausePanel = Instantiate(pausePanelPrefab, canvases[0].transform);
-        pausePanelShowing = true;
+        pausePanel = Instantiate(pausePanelPrefab, canvases[0].transform).GetComponent<PausePanel>();
+        pausePanel.Showing = true;
 
         // Pause the game
         PauseGame();
@@ -139,9 +136,9 @@ public class GameSceneUI : MonoBehaviour
         // Destroy/hide the pause panel (if showing)
         if (pausePanel != null)
         {
-            Destroy(pausePanel);
+            Destroy(pausePanel.gameObject);
+            pausePanel = null;
         }
-        pausePanelShowing = false;
 
         // Unpause the game
         if(unpauseGame)
@@ -153,8 +150,8 @@ public class GameSceneUI : MonoBehaviour
     public void ShowOptionsUI()
     {
         // Instantiate/show the options panel
-        optionsPanel = Instantiate(optionsPanelPrefab, canvases[0].transform);
-        optionsPanelShowing = true;
+        optionsPanel = Instantiate(optionsPanelPrefab, canvases[0].transform).GetComponent<OptionsPanel>();
+        optionsPanel.Showing = true;
 
         // Setup the panel so it knows to return to the game pause menu
         optionsPanel.GetComponent<OptionsPanel>().Setup(OptionsOpenType.GameScenePause);
@@ -168,9 +165,9 @@ public class GameSceneUI : MonoBehaviour
         // Destroy/hide the options panel (if showing)
         if (optionsPanel != null)
         {
-            Destroy(optionsPanel);
+            Destroy(optionsPanel.gameObject);
+            optionsPanel = null;
         }
-        optionsPanelShowing = false;
     }
 
     public void SetUIShowing(bool show)

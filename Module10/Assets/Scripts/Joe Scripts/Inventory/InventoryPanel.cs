@@ -204,14 +204,14 @@ public class InventoryPanel : UIPanel
         // Block keyboard input if an input field is selected
         if (!InputFieldSelection.AnyFieldSelected)
         {
-            if (!showing && Input.GetKeyDown(KeyCode.I) && playerMovement.GetCanMove() && !GameSceneUI.Instance.ShowingCinematicsCanvas)
+            if (!showing && (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab)) && CanShowUIPanel() && playerMovement.GetCanMove())
             {
                 // Show the inventory if the player presses I when it's not already showing and they can move (i.e. not in another menu)
                 Show(InventoryShowMode.InventoryOnly);
 
                 AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
             }
-            else if (showing && (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Escape)))
+            else if (showing && (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)))
             {
                 // Hide the inventory if the player presses I/Esc when it's showing
                 Hide();
@@ -223,10 +223,6 @@ public class InventoryPanel : UIPanel
 
     public void Show(InventoryShowMode showMode, float yOffset = 30.0f)
     {
-        // Don't allow the invetory panel to be shown during cinematics
-        if (GameSceneUI.Instance.ShowingCinematicsCanvas)
-            return;
-
         // Set the panel's position to the centre of the screen, plus the given y offset
         GetComponent<RectTransform>().anchoredPosition = new Vector2(0.0f, yOffset);
 

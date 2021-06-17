@@ -13,9 +13,9 @@ using TMPro;
 [RequireComponent(typeof(TMP_InputField))]
 public class InputFieldSelection : MonoBehaviour
 {
-    public static bool AnyFieldSelected;    // Whether any input field is currently selected/being typed in
-                                               
-    private TMP_InputField inputField;      // The input field this script 'listens' to
+    public static bool AnyFieldSelected { get; private set; }   // Whether any input field is currently selected/being typed in
+
+    private TMP_InputField inputField;                          // The input field this script 'listens' to
 
     private void Awake()
     {
