@@ -366,6 +366,7 @@ MonoBehaviour:
   iceLancePrefab: {fileID: 8668904131355023997, guid: 58561ab03e1eb534ca02793af1e5e264, type: 3}
   range: 100
   FreezeDuration: 5
+  freezeMaterial: {fileID: 2100000, guid: a14ea78c4e8f8ed4e9fd9494c14c643e, type: 2}
 --- !u!114 &6405603233027840712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +392,7 @@ MonoBehaviour:
   playerCameraShake: {fileID: 4740927130316203150}
   effectRadius: 15
   enemyLiftHeight: 6
+  enemyDropDamage: 0.5
 --- !u!1 &3399754590781465955
 GameObject:
   m_ObjectHideFlags: 0

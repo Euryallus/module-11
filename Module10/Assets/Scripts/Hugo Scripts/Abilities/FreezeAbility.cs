@@ -11,6 +11,7 @@ public class FreezeAbility : PlayerAbility
 
     [SerializeField] private float range = 50f;
     [SerializeField] private float FreezeDuration = 5f;
+    [SerializeField] private Material freezeMaterial;
     private EnemyBase hit;
 
     private GameObject playerCam;
@@ -82,7 +83,9 @@ public class FreezeAbility : PlayerAbility
     {
         if(enemyObj.Suspended)
         {
-            // The targeted enemy is currently suspended in the air - drop and kill it
+            // The targeted enemy is currently suspended in the air - apply an ice material, thendrop and kill it
+            enemyObj.MeshRenderer.material = freezeMaterial;
+
             GetComponent<SlamAbility>().DropAndKillSuspendedEnemy(enemyObj);
 
             AudioManager.Instance.PlaySoundEffect3D("iceSmash", enemyObj.gameObject.transform.position);

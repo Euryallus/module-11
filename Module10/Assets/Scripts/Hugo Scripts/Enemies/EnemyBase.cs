@@ -30,6 +30,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]    protected float stationaryTurnSpeed     = 5f;   // Speed at which enemy rotates to face player when stationary
     [SerializeField]    protected GameObject freezeIcePrefab;
                         private GameObject freezeIce;
+    [SerializeField]    private Renderer meshRenderer;                  // Added by Joe: Reference to the main MeshRenderer/SkinnedMeshRenderer for swapping out materials
 
     [Header("Enemy behaviour properties")]
 
@@ -66,8 +67,10 @@ public class EnemyBase : MonoBehaviour
     public bool canSee = false;
     private bool suspended; // Added by Joe - True when the enemy is suspended in the air by the slam ability
 
+    // Added by Joe
     public bool AgentEnabled { get { return agent.enabled; } }
     public bool Suspended { get { return suspended; } set { suspended = value; } }
+    public Renderer MeshRenderer { get { return meshRenderer; }}
 
     public virtual void Start()
     {
