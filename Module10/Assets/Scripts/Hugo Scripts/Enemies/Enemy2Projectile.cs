@@ -83,7 +83,7 @@ public class Enemy2Projectile : MonoBehaviour
     public void Die()
     {
         // Spawns particle group at position
-        ParticleManager.Instance.SpawnParticle(transform.position, "Explosion");
+        ParticleManager.Instance.SpawnParticle(transform.position, "Explosion", Vector3.zero);
         // Calls explode function & destroys self
         Explode();
         Destroy(gameObject);

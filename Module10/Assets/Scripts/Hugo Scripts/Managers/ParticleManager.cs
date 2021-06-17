@@ -50,7 +50,7 @@ public class ParticleManager : MonoBehaviour
         }
     }
 
-    public void SpawnParticle(Vector3 position, string name)
+    public void SpawnParticle(Vector3 position, string name, Vector3 newForward)
     {
         // Checks if name is present in list of effects
         foreach(ParticleIndex sys in particleObjects)
@@ -60,7 +60,18 @@ public class ParticleManager : MonoBehaviour
                 // If effect is present, create new instance of it at position given
                 initialisedEffects.Add(Instantiate(sys.effect));
                 initialisedEffects[initialisedEffects.Count - 1].transform.position = position;
+                
+                if(newForward != Vector3.zero)
+                {
+                    initialisedEffects[initialisedEffects.Count - 1].transform.forward = newForward;
+                }
+
+                Debug.Log("Spawned " + name);
+
+                return;
             }
         }
+
+        Debug.LogWarning("No particle found named '" + name + "'");
     }
 }

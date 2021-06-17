@@ -342,13 +342,20 @@ public class EnemyBase : MonoBehaviour
                 if (Physics.Raycast(transform.position, player.transform.position - transform.position, out RaycastHit hit, viewDistance, ~mask))
                 {
                     // If raycast does hit player
-                    if (hit.transform.parent.gameObject.CompareTag("Player"))
+                    if (hit.transform != null)
                     {
-                        // Draw a debug line to show connection, store position player was seen at, and return true
-                        Debug.DrawLine(transform.position, hit.transform.position, Color.red);
-                        playerLastSeen = player.transform.position;
-                        searchPointsVisited = 0;
-                        return true;
+                        if(hit.transform.parent != null)
+                        {
+                            if(hit.transform.parent.gameObject.CompareTag("Player"))
+                            {
+                                // Draw a debug line to show connection, store position player was seen at, and return true
+                                Debug.DrawLine(transform.position, hit.transform.position, Color.red);
+                                playerLastSeen = player.transform.position;
+                                searchPointsVisited = 0;
+                                return true;
+                            }
+
+                        }
                     }
                 }
             }

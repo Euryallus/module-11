@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5710564043450754647}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -49,4 +49,7 @@ MonoBehaviour:
     loop: 0
   - sysName: Explosion
     effect: {fileID: 3804470425089640731, guid: 7796b6e124f079d459bb1c7c76464d97, type: 3}
+    loop: 0
+  - sysName: IceImpact
+    effect: {fileID: 5974251325292428337, guid: 5afa9aa064a52b544a00a5a638e51cd7, type: 3}
     loop: 0

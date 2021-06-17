@@ -13,11 +13,14 @@ public class FreezeAbility : PlayerAbility
     [SerializeField] private float FreezeDuration = 5f;
     private EnemyBase hit;
 
+    private GameObject playerCam;
+
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        playerCam = gameObject.GetComponent<PlayerMovement>().playerCamera;
     }
 
     // Update is called once per frame
@@ -31,18 +34,19 @@ public class FreezeAbility : PlayerAbility
     {
         base.ChargeStart();
         spawnedIceLance = Instantiate(iceLancePrefab, transform);
-        spawnedIceLance.transform.position = GameObject.FindGameObjectWithTag("PlayerHand").transform.position;
+        spawnedIceLance.transform.forward = transform.forward;
+
+        spawnedIceLance.transform.localPosition = new Vector3(1, 1, 1);
+        //spawnedIceLance.transform.position = GameObject.FindGameObjectWithTag("PlayerHand").transform.position;
 
     }
 
     protected override void ChargeEnd()
     {
         base.ChargeEnd();
+        
+        Destroy(spawnedIceLance);
 
-        if(charging)
-        {
-            Destroy(spawnedIceLance);
-        }
     }
 
     protected override void FindUIIndicator()
@@ -54,23 +58,23 @@ public class FreezeAbility : PlayerAbility
     {
         base.AbilityStart();
 
-        if(spawnedIceLance!= null)
+        spawnedIceLance = Instantiate(iceLancePrefab, transform);
+        spawnedIceLance.transform.forward = transform.forward;
+
+        spawnedIceLance.transform.localPosition = new Vector3(1, 1, 1);
+
+        RaycastHit hit;
+        Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, range);
+
+        Vector3 direction = spawnedIceLance.transform.forward;
+
+        if (hit.transform != null)
         {
-            GameObject playerCam = gameObject.GetComponent<PlayerMovement>().playerCamera;
-
-            RaycastHit hit;
-            Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, range);
-
-            Vector3 direction = spawnedIceLance.transform.forward;
-
-            if (hit.transform != null)
-            {
-                direction = spawnedIceLance.transform.position - hit.point;
-                Debug.Log(direction);
-            }
-
-            spawnedIceLance.GetComponent<IceLanceObject>().Launch(direction.normalized, gameObject.GetComponent<FreezeAbility>());
+            direction = spawnedIceLance.transform.position - hit.point;
         }
+
+        spawnedIceLance.GetComponent<IceLanceObject>().Launch(direction.normalized, gameObject.GetComponent<FreezeAbility>());
+        
     }
 
     public void FreezeEnemy(EnemyBase enemyObj)

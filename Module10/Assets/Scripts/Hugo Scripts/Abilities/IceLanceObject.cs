@@ -11,8 +11,16 @@ public class IceLanceObject : MonoBehaviour
     [SerializeField] private float maxLifetime = 5f;
     private float currentLifetime;
 
+    [SerializeField] private GameObject impactParticles;
+
+    private void Awake()
+    {
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+    }
+
     public void Launch(Vector3 direction, FreezeAbility spawner)
     {
+       
         transform.parent = null;
 
         transform.forward = -direction;
@@ -21,6 +29,9 @@ public class IceLanceObject : MonoBehaviour
         parent = spawner;
         gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         gameObject.GetComponent<Rigidbody>().velocity = transform.forward * speed;
+        
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+
     }
 
     private void Update()
@@ -36,18 +47,19 @@ public class IceLanceObject : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-            if(collision.transform.gameObject.GetComponent<EnemyBase>())
-            {
-                parent.FreezeEnemy(collision.transform.gameObject.GetComponent<EnemyBase>());
-
-                Debug.Log("DESTROY");
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        
+    { 
+         GameObject particles = Instantiate(impactParticles, collision.GetContact(0).point, Quaternion.identity);
+         particles.transform.forward = -transform.forward;
+         particles.GetComponent<ParticleGroup>().PlayEffect();
+         
+         if (collision.transform.gameObject.GetComponent<EnemyBase>())
+         {
+             parent.FreezeEnemy(collision.transform.gameObject.GetComponent<EnemyBase>());
+         }
+         else
+         {
+             Destroy(gameObject);
+         }
         
     }
 }
