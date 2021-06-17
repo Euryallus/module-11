@@ -64,7 +64,10 @@ public class EnemyBase : MonoBehaviour
                         protected bool isFrozen = false;
 
     public bool canSee = false;
+    private bool suspended; // Added by Joe - True when the enemy is suspended in the air by the slam ability
 
+    public bool AgentEnabled { get { return agent.enabled; } }
+    public bool Suspended { get { return suspended; } set { suspended = value; } }
 
     public virtual void Start()
     {

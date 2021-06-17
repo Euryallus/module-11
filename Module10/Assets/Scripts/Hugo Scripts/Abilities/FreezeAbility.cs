@@ -78,11 +78,25 @@ public class FreezeAbility : PlayerAbility
     }
 
     public void FreezeEnemy(EnemyBase enemyObj)
-    {
-        hit = enemyObj;
-        enemyObj.Freeze();
 
-        StartCoroutine(UnFreezeEnemy());
+    {
+        if(enemyObj.Suspended)
+        {
+            // The targeted enemy is currently suspended in the air - drop and kill it
+            GetComponent<SlamAbility>().DropAndKillSuspendedEnemy(enemyObj);
+
+            AudioManager.Instance.PlaySoundEffect3D("iceSmash", enemyObj.gameObject.transform.position);
+        }
+        else if (enemyObj.AgentEnabled)
+        {
+            // Only freeze enemies that don't already have their agents disabled
+            //   Prevents multiple effects that disable enemy movement from being applied at once
+
+            hit = enemyObj;
+            enemyObj.Freeze();
+
+            StartCoroutine(UnFreezeEnemy());
+        }
     }
 
     IEnumerator UnFreezeEnemy()
