@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // ||=======================================================================||
 // || HotbarPanel: Panel allowing the player to select/hold certain items   ||
@@ -147,29 +148,32 @@ public class HotbarPanel : UIPanel, IPersistentObject
             }
         }
 
-        // Scroll input
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        if(!ScrollAreaSelection.AnyScrollAreaSelected)
         {
-            // Scrolling 'up', select the next (right) slot (looping back to slot 0 if the final one is reached)
-            if(selectedSlotIndex < (slotsUI.Count - 1))
+            // Scroll input
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
             {
-                SelectSlot(selectedSlotIndex + 1);
+                // Scrolling 'up', select the next (right) slot (looping back to slot 0 if the final one is reached)
+                if (selectedSlotIndex < (slotsUI.Count - 1))
+                {
+                    SelectSlot(selectedSlotIndex + 1);
+                }
+                else
+                {
+                    SelectSlot(0);
+                }
             }
-            else
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
             {
-                SelectSlot(0);
-            }
-        }
-        else if(Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            // Scrolling 'down', select the previous (left) slot (looping back to rightmost slot if the first one is reached)
-            if (selectedSlotIndex > 0)
-            {
-                SelectSlot(selectedSlotIndex - 1);
-            }
-            else
-            {
-                SelectSlot(slotsUI.Count - 1);
+                // Scrolling 'down', select the previous (left) slot (looping back to rightmost slot if the first one is reached)
+                if (selectedSlotIndex > 0)
+                {
+                    SelectSlot(selectedSlotIndex - 1);
+                }
+                else
+                {
+                    SelectSlot(slotsUI.Count - 1);
+                }
             }
         }
     }

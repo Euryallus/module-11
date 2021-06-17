@@ -19,7 +19,7 @@ public enum OptionsOpenType
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class OptionsPanel : MonoBehaviour
+public class OptionsPanel : UIPanel
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -37,8 +37,10 @@ public class OptionsPanel : MonoBehaviour
 
     private OptionsOpenType openType;   //Determines where the panel was opened from and where to return to (see OptionsOpenType)
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // Subscribe to toggle events for all OptionsToggles to values can be saved when they are clicked
         screenShakeToggle.ToggleEvent += ScreenShakeToggled;
         viewBobbingToggle.ToggleEvent += ViewBobbingToggled;

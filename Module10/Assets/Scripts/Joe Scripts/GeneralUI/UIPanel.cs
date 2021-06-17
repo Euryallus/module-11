@@ -13,7 +13,7 @@ public class UIPanel : MonoBehaviour
 {
     #region Properties
 
-    public bool Showing { get { return showing; } }
+    public bool Showing { get { return showing; } set { showing = value; } }
 
     #endregion
 
@@ -85,5 +85,10 @@ public class UIPanel : MonoBehaviour
 
         // No blocking panels being shown
         return false;
+    }
+
+    public static bool CanShowUIPanel()
+    {
+        return (!InputFieldSelection.AnyFieldSelected) && (!GameSceneUI.Instance.ShowingCinematicsCanvas) && (!AnyBlockingPanelShowing()) && Time.timeScale > 0.0f;
     }
 }

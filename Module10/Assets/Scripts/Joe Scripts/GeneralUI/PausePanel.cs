@@ -10,14 +10,16 @@ using UnityEngine.SceneManagement;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class PausePanel : MonoBehaviour
+public class PausePanel : UIPanel
 {
     [SerializeField] private CanvasGroup mainCanvasGroup;        // Canvas group on the main panel with pause option buttons (resume/menu/quit etc.)
     [SerializeField] private CanvasGroup menuConfirmCanvasGroup; // Canvas group on the panel for confirming the choice to exit to the main menu
     [SerializeField] private CanvasGroup quitConfirmCanvasGroup; // Canvas group on the panel for confirming the choice to quit the game
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // Show just the main panel by default
         ShowMainPanelOnly();
     }
