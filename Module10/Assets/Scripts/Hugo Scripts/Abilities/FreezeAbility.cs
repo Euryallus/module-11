@@ -9,12 +9,18 @@ public class FreezeAbility : PlayerAbility
     [SerializeField]    private GameObject iceLancePrefab;
                         private GameObject spawnedIceLance;
 
-    [SerializeField] private float range = 50f;
-    [SerializeField] private float FreezeDuration = 5f;
-    [SerializeField] private Material freezeMaterial;
-    private EnemyBase hit;
+    [SerializeField]    private float range = 50f;
+    [SerializeField]    private float FreezeDuration = 5f;
+    [SerializeField]    private Material freezeMaterial;
 
-    private GameObject playerCam;
+                        private GameObject playerCam;
+
+
+
+    [Header("Upgrade vars")]
+    public int chainEnemyCount = 1;
+    public float chainDistance = 5f;
+    
 
 
     // Start is called before the first frame update
@@ -95,22 +101,19 @@ public class FreezeAbility : PlayerAbility
             // Only freeze enemies that don't already have their agents disabled
             //   Prevents multiple effects that disable enemy movement from being applied at once
 
-            hit = enemyObj;
             enemyObj.Freeze();
 
-            StartCoroutine(UnFreezeEnemy());
+            StartCoroutine(UnFreezeEnemy(enemyObj));
         }
     }
 
-    IEnumerator UnFreezeEnemy()
+    IEnumerator UnFreezeEnemy(EnemyBase enemyUnfreeze)
     {
         yield return new WaitForSeconds(FreezeDuration);
-        if(hit != null)
+        if(enemyUnfreeze != null)
         {
-            hit.UnFreeze();
-            hit = null;
-        }
-
+            enemyUnfreeze.UnFreeze();
+        }   
     }
 
 }

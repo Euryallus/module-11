@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewDistance: 35
-  viewAngle: 150
+  viewAngle: 200
   stationaryTurnSpeed: 5
   freezeIcePrefab: {fileID: 3222182312808410388, guid: 50e1c8667c47cde4f97aa4ba03ccd8ec, type: 3}
   meshRenderer: {fileID: 8495781840414603369}

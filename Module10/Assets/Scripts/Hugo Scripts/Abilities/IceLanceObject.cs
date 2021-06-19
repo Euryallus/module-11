@@ -20,7 +20,6 @@ public class IceLanceObject : MonoBehaviour
 
     public void Launch(Vector3 direction, FreezeAbility spawner)
     {
-       
         transform.parent = null;
 
         transform.forward = -direction;
@@ -48,19 +47,25 @@ public class IceLanceObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     { 
-         GameObject particles = Instantiate(impactParticles, collision.GetContact(0).point, Quaternion.identity);
-         particles.transform.forward = -transform.forward;
-         particles.GetComponent<ParticleGroup>().PlayEffect();
-         
-         if (collision.transform.gameObject.GetComponent<EnemyBase>())
-         {
-             parent.FreezeEnemy(collision.transform.gameObject.GetComponent<EnemyBase>());
-             Destroy(gameObject);
-         }
-         else
-         {
-             Destroy(gameObject);
-         }
+        GameObject particles = Instantiate(impactParticles, collision.GetContact(0).point, Quaternion.identity);
+        particles.transform.forward = -transform.forward;
+        particles.GetComponent<ParticleGroup>().PlayEffect();
         
+        if (collision.transform.gameObject.GetComponent<EnemyBase>())
+        {
+            parent.FreezeEnemy(collision.transform.gameObject.GetComponent<EnemyBase>());
+        }
+
+        int mask = 1 << 6;
+        if (parent.chainEnemyCount > 0)
+        {
+            RaycastHit[] surrounding = Physics.SphereCastAll(transform.position, parent.chainDistance, collision.transform.forward, parent.chainDistance, mask, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < parent.chainEnemyCount; i++)
+            {
+                parent.FreezeEnemy(surrounding[i].transform.gameObject.GetComponent<EnemyBase>());
+            }
+        }
+
+        Destroy(gameObject);
     }
 }
