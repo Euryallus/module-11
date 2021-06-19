@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e5f7ad921b4c348a71de26a1ba4202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewDistance: 25
+  viewDistance: 70
   viewAngle: 200
   stationaryTurnSpeed: 4
   freezeIcePrefab: {fileID: 3222182312808410388, guid: 50e1c8667c47cde4f97aa4ba03ccd8ec, type: 3}

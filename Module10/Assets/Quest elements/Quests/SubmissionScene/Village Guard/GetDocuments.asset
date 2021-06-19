@@ -30,11 +30,12 @@ MonoBehaviour:
     Quantity: 1
   objectives:
   - {fileID: 11400000, guid: 253f1d3ff6def0b428fd0416f7c073c4, type: 2}
+  forceAccept: 1
   handInNPCName: VillageGuard
   handOutNPCName: VillageGuard
   questLineName: 
-  questCompleted: 0
-  questHandedIn: 0
+  questCompleted: 1
+  questHandedIn: 1
   handInToGiver: 1
   savedQuestCompleted: 0
   savedQuestHandedIn: 0

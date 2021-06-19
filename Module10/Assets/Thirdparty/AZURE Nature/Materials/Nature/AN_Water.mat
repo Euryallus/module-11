@@ -52,7 +52,7 @@ Material:
     - _2: 0.7
     - _AlphaCutoff: 0.5
     - _ChromaticAberration: 0
-    - _CoastOpacity: 0.208
+    - _CoastOpacity: 0.155
     - _CoastalWavesDensity: 0.5
     - _DepthDistance: 1.5
     - _DepthFade: 1
@@ -63,14 +63,14 @@ Material:
     - _Float2: 0.1
     - _Float3: 0
     - _FoamContrast: 0.241
-    - _FoamDensity: 0.429
+    - _FoamDensity: 0.292
     - _FoamDistance: 0.64
     - _FoamOpacity: 1
     - _Normal: 0.15
     - _Opacity: 0.629
     - _Power: 0.2
     - _RefractionIntensity: 0.15
-    - _RefractionScale: 0.211
+    - _RefractionScale: 0.41
     - _Scale: 50
     - _Smoothness: 0.838
     - _TessEdgeLength: 16

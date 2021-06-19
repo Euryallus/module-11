@@ -16,6 +16,7 @@ public class QuestUI : MonoBehaviour
     [SerializeField]    private TMP_Text questTitle;                
     [SerializeField]    private TMP_Text questDescription;
     [SerializeField]    private TMP_Text questObjectives;
+    [SerializeField]    private Button rejectButton;
 
     [Header("Complete quest UI")]                                       // References to quest Complete UI elements (quest title, complete message, rewards etc.)
     [SerializeField]    private TMP_Text questCompleteTitle;
@@ -45,7 +46,7 @@ public class QuestUI : MonoBehaviour
     }
 
     // Displays data associated with [quest] for player to accept or decline quest
-    public void DisplayQuestAccept(QuestData quest)
+    public void DisplayQuestAccept(QuestData quest, bool forceAccept = false)
     {
         // Allows cursor to move around screen & assigns correct strings to text elements (e.g. quest description)
         Cursor.lockState = CursorLockMode.None;
@@ -55,6 +56,7 @@ public class QuestUI : MonoBehaviour
         // Temp vairable used to calculate text for "questObjectives" display
         string objectivesText = "";
 
+
         foreach(QuestObjective objective in quest.objectives)
         {
             // Objectives are listed one after the other
@@ -63,6 +65,15 @@ public class QuestUI : MonoBehaviour
 
         // Once calculated, displays list of objectives
         questObjectives.text = objectivesText;
+
+        if(forceAccept)
+        {
+            rejectButton.interactable = false;
+        }
+        else
+        {
+            rejectButton.interactable = true;
+        }
 
         // Allows player to see & interact with quest UI
         questAcceptCanvasGroup.alpha = 1;

@@ -42,7 +42,7 @@ public class QuestManager : MonoBehaviour, IPersistentObject
         playerMove.StopMoving();
         playerQuestData.pendingQuest = questToOffer;
         // Displays quest UI (allows player to see details & accept or decline)
-        UI.DisplayQuestAccept(playerQuestData.pendingQuest);
+        UI.DisplayQuestAccept(playerQuestData.pendingQuest, questToOffer.forceAccept);
 
         // Sets ref. to NPC that's giving out the quest
         playerQuestData.offer = offerer;

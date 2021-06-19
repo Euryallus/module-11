@@ -73,14 +73,14 @@ public class FreezeAbility : PlayerAbility
         RaycastHit hit;
         Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, range);
 
-        Vector3 direction = spawnedIceLance.transform.forward;
+        Vector3 direction = playerCam.transform.forward;
 
         if (hit.transform != null)
         {
-            direction = spawnedIceLance.transform.position - hit.point;
+            direction = -((spawnedIceLance.transform.position - hit.point).normalized);
         }
 
-        spawnedIceLance.GetComponent<IceLanceObject>().Launch(direction.normalized, gameObject.GetComponent<FreezeAbility>());
+        spawnedIceLance.GetComponent<IceLanceObject>().Launch(direction, gameObject.GetComponent<FreezeAbility>());
         
     }
 

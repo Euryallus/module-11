@@ -23,6 +23,7 @@ public class QuestData : ScriptableObject
     [SerializeField]    public List<QuestData> nextQuests = new List<QuestData>();              // List of quests that lead on from this one (quest line functionality)
                         public List<ItemGroup> rewards = new List<ItemGroup>();                 // Rewards given to the player for completing this quest
                         public List<QuestObjective> objectives = new List<QuestObjective>();    // Objectives needed to complete this quest
+                        public bool forceAccept = false;
 
     [Header("Hand-in data")]
 
