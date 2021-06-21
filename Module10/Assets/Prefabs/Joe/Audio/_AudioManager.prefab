@@ -83,6 +83,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dbb7cb54d7021f84ebed9f2b12a50d81, type: 2}
   - {fileID: 11400000, guid: c6907a1829da7334e9cd69bc0edf06ce, type: 2}
   - {fileID: 11400000, guid: 707b66537d063ed4d9a3ad626ff75ad9, type: 2}
+  - {fileID: 11400000, guid: a410809444a91ab41a3492688904c50e, type: 2}
   sceneMusicSetup:
   - SceneName: MainMenu
     PlayMode: 2
