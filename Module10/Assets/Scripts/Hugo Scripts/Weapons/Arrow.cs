@@ -13,6 +13,9 @@ public class Arrow : MonoBehaviour
     private bool hasHit = false;    // Stores if arrow has hit something
 
     private Rigidbody rb;           // Ref. to own RigidBody component
+    private Vector3 fireForward;
+
+    [SerializeField] private Vector3 collisionPoint;
 
     private void Awake()
     {
@@ -20,28 +23,48 @@ public class Arrow : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
+    public void Fire(Vector3 direction, float force)
+    {
+        transform.parent = null;
+
+        transform.forward = direction;
+
+        gameObject.GetComponent<Rigidbody>().velocity = transform.forward * force;
+
+        gameObject.GetComponent<Collider>().enabled = true;
+        fireForward = direction;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         // Checks if arrow hasn't already hit & that it hasnt hit the player
-        if(!hasHit && !collision.transform.CompareTag("Player"))
+        if(!hasHit)
         {
+            collisionPoint = collision.GetContact(0).point;
             // Flags hasHit as true & removes resitual velocity from arrow
             hasHit = true;
-            rb.velocity = Vector3.zero;
+            Debug.LogWarning(collision.transform.name);
+
+            
 
             if (collision.transform.gameObject.isStatic)
             {
-                // Checks if object collided with is static - if so, child arrow to collided object & freeze in place
-                gameObject.transform.parent = collision.gameObject.transform;
-                rb.constraints = RigidbodyConstraints.FreezeAll;
+                // Checks if object collided with is static - if so, freeze in place
+                rb.velocity = Vector3.zero;
+                rb.isKinematic = true;
+                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                transform.forward = fireForward;
                 return;
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
             }
 
             if(collision.gameObject.GetComponent<EnemyHealth>())
             {
                 // If object has EnemyHealth component, deal damage & destroy self
                 gameObject.transform.parent = collision.gameObject.transform;
-                rb.constraints = RigidbodyConstraints.FreezeAll;
 
                 collision.gameObject.GetComponent<EnemyHealth>().DoDamage(damageDone);
                 Destroy(gameObject);

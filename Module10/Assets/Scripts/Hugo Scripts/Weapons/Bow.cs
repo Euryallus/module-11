@@ -20,6 +20,10 @@ public class Bow : Weapon
     private bool isHeld     = false;            // Flags if bow is being drawn
     private float heldTime  = 0;                // Time bow has been drawn
 
+    [SerializeField] private float bowDetectRange = 100f;
+
+    private GameObject playerCam;
+
     public override void StartSecondardAbility()
     {
         if(cooldown >= cooldownTime && !isHeld)
@@ -53,6 +57,7 @@ public class Bow : Weapon
 
     public override void EndSecondaryAbility()
     {
+        playerCam = GameObject.FindGameObjectWithTag("MainCamera");
         base.EndSecondaryAbility();
 
         InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
@@ -61,11 +66,18 @@ public class Bow : Weapon
         if (inventory.ContainsQuantityOfItem(arrowRequired, out _))
         {
             GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
-            // Velocity of arrow is proportional to time being drawn back (clamped to arrowReleaseVelocity)
-            newArrow.GetComponent<Rigidbody>().velocity = transform.forward * (arrowReleaseVelocity * (heldTime / chargeTime));
 
-            //Adjusts forwards vect. of arrow to line up with player forwards
-            newArrow.transform.forward = transform.forward;
+            RaycastHit hit;
+            Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, bowDetectRange);
+
+            Vector3 direction = playerCam.transform.forward;
+
+            if (hit.transform != null)
+            {
+                direction = -((newArrow.transform.position - hit.point).normalized);
+            }
+
+            newArrow.GetComponent<Arrow>().Fire(direction, arrowReleaseVelocity);
 
             isHeld = false;
             cooldown = 0f;

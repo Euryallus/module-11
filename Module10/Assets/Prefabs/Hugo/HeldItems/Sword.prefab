@@ -70,7 +70,7 @@ MonoBehaviour:
   damageModifier: 1
   cooldownTime: 0.5
   animator: {fileID: 5941972748324674398}
-  reachLength: 5
+  reachLength: 3
 --- !u!1001 &797270604329689266
 PrefabInstance:
   m_ObjectHideFlags: 0

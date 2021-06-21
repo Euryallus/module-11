@@ -137,7 +137,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
+  alive: 1
   anim: {fileID: 8454660148386180801}
+  hurt: {fileID: 2100000, guid: 0de92c44f337a9e489f8eac8d03973fa, type: 2}
+  render: {fileID: 8495781840414603369}
+  defaultMat: {fileID: 2100000, guid: 343efc4e4daa6884fb114514185426c9, type: 2}
 --- !u!1001 &8358682427824087425
 PrefabInstance:
   m_ObjectHideFlags: 0
