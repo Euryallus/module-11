@@ -18,15 +18,48 @@ public class EnemyCampManager : MonoBehaviour
                         private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
                         private List<EnemyBase> unitsDifficulty = new List<EnemyBase>();    // List of enemies that could possibly spawn, that make up difficulty ~ that defined by diffifultyLevel
 
+                        public bool hasBeenDefeated = false;
+
     void Start()
     {
         // Spawns units 
         SpawnUnits(difficultyLevel);
     }
 
+    private void Update()
+    {
+        if(spawnedEnemies.Count != 0)
+        {
+            hasBeenDefeated = false;
+
+            for(int i = 0; i < spawnedEnemies.Count; i++)
+            {
+                if(spawnedEnemies[i] == null)
+                {
+                    spawnedEnemies.RemoveAt(i);
+                    if (spawnedEnemies.Count == 0)
+                    {
+                        hasBeenDefeated = true;
+                        break;
+                        
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                }
+            }
+        }
+        else
+        {
+            hasBeenDefeated = true;
+        }
+    }
+
     // Spawns units with a total difficulty equal to the param passed
     public void SpawnUnits(int difficultyLevel)
-    {
+    {        
+        hasBeenDefeated = false;
         // Resets list of potential enemies
         unitsDifficulty = new List<EnemyBase>();
 
@@ -57,6 +90,8 @@ public class EnemyCampManager : MonoBehaviour
             created.centralHubPos = transform.position;
             created.manager = gameObject.GetComponent<EnemyCampManager>();
         }
+
+
     }
 
     // Calculates remaining units to spawn based on total difficulty of units already selected
@@ -93,5 +128,10 @@ public class EnemyCampManager : MonoBehaviour
         {
             enemy.AlertOfPosition(position);
         }
+    }
+
+    public void AddUnitToList(EnemyBase enemy)
+    {
+        spawnedEnemies.Add(enemy);
     }
 }
