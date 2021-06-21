@@ -1,26 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(BoxCollider))]
 public class AreaObjectiveManager : MonoBehaviour
 {
-    [SerializeField]    private int noOfWaves = 3;
-                        private int currentWave = 0;
-
-    [SerializeField]    private float graceTimeBetweenRounds = 0.5f;
-
+    [Header("Charge times")]
     [SerializeField]    private float chargeTime = 5.0f;
+    [SerializeField]    private float drainTime = 10f;
     [SerializeField]    private float objectiveCharge = 0.0f;
                         private bool isCharging;
-                        private bool spawningNew = false;
+                        private bool hasFullyCharged = false;
 
-    [SerializeField]    private int initialDifficulty;
-    [SerializeField]    private int difficultyIncreasePerWave = 0;
+    [Header("Enounter vars")]
+    [SerializeField]    private int encounterDifficulty;
     [SerializeField]    private EnemyCampManager enemyManager;
 
-    private WaitForSeconds wait;
+    [Header("UI Elements")]
+    [SerializeField]    private Gradient progressBarGrad;
+    [SerializeField]    private Image sliderFill;
+    [SerializeField]    Slider progressSlider;
+
+    [Header("Events triggered once fully charged")]
+    [SerializeField] private UnityEvent onChargedEvents = new UnityEvent();
     
 
     void Start()
@@ -28,37 +33,40 @@ public class AreaObjectiveManager : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<BoxCollider>().isTrigger = true;
 
-        wait = new WaitForSeconds(graceTimeBetweenRounds);
-
+        progressSlider.gameObject.SetActive(false);
         isCharging = false;
     }
     
     void Update()
     {
-        if(isCharging)
+        if (!hasFullyCharged)
         {
-            objectiveCharge += Time.deltaTime / chargeTime;
-            if(objectiveCharge > 1.0f)
+            if (isCharging)
             {
-                objectiveCharge = 1.0f;
+                progressSlider.gameObject.SetActive(true);
+
+                objectiveCharge += Time.deltaTime / chargeTime;
+                if (objectiveCharge > 1.0f)
+                {
+                    objectiveCharge = 1.0f;
+                    onChargedEvents.Invoke();
+                    hasFullyCharged = true;
+                }
             }
-        }
-        else
-        {
-            objectiveCharge -= Time.deltaTime / chargeTime;
-            if(objectiveCharge < 0.0f)
+            else
             {
-                objectiveCharge = 0.0f;
+                objectiveCharge -= Time.deltaTime / drainTime;
+
+                if (objectiveCharge < 0.0f)
+                {
+                    objectiveCharge = 0.0f;
+                    progressSlider.gameObject.SetActive(false);
+                }
             }
-        }
 
-        if(enemyManager.hasBeenDefeated && !spawningNew && currentWave < noOfWaves)
-        {
-            spawningNew = true;
-            currentWave += 1;
-            StartCoroutine(waitAndStartNextRound());
+            sliderFill.color = progressBarGrad.Evaluate(objectiveCharge);
+            progressSlider.value = objectiveCharge;
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -77,10 +85,8 @@ public class AreaObjectiveManager : MonoBehaviour
         }
     }
 
-    IEnumerator waitAndStartNextRound()
+    public void StartEnounter()
     {
-        yield return wait;
-        enemyManager.SpawnUnits(initialDifficulty + (currentWave * difficultyIncreasePerWave));
-        spawningNew = false;
+        enemyManager.SpawnUnits(encounterDifficulty);
     }
 }

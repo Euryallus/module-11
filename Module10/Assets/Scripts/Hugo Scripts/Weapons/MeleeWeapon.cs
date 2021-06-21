@@ -21,9 +21,6 @@ public class MeleeWeapon : Weapon
                 {
                     float damage = CalculateDamage();
                     weaponHit.transform.GetComponent<EnemyHealth>().DoDamage(damage);
-
-                    // Outputs damage
-                    Debug.Log(damage);
                 }
             }
 

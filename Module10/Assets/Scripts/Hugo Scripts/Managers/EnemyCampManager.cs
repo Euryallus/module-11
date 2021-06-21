@@ -14,16 +14,22 @@ public class EnemyCampManager : MonoBehaviour
     [SerializeField]    private float spawnDistanceMax          = 10f;  // Maximum distance units will spawn from own position
     [SerializeField]    private int difficultyLevel             = 10;   // Difficulty level of camp (lower number = less / easier enemies spawn)
 
+    [SerializeField]    private bool spawnOnStart = true;
+
     [SerializeField]    private List<EnemyBase> possibleUnits   = new List<EnemyBase>();    // List of enemies that could be spawned from the camp
                         private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
                         private List<EnemyBase> unitsDifficulty = new List<EnemyBase>();    // List of enemies that could possibly spawn, that make up difficulty ~ that defined by diffifultyLevel
 
                         public bool hasBeenDefeated = false;
+    
 
     void Start()
     {
-        // Spawns units 
-        SpawnUnits(difficultyLevel);
+        if (spawnOnStart)
+        { 
+            // Spawns units 
+            SpawnUnits(difficultyLevel);
+        }
     }
 
     private void Update()
