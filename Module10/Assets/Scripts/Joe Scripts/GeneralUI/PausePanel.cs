@@ -78,6 +78,9 @@ public class PausePanel : UIPanel
     {
         AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
 
+        // Stop any looping sounds so they don't continue to play in the menu scene
+        AudioManager.Instance.StopAllLoopingSoundEffects();
+
         // Switch to main menu scene
         SceneManager.LoadScene("MainMenu");
     }

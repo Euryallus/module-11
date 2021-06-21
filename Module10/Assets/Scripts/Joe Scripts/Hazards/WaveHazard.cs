@@ -41,6 +41,7 @@ public class WaveHazard : MonoBehaviour
     private bool moving;
     private CanvasGroup warningUICanvasGroup;
     private Transform playerTransform;
+    private AudioSource waveLoopAudioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -80,6 +81,8 @@ public class WaveHazard : MonoBehaviour
 
         transform.localScale = new Vector3(1.0f, 0.0f, 1.0f);
         waveMesh.material.SetFloat("_Opacity", 0.0f);
+
+        waveLoopAudioSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, transform.position, 30.0f, 100.0f);
     }
 
     private void MoveWaveUpdate()
@@ -108,10 +111,13 @@ public class WaveHazard : MonoBehaviour
             warningUICanvasGroup.alpha = 0.0f;
         }
 
+        waveLoopAudioSource.gameObject.transform.position = transform.position;
+
         if(transform.position == endWorldPos)
         {
             StopMoving();
         }
+
     }
 
     private void StopMoving()
@@ -122,6 +128,9 @@ public class WaveHazard : MonoBehaviour
         waveParticles.SetActive(false);
 
         warningUICanvasGroup.alpha = 0.0f;
+
+        AudioManager.Instance.StopLoopingSoundEffect("waveHazardLoop_" + basePosition.x + "_" + basePosition.z);
+        waveLoopAudioSource = null;
     }
 
     private void OnTriggerEnter(Collider other)

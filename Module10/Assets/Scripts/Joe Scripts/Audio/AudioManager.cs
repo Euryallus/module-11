@@ -26,6 +26,10 @@ public enum MusicPlayMode
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for mod11:
+// - PlaySoundEffect now returns audiosource, useful for e.g. keeping reference to + changing position of looping source while playing
+// - min/max distance can be changed for 3d sources
+
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
@@ -222,7 +226,7 @@ public class AudioManager : MonoBehaviour
         PlayMusic(currentSceneMusic.Playlist[currentPlaylistIndex], false);
     }
 
-    private void PlaySoundEffect(SoundClass sound, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default)
+    private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Pick a random volume/sound within the set ranges
         float volume    = Random.Range(sound.VolumeRange.Min, sound.VolumeRange.Max);
@@ -246,6 +250,15 @@ public class AudioManager : MonoBehaviour
         {
             // Enable spatialBlend if playing sound in 3D space, so it will sound like it originates from sourcePosition
             audioSource.spatialBlend = 1.0f;
+
+            if(min3dDistance > 0.0f)
+            {
+                audioSource.minDistance = min3dDistance;
+            }
+            if (max3dDistance > 0.0f)
+            {
+                audioSource.maxDistance = max3dDistance;
+            }
         }
 
         if (loopType.LoopEnabled)
@@ -260,31 +273,34 @@ public class AudioManager : MonoBehaviour
 
         // Play the sound
         audioSource.Play();
+
+        return audioSource;
     }
 
-    private void PlaySoundEffect(string id, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default)
+    private AudioSource PlaySoundEffect(string id, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         if (soundsDict.ContainsKey(id))
         {
             // Play a sound with the given parameters
-            PlaySoundEffect(soundsDict[id], loopType, use3DSpace, sourcePosition);
+            return PlaySoundEffect(soundsDict[id], loopType, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
         }
         else
         {
             Debug.LogError("Trying to play sound effect with invalid id: " + id);
+            return default;
         }
     }
 
-    public void PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default)
+    public AudioSource PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound with soundId that will loop until StopLoopingSoundEffect is called with the given loopId
-        PlaySoundEffect(soundId, LoopType.Loop(loopId), use3DSpace, sourcePosition);
+        return PlaySoundEffect(soundId, LoopType.Loop(loopId), use3DSpace, sourcePosition, min3dDistance, max3dDistance);
     }
 
-    public void PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default)
+    public AudioSource PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound that will loop until StopLoopingSoundEffect is called with the given loopId
-        PlaySoundEffect(sound, LoopType.Loop(loopId), use3DSpace, sourcePosition);
+        return PlaySoundEffect(sound, LoopType.Loop(loopId), use3DSpace, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void StopLoopingSoundEffect(string loopId)
@@ -309,6 +325,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void StopAllLoopingSoundEffects()
+    {
+        foreach (LoopingSoundSource loopSource in loopingSoundSources)
+        {
+            // Destroy all source GameObjects to stop the sounds
+            Destroy(loopSource.Source.gameObject);
+        }
+
+        // There are now no looping sounds, clear the looping sound sources list
+        loopingSoundSources.Clear();
+    }
+
     public void PlaySoundEffect2D(string id)
     {
         // Plays a sound with the given id that is not positioned in 3D space
@@ -321,16 +349,16 @@ public class AudioManager : MonoBehaviour
         PlaySoundEffect(sound, LoopType.DoNotLoop, false);
     }
 
-    public void PlaySoundEffect3D(string id, Vector3 sourcePosition)
+    public void PlaySoundEffect3D(string id, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Plays a sound with the given id positioned in 3D space at sourcePosition
-        PlaySoundEffect(id, LoopType.DoNotLoop, true, sourcePosition);
+        PlaySoundEffect(id, LoopType.DoNotLoop, true, sourcePosition, min3dDistance, max3dDistance);
     }
 
-    public void PlaySoundEffect3D(SoundClass sound, Vector3 sourcePosition)
+    public void PlaySoundEffect3D(SoundClass sound, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Plays the given sound, positioned in 3D space at sourcePosition
-        PlaySoundEffect(sound, LoopType.DoNotLoop, true, sourcePosition);
+        PlaySoundEffect(sound, LoopType.DoNotLoop, true, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void PlayAllDynamicSources()
