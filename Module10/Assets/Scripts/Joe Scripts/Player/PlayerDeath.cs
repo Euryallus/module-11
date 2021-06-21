@@ -11,7 +11,8 @@ public enum PlayerDeathCause
     FellOutOfWorld,
     Crushed,       
     Skewered,
-    SwingHit
+    SwingHit,
+    WaveHit
 }
 
 // ||=======================================================================||
@@ -79,6 +80,11 @@ public class PlayerDeath : MonoBehaviour
         { PlayerDeathCause.SwingHit,        new WeightedString[]    {
                                                                         new WeightedString("You were hit by a swinging object.", 100),
                                                                         new WeightedString("Swoosh swoosh", 1)
+                                                                    } },
+
+        { PlayerDeathCause.WaveHit,         new WeightedString[]    {
+                                                                        new WeightedString("You were hit by a wave.", 100),
+                                                                        new WeightedString("You were defeated by a liquid.", 1)
                                                                     } }
     };
 

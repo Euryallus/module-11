@@ -30,6 +30,7 @@ TagManager:
   - LaunchIndicator
   - FreezeIndicator
   - SlamIndicator
+  - WaveWarning
   layers:
   - Default
   - TransparentFX
