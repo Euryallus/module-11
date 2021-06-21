@@ -11,10 +11,12 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private float maxHealth = 1f;   // Maximum (initial) health of an enemy
-                     private float health = 1f;      // Current health of enemy
+                     protected float health = 1f;      // Current health of enemy
+
+    public bool alive = true;
     
     // Causes enemy to take [x] damage
-    public void DoDamage(float damageAmount)
+    public virtual void DoDamage(float damageAmount)
     {
         // Reduces "health" by amount specified
         health -= damageAmount;
@@ -25,13 +27,16 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         // ## NOTE! ##
         // This func. will be expanded as the weapons system becomes more complex and enemy animations / models are implemented
 
+        alive = false;
+
         // By default, just destroys the enemy
         gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
+
         Destroy(gameObject);
     }
 }

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 137528860155671676}
   - component: {fileID: 137528860155671677}
   - component: {fileID: 5519911894177581760}
-  - component: {fileID: 7576901424960007549}
   - component: {fileID: 3643104717004036938}
   - component: {fileID: 4666214640181450844}
+  - component: {fileID: 6924794721869540606}
   m_Layer: 6
   m_Name: Enemy1ModelMinion
   m_TagString: Untagged
@@ -94,19 +94,6 @@ MonoBehaviour:
   children: []
   duplicateSpawnDistance: 0
   anim: {fileID: 5931105488403266674}
---- !u!114 &7576901424960007549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137528860155671651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 079f6c5b0cb3c0443b5247364cee6859, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 1
 --- !u!136 &3643104717004036938
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -117,10 +104,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.80706763
-  m_Height: 1.6141353
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.74, z: 0}
+  m_Radius: 0.6
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.59, z: -0}
 --- !u!54 &4666214640181450844
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -137,6 +124,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6924794721869540606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137528860155671651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e5ef0a0556cac4e9f6891821b8d3bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  alive: 1
+  anim: {fileID: 5931105488403266674}
+  hurt: {fileID: 2100000, guid: 0de92c44f337a9e489f8eac8d03973fa, type: 2}
+  render: {fileID: 5978811818498615772}
+  defaultMat: {fileID: 2100000, guid: bcaad48fae9d78948944fe183b6e39fe, type: 2}
 --- !u!1001 &5989255439873933582
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -486,7 +486,7 @@ public class EnemyBase : MonoBehaviour
 
         if(freezeIce == null)
         {
-            freezeIce = Instantiate(freezeIcePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+            freezeIce = Instantiate(freezeIcePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
         }
     }
 

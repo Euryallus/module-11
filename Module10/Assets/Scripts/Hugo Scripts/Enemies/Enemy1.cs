@@ -39,7 +39,11 @@ public class Enemy1 : EnemyBase
                 children[children.Count - 1].GetComponent<EnemyBase>().manager = manager;
                 children[children.Count - 1].GetComponent<EnemyBase>().centralHubPos = centralHubPos;
 
-                manager.AddUnitToList(children[children.Count - 1].GetComponent<EnemyBase>());
+                if(manager != null)
+                {
+                    manager.AddUnitToList(children[children.Count - 1].GetComponent<EnemyBase>());
+                }
+
 
                 // Updates bool to reflect that the enemy has cloned itself
                 HasSplit = true;

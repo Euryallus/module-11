@@ -40,13 +40,18 @@ public class Enemy1Anim : Enemy1
                     return;
                 }
 
-                // Stop running forwards animation
-                anim.SetBool("Run Forward", false); 
+                if(anim.GetBool("Run Forward"))
+                {
+                    anim.SetBool("Run Forward", false); 
+                }
             }
             else
             {
                 // If player is visible but cannot be "reached" for attack, move towards player & animate running 
-                anim.SetBool("Run Forward", true);
+                if (!anim.GetBool("Run Forward"))
+                {
+                    anim.SetBool("Run Forward", true);
+                }
                 // Sets enemy destination to player position
                 GoTo(playerLastSeen);
             }
