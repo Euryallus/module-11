@@ -92,6 +92,14 @@ public class PlayerDeath : MonoBehaviour
     {
         Debug.Log("Player died! Cause of death: " + causeOfDeath);
 
+        GameSceneUI gameUI = GameSceneUI.Instance;
+
+        if(gameUI.ShowingCinematicsCanvas)
+        {
+            gameUI.HideCinematicsCanvas();
+            gameUI.SetUIShowing(true);
+        }
+
         // Stop player movement to prevent them moving while dead
         GetComponent<PlayerMovement>().StopMoving();
 
@@ -120,6 +128,12 @@ public class PlayerDeath : MonoBehaviour
 
         // Set the death showing cause of death on the panel to the chosen string
         deathPanel.SetDeathCauseText(deathCauseText);
+
+        // Play a sound when the death panel is first shown
+        AudioManager.Instance.PlaySoundEffect2D("playerDeath");
+
+        // Stop any looping sounds so they don't continue to play after respawning from death
+        AudioManager.Instance.StopAllLoopingSoundEffects();
     }
 
     public string PickRandomWeightedString(WeightedString[] weightedStrings)

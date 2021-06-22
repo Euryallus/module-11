@@ -21,15 +21,6 @@ public class DeathPanel : MonoBehaviour
 
     #endregion
 
-    private void Start()
-    {
-        // Play a sound when the death panel is first shown
-        AudioManager.Instance.PlaySoundEffect2D("sealExplosion");
-
-        // Stop any looping sounds so they don't continue to play after respawning from death
-        AudioManager.Instance.StopAllLoopingSoundEffects();
-    }
-
     public void SetDeathCauseText(string cause)
     {
         // Set the text showing cause of death

@@ -39,6 +39,9 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
 
     #endregion
 
+    private bool playingAnimation   = false;
+    private bool reversingAnimation = false;
+
     private void Awake()
     {
         // The hazard is a listener for all external triggers so certain
@@ -59,25 +62,47 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
         }
     }
 
+    private void Update()
+    {
+        if(reversingAnimation && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.0f)
+        {
+            reversingAnimation  = false;
+            playingAnimation    = false;
+
+            animator.SetTrigger("DoneReversing");
+        }
+    }
+
     public void OnExternalTriggerEnter(string triggerId, Collider other)
     {
         if(other.CompareTag("Player"))
         {
             if (triggerId == "triggerArea")
             {
-                if (mode == HazardMode.PlayerTrigger)
+                if (mode == HazardMode.PlayerTrigger && !playingAnimation)
                 {
                     // The player entered the trigger area wile using HazardMode.PlayerTrigger, start the hazard animation
-                    animator.SetTrigger("StartHazard");
+                    StartAnimation();
                 }
             }
             else if (triggerId == "hit")
             {
-                // The player was hit by the obstacle, kill them and give the death cause that was set in the inspector
-
-                PlayerStats playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-                playerStats.DecreaseHealth(1.0f, deathCause);
+                HazardHitPlayer();
             }
+        }
+    }
+
+    private void HazardHitPlayer()
+    {
+        // The player was hit by the obstacle, kill them and give the death cause that was set in the inspector
+
+        PlayerStats playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        playerStats.DecreaseHealth(1.0f, deathCause);
+
+        // Play an impact sound if one was set in the inspector
+        if (impactSound != null)
+        {
+            AudioManager.Instance.PlaySoundEffect3D(impactSound, transform.position);
         }
     }
 
@@ -91,7 +116,7 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
         {
             // Continuously trigger the hazard animation, then wait for the interval, and repeat
 
-            animator.SetTrigger("StartHazard");
+            StartAnimation();
 
             yield return new WaitForSeconds(continuousInverval);
         }
@@ -128,5 +153,40 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
         {
             AudioManager.Instance.PlaySoundEffect3D(impactSound, transform.position);
         }
+    }
+
+    private void StartAnimation()
+    {
+        animator.SetFloat("Speed", 1.0f);
+
+        animator.SetTrigger("StartHazard");
+
+        playingAnimation = true;
+    }
+
+    public void ReverseAnimationAfterDelay(float delay)
+    {
+        StartCoroutine(ReverseAnimationCoroutine(delay));
+    }
+
+    private IEnumerator ReverseAnimationCoroutine(float delay)
+    {
+        // Pause animation and wait for delay
+
+        animator.SetFloat("Speed", 0.0f);
+
+        yield return new WaitForSeconds(delay);
+
+        // Reverse animation after delay
+
+        animator.SetFloat("Speed", -1.0f);
+
+        reversingAnimation = true;
+    }
+
+    // Called by an animation event
+    public void AnimationDone()
+    {
+        playingAnimation = false;
     }
 }
