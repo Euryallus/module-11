@@ -11,7 +11,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class PuzzleButtonSequence : MonoBehaviour, IPersistentObject
+public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -40,7 +40,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentObject
     void Start()
     {
         // Subscribe to save/load events so the sequence state is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -55,7 +55,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the sequence GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

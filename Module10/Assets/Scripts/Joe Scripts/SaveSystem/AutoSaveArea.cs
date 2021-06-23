@@ -11,7 +11,7 @@ using UnityEngine;
 // ||=======================================================================||
 
 [RequireComponent(typeof(BoxCollider))]
-public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentObject
+public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
@@ -43,7 +43,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentObject
     private void Start()
     {
         // Subscribe to save/load events so colliderDisabled is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -55,7 +55,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)
@@ -100,7 +100,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentObject
         WorldSave.Instance.UsedSavePointId = id;
 
         // Try to save the game
-        bool saveSuccess = SaveLoadManager.Instance.SaveGame();
+        bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
 
         // Show a notification to tell the player is the save was successful
         if (saveSuccess)

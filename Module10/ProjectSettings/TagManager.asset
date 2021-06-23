@@ -32,6 +32,7 @@ TagManager:
   - SlamIndicator
   - WaveWarning
   - Map
+  - HotbarAndStats
   layers:
   - Default
   - TransparentFX

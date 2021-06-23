@@ -6,7 +6,10 @@
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public interface IPersistentObject
+// Mod11: renamed from IPersistentObject to IPersistentSceneObject, now specifically used for objects that
+// exist in only one scene (e.g. chest) as opposed to objects that are shared in all scenes (e.g. player inventory)
+
+public interface IPersistentSceneObject
 {
     //OnLoadSetup is the first function called on this object when the game is loaded,
     //  it should be used for loading initial data that other objects depend on

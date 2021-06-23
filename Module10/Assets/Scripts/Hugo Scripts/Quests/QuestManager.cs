@@ -9,7 +9,7 @@ using UnityEngine.UI;
 // Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
-public class QuestManager : MonoBehaviour, IPersistentObject
+public class QuestManager : MonoBehaviour, IPersistentSceneObject
 {
     [SerializeField]    private PlayerQuestBacklog playerQuestData; // Ref. to player's quest data, stored as ScriptableObject
     [SerializeField]    private InventoryPanel inventory;           // Ref. to player's inventory
@@ -25,7 +25,7 @@ public class QuestManager : MonoBehaviour, IPersistentObject
 
     private void Start()
     {
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         // Assigns refs. to UI, player movement and npc manager
         UI = gameObject.GetComponent<QuestUI>();

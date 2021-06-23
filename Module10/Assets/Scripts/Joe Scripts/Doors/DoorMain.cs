@@ -10,7 +10,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class DoorMain : MonoBehaviour, IPersistentObject, IExternalTriggerListener
+public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerListener
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -49,7 +49,7 @@ public class DoorMain : MonoBehaviour, IPersistentObject, IExternalTriggerListen
         playerHotbar    = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
 
         // Subscribe to save/load events so this door's data will be saved when the game is saved
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         // Add this door as a listener for the external triggers so
         //   the player can be detected on either side of the door
@@ -68,7 +68,7 @@ public class DoorMain : MonoBehaviour, IPersistentObject, IExternalTriggerListen
     private void OnDestroy()
     {
         // The door no longer exists, unsubscribe from to save/load events
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void Update()

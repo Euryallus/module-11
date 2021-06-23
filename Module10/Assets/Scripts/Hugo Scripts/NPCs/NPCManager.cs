@@ -29,10 +29,10 @@ public class NPCManager : MonoBehaviour
 
     [Header("Camera focus componens")]
     
-    [SerializeField]    private GameObject playerCamera;    // Ref to player default camera
-    [SerializeField]    private GameObject focusCamera;     // Ref to 2nd camera used to focus on NPC
     [SerializeField]    private float cameraLerpSpeed;      // Speed camera lerps from current pos to focused pos
 
+    private GameObject playerCamera;    // Ref to default player camera
+    private GameObject focusCamera;     // Ref to 2nd camera used to focus on NPC
 
     private void Start()
     {
@@ -40,6 +40,7 @@ public class NPCManager : MonoBehaviour
         UI = gameObject.GetComponent<DialogueUI>();        
         UI.HideDialogue();
         playerMove = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        focusCamera = FindFocusCamera();
 
         // Deactivates focus camera
         focusCamera.SetActive(false);
@@ -145,23 +146,34 @@ public class NPCManager : MonoBehaviour
 
     public void StartFocusCameraMove(Transform target)
     {
-        // De-activates player camera
-        playerCamera.SetActive(false);
+        if(Camera.main != null)
+        {
+            playerCamera = Camera.main.gameObject;
 
-        // Sssigns initial position of focus cam to match players current position
-        focusCamera.transform.position = playerCamera.transform.position;
-        focusCamera.transform.rotation = playerCamera.transform.rotation;
+            // De-activates player camera
+            playerCamera.SetActive(false);
 
-        // Activates focus cam 
-        focusCamera.SetActive(true);
+            if(focusCamera == null)
+            {
+                // Added by Joe: Re-finds focus camera if it became null (can happen when switching scenes)
+                focusCamera = FindFocusCamera();
+            }
 
-        // Sets target transform for focus cam
-        targetCameraTransform = target;
-        // Sets movement state to "moving"
-        focusCameraCurrentState = focusCameraState.moving;
+            // Sssigns initial position of focus cam to match players current position
+            focusCamera.transform.position = playerCamera.transform.position;
+            focusCamera.transform.rotation = playerCamera.transform.rotation;
 
-        //Added by Joe - Hide hotbar/player stats UI
-        GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>().HideHotbarAndStatPanels();
+            // Activates focus cam 
+            focusCamera.SetActive(true);
+
+            // Sets target transform for focus cam
+            targetCameraTransform = target;
+            // Sets movement state to "moving"
+            focusCameraCurrentState = focusCameraState.moving;
+
+            //Added by Joe - Hide hotbar/player stats UI
+            GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>().HideHotbarAndStatPanels();
+        }
     }
     public void StopFocusCamera()
     {
@@ -177,5 +189,8 @@ public class NPCManager : MonoBehaviour
         GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>().ShowHotbarAndStatPanels();
     }
 
-    
+    private GameObject FindFocusCamera()
+    {
+        return GameObject.FindGameObjectWithTag("Player").transform.Find("FocusCamera").gameObject;
+    }
 }

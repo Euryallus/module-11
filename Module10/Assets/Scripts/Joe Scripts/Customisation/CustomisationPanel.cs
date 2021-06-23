@@ -12,7 +12,7 @@ using System.Collections.Generic;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class CustomisationPanel : MonoBehaviour, IPersistentObject
+public class CustomisationPanel : MonoBehaviour, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -63,7 +63,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentObject
     protected void Start()
     {
         // Subscribe to save/load events so the panel's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         itemManager = ItemManager.Instance;
 
@@ -73,7 +73,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if for some reason the panel is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

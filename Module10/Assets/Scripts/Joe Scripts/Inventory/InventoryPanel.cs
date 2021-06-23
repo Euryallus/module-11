@@ -65,14 +65,14 @@ public class InventoryPanel : UIPanel
     protected override void Awake()
     {
         base.Awake();
-
-        // Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
-        itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
     }
 
     protected override void Start()
     {
         base.Start();
+
+        // Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
+        itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
 
         playerMovement  = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         handSlotUI      = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();

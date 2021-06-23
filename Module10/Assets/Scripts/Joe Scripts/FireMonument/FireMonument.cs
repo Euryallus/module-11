@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireMonument : MonoBehaviour, IPersistentObject
+public class FireMonument : MonoBehaviour, IPersistentSceneObject
 {
     [Header("Main")]
     [Header("Fire Monument")]
@@ -42,7 +42,7 @@ public class FireMonument : MonoBehaviour, IPersistentObject
         portalEmblemRenderers[1].sprite = portalEmblem;
 
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         Material portalMaterialInstance = new Material(portalMaterial);
         portalMaterialInstance.SetColor("_Tint", portalColour);
@@ -52,7 +52,7 @@ public class FireMonument : MonoBehaviour, IPersistentObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events to prevent null ref errors if the monument is destroyed
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnInteract()

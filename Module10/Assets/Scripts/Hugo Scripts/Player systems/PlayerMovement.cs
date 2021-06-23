@@ -67,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Item glider;                 // Ref. to glider object
 
+    public CharacterController Controller { get { return controller; } }
+
     public enum MovementStates      // Possible states player can be in when moving
     {
         walk,

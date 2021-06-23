@@ -46,7 +46,7 @@ public class MainMenu : MonoBehaviour
 
     public void ButtonPlay()
     {
-        SceneManager.LoadScene("Mod10SubmissionDemo");
+        SaveLoadManager.Instance.LoadGameData("JoeTesting", "JoeTestScene");
     }
 
     public void ButtonOptions()

@@ -257,13 +257,6 @@ MonoBehaviour:
   drownDamage: 0.2
   drownDamageInterval: 2
   baseTimeToDrown: 30
-  healthSlider: {fileID: 0}
-  healthSliderFill: {fileID: 0}
-  foodLevelSlider: {fileID: 0}
-  foodSliderFill: {fileID: 0}
-  breathLevelSlider: {fileID: 0}
-  breathSliderFill: {fileID: 0}
-  breathCanvasGroup: {fileID: 0}
   damageEffectPrefab: {fileID: 3342926187353654585, guid: 38135b846d9b4854d825cb5f5717235e, type: 3}
 --- !u!114 &8688783702949859633
 MonoBehaviour:
@@ -367,6 +360,8 @@ MonoBehaviour:
   range: 100
   FreezeDuration: 5
   freezeMaterial: {fileID: 2100000, guid: a14ea78c4e8f8ed4e9fd9494c14c643e, type: 2}
+  chainEnemyCount: 1
+  chainDistance: 5
 --- !u!114 &6405603233027840712
 MonoBehaviour:
   m_ObjectHideFlags: 0

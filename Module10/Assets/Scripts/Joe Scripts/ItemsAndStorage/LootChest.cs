@@ -11,7 +11,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class LootChest : Chest, IPersistentObject
+public class LootChest : Chest, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -28,13 +28,13 @@ public class LootChest : Chest, IPersistentObject
         base.Start();
 
         // Subscribe to save/load events so lootGenerated can be saved
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     protected override void OnDestroy()
     {
         // Unsubscribe from save/load events if the chest is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

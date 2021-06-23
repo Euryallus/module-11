@@ -707,9 +707,10 @@ GameObject:
   - component: {fileID: 6371067345204950207}
   - component: {fileID: 7005111223493855238}
   - component: {fileID: 4454102840216796256}
+  - component: {fileID: 8117527092684320698}
   m_Layer: 5
   m_Name: PlayerHotbarAndInfo
-  m_TagString: Untagged
+  m_TagString: HotbarAndStats
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -757,6 +758,27 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8117527092684320698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146076480648976802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62511f683d2ed3f429601af6e0ed47e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 5400460774534467757}
+  foodLevelSlider: {fileID: 5811139080191020762}
+  breathLevelSlider: {fileID: 1640714958}
+  breathCanvasGroup: {fileID: 751372276}
+  healthSliderAnimator: {fileID: 3239504033811617867}
+  foodSliderAnimator: {fileID: 3718778428584307491}
+  foodSliderBGAnimator: {fileID: 360893556308732827}
+  breathSliderAnimator: {fileID: 665562800}
+  breathSliderBGAnimator: {fileID: 719480096}
 --- !u!1 &2450569688229074450
 GameObject:
   m_ObjectHideFlags: 0

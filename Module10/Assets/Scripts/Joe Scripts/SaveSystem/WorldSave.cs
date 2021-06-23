@@ -12,7 +12,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class WorldSave : MonoBehaviour, IPersistentObject
+public class WorldSave : MonoBehaviour, IPersistentSceneObject
 {
     public static WorldSave Instance;
 
@@ -66,13 +66,13 @@ public class WorldSave : MonoBehaviour, IPersistentObject
     protected void Start()
     {
         // Subscribe to save/load events so all world data is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the WorldSave GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

@@ -48,7 +48,7 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
         WorldSave.Instance.UsedSavePointId = id;
 
         // Try to save the game
-        bool saveSuccess = SaveLoadManager.Instance.SaveGame();
+        bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
 
         // Show a notification to tell the player is the save was successful
         if (saveSuccess)

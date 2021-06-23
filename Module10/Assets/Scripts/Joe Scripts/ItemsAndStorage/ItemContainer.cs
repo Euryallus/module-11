@@ -16,7 +16,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class ItemContainer : MonoBehaviour, IPersistentObject
+public class ItemContainer : MonoBehaviour, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -65,13 +65,13 @@ public class ItemContainer : MonoBehaviour, IPersistentObject
         }
 
         // Subscribe to save/load events so the container's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the container is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void Update()

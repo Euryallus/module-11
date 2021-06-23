@@ -26,10 +26,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     [SerializeField] private Image                  coverImage;                 // Image that covers the slot UI, can be used as a highlight/fill
     [SerializeField] private GameObject             itemCountPanel;             // Panel containing itemCountText
     [SerializeField] private TextMeshProUGUI        itemCountText;              // Text showing the number of items in the slot (if > 1)
-    [SerializeField] private UnityEngine.UI.Outline outline;                    // Outline of the main slot panel
-
-    [SerializeField] private Color                  standardOutlineColour;      // Colour to use for the outline by default
-    [SerializeField] private Color                  selectedOutlineColour;      // Colour to use for the outline when the slot is selected (e.g. in the player's hotbar)
+    [SerializeField] private GameObject             outline;                    // Outline of the main slot panel
 
     [SerializeField] private bool                   clickToAddItems     = true; // Whether the player can click on this slot to add items that are in their hand
     [SerializeField] private bool                   clickToRemoveItems  = true; // Whether the player can click on this slot to transfer items to their hand
@@ -140,20 +137,21 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     {
         // Selects or deselects the slot UI
 
+        if (outline == null)
+        {
+            Debug.LogError("WTF", gameObject);
+            return;
+        }
+
         if (selected)
         {
-            // Slot is selected, show a slightly thicker outline with the selected colour
-            outline.enabled = true;
-            //outline.effectDistance = new Vector2(2.0f, 2.0f);
-            //outline.effectColor = selectedOutlineColour;
+            // Slot is selected, show an outline
+            outline.SetActive(true);
         }
         else
         {
-            // Slot is not selected, show a thinner outline with the standard colour
-            outline.enabled = false;
-
-            //outline.effectDistance = Vector2.one;
-            //outline.effectColor = standardOutlineColour;
+            // Slot is not selected, show no outline
+            outline.SetActive(false);
         }
     }
 

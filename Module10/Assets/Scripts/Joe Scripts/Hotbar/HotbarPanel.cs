@@ -15,7 +15,7 @@ using UnityEngine.EventSystems;
 // Changed for Mod11
 // - Removed itemcontainer, slots are now merged with inventory container
 
-public class HotbarPanel : UIPanel, IPersistentObject
+public class HotbarPanel : UIPanel, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -51,7 +51,7 @@ public class HotbarPanel : UIPanel, IPersistentObject
         base.Start();
 
         // Subscribe to save/load events so the hotbar's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
 
         itemEatPanel.SetActive(false);
 
@@ -72,7 +72,7 @@ public class HotbarPanel : UIPanel, IPersistentObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events is the hotbar is destroyed to prevent a null reference error
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void Update()

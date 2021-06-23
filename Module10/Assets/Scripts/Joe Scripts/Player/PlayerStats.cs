@@ -18,7 +18,7 @@ using UnityEngine.UI;
 // - Player dies when health reached 0
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerStats : MonoBehaviour, IPersistentObject
+public class PlayerStats : MonoBehaviour, IPersistentSceneObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
@@ -59,13 +59,6 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private float   baseTimeToDrown         = 60.0f;
 
     [Header("UI")]
-    [SerializeField] private Slider      healthSlider;       // The slider showing health
-    [SerializeField] private Image       healthSliderFill;   // The fill bar for the above slider
-    [SerializeField] private Slider      foodLevelSlider;    // The slider showing food level
-    [SerializeField] private Image       foodSliderFill;     // The fill bar for the above slider
-    [SerializeField] private Slider      breathLevelSlider;  // The slider showing breath
-    [SerializeField] private Image       breathSliderFill;   // The fill bar for the above slider
-    [SerializeField] private CanvasGroup breathCanvasGroup;  // Canvas group for showing/hiding the breath indicator
     [SerializeField] private GameObject  damageEffectPrefab; // Prefab showing a red vignette flash effect that is instantiated when the player takes damage
 
     #endregion
@@ -79,12 +72,8 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
                                                        
     private float           starveDamageTimer;      // Keeps track of seconds passed since damage was taken from starving
     private float           drownDamageTimer;          
-    private PlayerMovement  playerMovement;         // Reference to the script that controls player movement
-    private Animator        healthSliderAnimator;   // Animator used for flashing the health slider bar red when health is low
-    private Animator        foodSliderAnimator;     // Animator used for flashing the food slider bar red when food level is low
-    private Animator        foodSliderBgAnimator;   // Animator used for flashing the food slider background red when player is starving                                        
-    private Animator        breathSliderAnimator;   // Animator used for flashing the breath slider bar red when player is close to drowning
-    private Animator        breathSliderBgAnimator; // Animator used for flashing the breath slider background red when player is drowning     
+    private PlayerMovement  playerMovement;   
+    private PlayerStatsUI statsUI;
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
 
@@ -94,30 +83,27 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
 
         playerMovement = GetComponent<PlayerMovement>();
         canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
-
-        healthSliderAnimator    = healthSliderFill.gameObject.GetComponent<Animator>();
-
-        foodSliderAnimator      = foodSliderFill.gameObject.GetComponent<Animator>();
-        foodSliderBgAnimator    = foodLevelSlider.transform.Find("Background").GetComponent<Animator>();
-
-        breathSliderAnimator    = breathSliderFill.gameObject.GetComponent<Animator>();
-        breathSliderBgAnimator  = breathLevelSlider.transform.Find("Background").GetComponent<Animator>();
     }
 
     protected void Start()
     {
         // Subscribe to save/load events so player stats are saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         //Unsubscribe from save/load events if for some reason the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void Update()
     {
+        if(statsUI == null)
+        {
+            statsUI = GameObject.FindGameObjectWithTag("HotbarAndStats").GetComponent<PlayerStatsUI>();
+        }
+
         // Calculate how much the food/breath levels should decrease each frame
         float foodLevelDecreaseAmount = Time.deltaTime / baseTimeToStarve;
         float breathDecreaseAmount = Time.deltaTime / baseTimeToDrown;
@@ -222,7 +208,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     {
         // Added by Hugo
 
-        breathCanvasGroup.alpha = breath < 1.0 ? 1 : 0;
+        statsUI.BreathCanvasGroup.alpha = breath < 1.0 ? 1 : 0;
 
         if (playerMovement.currentMovementState == PlayerMovement.MovementStates.dive)
         {
@@ -235,7 +221,7 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
 
         if (breath < 1.0f)
         {
-            breathCanvasGroup.alpha = 1f;
+            statsUI.BreathCanvasGroup.alpha = 1f;
 
             if (breath == 0.0f)
             {
@@ -319,32 +305,32 @@ public class PlayerStats : MonoBehaviour, IPersistentObject
     private void UpdateBreathUI()
     {
         // Lerp the breath slider value towards breath so the value smoothly changes
-        breathLevelSlider.value = Mathf.Lerp(breathLevelSlider.value, breath, Time.unscaledDeltaTime * 25.0f);
+        statsUI.BreathLevelSlider.value = Mathf.Lerp(statsUI.BreathLevelSlider.value, breath, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the breath slider bar or background red depending on how low the level is
-        breathSliderAnimator.SetBool("Flash", (breath < StatWarningThreshold));
+        statsUI.BreathSliderAnimator.SetBool("Flash", (breath < StatWarningThreshold));
 
-        breathSliderBgAnimator.SetBool("Flash", (breath == 0.0f));
+        statsUI.BreathSliderBGAnimator.SetBool("Flash", (breath == 0.0f));
     }
 
     private void UpdateFoodLevelUI()
     {
         // Lerp the food slider value towards foodLevel so the value smoothly changes
-        foodLevelSlider.value = Mathf.Lerp(foodLevelSlider.value, foodLevel, Time.unscaledDeltaTime * 25.0f);
+        statsUI.FoodLevelSlider.value = Mathf.Lerp(statsUI.FoodLevelSlider.value, foodLevel, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the food slider bar or background red depending on how low the level is
-        foodSliderAnimator.SetBool("Flash", (foodLevel < StatWarningThreshold));
+        statsUI.FoodSliderAnimator.SetBool("Flash", (foodLevel < StatWarningThreshold));
 
-        foodSliderBgAnimator.SetBool("Flash", (foodLevel == 0.0f));
+        statsUI.FoodSliderBGAnimator.SetBool("Flash", (foodLevel == 0.0f));
     }
 
     private void UpdateHealthUI()
     {
         // Lerp the health slider value towards health so the value smoothly changes
-        healthSlider.value = Mathf.Lerp(healthSlider.value, health, Time.unscaledDeltaTime * 25.0f);
+        statsUI.HealthSlider.value = Mathf.Lerp(statsUI.HealthSlider.value, health, Time.unscaledDeltaTime * 25.0f);
 
         //Flash the health slider red if health is getting low
-        healthSliderAnimator.SetBool("Flash", (health < StatWarningThreshold));
+        statsUI.HealthSliderAnimator.SetBool("Flash", (health < StatWarningThreshold));
     }
 
     public bool PlayerIsFull()

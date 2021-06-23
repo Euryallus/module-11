@@ -10,7 +10,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class DynamicAudioArea : MonoBehaviour, IPersistentObject
+public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 {
 
     #region InspectorVariables
@@ -47,13 +47,13 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentObject
     private void Start()
     {
         // Subscribe to save/load events so the active value can be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the area GameObject is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

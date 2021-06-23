@@ -13,7 +13,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class ItemManager : MonoBehaviour, IPersistentObject
+public class ItemManager : MonoBehaviour, IPersistentSceneObject
 {
     public static ItemManager Instance; // Static instance of the class for simple access
 
@@ -60,13 +60,13 @@ public class ItemManager : MonoBehaviour, IPersistentObject
     private void Start()
     {
         // Subscribe to save/load events so custom items will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)

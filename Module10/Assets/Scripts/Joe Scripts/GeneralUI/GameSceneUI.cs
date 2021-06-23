@@ -48,9 +48,8 @@ public class GameSceneUI : MonoBehaviour
         // Ensure that an instance of the class does not already exist
         if (Instance == null)
         {
-            // Set this class as the instance and ensure that it stays when changing scenes
+            // Set this class as the instance
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         // If there is an existing instance that is not this, destroy the GameObject this script is connected to
         else if (Instance != this)

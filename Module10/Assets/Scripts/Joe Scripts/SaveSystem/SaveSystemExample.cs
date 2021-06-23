@@ -8,7 +8,7 @@ using UnityEngine;
 // || Written by Joe for Module 10                                          ||
 // ||=======================================================================||
 
-public class SaveSystemExample : MonoBehaviour, IPersistentObject
+public class SaveSystemExample : MonoBehaviour, IPersistentSceneObject
 {
     // Example variables that could be saved
     private int             exampleInt;
@@ -18,13 +18,13 @@ public class SaveSystemExample : MonoBehaviour, IPersistentObject
     private void Start()
     {
         // Subscribe to save and load events on start
-        SaveLoadManager.Instance.SubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save and load events if the object is destroyed
-        SaveLoadManager.Instance.UnsubscribeSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
     }
 
     public void OnSave(SaveData saveData)
