@@ -95,6 +95,10 @@ MonoBehaviour:
   - SceneName: JoeTestScene
     PlayMode: 3
     Playlist:
+    - {fileID: 0}
+  - SceneName: JoeTestScene2
+    PlayMode: 2
+    Playlist:
     - {fileID: 11400000, guid: 481bfedf74be6e24c8914f20dd3849bb, type: 2}
   - SceneName: DemoScene
     PlayMode: 3

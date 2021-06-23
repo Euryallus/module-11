@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]    [Range(0.01f, 1)] private float gliderTiltAmount                = 0.5f; // Amount glider tilts when in use (clamps after [x] amount)
     [SerializeField]    [Range(1, 10)]    private float gliderOpenDistanceFromGround    = 5.0f; // Distance from the ground player must be to open glider
 
+    public static PlayerMovement Instance; // Static instance of the class to ensure only one player ever exists in a scene
 
     private float mouseX;           // x component of raw mouse movement
     private float mouseY;           // y component of raw mouse movement
@@ -64,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
     private bool canMove    = true;     // Flags if player is able to move (changed to prevent moving during dialogue etc.)
     private bool canGlide   = false;    // Flags if player is able to glide (if > [gliderOpenDistanceFromGround] meters off ground)
 
-    private InventoryPanel inventory;   // Ref. to player inventory
     public Item glider;                 // Ref. to glider object
 
     public enum MovementStates      // Possible states player can be in when moving
@@ -90,13 +90,27 @@ public class PlayerMovement : MonoBehaviour
                         private CrouchState currentCrouchState;         // Saves player's current crouch state
     [HideInInspector]   public MovementStates currentMovementState;     // Saves player's current movement state
 
-
+    private void Awake()
+    {
+        // Ensure that an instance of the class does not already exist
+        if (Instance == null)
+        {
+            // Set this class as the instance and ensure that it stays when changing scenes
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        // If there is an existing instance that is not this, destroy the GameObject this script is connected to
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     void Start()
     {
         // Assigns references to components
         controller = gameObject.GetComponent<CharacterController>();
-        inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
 
         // Locks cursor to centre of screen
         Cursor.lockState = CursorLockMode.Locked;
@@ -489,7 +503,10 @@ public class PlayerMovement : MonoBehaviour
             moveVect.y = velocityY;
 
             // Tells controller to move
-            controller.Move(moveVect * Time.deltaTime); //applies movement to player
+            if(controller.enabled)
+            {
+                controller.Move(moveVect * Time.deltaTime); //applies movement to player
+            }
         }
     }
 

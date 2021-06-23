@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Noah test scene/DemoScene.unity
     guid: 8b54a35d013d11c4d990350939467323
+  - enabled: 1
+    path: Assets/Scenes/Joe test scene/JoeTestScene.unity
+    guid: 7b1de85605ec6c24498945b44ff548ab
+  - enabled: 1
+    path: Assets/Scenes/Joe test scene/JoeTestScene2.unity
+    guid: ab082dc59d728dc4e8655e4479c6176f
   m_configObjects: {}
