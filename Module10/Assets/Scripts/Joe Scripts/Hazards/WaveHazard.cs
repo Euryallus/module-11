@@ -111,7 +111,10 @@ public class WaveHazard : MonoBehaviour
             warningUICanvasGroup.alpha = 0.0f;
         }
 
-        waveLoopAudioSource.gameObject.transform.position = transform.position;
+        if(waveLoopAudioSource != null)
+        {
+            waveLoopAudioSource.gameObject.transform.position = transform.position;
+        }
 
         if(transform.position == endWorldPos)
         {

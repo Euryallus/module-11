@@ -22,7 +22,8 @@ public class SaveLoadManager : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject loadingPanelPrefab; // UI panel shown when loading the game
+    [SerializeField] private SceneSaveGroup[]   sceneSaveGroups;
+    [SerializeField] private GameObject         loadingPanelPrefab; // UI panel shown when loading the game
 
     #endregion
 
@@ -32,14 +33,18 @@ public class SaveLoadManager : MonoBehaviour
 
     #endregion
 
-    public event Action<SaveData>   SaveObjectsEvent;           // Event invoked when objects are saved
-    public event Action<SaveData>   LoadObjectsSetupEvent;      // Event invoked for the first stage of object loading
-    public event Action<SaveData>   LoadObjectsConfigureEvent;  // Event invoked for the second stage of object loading
+    private event Action<SaveData>      SaveSceneObjectsEvent;              // Event invoked when objects are saved
+    private event Action<SaveData>      LoadSceneObjectsSetupEvent;         // Event invoked for the first stage of object loading
+    private event Action<SaveData>      LoadSceneObjectsConfigureEvent;     // Event invoked for the second stage of object loading
 
-    private string  saveDirectory;      // Path where save files are stored
-    private bool    loadingAfterDeath;  // Whether the game is being reloaded after the player dies
+    private event Action<SaveData>      SaveGlobalObjectsEvent;             // Event invoked when objects are saved
+    private event Action<SaveData>      LoadGlobalObjectsSetupEvent;        // Event invoked for the first stage of object loading
+    private event Action<SaveData>      LoadGlobalObjectsConfigureEvent;    // Event invoked for the second stage of object loading
 
-    private Dictionary<string, int> playerPrefsDefaultIntValues = new Dictionary<string, int>()
+    private string                      saveDirectory;                      // Path where save files are stored
+    private bool                        loadingAfterDeath;                  // Whether the game is being reloaded after the player dies
+
+    private readonly Dictionary<string, int> playerPrefsDefaultIntValues = new Dictionary<string, int>()
     {
         { "musicVolume"       , 8 },
         { "soundEffectsVolume", 8 },
@@ -79,18 +84,18 @@ public class SaveLoadManager : MonoBehaviour
         // Subscribes to save/load events to the OnSave/OnLoadSetup/OnLoadCOnfigure functions on
         //   an object implementing IPerstentObject will be called when the game is saved/loaded
 
-        SaveObjectsEvent          += onSave;
-        LoadObjectsSetupEvent     += onLoadSetup;
-        LoadObjectsConfigureEvent += onLoadConfig;
+        SaveSceneObjectsEvent            += onSave;
+        LoadSceneObjectsSetupEvent       += onLoadSetup;
+        LoadSceneObjectsConfigureEvent   += onLoadConfig;
     }
 
     public void UnsubscribeSaveLoadEvents(Action<SaveData> onSave, Action<SaveData> onLoadSetup, Action<SaveData> onLoadConfig)
     {
         // Unsubscribes an objects save/load functions from the events
 
-        SaveObjectsEvent          -= onSave;
-        LoadObjectsSetupEvent     -= onLoadSetup;
-        LoadObjectsConfigureEvent -= onLoadConfig;
+        SaveSceneObjectsEvent           -= onSave;
+        LoadSceneObjectsSetupEvent      -= onLoadSetup;
+        LoadSceneObjectsConfigureEvent  -= onLoadConfig;
     }
 
     public bool SaveGame()
@@ -98,7 +103,7 @@ public class SaveLoadManager : MonoBehaviour
         SaveData dataToSave = new SaveData();
 
         // Call the OnSave function on all persistent objects - they will each add some data to the SavaData object
-        SaveObjectsEvent?.Invoke(dataToSave);
+        SaveSceneObjectsEvent?.Invoke(dataToSave);
 
         // Create a save data file path based on the name of the scene being saved
         string sceneName = SceneManager.GetActiveScene().name;
@@ -206,12 +211,12 @@ public class SaveLoadManager : MonoBehaviour
             // Setup then configure all persistent objects with the loaded data
 
             Debug.Log("Load Stage 1: Setup");
-            LoadObjectsSetupEvent?.Invoke(loadedData);
+            LoadSceneObjectsSetupEvent?.Invoke(loadedData);
 
             yield return null;
 
             Debug.Log("Load Stage 2: Configure");
-            LoadObjectsConfigureEvent?.Invoke(loadedData);
+            LoadSceneObjectsConfigureEvent?.Invoke(loadedData);
 
             // Loading is done
             Debug.Log("Game loaded!");
@@ -236,12 +241,33 @@ public class SaveLoadManager : MonoBehaviour
     {
         Debug.Log("Scene loaded: " + scene.name);
 
-        // Load the game's save data from a file if the loaded scene has one of the following names:
-        if(scene.name == "CombinedScene" || scene.name == "JoeTestScene" || scene.name == "Noah test scene" ||
-            scene.name == "DemoScene" || scene.name == "NoahNewScene" || scene.name == "Mod10SubmissionDemo")
+        //// Load the game's save data from a file if the loaded scene has one of the following names:
+        //if(scene.name == "CombinedScene" || scene.name == "JoeTestScene" || scene.name == "Noah test scene" ||
+        //    scene.name == "DemoScene" || scene.name == "NoahNewScene" || scene.name == "Mod10SubmissionDemo")
+        //{
+        //    LoadGame();
+        //}
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadSceneCoroutine(sceneName));
+    }
+
+    private IEnumerator LoadSceneCoroutine(string sceneName)
+    {
+        CharacterController playerController = PlayerMovement.Instance.gameObject.GetComponent<CharacterController>();
+        playerController.enabled = false;
+
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+
+        while (!op.isDone)
         {
-            LoadGame();
+            yield return null;
         }
+
+        PlayerMovement.Instance.gameObject.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+        playerController.enabled = true;
     }
 
     // Saving/loading PlayerPrefs
@@ -277,13 +303,13 @@ public class SaveLoadManager : MonoBehaviour
     {
         if (playerPrefsDefaultIntValues.ContainsKey(key))
         {
-            return (PlayerPrefs.GetInt(key, playerPrefsDefaultIntValues[key]) == 1 ? true : false);
+            return (PlayerPrefs.GetInt(key, playerPrefsDefaultIntValues[key]) == 1);
         }
         else
         {
             Debug.LogWarning("No default int value set for PlayerPref with key: " + key);
 
-            return (PlayerPrefs.GetInt(key) == 1 ? true : false);
+            return (PlayerPrefs.GetInt(key) == 1);
         }
     }
 }

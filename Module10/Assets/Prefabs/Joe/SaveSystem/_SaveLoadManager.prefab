@@ -43,4 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3ecf3edacbfb45a5c52b3b94771fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneSaveGroups:
+  - groupName: Maps
+    sceneNames:
+    - Catacombs
+    - Desert
+    - Flooded City
+    - The Village
+  - groupName: Joe Test Scenes
+    sceneNames:
+    - JoeTestScene
+    - JoeTestScene2
   loadingPanelPrefab: {fileID: 3896055339423295009, guid: 073c03f11bf814447af9f936b439ed25, type: 3}
