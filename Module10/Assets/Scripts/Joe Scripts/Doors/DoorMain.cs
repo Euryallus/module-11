@@ -15,16 +15,24 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [Header("Important: Set unique id")]
+    // See tooltips for comments
+
+    [Space]
+    [Header("(See tooltips for info)")]
     [Header("Door")]
 
-    [SerializeField] private string     id;                         // Unique id for the door
-    [SerializeField] private bool       manualOpen = true;          // Whether the door can be opened manually by a player (rather than an external method such as puzzle button)
-    [SerializeField] private Item       unlockItem;                 // Item required to unlock the door (none if null)
-    [SerializeField] private float      closeAfterTime = 5.0f;      // Amount of time before the door closes automatiaclly (seconds)
-    [SerializeField] private Animator   animator;                   // Animator used for door open/close animations
+    [SerializeField] [Tooltip("Whether the door can be opened manually by a player (rather than an external method such as puzzle button)")]
+    private bool       manualOpen = true;
 
-    [SerializeField] private ExternalTrigger[] triggers;            // Triggers to detect if the player is on either side of the door
+    [SerializeField] [Tooltip("Item required to unlock the door (none if left empty)")]
+    private Item       unlockItem;
+
+    [SerializeField] [Tooltip("Number of seconds before the door closes automatiaclly, 0 = stay open forever")]
+    private float      closeAfterTime = 5.0f;
+
+    [SerializeField] private Animator   animator;           // Animator used for door open/close animations
+
+    [SerializeField] private ExternalTrigger[] triggers;    // Triggers to detect if the player is on either side of the door
 
     #endregion
 
@@ -57,12 +65,6 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         {
             triggers[i].AddListener(this);
         }
-
-        if (string.IsNullOrEmpty(id))
-        {
-            // Warning for if an id has not been set
-            Debug.LogWarning("IMPORTANT: Door exists without id. All doors require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
-        }
     }
 
     private void OnDestroy()
@@ -89,6 +91,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     public void OnSceneSave(SaveData saveData)
     {
+        string id = GetUniquePositionId();
+
         Debug.Log("Saving data for door: " + id);
 
         // Save the locked state
@@ -106,11 +110,13 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             openStateToSave = 2;
         }
 
-        saveData.AddData("openState_" + id, openStateToSave);
+        saveData.AddData("openState_" + GetUniquePositionId(), openStateToSave);
     }
 
     public void OnSceneLoadSetup(SaveData saveData)
     {
+        string id = GetUniquePositionId();
+
         Debug.Log("Loading data for door: " + id);
 
         unlocked = saveData.GetData<bool>("unlocked_" + id);
@@ -294,6 +300,10 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         animator.SetBool("OpenOut", false);
     }
 
+    private string GetUniquePositionId()
+    {
+        return "door_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
+    }
 
     // Open/close sounds triggered by animation events:
     //==================================================
