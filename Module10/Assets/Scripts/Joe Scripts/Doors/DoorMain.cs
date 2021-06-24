@@ -49,7 +49,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         playerHotbar    = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
 
         // Subscribe to save/load events so this door's data will be saved when the game is saved
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         // Add this door as a listener for the external triggers so
         //   the player can be detected on either side of the door
@@ -68,7 +68,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     private void OnDestroy()
     {
         // The door no longer exists, unsubscribe from to save/load events
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void Update()
@@ -87,7 +87,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         }
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         Debug.Log("Saving data for door: " + id);
 
@@ -109,7 +109,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         saveData.AddData("openState_" + id, openStateToSave);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading data for door: " + id);
 
@@ -128,7 +128,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { }
+    public void OnSceneLoadConfigure(SaveData saveData) { }
 
     public void OnExternalTriggerEnter(string triggerId, Collider other)
     {

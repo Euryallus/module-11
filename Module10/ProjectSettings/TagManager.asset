@@ -33,6 +33,7 @@ TagManager:
   - WaveWarning
   - Map
   - HotbarAndStats
+  - DefaultSpawnPoint
   layers:
   - Default
   - TransparentFX

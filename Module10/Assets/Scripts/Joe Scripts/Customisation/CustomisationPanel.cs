@@ -12,7 +12,7 @@ using System.Collections.Generic;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class CustomisationPanel : MonoBehaviour, IPersistentSceneObject
+public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -63,7 +63,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentSceneObject
     protected void Start()
     {
         // Subscribe to save/load events so the panel's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
 
         itemManager = ItemManager.Instance;
 
@@ -73,10 +73,10 @@ public class CustomisationPanel : MonoBehaviour, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if for some reason the panel is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         // Save the type of item in the customise slot (no need to save stack size as there will always be either 0 [i.e. no item] or 1)
         saveData.AddData("customiseStackItemId", customiseSlot.ItemStack.StackSize > 0 ? customiseSlot.ItemStack.StackItemsID : "");
@@ -89,9 +89,9 @@ public class CustomisationPanel : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("resultStackItemId", resultSlot.ItemStack.StackSize > 0 ? resultSlot.ItemStack.StackItemsID : "");
     }
 
-    public void OnLoadSetup(SaveData saveData) { } // Nothing to setup
+    public void OnGlobalLoadSetup(SaveData saveData) { } // Nothing to setup
 
-    public void OnLoadConfigure(SaveData saveData)
+    public void OnGlobalLoadConfigure(SaveData saveData)
     {
         // Load any item that was in the customise slot
         string customiseItemId = saveData.GetData<string>("customiseStackItemId");

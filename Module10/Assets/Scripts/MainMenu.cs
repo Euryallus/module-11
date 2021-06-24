@@ -46,7 +46,7 @@ public class MainMenu : MonoBehaviour
 
     public void ButtonPlay()
     {
-        SaveLoadManager.Instance.LoadGameData("JoeTesting", "JoeTestScene");
+        SaveLoadManager.Instance.LoadGame();
     }
 
     public void ButtonOptions()

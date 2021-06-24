@@ -9,7 +9,7 @@ using UnityEngine.UI;
 // Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
-public class QuestManager : MonoBehaviour, IPersistentSceneObject
+public class QuestManager : MonoBehaviour, IPersistentGlobalObject
 {
     [SerializeField]    private PlayerQuestBacklog playerQuestData; // Ref. to player's quest data, stored as ScriptableObject
     [SerializeField]    private InventoryPanel inventory;           // Ref. to player's inventory
@@ -25,14 +25,17 @@ public class QuestManager : MonoBehaviour, IPersistentSceneObject
 
     private void Start()
     {
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
 
         // Assigns refs. to UI, player movement and npc manager
         UI = gameObject.GetComponent<QuestUI>();
         playerMove = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         npcManager = gameObject.GetComponent<NPCManager>();
+    }
 
-
+    private void OnDestroy()
+    {
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     // Called when an NPC is flagged as a quest giver & doesn't have any more dialogue to say
@@ -261,14 +264,14 @@ public class QuestManager : MonoBehaviour, IPersistentSceneObject
         playerMove.StartMoving();
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData)
     {
         //playerQuestData.LoadProgress();
         //
         //Debug.Log("LOADED SAVES");
     }
 
-    public void OnLoadConfigure(SaveData saveData)
+    public void OnGlobalLoadConfigure(SaveData saveData)
     {
         playerQuestData.LoadProgress();
 
@@ -286,7 +289,7 @@ public class QuestManager : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         Debug.Log("SAVED SAVES");
         playerQuestData.SaveProgress();

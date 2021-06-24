@@ -47,16 +47,16 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     private void Start()
     {
         // Subscribe to save/load events so the active value can be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the area GameObject is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         // Get a unique id for this audio area using its location
         string locationId = GetLocationId();
@@ -67,7 +67,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("audioAreaActive_" + locationId, active);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // Load whether this audio area was active when the player last saved
         bool loadedActive = saveData.GetData<bool>("audioAreaActive_" + GetLocationId());
@@ -79,7 +79,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private string GetLocationId()
     {

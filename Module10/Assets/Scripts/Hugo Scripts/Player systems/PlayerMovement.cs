@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 // Main author:         Hugo Bailey
 // Additional author:   N/A
@@ -43,8 +45,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]    [Range(0.5f, 4)]  private float gliderSensitivity               = 2.0f; // Turn sensitivity of glideer
     [SerializeField]    [Range(0.01f, 1)] private float gliderTiltAmount                = 0.5f; // Amount glider tilts when in use (clamps after [x] amount)
     [SerializeField]    [Range(1, 10)]    private float gliderOpenDistanceFromGround    = 5.0f; // Distance from the ground player must be to open glider
-
-    public static PlayerMovement Instance; // Static instance of the class to ensure only one player ever exists in a scene
 
     private float mouseX;           // x component of raw mouse movement
     private float mouseY;           // y component of raw mouse movement
@@ -91,23 +91,6 @@ public class PlayerMovement : MonoBehaviour
     
                         private CrouchState currentCrouchState;         // Saves player's current crouch state
     [HideInInspector]   public MovementStates currentMovementState;     // Saves player's current movement state
-
-    private void Awake()
-    {
-        // Ensure that an instance of the class does not already exist
-        if (Instance == null)
-        {
-            // Set this class as the instance and ensure that it stays when changing scenes
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        // If there is an existing instance that is not this, destroy the GameObject this script is connected to
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
 
     void Start()
     {

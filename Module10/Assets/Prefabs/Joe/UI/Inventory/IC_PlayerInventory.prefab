@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ContainerId: playerInventory
   numberOfSlots: 30
+  globalSave: 1
 --- !u!1 &944285479546653647
 GameObject:
   m_ObjectHideFlags: 0

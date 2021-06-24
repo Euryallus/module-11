@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ContainerId: linkedChest
   numberOfSlots: 24
+  globalSave: 1

@@ -78,7 +78,16 @@ public class SaveLoadManager : MonoBehaviour
 
         // Subscribe to the sceneLoaded event so OnSceneLoaded is called each time
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Disable debug logging in builds for better performance
+        #if UNITY_EDITOR
+            Debug.unityLogger.logEnabled = true;
+        #else
+            Debug.unityLogger.logEnabled = false;
+        #endif
     }
+
+    #region Save/Load Event Setup
 
     public void SubscribeSceneSaveLoadEvents(Action<SaveData> onSave, Action<SaveData> onLoadSetup, Action<SaveData> onLoadConfig)
     {
@@ -115,57 +124,9 @@ public class SaveLoadManager : MonoBehaviour
         LoadGlobalObjectsConfigureEvent -= onLoadConfig;
     }
 
-    //public bool SaveGame()
-    //{
-    //    SaveData dataToSave = new SaveData();
+    #endregion
 
-    //    // Call the OnSave function on all persistent objects - they will each add some data to the SavaData object
-    //    SaveSceneObjectsEvent?.Invoke(dataToSave);
-
-    //    // Create a save data file path based on the name of the scene being saved
-    //    string sceneName = SceneManager.GetActiveScene().name;
-    //    string saveDataPath = baseSaveDirectory + "/" + sceneName + "_save.dat";
-
-    //    // Try to create the save directory folder
-    //    if (!Directory.Exists(baseSaveDirectory))
-    //    {
-    //        try
-    //        {
-    //            Directory.CreateDirectory(baseSaveDirectory);
-    //        }
-    //        catch
-    //        {
-    //            Debug.LogError("Could not create save directory: " + baseSaveDirectory);
-    //            return false;
-    //        }
-    //    }
-
-    //    FileStream file;
-
-    //    // Try to open the save data file, or create one if it doesn't already exist
-    //    try
-    //    {
-    //        file = File.Open(saveDataPath, FileMode.OpenOrCreate);
-    //    }
-    //    catch
-    //    {
-    //        Debug.LogError("Could not open/create file at " + saveDataPath);
-    //        return false;
-    //    }
-
-    //    // Seralize the save data to the file
-    //    BinaryFormatter bf = new BinaryFormatter();
-    //    bf.Serialize(file, dataToSave);
-
-    //    // Saving done, close the file
-    //    file.Close();
-
-    //    Debug.Log("Game saved!");
-
-    //    return true;
-    //}
-
-    public bool SaveGameData(string scenesDirectory = "UseCurrentDirectory")
+    public bool SaveGameData(string returnToSceneName = "UseActiveScene", string scenesDirectory = "UseCurrentDirectory")
     {
         if(scenesDirectory == "UseCurrentDirectory")
         {
@@ -192,7 +153,12 @@ public class SaveLoadManager : MonoBehaviour
 
         string loadedSceneName = SceneManager.GetActiveScene().name;
 
-        infoDataToSave.AddData("lastLoadedScene", loadedSceneName);
+        if(returnToSceneName == "UseActiveScene")
+        {
+            returnToSceneName = loadedSceneName;
+        }
+
+        infoDataToSave.AddData("lastLoadedScene", returnToSceneName);
 
         SaveGlobalObjectsEvent?.Invoke(globalDataToSave);
 
@@ -234,59 +200,53 @@ public class SaveLoadManager : MonoBehaviour
         return true;
     }
 
-    public void LoadGameData(string saveDirectoryName = MainSaveDirectory, string startingSceneName = MainStartingSceneName)
+    public void LoadGame(string saveDirectoryName = MainSaveDirectory, string startingSceneName = MainStartingSceneName)
     {
-        StartCoroutine(LoadGameDataCoroutine(saveDirectoryName, startingSceneName));
+        StartCoroutine(LoadGameCoroutine(saveDirectoryName, startingSceneName));
     }
 
-    private IEnumerator LoadGameDataCoroutine(string saveDirectoryName, string startingSceneName)
+    private IEnumerator LoadGameCoroutine(string saveDirectoryName, string startingSceneName)
     {
         // STEP 1: Attempt to load the global save file for the specified scene group
         //============================================================================
 
-        string directoryPath = baseSaveDirectory + "/" + saveDirectoryName + "/";
-        string infoDataPath = directoryPath + "LoadInfo.save";
-        string globalDataPath = directoryPath + "GlobalSave.save";
+        string directoryPath    = baseSaveDirectory + "/" + saveDirectoryName + "/";
+        string infoDataPath     = directoryPath + "LoadInfo.save";
 
         currentScenesDirectory = directoryPath;
 
-        if (File.Exists(infoDataPath) && File.Exists(globalDataPath))
+        if (File.Exists(infoDataPath))
         {
             // Global and LoadInfo save files exist - open them and load save data
 
-            FileStream infoDataFile, globalDataFile;
+            FileStream infoDataFile;
 
             // Try to open the file for reading
             try
             {
                 infoDataFile = File.OpenRead(infoDataPath);
-                globalDataFile = File.OpenRead(globalDataPath);
             }
             catch
             {
-                Debug.LogError("Could not open info or global save file when loading: " + globalDataPath);
+                Debug.LogError("Could not open info save file when loading: " + infoDataPath);
                 yield break;
             }
 
-            SaveData infoData, globalData;
+            SaveData infoData;
 
-            // Try to deserialise the Global and LoadInfo save data from the file
+            // Try to deserialise the LoadInfo save data from the file
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
 
                 infoData = (SaveData)bf.Deserialize(infoDataFile);
                 infoDataFile.Close();
-
-                globalData = (SaveData)bf.Deserialize(globalDataFile);
-                globalDataFile.Close();
             }
             catch
             {
                 infoDataFile.Close();
-                globalDataFile.Close();
 
-                Debug.LogError("Could not deserialize save data from: " + infoDataPath + " or " + globalDataPath);
+                Debug.LogError("Could not deserialize save data from: " + infoDataPath);
                 yield break;
             }
 
@@ -294,41 +254,34 @@ public class SaveLoadManager : MonoBehaviour
 
             string sceneToLoadName = infoData.GetData<string>("lastLoadedScene");
 
-            // TODO: Re-add loadingAfterDeath stuff
-
-            yield return StartCoroutine(LoadSceneCoroutine(sceneToLoadName, directoryPath));
-
-            // Disable the CharacterController component attached to the player to prevent them moving while the game
-            //   is loading and allow the player to be teleported to the posision of the last used save point
-            PlayerMovement.Instance.Controller.enabled = false;
-
-            // Load global stuff (call global events)
-
-            // Re-enable the character coltroller so the player can move
-            PlayerMovement.Instance.Controller.enabled = true;
+            yield return StartCoroutine(LoadGameSceneCoroutine(sceneToLoadName, directoryPath));
         }
         else
         {
-            // No global/info save files, this should only occur when first loading a scene group with no previously saved data
+            // No info save file, this should only occur when first loading a scene group with no previously saved data
 
             Debug.Log("No saved data found for save directory: " + saveDirectoryName);
 
-            StartCoroutine(LoadSceneCoroutine(startingSceneName, directoryPath));
+            StartCoroutine(LoadGameSceneCoroutine(startingSceneName, directoryPath));
         }
+
+        loadingAfterDeath = false;
     }
 
-    public void LoadScene(string sceneName, string scenesDirectory = "UseCurrentDirectory")
+    public void LoadGameScene(string sceneName, string scenesDirectory = "UseCurrentDirectory")
     {
-        StartCoroutine(LoadSceneCoroutine(sceneName, scenesDirectory));
+        StartCoroutine(LoadGameSceneCoroutine(sceneName, scenesDirectory));
     }
 
-    private IEnumerator LoadSceneCoroutine(string sceneName, string scenesDirectory)
+    private IEnumerator LoadGameSceneCoroutine(string sceneName, string scenesDirectory)
     {
+        PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
+
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
-        if(PlayerMovement.Instance != null)
+        if(activePlayer != null && activePlayer.PlayerController != null)
         {
-            PlayerMovement.Instance.Controller.enabled = false;
+            activePlayer.PlayerController.enabled = false;
         }
 
         while (!sceneLoadOperation.isDone)
@@ -336,24 +289,72 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
-        PlayerMovement.Instance.Controller.enabled = false;
+        if(activePlayer == null)
+        {
+            // If no active player was found before loading the scene, get a referece to it
+            //   now a scene containing the player has been loaded
+            activePlayer = PlayerInstance.ActivePlayer;
+        }
 
-        // Load saved scene data
-        //=======================
-        yield return StartCoroutine(LoadSceneDataCoroutine(sceneName, scenesDirectory));
+        activePlayer.PlayerController.enabled = false;
 
-        PlayerMovement.Instance.gameObject.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
-        PlayerMovement.Instance.Controller.enabled = true;
+        // Load and setup saved global/scene data
+        //========================================
+        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory));
+
+        activePlayer.PlayerController.enabled = true;
     }
 
-    private IEnumerator LoadSceneDataCoroutine(string sceneToLoadName, string scenesDirectory)
+    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)
     {
         if(scenesDirectory == "UseCurrentDirectory")
         {
             scenesDirectory = currentScenesDirectory;
         }
 
-        string sceneDataPath = scenesDirectory + sceneToLoadName + ".save";
+        string globalDataPath   = scenesDirectory + "GlobalSave.save";
+        string sceneDataPath    = scenesDirectory + sceneToLoadName + ".save";
+
+        SaveData globalData = null;
+        SaveData sceneData = null;
+
+        if(File.Exists(globalDataPath))
+        {
+            FileStream globalDataFile;
+
+            // Try to open the file for reading
+            try
+            {
+                globalDataFile = File.OpenRead(globalDataPath);
+            }
+            catch
+            {
+                Debug.LogError("Could not open global save file when loading: " + globalDataPath);
+                yield break;
+            }
+
+            yield return null;
+
+            Debug.Log(">>> Attempting to load global data from: " + globalDataPath);
+
+            // Try to deserialise the Global save data from the file
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+
+                globalData = (SaveData)bf.Deserialize(globalDataFile);
+                globalDataFile.Close();
+            }
+            catch
+            {
+                globalDataFile.Close();
+
+                Debug.LogError("Could not deserialize save data from: " + globalDataPath);
+                yield break;
+            }
+
+            yield return null;
+        }
 
         if (File.Exists(sceneDataPath))
         {
@@ -370,9 +371,11 @@ public class SaveLoadManager : MonoBehaviour
                 yield break;
             }
 
-            SaveData sceneData;
+            yield return null;
 
-            // Try to deserialise the Global and LoadInfo save data from the file
+            Debug.Log(">>> Attempting to load scene data from: " + sceneDataPath);
+
+            // Try to deserialise the scene save data from the file
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
@@ -389,120 +392,93 @@ public class SaveLoadManager : MonoBehaviour
             }
 
             yield return null;
-
-            Debug.Log("Scene load stage 1: setup");
-            LoadSceneObjectsSetupEvent?.Invoke(sceneData);
-
-            yield return null;
-
-            Debug.Log("Scene load stage 2: configure");
-            LoadSceneObjectsConfigureEvent?.Invoke(sceneData);
-
-            // Loading is done
-            Debug.Log("Scene data loaded for " + sceneToLoadName);
-        }
-    }
-
-    //public void LoadGame()
-    //{
-    //    StartCoroutine(LoadGameCoroutine());
-    //}
-
-    private IEnumerator LoadGameCoroutine()
-    {
-        Debug.Log("Attempting to load game");
-
-        Transform canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
-
-        // Instantiate the loading panel, using the canvas as a parent
-        LoadingPanel        loadingPanel        = Instantiate(loadingPanelPrefab, canvasTransform).GetComponent<LoadingPanel>();
-
-        // Disable the CharacterController component attached to the player to prevent them moving while the game
-        //   is loading and allow the player to be teleported to the posision of the last used save point
-        CharacterController playerCharControl   = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
-        playerCharControl.enabled = false;
-
-        // Get the path of the file to be loaded based on the current scene
-        string sceneName = SceneManager.GetActiveScene().name;
-        string loadDataPath = baseSaveDirectory + "/" + sceneName + "_save.dat";
-
-        if (File.Exists(loadDataPath))
-        {
-            // Save file exists - open it and load save data
-
-            FileStream file;
-
-            // Try to open the file for reading
-            try
-            {
-                file = File.OpenRead(loadDataPath);
-            }
-            catch
-            {
-                Debug.LogError("Could not open file when loading: " + loadDataPath);
-                yield break;
-            }
-
-            BinaryFormatter bf = new BinaryFormatter();
-            SaveData loadedData;
-
-            // Try to deserialise the save data from the file
-            try
-            {
-                loadedData = (SaveData)bf.Deserialize(file);
-                file.Close();
-            }
-            catch
-            {
-                file.Close();
-                Debug.LogError("Could not deserialize save data from " + loadDataPath);
-                yield break;
-            }
-
-            // Wait a couple of frames to ensure objects are set up before calling load functions
-            yield return null;
-            yield return null;
-
-            // Setup then configure all persistent objects with the loaded data
-
-            Debug.Log("Load Stage 1: Setup");
-            LoadSceneObjectsSetupEvent?.Invoke(loadedData);
-
-            yield return null;
-
-            Debug.Log("Load Stage 2: Configure");
-            LoadSceneObjectsConfigureEvent?.Invoke(loadedData);
-
-            // Loading is done
-            Debug.Log("Game loaded!");
         }
         else
         {
-            // No save file found
-            Debug.LogWarning("No save file exists at: " + loadDataPath);
+            // No scene save data to control player position, instead move the player to the default spawn point
+
+            GameObject defaultSpawnPoint = GameObject.Find("DefaultSpawnPoint");
+            if(defaultSpawnPoint != null)
+            {
+                PlayerInstance.ActivePlayer.gameObject.transform.position = defaultSpawnPoint.transform.position;
+            }
+
+            Debug.Log(">> Moving player to default spawn point");
+
+            yield return null;
         }
 
-        // Loading is done, hide the load panel and re-enable player controls
-        loadingPanel.LoadDone();
+        // Setup scene objects
+        if(sceneData != null)
+        {
+            Debug.Log(">>> Scene load stage 1: setup");
+            LoadSceneObjectsSetupEvent?.Invoke(sceneData);
 
-        // Re-enable the character coltroller so the player can move
-        playerCharControl.enabled = true;
+            yield return null;
+        }
 
-        // Reset loading after death bool
-        loadingAfterDeath = false;
+        // Setup global objects
+        if (globalData != null)
+        {
+            Debug.Log(">>> Global load stage 1: setup");
+            LoadGlobalObjectsSetupEvent?.Invoke(globalData);
+
+            yield return null;
+        }
+
+        // Configure scene objects
+        if (sceneData != null)
+        {
+            Debug.Log(">>> Scene load stage 2: configure");
+            LoadSceneObjectsConfigureEvent?.Invoke(sceneData);
+
+            yield return null;
+        }
+
+        // Configure global objects
+        if (globalData != null)
+        {
+            Debug.Log(">>> Global load stage 2: configure");
+            LoadGlobalObjectsConfigureEvent?.Invoke(globalData);
+        }
+
+        // Scene data loading done
+        Debug.Log(">>> Finished loading data for " + sceneToLoadName);
     }
+
+    #if UNITY_EDITOR
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //Debug.Log("Scene loaded: " + scene.name);
+        if (string.IsNullOrEmpty(currentScenesDirectory))
+        {
+            if (scene.name == "JoeTestScene" || scene.name == "JoeTestScene2")
+            {
+                Debug.LogWarning("No save directory was set before entering the scene - using Debug_JoeTestScenes");
 
-        //// Load the game's save data from a file if the loaded scene has one of the following names:
-        //if(scene.name == "CombinedScene" || scene.name == "JoeTestScene" || scene.name == "Noah test scene" ||
-        //    scene.name == "DemoScene" || scene.name == "NoahNewScene" || scene.name == "Mod10SubmissionDemo")
-        //{
-        //    LoadGame();
-        //}
+                currentScenesDirectory = baseSaveDirectory + "/" + "Debug_JoeTestScenes" + "/";
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+            }
+            else if (scene.name == "The Village" || scene.name == "Desert" || scene.name == "Flooded City" || scene.name == "Catacombs")
+            {
+                Debug.LogWarning("No save directory was set before entering the scene - using Debug_MapScenes");
+
+                currentScenesDirectory = baseSaveDirectory + "/" + "Debug_MapScenes" + "/";
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+            }
+            else
+            {
+                Debug.LogWarning("No save directory was set before entering the scene - using Debug_" + scene.name);
+
+                currentScenesDirectory = baseSaveDirectory + "/" + "Debug_" + scene.name + "/";
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+            }
+        }
     }
+
+    #endif
+
+    #region PlayerPrefs
 
     // Saving/loading PlayerPrefs
     //============================
@@ -546,4 +522,6 @@ public class SaveLoadManager : MonoBehaviour
             return (PlayerPrefs.GetInt(key) == 1);
         }
     }
+
+    #endregion
 }

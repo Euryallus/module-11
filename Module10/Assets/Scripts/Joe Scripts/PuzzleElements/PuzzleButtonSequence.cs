@@ -40,7 +40,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     void Start()
     {
         // Subscribe to save/load events so the sequence state is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -55,16 +55,16 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the sequence GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         // Save whether the sequence was completed successfully
         saveData.AddData("buttonSequenceCompleted_" + id, sequenceCompleted);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // Load whether the sequence was completed successfully
         sequenceCompleted = saveData.GetData<bool>("buttonSequenceCompleted_" + id);
@@ -81,7 +81,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     public void ButtonInSequencePressed(PuzzleButton button)
     {
