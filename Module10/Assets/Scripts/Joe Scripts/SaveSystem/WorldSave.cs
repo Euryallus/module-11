@@ -66,16 +66,16 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
     protected void Start()
     {
         // Subscribe to save/load events so all world data is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the WorldSave GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         Debug.Log("Saving world save");
 
@@ -97,7 +97,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading world save");
 
@@ -105,7 +105,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         usedSavePointId = saveData.GetData<string>("usedSavePointId");
     }
 
-    public void OnLoadConfigure(SaveData saveData)
+    public void OnSceneLoadConfigure(SaveData saveData)
     {
         // Load all objects placed by the player
         LoadPlayerPlacedObjects(saveData.GetSaveDataEntries());

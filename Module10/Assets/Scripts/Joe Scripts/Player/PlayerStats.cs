@@ -88,13 +88,13 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
     protected void Start()
     {
         // Subscribe to save/load events so player stats are saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void OnDestroy()
     {
         //Unsubscribe from save/load events if for some reason the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void Update()
@@ -120,7 +120,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         UpdateBreathUI();
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         //Save the player's food level, health and breath
 
@@ -131,7 +131,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("playerBreath", breath);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // Only load in health/food/breath values if the game is being loaded from the menu
         //   rather than after a death. If the player died, values will instead be set to their
@@ -162,7 +162,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private void UpdateFoodLevel(float foodLevelDecreaseAmount)
     {

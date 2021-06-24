@@ -126,8 +126,6 @@ public class HeldItemManager : MonoBehaviour
                 // The player was previously holding either nothing or a different item,
                 //   so the held item GameObject needs to be updated
 
-                Debug.Log("Player is holding " + heldItem.UIName);
-
                 // Destroy the current held object to make way for a new one
                 DestroyHeldGameObject();
 

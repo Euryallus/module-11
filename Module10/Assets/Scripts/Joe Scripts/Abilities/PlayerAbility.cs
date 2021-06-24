@@ -48,16 +48,23 @@ public abstract class PlayerAbility : MonoBehaviour
             Debug.LogError("Failed to find UI ability indicator", gameObject);
         }
 
-        SetChargeAmount(0.0f);
-        SetCooldownAmount(1.0f);
+        charge = 0.0f;
+        cooldown = 1.0f;
 
-        uiIndicator.SetKeyPromptText(triggerKey.ToString());
+        SetupUIIndicator();
     }
 
     protected virtual void Update()
     {
         if (GameSceneUI.Instance.ShowingCinematicsCanvas)
             return;
+
+        if(uiIndicator == null)
+        {
+            // Re-find and setup the UI indicator if it becomes null (happens when switching scenes)
+            FindUIIndicator();
+            SetupUIIndicator();
+        }
 
         bool triggerKeyPressed = GetTriggerKeyInput();
 
@@ -114,6 +121,14 @@ public abstract class PlayerAbility : MonoBehaviour
                 SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
             }
         }
+    }
+
+    private void SetupUIIndicator()
+    {
+        SetChargeAmount(charge);
+        SetCooldownAmount(cooldown);
+
+        uiIndicator.SetKeyPromptText(triggerKey.ToString());
     }
 
     private bool GetTriggerKeyInput()

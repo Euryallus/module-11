@@ -16,7 +16,9 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class ItemContainer : MonoBehaviour, IPersistentSceneObject
+// Updated for mod11: can now be saved/loaded globally or as a scene object
+
+public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentGlobalObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -26,6 +28,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject
 
     public string                               ContainerId;        // Unique id used when saving/loading the contents of this container
     [SerializeField] private int                numberOfSlots;      // The number of item slots in this container
+    [SerializeField] private bool               globalSave;         // Whether this container should use global save/load functions
 
     #endregion
 
@@ -65,13 +68,27 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject
         }
 
         // Subscribe to save/load events so the container's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        if(globalSave)
+        {
+            SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
+        }
+        else
+        {
+            SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        }
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the container is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        if(globalSave)
+        {
+            SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
+        }
+        else
+        {
+            SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        }
     }
 
     private void Update()
@@ -84,7 +101,17 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
+    {
+        OnSave(saveData);
+    }
+
+    public void OnGlobalSave(SaveData saveData)
+    {
+        OnSave(saveData);
+    }
+
+    private void OnSave(SaveData saveData)
     {
         Debug.Log("Saving item container data for " + ContainerId);
 
@@ -96,13 +123,25 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // Loading for ItemContainer occurs in the OnLoadConfigure function since it
         //   depends on data that is initialised by other objects in the OnLoadSetup function
     }
 
-    public void OnLoadConfigure(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData) { }
+
+    public void OnSceneLoadConfigure(SaveData saveData)
+    {
+        OnLoadConfigure(saveData);
+    }
+
+    public void OnGlobalLoadConfigure(SaveData saveData)
+    {
+        OnLoadConfigure(saveData);
+    }
+
+    private void OnLoadConfigure(SaveData saveData)
     {
         Debug.Log("Loading item container data for " + ContainerId);
 
@@ -119,7 +158,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject
             }
 
             // If slots are linked to UI, update it for each one to reflect changes
-            if(slots[i].SlotUI != null)
+            if (slots[i].SlotUI != null)
             {
                 slots[i].SlotUI.UpdateUI();
             }

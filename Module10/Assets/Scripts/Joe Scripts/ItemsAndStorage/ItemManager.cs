@@ -13,7 +13,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class ItemManager : MonoBehaviour, IPersistentSceneObject
+public class ItemManager : MonoBehaviour, IPersistentGlobalObject
 {
     public static ItemManager Instance; // Static instance of the class for simple access
 
@@ -60,16 +60,16 @@ public class ItemManager : MonoBehaviour, IPersistentSceneObject
     private void Start()
     {
         // Subscribe to save/load events so custom items will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         Debug.Log("Saving custom inventory items");
 
@@ -128,7 +128,7 @@ public class ItemManager : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading custom inventory items");
 
@@ -196,7 +196,7 @@ public class ItemManager : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private void SetupDictionaries()
     {

@@ -42,7 +42,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         portalEmblemRenderers[1].sprite = portalEmblem;
 
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         Material portalMaterialInstance = new Material(portalMaterial);
         portalMaterialInstance.SetColor("_Tint", portalColour);
@@ -52,7 +52,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events to prevent null ref errors if the monument is destroyed
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     public void OnInteract()
@@ -97,12 +97,12 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         GameSceneUI.Instance.GetActiveCinematicsCanvas().FadeToBlack();
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         saveData.AddData("fireMonumentLit_" + GetUniquePositionId(), lit);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         lit = saveData.GetData<bool>("fireMonumentLit_" + GetUniquePositionId());
 
@@ -115,7 +115,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { }
+    public void OnSceneLoadConfigure(SaveData saveData) { }
 
     private void LightFire()
     {

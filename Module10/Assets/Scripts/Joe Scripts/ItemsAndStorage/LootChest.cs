@@ -28,28 +28,28 @@ public class LootChest : Chest, IPersistentSceneObject
         base.Start();
 
         // Subscribe to save/load events so lootGenerated can be saved
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     protected override void OnDestroy()
     {
         // Unsubscribe from save/load events if the chest is destroyed to prevent null ref. errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         // Save whether loot has been generated
         saveData.AddData(itemContainer.ContainerId + "_lootGenerated", lootGenerated);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // Load whether loot has been generated
         lootGenerated = saveData.GetData<bool>(itemContainer.ContainerId + "_lootGenerated");
     }
 
-    public void OnLoadConfigure(SaveData saveData) {} // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) {} // Nothing to configure
 
     protected override void SetupChest()
     {

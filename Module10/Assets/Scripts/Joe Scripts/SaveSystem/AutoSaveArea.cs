@@ -43,7 +43,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     private void Start()
     {
         // Subscribe to save/load events so colliderDisabled is saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -55,10 +55,10 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         Debug.Log("Saving data for AutoSaveArea: " + id);
 
@@ -66,7 +66,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
         saveData.AddData("saveColliderDisabled_" + id, colliderDisabled);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading data for AutoSaveArea: " + id);
 
@@ -84,7 +84,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
         }
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private void OnTriggerEnter(Collider other)
     {

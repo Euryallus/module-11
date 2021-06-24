@@ -18,16 +18,16 @@ public class SaveSystemExample : MonoBehaviour, IPersistentSceneObject
     private void Start()
     {
         // Subscribe to save and load events on start
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from save and load events if the object is destroyed
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         // OnSave is called each time game data is saved to a file
            
@@ -44,7 +44,7 @@ public class SaveSystemExample : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("arrayToSave", exampleArray);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         // OnLoadSetup is called each time game data is loaded from a file
            
@@ -59,7 +59,7 @@ public class SaveSystemExample : MonoBehaviour, IPersistentSceneObject
         exampleArray = saveData.GetData<float[]>("arrayToSave");
     }
 
-    public void OnLoadConfigure(SaveData saveData)
+    public void OnSceneLoadConfigure(SaveData saveData)
     {
         // OnLoadConfigure is called each time game data is loaded from a file AFTER OnLoadSetup has been called on all persistent objects
            

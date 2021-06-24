@@ -51,7 +51,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         base.Start();
 
         // Subscribe to save/load events so the hotbar's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         itemEatPanel.SetActive(false);
 
@@ -72,7 +72,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events is the hotbar is destroyed to prevent a null reference error
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSave, OnLoadSetup, OnLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void Update()
@@ -98,7 +98,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         }
     }
 
-    public void OnSave(SaveData saveData)
+    public void OnSceneSave(SaveData saveData)
     {
         Debug.Log("Saving hotbar panel data");
 
@@ -106,7 +106,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         saveData.AddData("selectedSlot", selectedSlotIndex);
     }
 
-    public void OnLoadSetup(SaveData saveData)
+    public void OnSceneLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading hotbar panel data");
 
@@ -114,7 +114,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         SelectSlot(saveData.GetData<int>("selectedSlot"));
     }
 
-    public void OnLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     public void ShowHotbarAndStatPanels()
     {
