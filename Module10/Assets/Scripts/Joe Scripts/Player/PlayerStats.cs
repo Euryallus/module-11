@@ -73,7 +73,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private float           starveDamageTimer;      // Keeps track of seconds passed since damage was taken from starving
     private float           drownDamageTimer;          
     private PlayerMovement  playerMovement;   
-    private PlayerStatsUI statsUI;
+    private PlayerStatsUI   statsUI;
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
 
@@ -82,7 +82,6 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         // Get player movement script and animators for various UI elements
 
         playerMovement = GetComponent<PlayerMovement>();
-        canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
     }
 
     protected void Start()
@@ -102,6 +101,11 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         if(statsUI == null)
         {
             statsUI = GameObject.FindGameObjectWithTag("HotbarAndStats").GetComponent<PlayerStatsUI>();
+        }
+
+        if (canvasTransform == null)
+        {
+            canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
         }
 
         // Calculate how much the food/breath levels should decrease each frame
