@@ -16,7 +16,16 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
     {
         // Called when the button is clicked
 
-        inventoryPanel.DropItemsInHand(false);
+        // Get the slot used for holding/moving items
+        HandSlotUI handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+
+        // Get the number of items in the player's hand
+        int handStackSize = handSlotUI.Slot.ItemStack.StackSize;
+
+        if (handStackSize > 0)
+        {
+            inventoryPanel.DropItemsInHand(false);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

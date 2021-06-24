@@ -25,15 +25,34 @@ public class HeldItemManager : MonoBehaviour
 
     void Start()
     {
-        hotbarPanel             = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
         playerCameraTransform   = GameObject.FindGameObjectWithTag("MainCamera").transform;
+
+        FindHotbarPanel();
+    }
+
+    private void FindHotbarPanel()
+    {
+        hotbarPanel = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
 
         //OnHeldItemSelectionChanged will be called when the selected hotbar item changes
         hotbarPanel.HeldItemChangedEvent += OnHeldItemSelectionChanged;
     }
 
+    private void OnDestroy()
+    {
+        if(hotbarPanel != null)
+        {
+            hotbarPanel.HeldItemChangedEvent -= OnHeldItemSelectionChanged;
+        }
+    }
+
     void Update()
     {
+        if(hotbarPanel == null)
+        {
+            FindHotbarPanel();
+        }
+
         CheckForPlayerInput();
     }
 

@@ -264,8 +264,6 @@ public class SaveLoadManager : MonoBehaviour
 
             StartCoroutine(LoadGameSceneCoroutine(startingSceneName, directoryPath));
         }
-
-        loadingAfterDeath = false;
     }
 
     public void LoadGameScene(string sceneName, string scenesDirectory = "UseCurrentDirectory")
@@ -441,6 +439,8 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log(">>> Global load stage 2: configure");
             LoadGlobalObjectsConfigureEvent?.Invoke(globalData);
         }
+
+        loadingAfterDeath = false;
 
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);

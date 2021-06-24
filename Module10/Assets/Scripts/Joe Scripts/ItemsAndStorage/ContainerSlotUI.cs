@@ -92,22 +92,23 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 if (item != null)
                 {
                     // Set the item image to display the contained item type's sprite
-                    ItemImage.sprite = item.Sprite;
+                    itemImage.sprite = item.Sprite;
                 }
 
                 // Show the item image GameObject so the icon is displayed
-                ItemImage.gameObject.SetActive(stackSize > 0);
+                itemImage.gameObject.SetActive(stackSize > 0);
             }
             else
             {
                 // No items in the stack, no need to display an image preview
-                ItemImage.gameObject.SetActive(false);
+                itemImage.gameObject.SetActive(false);
             }
 
             // Also display the number of items in the stack if there are more than 1
-            ItemCountText.text = stackSize.ToString();
-            ItemCountPanel          .SetActive(stackSize > 1);
-            ItemCountText.gameObject.SetActive(stackSize > 1);
+            itemCountText.text = stackSize.ToString();
+
+            itemCountPanel          .SetActive(stackSize > 1);
+            itemCountText.gameObject.SetActive(stackSize > 1);
         }
         else
         {
@@ -136,13 +137,6 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     public void SetSelected(bool selected)
     {
         // Selects or deselects the slot UI
-
-        if (outline == null)
-        {
-            Debug.LogError("WTF", gameObject);
-            return;
-        }
-
         if (selected)
         {
             // Slot is selected, show an outline

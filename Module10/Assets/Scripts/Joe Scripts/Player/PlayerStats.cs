@@ -18,7 +18,7 @@ using UnityEngine.UI;
 // - Player dies when health reached 0
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerStats : MonoBehaviour, IPersistentSceneObject
+public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
@@ -88,13 +88,13 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
     protected void Start()
     {
         // Subscribe to save/load events so player stats are saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void OnDestroy()
     {
         //Unsubscribe from save/load events if for some reason the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void Update()
@@ -120,7 +120,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         UpdateBreathUI();
     }
 
-    public void OnSceneSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         //Save the player's food level, health and breath
 
@@ -131,7 +131,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("playerBreath", breath);
     }
 
-    public void OnSceneLoadSetup(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData)
     {
         // Only load in health/food/breath values if the game is being loaded from the menu
         //   rather than after a death. If the player died, values will instead be set to their
@@ -160,9 +160,16 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
                 breath = loadedBreath;
             }
         }
+        else
+        {
+            // The player died, reset stat values to be full
+            foodLevel   = 1.0f;
+            health      = 1.0f;
+            breath      = 1.0f;
+        }
     }
 
-    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private void UpdateFoodLevel(float foodLevelDecreaseAmount)
     {
