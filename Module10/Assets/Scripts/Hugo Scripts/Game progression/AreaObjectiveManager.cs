@@ -18,11 +18,14 @@ public class AreaObjectiveManager : MonoBehaviour
     [Header("Enounter vars")]
     [SerializeField]    private int encounterDifficulty;
     [SerializeField]    private EnemyCampManager enemyManager;
+    [SerializeField]    private Transform searchPosition;
 
     [Header("UI Elements")]
     [SerializeField]    private Gradient progressBarGrad;
     [SerializeField]    private Image sliderFill;
     [SerializeField]    Slider progressSlider;
+
+    private bool hasInteracted = false;
 
     [Header("Events triggered once fully charged")]
     [SerializeField] private UnityEvent onChargedEvents = new UnityEvent();
@@ -33,13 +36,14 @@ public class AreaObjectiveManager : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<BoxCollider>().isTrigger = true;
 
-        progressSlider.gameObject.SetActive(false);
+        //progressSlider.gameObject.SetActive(false);
         isCharging = false;
+        hasFullyCharged = false;
     }
     
     void Update()
     {
-        if (!hasFullyCharged)
+        if (!hasFullyCharged && hasInteracted)
         {
             if (isCharging)
             {
@@ -49,6 +53,7 @@ public class AreaObjectiveManager : MonoBehaviour
                 if (objectiveCharge > 1.0f)
                 {
                     objectiveCharge = 1.0f;
+                    hasFullyCharged = true;
                     onChargedEvents.Invoke();
                     hasFullyCharged = true;
                 }
@@ -87,6 +92,7 @@ public class AreaObjectiveManager : MonoBehaviour
 
     public void StartEnounter()
     {
-        enemyManager.SpawnUnits(encounterDifficulty);
+        hasInteracted = true;
+        enemyManager.SpawnUnits(encounterDifficulty, searchPosition.position);
     }
 }

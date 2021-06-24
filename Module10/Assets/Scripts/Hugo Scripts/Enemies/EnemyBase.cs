@@ -72,7 +72,7 @@ public class EnemyBase : MonoBehaviour
     public bool Suspended { get { return suspended; } set { suspended = value; } }
     public Renderer MeshRenderer { get { return meshRenderer; }}
 
-    public virtual void Start()
+    public virtual void Awake()
     {
         // Stores references to own NavMeshAgent, player GameObject, and PlayerStats component of player
         agent = GetComponent<NavMeshAgent>();
@@ -82,8 +82,8 @@ public class EnemyBase : MonoBehaviour
         // Sets default speed to that set by NavMeshAgent
         defaultSpeed = agent.speed;
 
-        // Initial state is patrolling
-        StartPatrolling();
+        //// Initial state is patrolling
+        //StartPatrolling();
     }
 
     // Update is called once per frame

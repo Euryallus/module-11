@@ -10,9 +10,9 @@ using UnityEngine;
 public class Enemy1MinionAnim : Enemy1Anim
 {
     //Operates the same as Enemy1Anim currently, but since HasSplit is set to true immediately it just melee attacks
-    public override void Start()
+    public override void Awake()
     {
         HasSplit = true;
-        base.Start();
+        base.Awake();
     }
 }

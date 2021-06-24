@@ -21,6 +21,7 @@ public class EnemyCampManager : MonoBehaviour
                         private List<EnemyBase> unitsDifficulty = new List<EnemyBase>();    // List of enemies that could possibly spawn, that make up difficulty ~ that defined by diffifultyLevel
 
                         public bool hasBeenDefeated = false;
+                        public bool spawnRandomPosition = true;
     
 
     void Start()
@@ -28,7 +29,7 @@ public class EnemyCampManager : MonoBehaviour
         if (spawnOnStart)
         { 
             // Spawns units 
-            SpawnUnits(difficultyLevel);
+            SpawnUnits(difficultyLevel, Vector3.zero);
         }
     }
 
@@ -63,7 +64,7 @@ public class EnemyCampManager : MonoBehaviour
     }
 
     // Spawns units with a total difficulty equal to the param passed
-    public void SpawnUnits(int difficultyLevel)
+    public void SpawnUnits(int difficultyLevel, Vector3 initialSearchPos)
     {        
         hasBeenDefeated = false;
         // Resets list of potential enemies
@@ -82,11 +83,15 @@ public class EnemyCampManager : MonoBehaviour
         // Once all units are calculated, spawn each in
         foreach (EnemyBase prefab in unitsDifficulty)
         {
-            // Generate random position within [spawnDistanceMax] meters of position
-            Vector3 randomPosition = Random.insideUnitSphere * spawnDistanceMax;
+            Vector3 randomPosition = transform.position;
+            if (spawnRandomPosition)
+            {
+                // Generate random position within [spawnDistanceMax] meters of position
+                randomPosition = Random.insideUnitSphere * spawnDistanceMax;
 
-            randomPosition += transform.position;
-            randomPosition.y = transform.position.y;
+                randomPosition += transform.position;
+                randomPosition.y = transform.position.y;
+            }
 
             // Instantiate Enemy from list, set position to random pos generated
             spawnedEnemies.Add(Instantiate(prefab, randomPosition, Quaternion.identity));
@@ -95,6 +100,15 @@ public class EnemyCampManager : MonoBehaviour
             // Assign manager & centralHubPos variables to new enemy
             created.centralHubPos = transform.position;
             created.manager = gameObject.GetComponent<EnemyCampManager>();
+
+            if(initialSearchPos != Vector3.zero)
+            {
+                created.StartSearching(initialSearchPos);
+            }
+            else
+            {
+                created.StartPatrolling();
+            }
         }
 
 

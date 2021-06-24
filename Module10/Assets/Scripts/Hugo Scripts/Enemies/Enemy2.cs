@@ -15,9 +15,9 @@ public class Enemy2 : EnemyBase
     [SerializeField]    private float spawnToLaunchTime = 1.5f;     // Time between spawning projectile & firing projectile (allows time for player to react)
                         private GameObject lastProjectile;          // Stores reference to last projectile created by the enemy
 
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
+        base.Awake();
         // Calls base Start() function but adjusts timeBetweenAttacks to inclue the time between spawning & launching projectile
         timeBetweenAttacks += spawnToLaunchTime;
     }

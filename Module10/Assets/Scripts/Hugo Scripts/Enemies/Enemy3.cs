@@ -19,10 +19,10 @@ public class Enemy3 : EnemyBase
     // Due to a changing design, Enemy 3 currently operates exactly like Enemy 2 just with altered variables for attackDistance
     // This script (Enemy3) is almost identicle to the Enemy2 script. This is expected to change during the Production phase
 
-    public override void Start()
+    public override void Awake()
     {
         // Calls base Start() function but adjusts timeBetweenAttacks to inclue the time between spawning & launching projectile
-        base.Start();
+        base.Awake();
         timeBetweenAttacks += spawnToLaunchTime;
     }
 

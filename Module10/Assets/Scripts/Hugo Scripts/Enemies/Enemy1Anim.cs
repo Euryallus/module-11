@@ -73,6 +73,14 @@ public class Enemy1Anim : Enemy1
         base.StartPatrolling();
     }
 
+    public override void StartSearching(Vector3 searchPos)
+    {
+        base.StartSearching(searchPos);
+
+        anim.SetBool("Walk Forward", false);
+        anim.SetBool("Run Forward", true);
+    }
+
     // Altered version of Engage() allowing for animations
     public override void Engage()
     {
