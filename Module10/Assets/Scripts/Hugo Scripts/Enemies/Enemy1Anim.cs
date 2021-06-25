@@ -111,6 +111,7 @@ public class Enemy1Anim : Enemy1
                anim.SetTrigger("Smash Attack");
            }
        }
+
        // Run base melee attack
        base.Attack();
  

@@ -43,35 +43,25 @@ public class AreaObjectiveManager : MonoBehaviour
     
     void Update()
     {
-        if (!hasFullyCharged && hasInteracted)
+        if (hasInteracted)
         {
-            if (isCharging)
+            if (enemyManager.remainingUnits == 0)
             {
-                progressSlider.gameObject.SetActive(true);
-
-                objectiveCharge += Time.deltaTime / chargeTime;
-                if (objectiveCharge > 1.0f)
-                {
-                    objectiveCharge = 1.0f;
-                    hasFullyCharged = true;
-                    onChargedEvents.Invoke();
-                    hasFullyCharged = true;
-                }
+                
+                objectiveCharge = 1.0f;
+                onChargedEvents.Invoke();
+                hasFullyCharged = true;
+                
             }
-            else
-            {
-                objectiveCharge -= Time.deltaTime / drainTime;
+            
 
-                if (objectiveCharge < 0.0f)
-                {
-                    objectiveCharge = 0.0f;
-                    progressSlider.gameObject.SetActive(false);
-                }
-            }
-
-            sliderFill.color = progressBarGrad.Evaluate(objectiveCharge);
-            progressSlider.value = objectiveCharge;
+            //objectiveCharge = (enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned;
+            
+            sliderFill.color = progressBarGrad.Evaluate((enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned);
+            progressSlider.maxValue = enemyManager.totalSpawned;
+            progressSlider.value = enemyManager.totalSpawned - enemyManager.remainingUnits;
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,6 +69,7 @@ public class AreaObjectiveManager : MonoBehaviour
         if(other.transform.CompareTag("Player"))
         {
             isCharging = true;
+            progressSlider.gameObject.SetActive(true);
         }
     }
 
@@ -87,12 +78,14 @@ public class AreaObjectiveManager : MonoBehaviour
         if (other.transform.CompareTag("Player"))
         {
             isCharging = false;
+            progressSlider.gameObject.SetActive(false);
         }
     }
 
     public void StartEnounter()
     {
-        hasInteracted = true;
         enemyManager.SpawnUnits(encounterDifficulty, searchPosition.position);
+        
+        hasInteracted = true;
     }
 }

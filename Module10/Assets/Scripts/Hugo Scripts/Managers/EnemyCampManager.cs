@@ -22,10 +22,14 @@ public class EnemyCampManager : MonoBehaviour
 
                         public bool hasBeenDefeated = false;
                         public bool spawnRandomPosition = true;
+    public int remainingUnits { get { return spawnedEnemies.Count; } }
+
+    public int totalSpawned;
     
 
     void Start()
     {
+        totalSpawned = 0;
         if (spawnOnStart)
         { 
             // Spawns units 
@@ -41,7 +45,7 @@ public class EnemyCampManager : MonoBehaviour
 
             for(int i = 0; i < spawnedEnemies.Count; i++)
             {
-                if(spawnedEnemies[i] == null)
+                if(!spawnedEnemies[i].gameObject.GetComponent<EnemyHealth>().alive)
                 {
                     spawnedEnemies.RemoveAt(i);
                     if (spawnedEnemies.Count == 0)
@@ -111,7 +115,7 @@ public class EnemyCampManager : MonoBehaviour
             }
         }
 
-
+        totalSpawned = spawnedEnemies.Count;
     }
 
     // Calculates remaining units to spawn based on total difficulty of units already selected
@@ -153,5 +157,6 @@ public class EnemyCampManager : MonoBehaviour
     public void AddUnitToList(EnemyBase enemy)
     {
         spawnedEnemies.Add(enemy);
+        totalSpawned += 1;
     }
 }

@@ -352,9 +352,8 @@ public class EnemyBase : MonoBehaviour
                     // If raycast does hit player
                     if (hit.transform != null)
                     {
-                        if(hit.transform.parent != null)
-                        {
-                            if(hit.transform.parent.gameObject.CompareTag("Player"))
+                        
+                            if(hit.transform.gameObject.CompareTag("Player"))
                             {
                                 // Draw a debug line to show connection, store position player was seen at, and return true
                                 Debug.DrawLine(transform.position, hit.transform.position, Color.red);
@@ -363,7 +362,7 @@ public class EnemyBase : MonoBehaviour
                                 return true;
                             }
 
-                        }
+                        
                     }
                 }
             }
@@ -403,7 +402,6 @@ public class EnemyBase : MonoBehaviour
                     {
                         playerStats.DecreaseHealth(baseDamage, PlayerDeathCause.Enemy);
                     }
-
                 }
             }
     }
