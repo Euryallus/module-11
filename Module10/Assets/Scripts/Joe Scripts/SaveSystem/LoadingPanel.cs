@@ -20,6 +20,16 @@ public class LoadingPanel : MonoBehaviour
 
     private bool loadDone;  // Whether the loading process is complete
 
+    private void Awake()
+    {
+        canvasGroup.alpha = 0.0f;
+    }
+
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Update()
     {
         if(loadDone)
@@ -32,6 +42,13 @@ public class LoadingPanel : MonoBehaviour
             if(canvasGroup.alpha <= 0.0f)
             {
                 Destroy(gameObject);
+            }
+        }
+        else
+        {
+            if(canvasGroup.alpha < 1.0f)
+            {
+                canvasGroup.alpha += Time.unscaledDeltaTime * 4.0f;
             }
         }
     }

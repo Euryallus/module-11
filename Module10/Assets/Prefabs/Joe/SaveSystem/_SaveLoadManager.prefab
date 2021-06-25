@@ -43,15 +43,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3ecf3edacbfb45a5c52b3b94771fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneSaveGroups:
-  - groupName: MainGame
-    sceneNames:
-    - The Village
-    - Desert
-    - Flooded City
-    - Catacombs
-  - groupName: JoeTesting
-    sceneNames:
-    - JoeTestScene
-    - JoeTestScene2
-  loadingPanelPrefab: {fileID: 3896055339423295009, guid: 073c03f11bf814447af9f936b439ed25, type: 3}
+  loadingCanvasPrefab: {fileID: 8318778376780048369, guid: 911f04c1ece45e04ba6d8a4fdcfc9854, type: 3}
