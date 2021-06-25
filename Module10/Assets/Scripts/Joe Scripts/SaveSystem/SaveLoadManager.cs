@@ -273,6 +273,9 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadGameSceneCoroutine(string sceneName, string scenesDirectory)
     {
+        float previousTimeScale = Time.timeScale;
+        Time.timeScale = 0.0f;
+
         LoadingPanel loadingPanel = Instantiate(loadingCanvasPrefab).GetComponent<LoadingPanel>();
 
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
@@ -283,7 +286,7 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         // Wait for the loading panel to fade in
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSecondsRealtime(0.25f);
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -308,6 +311,8 @@ public class SaveLoadManager : MonoBehaviour
         activePlayer.PlayerController.enabled = true;
 
         loadingPanel.LoadDone();
+
+        Time.timeScale = previousTimeScale;
     }
 
     private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)

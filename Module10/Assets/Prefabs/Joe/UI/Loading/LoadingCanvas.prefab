@@ -73,12 +73,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 3601024453455070390}
+  animator: {fileID: 6220087720690700852}
 --- !u!1001 &496962742470716721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,5 +220,10 @@ RectTransform:
 --- !u!225 &3601024453455070390 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 3971322004589341063, guid: 073c03f11bf814447af9f936b439ed25, type: 3}
+  m_PrefabInstance: {fileID: 496962742470716721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6220087720690700852 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5816293540184719109, guid: 073c03f11bf814447af9f936b439ed25, type: 3}
   m_PrefabInstance: {fileID: 496962742470716721}
   m_PrefabAsset: {fileID: 0}
