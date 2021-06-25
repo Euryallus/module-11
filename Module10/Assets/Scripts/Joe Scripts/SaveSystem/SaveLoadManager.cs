@@ -22,7 +22,7 @@ public class SaveLoadManager : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject         loadingPanelPrefab; // UI panel shown when loading the game
+    [SerializeField] private GameObject loadingCanvasPrefab; // UI canvas instantiated when loading a scene
 
     #endregion
 
@@ -264,8 +264,6 @@ public class SaveLoadManager : MonoBehaviour
 
             StartCoroutine(LoadGameSceneCoroutine(startingSceneName, directoryPath));
         }
-
-        loadingAfterDeath = false;
     }
 
     public void LoadGameScene(string sceneName, string scenesDirectory = "UseCurrentDirectory")
@@ -275,14 +273,19 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadGameSceneCoroutine(string sceneName, string scenesDirectory)
     {
+        LoadingPanel loadingPanel = Instantiate(loadingCanvasPrefab).GetComponent<LoadingPanel>();
+
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
 
-        AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
-
-        if(activePlayer != null && activePlayer.PlayerController != null)
+        if (activePlayer != null && activePlayer.PlayerController != null)
         {
             activePlayer.PlayerController.enabled = false;
         }
+
+        // Wait for the loading panel to fade in
+        yield return new WaitForSeconds(0.25f);
+
+        AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
         while (!sceneLoadOperation.isDone)
         {
@@ -303,6 +306,8 @@ public class SaveLoadManager : MonoBehaviour
         yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory));
 
         activePlayer.PlayerController.enabled = true;
+
+        loadingPanel.LoadDone();
     }
 
     private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)
@@ -441,6 +446,8 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log(">>> Global load stage 2: configure");
             LoadGlobalObjectsConfigureEvent?.Invoke(globalData);
         }
+
+        loadingAfterDeath = false;
 
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);

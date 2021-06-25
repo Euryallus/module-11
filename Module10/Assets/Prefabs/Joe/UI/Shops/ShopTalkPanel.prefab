@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: 4414514782835333362}
   - component: {fileID: 1116918352807849279}
   - component: {fileID: 6869483425169065495}
-  - component: {fileID: 8941745013158981406}
   m_Layer: 5
-  m_Name: ColourMain
+  m_Name: OutlineMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: cf0ba6c4c5649a84692f2958e2de63c6, type: 2}
   m_Color: {r: 0.047169805, g: 0.12971692, b: 0.18867922, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -98,19 +97,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &8941745013158981406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1071158691781886694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!1 &3853977384658065885
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +243,7 @@ GameObject:
   - component: {fileID: 3853977385117276284}
   - component: {fileID: 3853977385117276285}
   - component: {fileID: 3853977385117276282}
+  - component: {fileID: 100700785928936438}
   m_Layer: 5
   m_Name: ShopTalkPanel
   m_TagString: ShopTalkUI
@@ -323,6 +310,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopNameText: {fileID: 2153666665746479755}
   buyUIPrefab: {fileID: 3790193822055982660, guid: 7e65b7ca4a41ebb47ae266fcf440927d, type: 3}
+--- !u!114 &100700785928936438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3853977385117276225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.047169805, g: 0.12971692, b: 0.18867922, a: 0.9019608}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 9c9f3a128db3f7245b7ae2c40c33d06f, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 10
 --- !u!1 &4044341325046716524
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1885597183472320033}
   - component: {fileID: 6763124061014759087}
-  - component: {fileID: 8191073880599825257}
+  - component: {fileID: 3491165896223449690}
   m_Layer: 5
   m_Name: Outline
   m_TagString: Untagged
@@ -368,7 +385,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4044341325046716524}
   m_CullTransparentMesh: 1
---- !u!114 &8191073880599825257
+--- !u!114 &3491165896223449690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -377,10 +394,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4044341325046716524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e98a3ce38ce173c4abcdc654a2c60096, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c779bdb1dd3db2841b3c631523f38035, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

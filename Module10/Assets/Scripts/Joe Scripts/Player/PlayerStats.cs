@@ -18,7 +18,7 @@ using UnityEngine.UI;
 // - Player dies when health reached 0
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerStats : MonoBehaviour, IPersistentSceneObject
+public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
@@ -73,7 +73,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
     private float           starveDamageTimer;      // Keeps track of seconds passed since damage was taken from starving
     private float           drownDamageTimer;          
     private PlayerMovement  playerMovement;   
-    private PlayerStatsUI statsUI;
+    private PlayerStatsUI   statsUI;
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
 
@@ -82,19 +82,18 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         // Get player movement script and animators for various UI elements
 
         playerMovement = GetComponent<PlayerMovement>();
-        canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
     }
 
     protected void Start()
     {
         // Subscribe to save/load events so player stats are saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void OnDestroy()
     {
         //Unsubscribe from save/load events if for some reason the GameObject is destroyed to prevent null reference errors
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void Update()
@@ -102,6 +101,11 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         if(statsUI == null)
         {
             statsUI = GameObject.FindGameObjectWithTag("HotbarAndStats").GetComponent<PlayerStatsUI>();
+        }
+
+        if (canvasTransform == null)
+        {
+            canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
         }
 
         // Calculate how much the food/breath levels should decrease each frame
@@ -120,7 +124,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         UpdateBreathUI();
     }
 
-    public void OnSceneSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         //Save the player's food level, health and breath
 
@@ -131,7 +135,7 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("playerBreath", breath);
     }
 
-    public void OnSceneLoadSetup(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData)
     {
         // Only load in health/food/breath values if the game is being loaded from the menu
         //   rather than after a death. If the player died, values will instead be set to their
@@ -160,9 +164,16 @@ public class PlayerStats : MonoBehaviour, IPersistentSceneObject
                 breath = loadedBreath;
             }
         }
+        else
+        {
+            // The player died, reset stat values to be full
+            foodLevel   = 1.0f;
+            health      = 1.0f;
+            breath      = 1.0f;
+        }
     }
 
-    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     private void UpdateFoodLevel(float foodLevelDecreaseAmount)
     {

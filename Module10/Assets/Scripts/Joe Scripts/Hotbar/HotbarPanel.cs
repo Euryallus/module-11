@@ -15,7 +15,7 @@ using UnityEngine.EventSystems;
 // Changed for Mod11
 // - Removed itemcontainer, slots are now merged with inventory container
 
-public class HotbarPanel : UIPanel, IPersistentSceneObject
+public class HotbarPanel : UIPanel, IPersistentGlobalObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -51,7 +51,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         base.Start();
 
         // Subscribe to save/load events so the hotbar's data will be saved/loaded with the game
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
 
         itemEatPanel.SetActive(false);
 
@@ -72,7 +72,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
     private void OnDestroy()
     {
         // Unsubscribe from save/load events is the hotbar is destroyed to prevent a null reference error
-        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+        SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
 
     private void Update()
@@ -98,7 +98,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         }
     }
 
-    public void OnSceneSave(SaveData saveData)
+    public void OnGlobalSave(SaveData saveData)
     {
         Debug.Log("Saving hotbar panel data");
 
@@ -106,7 +106,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         saveData.AddData("selectedSlot", selectedSlotIndex);
     }
 
-    public void OnSceneLoadSetup(SaveData saveData)
+    public void OnGlobalLoadSetup(SaveData saveData)
     {
         Debug.Log("Loading hotbar panel data");
 
@@ -114,7 +114,7 @@ public class HotbarPanel : UIPanel, IPersistentSceneObject
         SelectSlot(saveData.GetData<int>("selectedSlot"));
     }
 
-    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     public void ShowHotbarAndStatPanels()
     {
