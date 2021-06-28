@@ -285,8 +285,18 @@ public class SaveLoadManager : MonoBehaviour
             activePlayer.PlayerController.enabled = false;
         }
 
-        // Wait for the loading panel to fade in
-        yield return new WaitForSecondsRealtime(0.25f);
+        AudioManager audioManager = AudioManager.Instance;
+
+        float loadFadeTimer = 0.0f;
+
+        // Wait 0.4 seconds for the loading panel to fade in, and fade out audio
+        while (loadFadeTimer < 0.4f)
+        {
+            loadFadeTimer += Time.unscaledDeltaTime;
+            audioManager.UpdateGlobalVolumeMultiplier(audioManager.GlobalVolumeMultiplier - Time.unscaledDeltaTime * 2.5f);
+
+            yield return null;
+        }
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -294,6 +304,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             yield return null;
         }
+
+        // Scene loaded
 
         // Load and setup saved global/scene data
         //========================================
@@ -499,6 +511,15 @@ public class SaveLoadManager : MonoBehaviour
     {
         PlayerPrefs.SetInt(key, value);
         PlayerPrefs.Save();
+
+        if(key == "musicVolume")
+        {
+            AudioManager.Instance.SavedMusicVolume = value;
+        }
+        else if(key == "soundEffectsVolume")
+        {
+            AudioManager.Instance.SavedSoundEffectsVolume = value;
+        }
     }
 
     public int GetIntFromPlayerPrefs(string key)

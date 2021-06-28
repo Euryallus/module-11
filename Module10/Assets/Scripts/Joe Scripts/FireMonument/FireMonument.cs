@@ -60,6 +60,9 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
         gameUI.SetUIShowing(false);
         gameUI.ShowCinematicsCanvas();
+
+        // Fade music/sounds out over 0.2 seconds
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
     }
 
     // Called by an animation event
@@ -72,6 +75,8 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
         gameUI.SetUIShowing(true);
         gameUI.HideCinematicsCanvas();
+
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
     }
 
     // Called during cutscene by an animation event
@@ -91,7 +96,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
             CameraShake cutsceneCameraShake = cutsceneCameraParent.GetComponent<CameraShake>();
 
             cutsceneCameraShake.UpdateBasePosition(-connectedPortal.MainPortalTransform.localPosition);
-            cutsceneCameraShake.ShakeCameraForTime(4.0f, CameraShakeType.ReduceOverTime, 0.02f);
+            cutsceneCameraShake.ShakeCameraForTime(4.3f, CameraShakeType.ReduceOverTime, 0.02f);
 
             if (connectedPortal != null)
             {
@@ -123,14 +128,14 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
         interaction.CanInteract = false;
 
-        StartCoroutine(LightFireCoroutine());
-    }
-
-    private IEnumerator LightFireCoroutine()
-    {
         lightIndicator.SetActive(false);
 
-        yield return new WaitForSecondsRealtime(0.1f);
+        StartCoroutine(LightFireEffectsCoroutine());
+    }
+
+    private IEnumerator LightFireEffectsCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
 
         AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, transform.position);
 

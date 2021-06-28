@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,7 @@ public enum MusicPlayMode
 // Edited for mod11:
 // - PlaySoundEffect now returns audiosource, useful for e.g. keeping reference to + changing position of looping source while playing
 // - min/max distance can be changed for 3d sources
+// - globalVolumeMultiplier, for fading music in/out independent of saved volume values
 
 public class AudioManager : MonoBehaviour
 {
@@ -50,15 +52,23 @@ public class AudioManager : MonoBehaviour
     public SceneMusic       CurrentSceneMusic       { get { return currentSceneMusic; } }       
     public DynamicAudioArea CurrentDynamicAudioArea { get { return currentDynamicAudioArea; }
                                                       set { currentDynamicAudioArea = value; } }
+    public float            GlobalVolumeMultiplier  { get { return globalVolumeMultiplier; } }
+
+    public int              SavedMusicVolume        { set { savedMusicVolume = value; } }
+    public int              SavedSoundEffectsVolume { set { savedSoundEffectsVolume = value; } }
 
     #endregion
 
-    private Dictionary<string, SoundClass>  soundsDict;                 // Dictionary containing sound effects indexed by their string id's
-    private SceneMusic                      currentSceneMusic;          // Defines how music is handled in the loaded scene
-    private int                             currentPlaylistIndex;       // If using a playlist, the index of the song that is currently playing in it
-    private DynamicAudioArea[]              dynamicAudioAreas;          // All (if any) dynamic audio areas in the loaded scene
-    private DynamicAudioArea                currentDynamicAudioArea;    // The dynamic audio area that the player most recently entered
-    private List<LoopingSoundSource>        loopingSoundSources;        // List of all active looping sound sources
+    private Dictionary<string, SoundClass>  soundsDict;                     // Dictionary containing sound effects indexed by their string id's
+    private SceneMusic                      currentSceneMusic;              // Defines how music is handled in the loaded scene
+    private int                             currentPlaylistIndex;           // If using a playlist, the index of the song that is currently playing in it
+    private DynamicAudioArea[]              dynamicAudioAreas;              // All (if any) dynamic audio areas in the loaded scene
+    private DynamicAudioArea                currentDynamicAudioArea;        // The dynamic audio area that the player most recently entered
+    private List<LoopingSoundSource>        loopingSoundSources;            // List of all active looping sound sources
+    private float                           globalVolumeMultiplier = 1.0f;  // Volume multiplier for fading music and sounds in/out without altering saved volume values
+
+    private int savedMusicVolume        = -1;   // Keeps track of the saved music volume so PlayerPrefs don't have to be checked each time (set from SaveLoadManager)
+    private int savedSoundEffectsVolume = -1;   // Same as above, but for sound effects. (If these values are set to -1 the actual value will be loaded from PlayerPrefs)
 
     private void Awake()
     {
@@ -165,7 +175,9 @@ public class AudioManager : MonoBehaviour
             }
         }
 
-        UpdateMusicSourcesVolume(SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume"));
+        globalVolumeMultiplier = 1.0f;
+
+        UpdateMusicSourcesVolume();
     }
 
     public void PlayMusic(MusicClass music, bool loop)
@@ -226,7 +238,8 @@ public class AudioManager : MonoBehaviour
         PlayMusic(currentSceneMusic.Playlist[currentPlaylistIndex], false);
     }
 
-    private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
+                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Pick a random volume/sound within the set ranges
         float volume    = Random.Range(sound.VolumeRange.Min, sound.VolumeRange.Max);
@@ -241,8 +254,14 @@ public class AudioManager : MonoBehaviour
 
         audioSource.clip        = sound.AudioClips[Random.Range(0, sound.AudioClips.Length)];
 
+        float globalVolume = globalVolumeMultiplier;
+        if(overrideGlobalVolumeMultiplier)
+        {
+            globalVolume = 1.0f;
+        }
+
         // Multiply the chosen volume value by the saved overall sound effects volume (which is stored as a value from 0 - 20)
-        audioSource.volume      = volume * SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume") * 0.05f;
+        audioSource.volume      = volume * SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume") * 0.05f * globalVolume;
 
         audioSource.pitch       = pitch;
 
@@ -277,12 +296,13 @@ public class AudioManager : MonoBehaviour
         return audioSource;
     }
 
-    private AudioSource PlaySoundEffect(string id, LoopType loopType, bool use3DSpace, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    private AudioSource PlaySoundEffect(string id, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
+                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         if (soundsDict.ContainsKey(id))
         {
             // Play a sound with the given parameters
-            return PlaySoundEffect(soundsDict[id], loopType, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+            return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
         }
         else
         {
@@ -294,13 +314,13 @@ public class AudioManager : MonoBehaviour
     public AudioSource PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound with soundId that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(soundId, LoopType.Loop(loopId), use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(soundId, LoopType.Loop(loopId), false, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public AudioSource PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(sound, LoopType.Loop(loopId), use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(sound, LoopType.Loop(loopId), false, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void StopLoopingSoundEffect(string loopId)
@@ -337,28 +357,28 @@ public class AudioManager : MonoBehaviour
         loopingSoundSources.Clear();
     }
 
-    public void PlaySoundEffect2D(string id)
+    public void PlaySoundEffect2D(string id, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays a sound with the given id that is not positioned in 3D space
-        PlaySoundEffect(id, LoopType.DoNotLoop, false);
+        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false);
     }
 
-    public void PlaySoundEffect2D(SoundClass sound)
+    public void PlaySoundEffect2D(SoundClass sound, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays the given sound, not positioned in 3D space
-        PlaySoundEffect(sound, LoopType.DoNotLoop, false);
+        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false);
     }
 
-    public void PlaySoundEffect3D(string id, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    public void PlaySoundEffect3D(string id, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays a sound with the given id positioned in 3D space at sourcePosition
-        PlaySoundEffect(id, LoopType.DoNotLoop, true, sourcePosition, min3dDistance, max3dDistance);
+        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, sourcePosition, min3dDistance, max3dDistance);
     }
 
-    public void PlaySoundEffect3D(SoundClass sound, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    public void PlaySoundEffect3D(SoundClass sound, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays the given sound, positioned in 3D space at sourcePosition
-        PlaySoundEffect(sound, LoopType.DoNotLoop, true, sourcePosition, min3dDistance, max3dDistance);
+        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void PlayAllDynamicSources()
@@ -371,13 +391,52 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void UpdateMusicSourcesVolume(int savedMusicVolume)
+    public void FadeGlobalVolumeMultiplier(float fadeTo, float fadeTime)
+    {
+        StartCoroutine(FadeGlobalVolumeMultiplierCoroutine(fadeTo, fadeTime, fadeTo > globalVolumeMultiplier));
+    }
+
+    private IEnumerator FadeGlobalVolumeMultiplierCoroutine(float fadeTo, float fadeTime, bool fadingIn)
+    {
+        float increaseMultiplier = fadingIn ? 1.0f : -1.0f;
+
+        while((fadingIn && (globalVolumeMultiplier < fadeTo)) || ((!fadingIn) && (globalVolumeMultiplier > fadeTo)))
+        {
+            UpdateGlobalVolumeMultiplier(globalVolumeMultiplier + increaseMultiplier * Time.unscaledDeltaTime / fadeTime);
+            yield return null;
+        }
+
+        UpdateGlobalVolumeMultiplier(fadeTo);
+
+        Debug.Log("Global volume multiplier faded to " + globalVolumeMultiplier);
+    }
+
+    public void UpdateGlobalVolumeMultiplier(float value)
+    {
+        if(value < 0.0f)
+        {
+            value = 0.0f;
+        }
+
+        globalVolumeMultiplier = value;
+
+        UpdateMusicSourcesVolume();
+        UpdateActiveLoopingSoundsVolume();
+    }
+
+    public void UpdateMusicSourcesVolume()
     {
         // Updates the volume of the main music source and any active
         //   dynamic audio sources
 
+        // Get the saved music volume if it hasn't already been set from SaveLoadManager
+        if(savedMusicVolume == -1)
+        {
+            savedMusicVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");
+        }
+
         // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
-        float volumeVal = savedMusicVolume * 0.05f;
+        float volumeVal = savedMusicVolume * 0.05f * globalVolumeMultiplier;
 
         // Set the volume of the main audio source used for playing music
         musicSource.volume = volumeVal;
@@ -390,16 +449,20 @@ public class AudioManager : MonoBehaviour
                 dynamicAudioAreas[i].UpdateSourceVolume(volumeVal);
             }
         }
-
-        Debug.Log("Updating music source volume: " + volumeVal);
     }
 
-    public void UpdateActiveLoopingSoundsVolume(int savedSoundEffectsVolume)
+    public void UpdateActiveLoopingSoundsVolume()
     {
         // Updates the volume of all looping sound effects that are currently playing
 
+        // Get the saved sound effects volume if it hasn't already been set from SaveLoadManager
+        if (savedSoundEffectsVolume == -1)
+        {
+            savedSoundEffectsVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume");
+        }
+
         // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
-        float volumeVal = savedSoundEffectsVolume * 0.05f;
+        float volumeVal = savedSoundEffectsVolume * 0.05f * globalVolumeMultiplier;
 
         // Update the volume of all active loop sources, multiplying by the base
         //   volume that was chosen when the sound first started playing
@@ -407,8 +470,6 @@ public class AudioManager : MonoBehaviour
         {
             loopSource.Source.volume = volumeVal * loopSource.BaseVolume;
         }
-
-        Debug.Log("Updating looping sounds volume: " + volumeVal);
     }
 }
 
