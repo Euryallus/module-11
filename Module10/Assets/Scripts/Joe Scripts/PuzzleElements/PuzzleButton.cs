@@ -146,7 +146,7 @@ public class PuzzleButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (playerCanActivate && other.transform.parent != null && other.transform.parent.CompareTag("Player"))
+        if (playerCanActivate && other.gameObject.CompareTag("Player"))
         {
             // The player entered the trigger and can press the button
             playerIsColliding = true;
@@ -160,7 +160,7 @@ public class PuzzleButton : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (playerCanActivate && other.transform.parent != null && other.transform.parent.CompareTag("Player"))
+        if (playerCanActivate && other.gameObject.CompareTag("Player"))
         {
             // The player exited the trigger and was pressing the button
             playerIsColliding = false;

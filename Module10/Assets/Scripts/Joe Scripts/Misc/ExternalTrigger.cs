@@ -30,7 +30,7 @@ public class ExternalTrigger : MonoBehaviour
 
     private List<IExternalTriggerListener> listeners = new List<IExternalTriggerListener>(); // List of all IExternalTriggerListeners to notify when a something enters/enters/stays in the trigger
 
-    private bool triggerEnabled;
+    private bool triggerEnabled = true;
 
     public void AddListener(IExternalTriggerListener listener)
     {
