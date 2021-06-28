@@ -178,7 +178,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         // Update the base volume, and instantly set the music source to have the
         //   new volume if it's already active/playing
 
-        Debug.Log("Updating source volume: " + musicToTrigger.name);
+        //Debug.Log("Updating source volume: " + musicToTrigger.name);
 
         // Multiplying from the set MusicClass volume so the saved volume and default
         //  volume level are both used to determine the overall volume

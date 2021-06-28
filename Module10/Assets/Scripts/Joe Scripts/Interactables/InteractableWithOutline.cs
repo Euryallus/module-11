@@ -40,7 +40,7 @@ public class InteractableWithOutline : InteractableObject
         if (!string.IsNullOrEmpty(interactionSound))
         {
             // Play the interaction sound if one was set
-            AudioManager.Instance.PlaySoundEffect2D(interactionSound);
+            AudioManager.Instance.PlaySoundEffect2D(interactionSound, true);
         }
     }
 

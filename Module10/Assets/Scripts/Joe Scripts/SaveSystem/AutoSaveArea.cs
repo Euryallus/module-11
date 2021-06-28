@@ -16,18 +16,13 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
 
-    [SerializeField] [Header("Important: Set unique id")]
-    [Tooltip("Unique id for this save point. Important: all save points should use a different id.")]
-    private string id;
+    [Header("Auto Save Area")]
+
+    [SerializeField]
+    private Transform respawnPointTransform;
 
     [SerializeField]
     private bool disableWhenUsed = true;    //Whether the trigger should be permenantly disabled after being used once
-
-    #endregion
-
-    #region Properties
-
-    public string Id { get { return id; } }
 
     #endregion
 
@@ -44,12 +39,6 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     {
         // Subscribe to save/load events so colliderDisabled is saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
-
-        if (string.IsNullOrEmpty(id))
-        {
-            // Warning if an id has not been set
-            Debug.LogWarning("IMPORTANT: AutoSaveArea exists without id. All save points require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
-        }
     }
 
     private void OnDestroy()
@@ -60,19 +49,19 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
     public void OnSceneSave(SaveData saveData)
     {
-        Debug.Log("Saving data for AutoSaveArea: " + id);
+        Debug.Log("Saving data for AutoSaveArea: " + GetSavePointId());
 
         // Save whether the collider is disabled
-        saveData.AddData("saveColliderDisabled_" + id, colliderDisabled);
+        saveData.AddData("saveColliderDisabled_" + GetSavePointId(), colliderDisabled);
     }
 
     public void OnSceneLoadSetup(SaveData saveData)
     {
-        Debug.Log("Loading data for AutoSaveArea: " + id);
+        Debug.Log("Loading data for AutoSaveArea: " + GetSavePointId());
 
         // Load whether the collider was disabled, and enable/disable it based on this
 
-        bool disableOnLoad = saveData.GetData<bool>("saveColliderDisabled_" + id);
+        bool disableOnLoad = saveData.GetData<bool>("saveColliderDisabled_" + GetSavePointId());
 
         if (disableOnLoad)
         {
@@ -94,10 +83,10 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
             DisableCollider();
         }
 
-        Debug.Log("Attempting to save game at save auto save point: " + id);
+        Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
 
         // Store the UsedSavePointId so the player can be restored to the save area when the game is next loaded
-        WorldSave.Instance.UsedSavePointId = id;
+        WorldSave.Instance.UsedSavePointId = GetSavePointId();
 
         // Try to save the game
         bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
@@ -129,11 +118,11 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
     public string GetSavePointId()
     {
-        return id;
+        return "autoSaveArea_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 
     public Vector3 GetRespawnPosition()
     {
-        return transform.position;
+        return respawnPointTransform.position;
     }
 }

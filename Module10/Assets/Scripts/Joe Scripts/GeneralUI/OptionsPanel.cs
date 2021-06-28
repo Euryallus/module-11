@@ -73,7 +73,7 @@ public class OptionsPanel : UIPanel
         musicVolumeText.text = "Music Volume (" + (savedMusicVolume * 5) + "%)";
 
         // Update the volume of all active music sources
-        AudioManager.Instance.UpdateMusicSourcesVolume(savedMusicVolume);
+        AudioManager.Instance.UpdateMusicSourcesVolume();
     }
 
     private void UpdateSoundEffectsVolumeUI(int savedSoundEffectsVolume)
@@ -83,7 +83,7 @@ public class OptionsPanel : UIPanel
 
         // Update the volume of all active looping sound sources (volume for standard sound effects is determined when they are played,
         //   but looping sound volume needs to be adjusted dynamically since volume may be changed while they are playing)
-        AudioManager.Instance.UpdateActiveLoopingSoundsVolume(savedSoundEffectsVolume);
+        AudioManager.Instance.UpdateActiveLoopingSoundsVolume();
     }
 
     private void ScreenShakeToggled(bool enabled)

@@ -285,7 +285,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
                     Debug.Log("Moving player to save point: " + savePointId + ", position: " + currentSavePoint.GetRespawnPosition());
 
                     //Move player to the position of the spawn transform at the point they last saved
-                    GameObject.FindGameObjectWithTag("Player").transform.position = currentSavePoint.GetRespawnPosition() + new Vector3(0.0f, 3.0f, 0.0f);
+                    GameObject.FindGameObjectWithTag("Player").transform.position = currentSavePoint.GetRespawnPosition() + Vector3.up;
 
                     break;
                 }
