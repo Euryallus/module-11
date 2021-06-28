@@ -15,37 +15,20 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
 
-    [Header("Important: Set unique id")]
-    [Header("Save Point Properties")]
-
-    [SerializeField] [Tooltip("Unique id for this save point. Important: all save points should use a different id.")]
-    private string id;
+    [Header("Manual Save Point")]
 
     [SerializeField] private Transform spawnPlatformTransform;  // Transform used to position the player on respawn at this point
 
     #endregion
 
-    public string Id { get { return id; } }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        if (string.IsNullOrEmpty(id))
-        {
-            // Warning if an id was not set
-            Debug.LogWarning("IMPORTANT: ManualSavePoint exists without id. All save points require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
-        }
-    }
-
     public override void Interact()
     {
         base.Interact();
 
-        Debug.Log("Attempting to save game at point: " + id);
+        Debug.Log("Attempting to save game at point: " + GetSavePointId());
 
         // Store the UsedSavePointId so the player can be restored to the save point when the game is next loaded
-        WorldSave.Instance.UsedSavePointId = id;
+        WorldSave.Instance.UsedSavePointId = GetSavePointId();
 
         // Try to save the game
         bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
@@ -63,7 +46,7 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
 
     public string GetSavePointId()
     {
-        return id;
+        return "manualSavePoint_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 
     public Vector3 GetRespawnPosition()
