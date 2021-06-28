@@ -45,8 +45,20 @@ public class Arrow : MonoBehaviour
             hasHit = true;
             Debug.LogWarning(collision.transform.name);
 
-            
+            if(collision.gameObject.GetComponent<EnemyHealth>())
+            {
+                // If object has EnemyHealth component, deal damage & destroy self
+                gameObject.transform.parent = collision.gameObject.transform;
 
+                collision.gameObject.GetComponent<EnemyHealth>().DoDamage(damageDone);
+                Destroy(gameObject);
+                return;
+            }
+            else if (collision.gameObject.GetComponent<TestDummy>())
+            {
+                collision.gameObject.GetComponent<TestDummy>().TakeHit();
+            }
+            
             if (collision.transform.gameObject.isStatic)
             {
                 // Checks if object collided with is static - if so, freeze in place
@@ -59,15 +71,6 @@ public class Arrow : MonoBehaviour
             else
             {
                 rb.velocity = Vector3.zero;
-            }
-
-            if(collision.gameObject.GetComponent<EnemyHealth>())
-            {
-                // If object has EnemyHealth component, deal damage & destroy self
-                gameObject.transform.parent = collision.gameObject.transform;
-
-                collision.gameObject.GetComponent<EnemyHealth>().DoDamage(damageDone);
-                Destroy(gameObject);
             }
         }
     }

@@ -22,6 +22,10 @@ public class MeleeWeapon : Weapon
                     float damage = CalculateDamage();
                     weaponHit.transform.GetComponent<EnemyHealth>().DoDamage(damage);
                 }
+                else if(weaponHit.transform.GetComponent<TestDummy>())
+                {
+                    weaponHit.transform.GetComponent<TestDummy>().TakeHit();
+                }
             }
 
             // If the weapon has attached animation, play it
