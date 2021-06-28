@@ -45,7 +45,7 @@ public class CameraShake : MonoBehaviour
 
     private void Start()
     {
-        basePosition = targetCameraTransform.localPosition;
+        UpdateBasePosition(Vector3.zero);
     }
 
     void Update()
@@ -85,6 +85,11 @@ public class CameraShake : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateBasePosition(Vector3 offset)
+    {
+        basePosition = targetCameraTransform.localPosition + offset;
     }
 
     public void ShakeCameraForTime(float time, CameraShakeType type,

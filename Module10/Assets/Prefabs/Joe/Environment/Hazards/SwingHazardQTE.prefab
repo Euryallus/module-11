@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLoseable: 1
-  keyToPress: 120
+  keyToPress: 102
   timeScale: 0.12
   timeBeforeFail: 3
   successCameraDelay: 0.5
@@ -212,7 +212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8481037352903751155, guid: 982816a2d0be8e44493e0c4783bdddc6, type: 3}
       propertyPath: m_Name
-      value: SwingHazardQTE Variant
+      value: SwingHazardQTE
       objectReference: {fileID: 0}
     - target: {fileID: 8481037352903751155, guid: 982816a2d0be8e44493e0c4783bdddc6, type: 3}
       propertyPath: m_IsActive
