@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLoseable: 1
-  keyToPress: 120
+  keyToPress: 102
   timeScale: 0.045
   timeBeforeFail: 3
   successCameraDelay: 0.5
@@ -264,7 +264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4176112455624415615, guid: 9231ad8ed72356744b8c68b952d48603, type: 3}
       propertyPath: m_Name
-      value: FallingHazardQTE Variant
+      value: FallingHazardQTE
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9231ad8ed72356744b8c68b952d48603, type: 3}

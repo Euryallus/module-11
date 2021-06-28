@@ -11,6 +11,8 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for Module 11: added triggerEnabled so external triggers can easily be enabled/disabled
+
 public class ExternalTrigger : MonoBehaviour
 {
     #region InspectorVariables
@@ -20,7 +22,15 @@ public class ExternalTrigger : MonoBehaviour
 
     #endregion
 
+    #region Properties
+
+    public bool TriggerEnabled { get { return triggerEnabled; } set { triggerEnabled = value; } }
+
+    #endregion
+
     private List<IExternalTriggerListener> listeners = new List<IExternalTriggerListener>(); // List of all IExternalTriggerListeners to notify when a something enters/enters/stays in the trigger
+
+    private bool triggerEnabled;
 
     public void AddListener(IExternalTriggerListener listener)
     {
@@ -31,28 +41,37 @@ public class ExternalTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        for (int i = 0; i < listeners.Count; i++)
+        if(triggerEnabled)
         {
-            // Trigger was entered, call OnExternalTriggerEnter on all listeners
-            listeners[i].OnExternalTriggerEnter(triggerId, other);
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                // Trigger was entered, call OnExternalTriggerEnter on all listeners
+                listeners[i].OnExternalTriggerEnter(triggerId, other);
+            }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        for (int i = 0; i < listeners.Count; i++)
+        if(triggerEnabled)
         {
-            // A collider is in the trigger, call OnExternalTriggerStay on all listeners
-            listeners[i].OnExternalTriggerStay(triggerId, other);
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                // A collider is in the trigger, call OnExternalTriggerStay on all listeners
+                listeners[i].OnExternalTriggerStay(triggerId, other);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        for (int i = 0; i < listeners.Count; i++)
+        if(triggerEnabled)
         {
-            // Trigger was exited, call OnExternalTriggerExit on all listeners
-            listeners[i].OnExternalTriggerExit(triggerId, other);
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                // Trigger was exited, call OnExternalTriggerExit on all listeners
+                listeners[i].OnExternalTriggerExit(triggerId, other);
+            }
         }
     }
 }

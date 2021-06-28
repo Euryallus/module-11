@@ -9,26 +9,13 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private FireMonumentInteraction    interaction;
     [SerializeField] private ParticleSystem             fireParticles;
     [SerializeField] private GameObject                 lightIndicator;
-    [SerializeField] private SpriteRenderer[]           portalEmblemRenderers;
+    [SerializeField] private Transform                  cutsceneCameraParent;
     [SerializeField] private GameObject                 cutsceneCamera;
     [SerializeField] private Animator                   cutsceneAnimator;
 
-    [Header("Portal (Appears When Lit)")]
-    [SerializeField]  [Tooltip("The portal GameObject")]
-    private GameObject     portalGameObj;
-
-    [SerializeField] [Tooltip("The MeshRenderer component on the portal")]
-    private MeshRenderer   portalRenderer;
-
-    [SerializeField] [Tooltip("The material used for the portal (base material before applying tint colour)")]
-    private Material       portalMaterial;
-
-    [SerializeField] [Tooltip("Colour used to tint the portal material")]
-    private Color32        portalColour;
-
-    [Header("Please use 512x512 sprite")]
-    [SerializeField] [Tooltip("The sprite shown on the portal")]
-    private Sprite         portalEmblem;
+    [Header("Connected Portal")]
+    [SerializeField] [Tooltip("The portal that will appear when the torch is lit")]
+    private Portal connectedPortal;
 
     private bool lit;
     private GameObject mainCameraGameObj;
@@ -38,15 +25,8 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         cutsceneAnimator.enabled = false;
         cutsceneCamera.SetActive(false);
 
-        portalEmblemRenderers[0].sprite = portalEmblem;
-        portalEmblemRenderers[1].sprite = portalEmblem;
-
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
-
-        Material portalMaterialInstance = new Material(portalMaterial);
-        portalMaterialInstance.SetColor("_Tint", portalColour);
-        portalRenderer.material = portalMaterialInstance;
     }
 
     private void OnDestroy()
@@ -64,7 +44,10 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
     private void StartCutscene()
     {
-        if(Camera.main != null)
+        cutsceneCameraParent.transform.localPosition = Vector3.zero;
+        cutsceneCameraParent.transform.rotation = Quaternion.identity;
+
+        if (Camera.main != null)
         {
             mainCameraGameObj = Camera.main.gameObject;
             mainCameraGameObj.SetActive(false);
@@ -97,6 +80,26 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         GameSceneUI.Instance.GetActiveCinematicsCanvas().FadeToBlack();
     }
 
+    // Called during cutscene by an animation event
+    private void FocusCutsceneOnPortal()
+    {
+        if(connectedPortal != null)
+        {
+            cutsceneCameraParent.transform.position = connectedPortal.MainPortalTransform.position;
+            cutsceneCameraParent.transform.rotation = connectedPortal.MainPortalTransform.rotation;
+
+            CameraShake cutsceneCameraShake = cutsceneCameraParent.GetComponent<CameraShake>();
+
+            cutsceneCameraShake.UpdateBasePosition(-connectedPortal.MainPortalTransform.localPosition);
+            cutsceneCameraShake.ShakeCameraForTime(4.0f, CameraShakeType.ReduceOverTime, 0.02f);
+
+            if (connectedPortal != null)
+            {
+                connectedPortal.ShowWithAnimation();
+            }
+        }
+    }
+
     public void OnSceneSave(SaveData saveData)
     {
         saveData.AddData("fireMonumentLit_" + GetUniquePositionId(), lit);
@@ -109,9 +112,6 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         if(lit)
         {
             LightFire();
-
-            // Show portal
-            portalGameObj.transform.localPosition = new Vector3(3.05f, 0.0f, 0.0f);
         }
     }
 
@@ -121,13 +121,20 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     {
         lit = true;
 
+        interaction.CanInteract = false;
+
+        StartCoroutine(LightFireCoroutine());
+    }
+
+    private IEnumerator LightFireCoroutine()
+    {
+        lightIndicator.SetActive(false);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
         AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, transform.position);
 
         fireParticles.Play();
-
-        lightIndicator.SetActive(false);
-
-        interaction.CanInteract = false;
     }
 
     private string GetUniquePositionId()

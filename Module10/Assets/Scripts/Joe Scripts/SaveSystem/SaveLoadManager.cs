@@ -295,20 +295,9 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
-        if(activePlayer == null)
-        {
-            // If no active player was found before loading the scene, get a referece to it
-            //   now a scene containing the player has been loaded
-            activePlayer = PlayerInstance.ActivePlayer;
-        }
-
-        activePlayer.PlayerController.enabled = false;
-
         // Load and setup saved global/scene data
         //========================================
         yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory));
-
-        activePlayer.PlayerController.enabled = true;
 
         loadingPanel.LoadDone();
 
@@ -317,7 +306,15 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)
     {
-        if(scenesDirectory == "UseCurrentDirectory")
+        // Wait a frame to ensure the player instance is ready
+        yield return null;
+
+        // In case no active player was found before loading the scene, get a reference to it now a
+        //   scene containing the player has been loaded so its controller can definitely be disabled
+        PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
+        activePlayer.PlayerController.enabled = false;
+
+        if (scenesDirectory == "UseCurrentDirectory")
         {
             scenesDirectory = currentScenesDirectory;
         }
@@ -410,7 +407,8 @@ public class SaveLoadManager : MonoBehaviour
             GameObject defaultSpawnPoint = GameObject.Find("DefaultSpawnPoint");
             if(defaultSpawnPoint != null)
             {
-                PlayerInstance.ActivePlayer.gameObject.transform.position = defaultSpawnPoint.transform.position;
+                // Adding Vector3.up to the spawn position so the player doesn't spawn halfway in the ground
+                PlayerInstance.ActivePlayer.gameObject.transform.position = (defaultSpawnPoint.transform.position + Vector3.up);
             }
 
             Debug.Log(">> Moving player to default spawn point");
@@ -454,11 +452,13 @@ public class SaveLoadManager : MonoBehaviour
 
         loadingAfterDeath = false;
 
+        activePlayer.PlayerController.enabled = true;
+
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
