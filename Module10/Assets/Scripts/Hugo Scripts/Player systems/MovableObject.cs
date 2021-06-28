@@ -41,7 +41,7 @@ public class MovableObject : InteractableWithOutline
             // Originally was using Vector3.Lerp but this caused issues with collisions being ignored
             // Used https://answers.unity.com/questions/510853/how-to-keep-objects-from-passing-through-colliders.html as ref. for fix
 
-            transform.position = Vector3.SmoothDamp(transform.position, target.position, ref currentVelocity, movementDampen);
+            transform.position = Vector3.SmoothDamp(transform.position, hand.position, ref currentVelocity, movementDampen);
         }
 
         // If the spring joint has broken, let go of object
@@ -75,7 +75,7 @@ public class MovableObject : InteractableWithOutline
         {
             base.Interact();
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
-            transform.parent = hand.transform;
+            transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;
 
             joint = gameObject.AddComponent<SpringJoint>();
             joint.spring = jointSpring;

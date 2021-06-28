@@ -218,39 +218,44 @@ public class PlayerMovement : MonoBehaviour
         // Layer mask ("exposes" only 4th layer, water layer)
         int mask = 1 << 4;
 
-        // Raycast upwards from player on water layer exposes if player is underwater
-        if (Physics.Raycast(transform.position - new Vector3(0,0.5f,0), transform.up, 100f, mask ))
+
+        if (currentMovementState != MovementStates.ladder)
         {
-            // If hits water layer above & mode isnt swimming, enable post processing effects
-            if(currentMovementState != MovementStates.dive)
+
+            // Raycast upwards from player on water layer exposes if player is underwater
+            if (Physics.Raycast(transform.position - new Vector3(0, 0.5f, 0), transform.up, 100f, mask))
             {
-                dof.active = true;
-                v.active = true;
+                // If hits water layer above & mode isnt swimming, enable post processing effects
+                if (currentMovementState != MovementStates.dive)
+                {
+                    dof.active = true;
+                    v.active = true;
+                }
+
+                // Added by Joe: plays a sound when the player first enters water and starts looping underwater sound
+                if (!inWater)
+                {
+                    AudioManager.Instance.PlaySoundEffect2D("splash");
+                    AudioManager.Instance.PlayLoopingSoundEffect("underwaterLoop", "playerInWater");
+                }
+
+                // Flags water bool
+                inWater = true;
+                // Sets current movement mode to diving
+                currentMovementState = MovementStates.dive;
             }
-
-            // Added by Joe: plays a sound when the player first enters water and starts looping underwater sound
-            if (!inWater)
+            else
             {
-                AudioManager.Instance.PlaySoundEffect2D("splash");
-                AudioManager.Instance.PlayLoopingSoundEffect("underwaterLoop", "playerInWater");
-            }
+                // If doesnt hit but currently in water
+                if (inWater == true)
+                {
+                    // Disable post processing effects
+                    dof.active = false;
+                    v.active = false;
 
-            // Flags water bool
-            inWater = true;
-            // Sets current movement mode to diving
-            currentMovementState = MovementStates.dive;
-        }
-        else 
-        {
-            // If doesnt hit but currently in water
-            if (inWater == true)
-            {
-                // Disable post processing effects
-                dof.active = false;
-                v.active = false;
-
-                // Change state to "swim" on top of water
-                currentMovementState = MovementStates.swim;
+                    // Change state to "swim" on top of water
+                    currentMovementState = MovementStates.swim;
+                }
             }
         }
 
@@ -568,6 +573,8 @@ public class PlayerMovement : MonoBehaviour
             controller.enabled = false;
             transform.position = new Vector3(snapPos.x, transform.position.y, snapPos.z);
             controller.enabled = true;
+
+            inWater = false;
         }
     }
 

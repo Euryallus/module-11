@@ -36,7 +36,7 @@ public class AreaObjectiveManager : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<BoxCollider>().isTrigger = true;
 
-        //progressSlider.gameObject.SetActive(false);
+        progressSlider.gameObject.SetActive(false);
         isCharging = false;
         hasFullyCharged = false;
     }
