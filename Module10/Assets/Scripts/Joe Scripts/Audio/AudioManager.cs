@@ -239,7 +239,7 @@ public class AudioManager : MonoBehaviour
     }
 
     private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
-                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         // Pick a random volume/sound within the set ranges
         float volume    = Random.Range(sound.VolumeRange.Min, sound.VolumeRange.Max);
@@ -260,8 +260,18 @@ public class AudioManager : MonoBehaviour
             globalVolume = 1.0f;
         }
 
+        float savedVolume;
+        if(useMusicVolume)
+        {
+            savedVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");
+        }
+        else
+        {
+            savedVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume");
+        }
+
         // Multiply the chosen volume value by the saved overall sound effects volume (which is stored as a value from 0 - 20)
-        audioSource.volume      = volume * SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume") * 0.05f * globalVolume;
+        audioSource.volume      = volume * savedVolume * 0.05f * globalVolume;
 
         audioSource.pitch       = pitch;
 
@@ -297,12 +307,12 @@ public class AudioManager : MonoBehaviour
     }
 
     private AudioSource PlaySoundEffect(string id, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
-                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+                                        Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         if (soundsDict.ContainsKey(id))
         {
             // Play a sound with the given parameters
-            return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+            return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
         }
         else
         {
@@ -379,6 +389,15 @@ public class AudioManager : MonoBehaviour
     {
         // Plays the given sound, positioned in 3D space at sourcePosition
         PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, sourcePosition, min3dDistance, max3dDistance);
+    }
+
+    public void PlayMusicInterlude(string id)
+    {
+        // For playing music that does not act as background music, but instead as a short musical interlude,
+        //   for example when a cutscene is being played. Plays like a sound effect on top of background music, hence the use of PlaySoundEffect
+        //   Also overrides globalVolumeMultiplier, allowing background music to be faded out while the interlude plays if desired
+
+        PlaySoundEffect(id, LoopType.DoNotLoop, true, false, default, 0, 0, true);
     }
 
     public void PlayAllDynamicSources()

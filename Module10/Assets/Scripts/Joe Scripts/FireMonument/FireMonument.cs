@@ -63,6 +63,8 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
         // Fade music/sounds out over 0.2 seconds
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
+
+        AudioManager.Instance.PlayMusicInterlude("fireLightCutscene");
     }
 
     // Called by an animation event
