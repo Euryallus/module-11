@@ -40,6 +40,9 @@ public class Arrow : MonoBehaviour
         // Checks if arrow hasn't already hit & that it hasnt hit the player
         if(!hasHit)
         {
+
+            AudioManager.Instance.PlaySoundEffect2D("arrowHit");
+
             collisionPoint = collision.GetContact(0).point;
             // Flags hasHit as true & removes resitual velocity from arrow
             hasHit = true;

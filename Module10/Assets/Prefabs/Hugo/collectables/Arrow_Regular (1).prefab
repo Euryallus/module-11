@@ -133,7 +133,7 @@ MonoBehaviour:
   interactTooltipPrefab: {fileID: 0}
   interactTooltipOffset: {x: 0, y: 0, z: 0}
   tooltipNameText: 
-  interactionSound: buttonClickMain1
+  interactionSound: pop
   collectedOnPickup:
   - Item: {fileID: 11400000, guid: f8dacc19b588066429ff07ce85f7aa67, type: 2}
     Quantity: 4

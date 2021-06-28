@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
+  m_Name: BowCharge
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: a1dc8887fe376fc47b49047be3de316f, type: 3}
+  - {fileID: 8300000, guid: a8f4789d5e2df9c428736673cee2e0d0, type: 3}
+  - {fileID: 8300000, guid: acd2570cfde830642af6d6a88de277a3, type: 3}
+  m_id: bowCharge
+  m_volumeRange:
+    Min: 1
+    Max: 1
+  m_pitchRange:
+    Min: 0.9
+    Max: 1

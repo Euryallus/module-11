@@ -88,6 +88,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cf5baa675ad147d409606eb66a6c4333, type: 2}
   - {fileID: 11400000, guid: 8c0f89773a4149c4786b90332330bb21, type: 2}
   - {fileID: 11400000, guid: 8c6418128ac7dca48b2258dd865ba7d2, type: 2}
+  - {fileID: 11400000, guid: d7937863df34a1c4f8a902dd0f4b7a74, type: 2}
+  - {fileID: 11400000, guid: b1e56c1635b84c14281a3d5093e36e69, type: 2}
+  - {fileID: 11400000, guid: 2ae7334f4983af44b9ec4deb1dd2f215, type: 2}
+  - {fileID: 11400000, guid: 81f932826694a594ca5796d1df02ed35, type: 2}
   sceneMusicSetup:
   - SceneName: MainMenu
     PlayMode: 2
@@ -233,10 +237,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: ced84a9968460fd42bda1939f241376f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 1.149096
   Loop: 0
   Mute: 0
   Spatialize: 0

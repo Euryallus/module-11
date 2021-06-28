@@ -28,6 +28,9 @@ public class Bow : Weapon
     {
         if(cooldown >= cooldownTime && !isHeld)
         {
+
+            AudioManager.Instance.PlaySoundEffect2D("bowCharge");
+
             // Starts player drawing back bow if ability is activated & wasn't already flagged
             isHeld = true;
             heldTime = 0f;
@@ -86,6 +89,8 @@ public class Bow : Weapon
             {
                 inventory.TryRemoveItem(arrowRequired.Item);
             }
+
+            AudioManager.Instance.PlaySoundEffect2D("bowRelease");
         }
         else
         {
