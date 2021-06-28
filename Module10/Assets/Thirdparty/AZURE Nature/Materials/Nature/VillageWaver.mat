@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AN_Water
+  m_Name: VillageWaver
   m_Shader: {fileID: 4800000, guid: faaeb4a0622f3594095e9e1327bca9e2, type: 3}
   m_ShaderKeywords: _WAVESNORMALINTENSITY_ON
   m_LightmapFlags: 4
@@ -52,7 +52,7 @@ Material:
     - _2: 0.7
     - _AlphaCutoff: 0.5
     - _ChromaticAberration: 0
-    - _CoastOpacity: 0.155
+    - _CoastOpacity: 1
     - _CoastalWavesDensity: 0.5
     - _DepthDistance: 1.5
     - _DepthFade: 1
@@ -62,15 +62,15 @@ Material:
     - _Float1: 0
     - _Float2: 0.1
     - _Float3: 0
-    - _FoamContrast: 0.241
-    - _FoamDensity: 0.292
-    - _FoamDistance: 0.64
+    - _FoamContrast: 0.462
+    - _FoamDensity: 0.464
+    - _FoamDistance: 2.08
     - _FoamOpacity: 1
     - _Normal: 0.15
-    - _Opacity: 0.629
+    - _Opacity: 0.95
     - _Power: 0.2
     - _RefractionIntensity: 0.15
-    - _RefractionScale: 0.41
+    - _RefractionScale: 0.246
     - _Scale: 50
     - _Smoothness: 0.838
     - _TessEdgeLength: 16
@@ -90,8 +90,8 @@ Material:
     - _TransmissionShadow: 0.5
     - _UDepthDistance: 0.3
     - _UDistancePower: 0.1
-    - _WavesNormalIntensity: 0.94
-    - _WavesSpeed: 0.063
+    - _WavesNormalIntensity: 1.17
+    - _WavesSpeed: 0.106
     - _WavesTile: 0.15
     - __dirty: 0
     m_Colors:
