@@ -716,7 +716,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2723929033661096228}
   m_HandleRect: {fileID: 6155232081467834371}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1654,8 +1654,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questDisplay: {fileID: 0}
-  buttonTitle: {fileID: 0}
-  ui: {fileID: 0}
+  buttonTitle: {fileID: 4885149024612402133}
+  ui: {fileID: 5165638561994689170}
 --- !u!1 &4884584923031933638
 GameObject:
   m_ObjectHideFlags: 0
@@ -4082,8 +4082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerQuestData: {fileID: 11400000, guid: 849c1f5215c88084a9b1b17fbd0a6bf6, type: 2}
-  inventory: {fileID: 0}
-  questMenuUI: {fileID: 0}
+  questMenuUI: {fileID: 5165638561994689170}
 --- !u!114 &9204811781302828328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4097,8 +4096,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qmanager: {fileID: 9204811781302828331}
-  playerCamera: {fileID: 0}
-  focusCamera: {fileID: 0}
   cameraLerpSpeed: 5
 --- !u!114 &9204811781302828329
 MonoBehaviour:
@@ -4115,7 +4112,7 @@ MonoBehaviour:
   questTitle: {fileID: 9204811781861020277}
   questDescription: {fileID: 9204811782012401772}
   questObjectives: {fileID: 9204811780387215477}
-  rejectButton: {fileID: 0}
+  rejectButton: {fileID: 9204811781967864670}
   questCompleteTitle: {fileID: 9204811780657236265}
   questCompleteMessage: {fileID: 9204811782280750802}
   questReward: {fileID: 9204811781269792782}

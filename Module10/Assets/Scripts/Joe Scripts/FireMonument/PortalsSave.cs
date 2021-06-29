@@ -83,6 +83,8 @@ public class PortalsSave : MonoBehaviour, IPersistentGlobalObject
 
     public void SetPortalShowing(string portalId, bool showing)
     {
+        //Debug.Log("Set Portal '" + portalId + "' Showing to " + showing);
+
         foreach (PortalSaveInfo info in portalSaveInfo)
         {
             if (info.Id == portalId)

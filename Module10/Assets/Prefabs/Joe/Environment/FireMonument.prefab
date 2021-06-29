@@ -668,7 +668,10 @@ MonoBehaviour:
   cutsceneCameraParent: {fileID: 7162184122657867188}
   cutsceneCamera: {fileID: 3928512235411481065}
   cutsceneAnimator: {fileID: 2683010491066369912}
-  connectedPortal: {fileID: 0}
+  portalUnlockPanelPrefab: {fileID: 4947224163287628048, guid: 99aaf4c91b504b54cbea6385a31c8475, type: 3}
+  unlockAreaName: 
+  localConnectedPortal: {fileID: 0}
+  villagePortalId: 
 --- !u!1 &8069915206502717161
 GameObject:
   m_ObjectHideFlags: 0
