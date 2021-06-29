@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class FireMonument : MonoBehaviour, IPersistentSceneObject
 {
@@ -13,7 +14,8 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private Transform                  cutsceneCameraParent;
     [SerializeField] private GameObject                 cutsceneCamera;
     [SerializeField] private Animator                   cutsceneAnimator;
-
+    [SerializeField] private GameObject                 portalUnlockPanelPrefab;
+    [SerializeField] private string                     unlockAreaName;
 
     [Header("For a portal in this scene:")]
     [Space]
@@ -24,6 +26,9 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [Header("For a portal in the village scene:")]
     [SerializeField] [Tooltip("The id of the portal that will appear in the village when the torch is lit")]
     private string villagePortalId;
+
+    [SerializeField] [Tooltip("The video clip to be shown during the lighting cutscene. This should be a video of the portal appearing in the Village Scene")]
+    private VideoClip unlockVideoClip;
 
     private bool lit;
     private GameObject mainCameraGameObj;
@@ -48,6 +53,11 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         LightFire();
 
         StartCutscene();
+
+        if(!string.IsNullOrEmpty(villagePortalId))
+        {
+            PortalsSave.Instance.SetPortalShowing(villagePortalId, true);
+        }
     }
 
     private void StartCutscene()
@@ -73,6 +83,13 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
 
         AudioManager.Instance.PlayMusicInterlude("fireLightCutscene");
+
+        CinematicsCanvas cinematicsCanvas = gameUI.GetActiveCinematicsCanvas();
+
+        if(unlockVideoClip != null)
+        {
+            cinematicsCanvas.SetupVideoPlayer(unlockVideoClip);
+        }
     }
 
     // Called by an animation event
@@ -98,9 +115,15 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     // Called during cutscene by an animation event
     private void FocusCutsceneOnPortal()
     {
-        if(localConnectedPortal != null)
+        CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
+
+        PortalUnlockPanel unlockPanel = Instantiate(portalUnlockPanelPrefab, cinematicsCanvas.transform).GetComponent<PortalUnlockPanel>();
+        unlockPanel.Setup(unlockAreaName, localConnectedPortal == null);
+        unlockPanel.transform.SetSiblingIndex(2);
+
+        if (localConnectedPortal != null)
         {
-            // The monument is connected to a portal in the same scene - animate the portal appearing
+            // The monument is connected to a portal in the same scene - animate the portal appearing in-engine
 
             cutsceneCameraParent.transform.position = localConnectedPortal.MainPortalTransform.position;
             cutsceneCameraParent.transform.rotation = localConnectedPortal.MainPortalTransform.rotation;
@@ -112,9 +135,10 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
             localConnectedPortal.ShowWithAnimation();
         }
-        else if (!string.IsNullOrEmpty(villagePortalId))
+        else
         {
-            
+            // The connected portal is in the Village Scene, play a video of the portal emerging instead
+            cinematicsCanvas.PlayVideo();
         }
     }
 

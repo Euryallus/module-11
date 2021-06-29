@@ -426,8 +426,6 @@ public class AudioManager : MonoBehaviour
         }
 
         UpdateGlobalVolumeMultiplier(fadeTo);
-
-        Debug.Log("Global volume multiplier faded to " + globalVolumeMultiplier);
     }
 
     public void UpdateGlobalVolumeMultiplier(float value)
