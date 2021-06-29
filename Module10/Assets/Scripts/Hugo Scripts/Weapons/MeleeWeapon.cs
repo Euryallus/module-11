@@ -12,29 +12,33 @@ public class MeleeWeapon : Weapon
     public float reachLength = 5f;  // Range of weapon (how far in front of player it reaches)
     public override void PerformMainAbility()
     {
-        if(cooldown >= cooldownTime)
+        if (cooldown >= cooldownTime)
         {
-            if (Physics.Raycast(playerTransform.position, playerTransform.forward, out RaycastHit weaponHit, reachLength))
-            {
-                // If weapon cooldown has ended & player can be hit by weapon, deal damage
-                if (weaponHit.transform.GetComponent<EnemyHealth>())
-                {
-                    float damage = CalculateDamage();
-                    weaponHit.transform.GetComponent<EnemyHealth>().DoDamage(damage);
-                }
-                else if(weaponHit.transform.GetComponent<TestDummy>())
-                {
-                    weaponHit.transform.GetComponent<TestDummy>().TakeHit();
-                }
-            }
-
             // If the weapon has attached animation, play it
-            if(animator != null)
+            if (animator != null)
             {
                 animator.SetTrigger("Swing");
             }
-            cooldown = 0f;
-            base.PerformMainAbility();
         }
     }
+
+    public void Swing()
+    {
+        if (Physics.Raycast(playerTransform.position, playerTransform.forward, out RaycastHit weaponHit, reachLength))
+        {
+            // If weapon cooldown has ended & player can be hit by weapon, deal damage
+            if (weaponHit.transform.GetComponent<EnemyHealth>())
+            {
+                float damage = CalculateDamage();
+                weaponHit.transform.GetComponent<EnemyHealth>().DoDamage(damage);
+            }
+            else if(weaponHit.transform.GetComponent<TestDummy>())
+            {
+                weaponHit.transform.GetComponent<TestDummy>().TakeHit();
+            }
+        }
+
+        cooldown = 0f;
+        
+    }    
 }

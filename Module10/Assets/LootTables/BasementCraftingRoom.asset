@@ -16,14 +16,14 @@ MonoBehaviour:
   m_maxItems: 20
   m_itemPool:
   - Item: {fileID: 11400000, guid: 5a86715d1aa7a024d914679571e7564b, type: 2}
-    Weight: 5
+    Weight: 1
     MinimumQuantity: 1
   - Item: {fileID: 11400000, guid: fa47ba5214aa1e34fab5746060e118c5, type: 2}
-    Weight: 5
+    Weight: 10
     MinimumQuantity: 4
   - Item: {fileID: 11400000, guid: b005af4b3f26f2f4c8fe8da34669eba5, type: 2}
-    Weight: 2
+    Weight: 10
     MinimumQuantity: 2
   - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
-    Weight: 1
+    Weight: 2
     MinimumQuantity: 0
