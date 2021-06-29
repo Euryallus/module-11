@@ -35,11 +35,15 @@ public class PuzzleButton : MonoBehaviour
     {
         for (int i = 0; i < connectedPlatforms.Length; i++)
         {
-            // Tell all platforms with TriggerOnPress that they are triggered by a button press
-            if (connectedPlatforms[i].Behaviour == PlatformButtonBehaviour.TriggerOnPress)
+            // Tell all platforms with TriggerOnPress/LoopOnPress that they are triggered by a button press
+
+            if (connectedPlatforms[i].Behaviour == PlatformButtonBehaviour.TriggerOnPress ||
+                connectedPlatforms[i].Behaviour == PlatformButtonBehaviour.LoopOnPress)
             {
                 connectedPlatforms[i].Platform.TriggeredByButton = true;
             }
+
+            connectedPlatforms[i].Platform.ButtonBehaviour = connectedPlatforms[i].Behaviour;
         }
     }
 
@@ -82,6 +86,7 @@ public class PuzzleButton : MonoBehaviour
         {
             // Open/close all doors depending on their default states
             DoorPuzzleData doorData = connectedDoors[i];
+
             if (doorData.OpenByDefault)
             {
                 doorData.Door.SetAsClosed();
@@ -96,13 +101,14 @@ public class PuzzleButton : MonoBehaviour
         {
             // Either move connected platforms or pause their movement depending on set behaviour type
             PlatformPuzzleData platformData = connectedPlatforms[i];
-            if(platformData.Behaviour == PlatformButtonBehaviour.TriggerOnPress)
-            {
-                platformData.Platform.StartMovingForwards();
-            }
-            else
+
+            if(platformData.Behaviour == PlatformButtonBehaviour.PauseOnPress)
             {
                 platformData.Platform.Paused = true;
+            }
+            else // TriggerOnPress or LoopOnPress
+            {
+                platformData.Platform.StartMovingForwards();
             }
         }
 
@@ -137,7 +143,7 @@ public class PuzzleButton : MonoBehaviour
             {
                 platformData.Platform.StartMovingBackwards();
             }
-            else
+            else if(platformData.Behaviour == PlatformButtonBehaviour.PauseOnPress)
             {
                 platformData.Platform.Paused = false;
             }

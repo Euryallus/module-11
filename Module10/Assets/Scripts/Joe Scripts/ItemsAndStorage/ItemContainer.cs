@@ -64,7 +64,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         if (string.IsNullOrEmpty(ContainerId))
         {
             // Warning if no id is set
-            Debug.LogWarning("IMPORTANT: ItemContainer exists without id. All item containers require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
+            Debug.LogError("IMPORTANT: ItemContainer exists without id. All item containers require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
         }
 
         // Subscribe to save/load events so the container's data will be saved/loaded with the game

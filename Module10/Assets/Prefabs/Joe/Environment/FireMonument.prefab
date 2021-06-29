@@ -6302,7 +6302,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chain_03
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 963607695034483478, guid: 1f025297f1b4ec340a40b361acc958c7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f025297f1b4ec340a40b361acc958c7, type: 3}
 --- !u!4 &6714106815508579399 stripped
 Transform:
@@ -6551,7 +6552,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chain_04
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7471514170308683972, guid: 5e4c0fb0c4c12714e80f324f55d51ddf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5e4c0fb0c4c12714e80f324f55d51ddf, type: 3}
 --- !u!4 &8063773597207031686 stripped
 Transform:

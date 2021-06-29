@@ -7,6 +7,13 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     // See tooltips for comments
 
+    [Space]
+    [Header("Important: Set unique id")]
+    [Header("Portal")]
+
+    [SerializeField] [Tooltip("Unique id for this portal")]
+    private string              id;
+
     [SerializeField] [Tooltip("If true, the portal will always be visible/usable. Otherwise, it will appear after a FireMonument with this set as the connected portal is activated")]
     private bool                alwaysActive = false;
 
@@ -49,10 +56,10 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     #endregion
 
-    private bool showing = false;
-
     private void Start()
     {
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
+
         Material portalMaterialInstance = new Material(portalMaterial);
         portalMaterialInstance.SetColor("_Tint", portalColour);
         portalRenderer.material = portalMaterialInstance;
@@ -62,9 +69,12 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
         portalTrigger.AddListener(this);
 
-        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
-
         SetShowing(alwaysActive);
+
+        if(string.IsNullOrWhiteSpace(id))
+        {
+            Debug.LogError("IMPORTANT: Portal exists without id. All portals require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
+        }
     }
 
     private void OnDestroy()
@@ -72,17 +82,17 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSceneSave(SaveData saveData)
-    {
-        saveData.AddData("portalShowing_" + GetSavePointId(), showing);
-    }
+    public void OnSceneSave(SaveData saveData) { }
 
-    public void OnSceneLoadSetup(SaveData saveData)
-    {
-        SetShowing(saveData.GetData<bool>("portalShowing_" + GetSavePointId()));
-    }
+    public void OnSceneLoadSetup(SaveData saveData) { }
 
-    public void OnSceneLoadConfigure(SaveData saveData) { }
+    public void OnSceneLoadConfigure(SaveData saveData)
+    {
+        if(!alwaysActive)
+        {
+            SetShowing(PortalsSave.Instance.IsPortalShowing(GetSavePointId()));
+        }
+    }
 
     public void OnExternalTriggerEnter(string triggerId, Collider other)
     {
@@ -111,11 +121,11 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     private void SetShowing(bool show)
     {
-        showing = show;
+        portalTrigger.TriggerEnabled = show;
 
-        portalTrigger.TriggerEnabled = showing;
+        animator.SetBool("Showing", show);
 
-        animator.SetBool("Showing", showing);
+        PortalsSave.Instance.SetPortalShowing(GetSavePointId(), show);
     }
 
     public Vector3 GetRespawnPosition()
@@ -125,6 +135,6 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     public string GetSavePointId()
     {
-        return "portal_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
+        return id;
     }
 }

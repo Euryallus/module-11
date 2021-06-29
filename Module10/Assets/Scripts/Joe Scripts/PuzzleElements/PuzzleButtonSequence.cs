@@ -16,10 +16,8 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [Header("Important: Set unique id")]
     [Header("Puzzle Button Sequence")]
 
-    [SerializeField] private string              id;                    // Unique id for the sequence to save/load its state
     [SerializeField] private List<PuzzleButton>  buttonsInSequence;     // All buttons that make up the sequence
     [SerializeField] private DoorPuzzleData[]    connectedDoors;        // Doors that will be opened/closed when the sequence is complete
 
@@ -42,12 +40,6 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
         // Subscribe to save/load events so the sequence state is saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
-        if (string.IsNullOrEmpty(id))
-        {
-            // Warning if an id was not set
-            Debug.LogWarning("IMPORTANT: PuzzleButtonSequence exists without id. All sequences require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
-        }
-
         // Trigger fail to restore the default state of connected doors
         SequenceFailedEvents();
     }
@@ -61,13 +53,13 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     public void OnSceneSave(SaveData saveData)
     {
         // Save whether the sequence was completed successfully
-        saveData.AddData("buttonSequenceCompleted_" + id, sequenceCompleted);
+        saveData.AddData("buttonSequenceCompleted_" + GetUniquePositionId(), sequenceCompleted);
     }
 
     public void OnSceneLoadSetup(SaveData saveData)
     {
         // Load whether the sequence was completed successfully
-        sequenceCompleted = saveData.GetData<bool>("buttonSequenceCompleted_" + id);
+        sequenceCompleted = saveData.GetData<bool>("buttonSequenceCompleted_" + GetUniquePositionId());
 
         if (sequenceCompleted)
         {
@@ -154,5 +146,10 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
                 doorData.Door.SetAsClosed();
             }
         }
+    }
+
+    private string GetUniquePositionId()
+    {
+        return "puzzleButtonSequence_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 }

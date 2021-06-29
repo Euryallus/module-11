@@ -6,6 +6,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 {
     [Header("Main")]
     [Header("Fire Monument")]
+
     [SerializeField] private FireMonumentInteraction    interaction;
     [SerializeField] private ParticleSystem             fireParticles;
     [SerializeField] private GameObject                 lightIndicator;
@@ -13,9 +14,16 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private GameObject                 cutsceneCamera;
     [SerializeField] private Animator                   cutsceneAnimator;
 
+
+    [Header("For a portal in this scene:")]
+    [Space]
     [Header("Connected Portal")]
     [SerializeField] [Tooltip("The portal that will appear when the torch is lit")]
-    private Portal connectedPortal;
+    private Portal localConnectedPortal;
+
+    [Header("For a portal in the village scene:")]
+    [SerializeField] [Tooltip("The id of the portal that will appear in the village when the torch is lit")]
+    private string villagePortalId;
 
     private bool lit;
     private GameObject mainCameraGameObj;
@@ -90,20 +98,23 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     // Called during cutscene by an animation event
     private void FocusCutsceneOnPortal()
     {
-        if(connectedPortal != null)
+        if(localConnectedPortal != null)
         {
-            cutsceneCameraParent.transform.position = connectedPortal.MainPortalTransform.position;
-            cutsceneCameraParent.transform.rotation = connectedPortal.MainPortalTransform.rotation;
+            // The monument is connected to a portal in the same scene - animate the portal appearing
+
+            cutsceneCameraParent.transform.position = localConnectedPortal.MainPortalTransform.position;
+            cutsceneCameraParent.transform.rotation = localConnectedPortal.MainPortalTransform.rotation;
 
             CameraShake cutsceneCameraShake = cutsceneCameraParent.GetComponent<CameraShake>();
 
-            cutsceneCameraShake.UpdateBasePosition(-connectedPortal.MainPortalTransform.localPosition);
+            cutsceneCameraShake.UpdateBasePosition(-localConnectedPortal.MainPortalTransform.localPosition);
             cutsceneCameraShake.ShakeCameraForTime(4.3f, CameraShakeType.ReduceOverTime, 0.02f);
 
-            if (connectedPortal != null)
-            {
-                connectedPortal.ShowWithAnimation();
-            }
+            localConnectedPortal.ShowWithAnimation();
+        }
+        else if (!string.IsNullOrEmpty(villagePortalId))
+        {
+            
         }
     }
 

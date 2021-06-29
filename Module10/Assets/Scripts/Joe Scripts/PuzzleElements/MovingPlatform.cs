@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PlatformButtonBehaviour
 {
     TriggerOnPress, // Starts moving when the button is pressed, returns to start point when released
-    PauseOnPress    // Moves as normal by default but pauses in place while the button is pressed
+    PauseOnPress,   // Moves as normal by default but pauses in place while the button is pressed
+    LoopOnPress     // Starts moving when the button is pressed, and continues to repeat movement
 }
 
 // PlatformMovementType: defines the movement pattern of a platform
@@ -59,8 +60,9 @@ public class MovingPlatform : MonoBehaviour
 
     #region Properties
 
-    public bool Paused              { set { paused = value; } }
-    public bool TriggeredByButton   { set { triggeredByButton = value; } }
+    public bool                     Paused              { set { paused = value; } }
+    public bool                     TriggeredByButton   { set { triggeredByButton = value; } }
+    public PlatformButtonBehaviour  ButtonBehaviour     { set { buttonBehaviour = value; } }
 
     #endregion
 
@@ -69,6 +71,7 @@ public class MovingPlatform : MonoBehaviour
     private bool                    paused;                     // Whether movement is paused
     private PlatformMoveDirection   moveDirection;              // The current direction of movement
     private bool                    triggeredByButton;          // Whether this platform is triggered by a PuzzleButton
+    private PlatformButtonBehaviour buttonBehaviour;            // If triggered by a button, how the button affects platform movement
 
     private Transform               playerReturnToTransform;    // Transform that acts as the player's parent before they step on the platform,
                                                                 //   and that they should be returned to as a child after stepping off
@@ -126,22 +129,26 @@ public class MovingPlatform : MonoBehaviour
             {
                 // The final point has been reached
 
-                if(triggeredByButton)
+
+                if (movementType == PlatformMovementType.OutAndBack)
                 {
-                    // If the platform was triggered by a button, it should stop moving after reaching the end point
-                    moveDirection = PlatformMoveDirection.None;
-                }
-                else
-                {
-                    if (movementType == PlatformMovementType.OutAndBack)
+                    if (triggeredByButton)
+                    {
+                        // If the platform was triggered by a button, it should stop moving after reaching the end point
+                        moveDirection = PlatformMoveDirection.None;
+                    }
+                    else
                     {
                         // Start going in the reverse direction
                         moveDirection = PlatformMoveDirection.Backwards;
                     }
-                    else // (movementType == Loop)
+                }
+                else // (movementType == Loop)
+                {
+                    // Loop back to start but continue going forwards
+                    if(!triggeredByButton || buttonBehaviour == PlatformButtonBehaviour.LoopOnPress)
                     {
-                        // Loop back to start but continue going forwards
-                        currentPointIndex = 0; 
+                        currentPointIndex = 0;
                     }
                 }
             }
@@ -173,16 +180,22 @@ public class MovingPlatform : MonoBehaviour
 
     public void StartMovingForwards()
     {
-        // Sets moveDireciton to Forwards and finds a point so movement starts instantly in the correct direction
-        moveDirection = PlatformMoveDirection.Forwards;
-        FindNextPoint();
+        if(moveDirection != PlatformMoveDirection.Forwards)
+        {
+            // Sets moveDireciton to Forwards and finds a point so movement starts instantly in the correct direction
+            moveDirection = PlatformMoveDirection.Forwards;
+            FindNextPoint();
+        }
     }
 
     public void StartMovingBackwards()
     {
-        // Sets moveDireciton to Backwards and finds a point so movement starts instantly in the correct direction
-        moveDirection = PlatformMoveDirection.Backwards;
-        FindNextPoint();
+        if(moveDirection != PlatformMoveDirection.Backwards)
+        {
+            // Sets moveDireciton to Backwards and finds a point so movement starts instantly in the correct direction
+            moveDirection = PlatformMoveDirection.Backwards;
+            FindNextPoint();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
