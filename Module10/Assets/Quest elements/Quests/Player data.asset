@@ -33,6 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df01235c2b0fbdd4f9a8d8380dbd7b07, type: 2}
   - {fileID: 11400000, guid: 863790949db486b428cd5174f109f656, type: 2}
   - {fileID: 11400000, guid: f0c8b27e64be46c4fa1b0272092ab8eb, type: 2}
+  - {fileID: 11400000, guid: e59a7f749b84752498dedcae9a10fd69, type: 2}
   quests:
   - {fileID: 11400000, guid: 9301281eda2e5fb4baf96738d2fddd5d, type: 2}
   - {fileID: 11400000, guid: 3186995896ff64a43bd122676ac0bfc0, type: 2}
@@ -60,5 +61,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f4107648ae1df249b65a9295d7abdc1, type: 2}
   - {fileID: 11400000, guid: bc879299d8e1c7a4bb6872ae7524ab57, type: 2}
   - {fileID: 11400000, guid: 272a83299c881e9419fda1bcfe77ce45, type: 2}
+  - {fileID: 11400000, guid: 6a7df13dbaeb5824c831d94abc78c0a8, type: 2}
   savedQuestBacklog: []
   savedCompletedQuests: []

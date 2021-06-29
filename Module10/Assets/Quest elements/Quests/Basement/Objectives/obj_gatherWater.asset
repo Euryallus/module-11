@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a89370bf0629614478e9fe967124bf9e, type: 3}
   m_Name: obj_gatherWater
   m_EditorClassIdentifier: 
-  objectiveType: 0
+  objectiveType: 1
   taskName: Gather water cup
   taskComplete: 0
   saveTaskComplete: 0
