@@ -66,7 +66,7 @@ public class GameSceneUI : MonoBehaviour
 
     private void Update()
     {
-        if(!InputFieldSelection.AnyFieldSelected && Input.GetKeyDown(KeyCode.Escape) && !showingCinematicsCanvas)
+        if(!InputFieldSelection.AnyFieldSelected && !showingCinematicsCanvas && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)))
         {
             // Esc key was pressed while not editing an input field
 

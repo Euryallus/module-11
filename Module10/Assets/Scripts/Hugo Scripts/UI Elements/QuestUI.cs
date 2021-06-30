@@ -10,7 +10,7 @@ using TMPro;
 // Development window:  Prototype phase
 // Inherits from:       MonoBehaviour
 
-public class QuestUI : MonoBehaviour
+public class QuestUI : UIPanel
 {
     [Header("Accept quest UI")]                                         // References to quest Accept UI elements (quest title, description, objectives etc.)
     [SerializeField]    private TMP_Text questTitle;                
@@ -38,8 +38,10 @@ public class QuestUI : MonoBehaviour
     [Header("HUD list element blueprint")]
     [SerializeField]    private TMP_Text defaultName;                   // HUD quest name blueprint 
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // Hides all UI apart from quest HUD element to begin with
         HideQuestAccept();
         HideQuestComplete();
@@ -79,6 +81,8 @@ public class QuestUI : MonoBehaviour
         questAcceptCanvasGroup.alpha = 1;
         questAcceptCanvasGroup.blocksRaycasts = true;
         questAcceptCanvasGroup.interactable = true;
+
+        showing = true;
     }
 
     public void HideQuestAccept()
@@ -88,6 +92,8 @@ public class QuestUI : MonoBehaviour
         questAcceptCanvasGroup.alpha = 0;
         questAcceptCanvasGroup.blocksRaycasts = false;
         questAcceptCanvasGroup.interactable = false;
+
+        showing = false;
     }
 
     public void DisplayQuestComplete(QuestData quest)
@@ -111,6 +117,8 @@ public class QuestUI : MonoBehaviour
         questCompleteCanvasGroup.alpha = 1;
         questCompleteCanvasGroup.blocksRaycasts = true;
         questCompleteCanvasGroup.interactable = true;
+
+        showing = true;
     }
 
     public void HideQuestComplete()
@@ -120,6 +128,8 @@ public class QuestUI : MonoBehaviour
         questCompleteCanvasGroup.alpha = 0;
         questCompleteCanvasGroup.blocksRaycasts = false;
         questCompleteCanvasGroup.interactable = false;
+
+        showing = false;
     }
 
     // Adds quest name to HUD side bar

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using TMPro;
 
-public class QuestMenuUI : MonoBehaviour
+public class QuestMenuUI : UIPanel
 {
     [SerializeField] private GameObject buttonPrefab;
 
@@ -18,7 +17,6 @@ public class QuestMenuUI : MonoBehaviour
     public TMP_Text objectives;
     public TMP_Text rewards;
 
-    private bool displayed = false;
     private CanvasGroup group;
 
     // NEEDED: Quest title, quest description, objectives rewards etc. containers
@@ -27,10 +25,11 @@ public class QuestMenuUI : MonoBehaviour
 
     [SerializeField] private List<GameObject> buttons = new List<GameObject>();
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         group = gameObject.GetComponent<CanvasGroup>();
-        displayed = false;
 
         group.interactable = false;
         group.blocksRaycasts = false;
@@ -40,25 +39,36 @@ public class QuestMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O) && UIPanel.CanShowUIPanel())
+        // Adjusted by Joe to work with UIPanel base class/fix bugs related to showing/hiding panels
+
+        if(Input.GetKeyDown(KeyCode.O))
         {
-            displayed = !displayed;
-            group.alpha = displayed ? 1f : 0f;
-
-            group.interactable = displayed ? true : false;
-            group.blocksRaycasts = displayed ? true : false;
-            group.alpha = displayed ? 1f : 0f;
-
-            Cursor.lockState = displayed ? CursorLockMode.None : CursorLockMode.Locked;
-
-
-            if(displayed)
+            if(!showing && CanShowUIPanel())
             {
+                // Show panel
+                showing = true;
+                group.alpha = 1.0f;
+                group.interactable = true;
+                group.blocksRaycasts = true;
+
+                Cursor.lockState = CursorLockMode.None;
+
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().StopMoving();
+
+                AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
             }
-            else
+            else if(showing)
             {
+                // Hide panel
+                showing = false;
+                group.alpha = 0.0f;
+                group.blocksRaycasts = false;
+
+                Cursor.lockState = CursorLockMode.Locked;
+
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().StartMoving();
+
+                AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2");
             }
         }
     }

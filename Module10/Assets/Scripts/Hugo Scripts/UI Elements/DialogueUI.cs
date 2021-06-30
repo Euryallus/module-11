@@ -9,10 +9,15 @@ using TMPro;
 // Development window:  Prototype phase
 // Inherits from:       MonoBehaviour
 
-public class DialogueUI : MonoBehaviour
+public class DialogueUI : UIPanel
 {
     [SerializeField]    private CanvasGroup cg;         // Ref. to NPC Dialogue UI canvas group
     [SerializeField]    private TMP_Text dialogueText;  // Ref to dialogue text box
+
+    protected override void Start()
+    {
+        base.Start();
+    }
 
     public void ShowDialogue(string dialogue)
     {
@@ -25,6 +30,7 @@ public class DialogueUI : MonoBehaviour
         cg.blocksRaycasts = true;
         cg.interactable = true;
 
+        showing = true;
     }
 
     //Hides dialogue
@@ -38,5 +44,7 @@ public class DialogueUI : MonoBehaviour
 
         // Resets dialogue in text box
         dialogueText.text = "";
+
+        showing = false;
     }
 }
