@@ -170,16 +170,24 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
             foreach (ItemGroup stack in quest.rewards)
             {
                 ItemGroup dropItemGroup = new ItemGroup(stack.Item, 0);
+                int inventoryItemsAddedCount = 0;
 
                 for (int i = 0; i < stack.Quantity; i++)
                 {
-                    if(!inventory.TryAddItem(stack.Item))
+                    if(inventory.TryAddItem(stack.Item))
+                    {
+                        inventoryItemsAddedCount++;
+                    }
+                    else
                     {
                         dropItemGroup.Quantity++;
                     }
                 }
 
                 dropItemGroups.Add(dropItemGroup);
+
+                // Show a notification telling the player what items they gained in the current group
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.GivenItem, new string[] { stack.Quantity.ToString(), stack.Item.UIName });
             }
 
             if (dropItemGroups.Count > 0)

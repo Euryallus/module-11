@@ -20,6 +20,8 @@ public enum NotificationMessageType
 
     NoSpaceItemsDropped,
 
+    GivenItem,
+
     SaveSuccess,
     AutoSaveSuccess,
     SaveError
@@ -68,6 +70,8 @@ public class NotificationManager : MonoBehaviour
         { NotificationMessageType.CantThrowAwayItem,   "* cannot be thrown away." },
 
         { NotificationMessageType.NoSpaceItemsDropped,  "Not enough space in your inventory. Some items were dropped." },
+
+        { NotificationMessageType.GivenItem,            "You were given *x *." },
 
         { NotificationMessageType.SaveSuccess,         "Progress saved successfully.\nSpawn point set." },
         { NotificationMessageType.AutoSaveSuccess,     "Your progress has been auto-saved.\nSpawn point set." },

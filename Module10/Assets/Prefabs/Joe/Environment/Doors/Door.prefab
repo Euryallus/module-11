@@ -346,7 +346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e861e1d3e9fd6f4192719b6546f56f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
   manualOpen: 1
   unlockItem: {fileID: 0}
   closeAfterTime: 5

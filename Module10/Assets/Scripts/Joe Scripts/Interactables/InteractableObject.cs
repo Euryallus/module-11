@@ -41,7 +41,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     private Transform   canvasTransform;            // Canvas transform used as a parent for the UI tooltip
     private GameObject  interactTooltip;            // The instantiated interact tooltip, null if not active
-    private Vector3     localInteractTooltipOffset; // interactTooltipOffset converted to local space
+    private Vector3 worldInteractTooltipOffset;     // interactTooltipOffset converted to world space
 
     protected bool      canInteract = true;
 
@@ -55,8 +55,8 @@ public abstract class InteractableObject : MonoBehaviour
         mainPlayerCamera    = Camera.main;
         canvasTransform     = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
 
-        // Calculate the offset of the interact tooltip in local space (changes depending on the object's rotation in the world)
-        localInteractTooltipOffset = transform.InverseTransformDirection(interactTooltipOffset);
+        // Calculate the offset of the interact tooltip in world space (changes depending on the object's rotation in the world)
+        worldInteractTooltipOffset = transform.TransformDirection(interactTooltipOffset);
     }
 
     protected virtual void Update()
@@ -92,8 +92,18 @@ public abstract class InteractableObject : MonoBehaviour
                     }
                     else
                     {
-                        // Move the tooltip to the object's position + the local offset, all converted to screen space
-                        interactTooltip.transform.position = mainPlayerCamera.WorldToScreenPoint(transform.position + localInteractTooltipOffset);
+                        Vector3 popupScreenPos = mainPlayerCamera.WorldToScreenPoint(transform.position + worldInteractTooltipOffset);
+                        if(popupScreenPos.z > 0.0f)
+                        {
+                            // The player is facing the target position of the tooltip, move it to 
+                            //   the object's position + the world offset, all converted to screen space
+                            interactTooltip.transform.position = popupScreenPos;
+                        }
+                        else
+                        {
+                            // The player is facing away from the tooltip position, hide it off-screen
+                            interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
+                        }
                     }
                 }
                 else
