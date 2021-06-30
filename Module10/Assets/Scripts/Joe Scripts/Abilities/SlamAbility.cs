@@ -216,7 +216,7 @@ public class SlamAbility : PlayerAbility
 
             float enemyDamage = (damageOverride == -1.0f ? enemyDropDamage : damageOverride);
 
-            enemyToDrop.gameObject.GetComponent<EnemyHealth>().DoDamage(enemyDamage);
+            enemyToDrop.gameObject.GetComponent<EnemyHealth>().DoDamage(enemyDamage, frozen);
 
             enemyToDrop.StartAgentMovement();
 

@@ -136,10 +136,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 3694353218052961693}
   buttonTopGameObject: {fileID: 3694353218226078356}
+  buttonTopImage: {fileID: 3694353218226078355}
+  buttonSideImage: {fileID: 3694353218052961692}
   pressSpeed: 120
   inputType: 1
   buttonColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   buttonShadowTint: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  changeSideColourHover: 0
+  hoverSideColour: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &3694353218226078356
 GameObject:
   m_ObjectHideFlags: 0

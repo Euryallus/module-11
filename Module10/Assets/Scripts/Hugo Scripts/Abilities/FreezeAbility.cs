@@ -89,7 +89,7 @@ public class FreezeAbility : PlayerAbility
     {
         if(enemyObj.Suspended)
         {
-            // The targeted enemy is currently suspended in the air - apply an ice material, thendrop and kill it
+            // The targeted enemy is currently suspended in the air - apply an ice material, then drop and kill it
             enemyObj.MeshRenderer.material = freezeMaterial;
 
             GetComponent<SlamAbility>().DropAndKillSuspendedEnemy(enemyObj, true);

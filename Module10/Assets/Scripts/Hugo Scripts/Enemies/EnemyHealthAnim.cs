@@ -10,16 +10,15 @@ public class EnemyHealthAnim : EnemyHealth
     [SerializeField] private Material hurt;
     [SerializeField] private SkinnedMeshRenderer render;
     [SerializeField] private Material defaultMat;
-    public override void DoDamage(float damageAmount)
+    public override void DoDamage(float damageAmount, bool destroyOnDeath = false)
     {
-        base.DoDamage(damageAmount);
+        base.DoDamage(damageAmount, destroyOnDeath);
 
         if(health > 0.0f)
         {
             anim.SetTrigger("Take Damage");
             StartCoroutine(FlashHurt());
         }
-
     }
 
     protected override void Die()

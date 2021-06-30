@@ -16,7 +16,7 @@ public class EnemyHealth : MonoBehaviour
     public bool alive = true;
     
     // Causes enemy to take [x] damage
-    public virtual void DoDamage(float damageAmount)
+    public virtual void DoDamage(float damageAmount, bool destroyOnDeath = false)
     {
         // Reduces "health" by amount specified
         health -= damageAmount;
@@ -24,6 +24,11 @@ public class EnemyHealth : MonoBehaviour
         {
             // If health is then less than 0, call Die() func.
             Die();
+
+            if(destroyOnDeath)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
