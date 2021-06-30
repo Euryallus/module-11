@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,7 +66,14 @@ public class UIPanel : MonoBehaviour
         // Stop the panel from blocking raycasts and hence allow UI behind it to be interacted with
         canvasGroup.blocksRaycasts = false;
 
-        // The panel is now hidden
+        // Wait a frame, them mark the panel as hidden
+        //  (Waiting a frame first so if multiple panels are opened/closed with esc, they will not all be triggered on the same frame)
+        StartCoroutine(HideAfterFrame());
+    }
+
+    private IEnumerator HideAfterFrame()
+    {
+        yield return null;
         showing = false;
     }
 

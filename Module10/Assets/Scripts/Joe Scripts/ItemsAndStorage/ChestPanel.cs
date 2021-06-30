@@ -68,7 +68,7 @@ public class ChestPanel : UIPanel
         if (!InputFieldSelection.AnyFieldSelected)
         {
             // Hide the panel if I/Esc is pressed while it's open
-            if (showing && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I)))
+            if (showing && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab)))
             {
                 Hide();
             }
