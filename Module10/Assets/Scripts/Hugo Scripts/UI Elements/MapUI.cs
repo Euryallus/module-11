@@ -8,7 +8,7 @@ using UnityEngine;
 // Development window:  Prototype phase
 // Inherits from:       MonoBehaviour
 
-public class MapUI : MonoBehaviour
+public class MapUI : UIPanel
 {    
     [SerializeField]    private int revealRadius = 5;   // Radius of path reveled as player moves through world
     [SerializeField]    private Texture2D mapMask;      // Ref. to mask texture
@@ -17,8 +17,10 @@ public class MapUI : MonoBehaviour
                         private CanvasGroup cg;         // Ref to canvas group of map
     
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // Assigns refs to player and canvas group
         player = GameObject.FindGameObjectWithTag("Player");
         cg = gameObject.GetComponent<CanvasGroup>();
@@ -40,30 +42,45 @@ public class MapUI : MonoBehaviour
 
     private void Update()
     {
+        // Adjusted by Joe to work with UIPanel base class/fix bugs related to showing/hiding panels
+
         // Checks if player presses M and no other menu is showing
-        if (Input.GetKeyDown(KeyCode.M) && UIPanel.CanShowUIPanel())
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            // Switches alpha value of canvas group
-            cg.alpha = cg.alpha == 0 ? 1 : 0;
-
-            Cursor.lockState = cg.alpha == 0 ? CursorLockMode.Locked : CursorLockMode.None;
-
-            // If map is now visible, apply changes made to texture since last opened & allow player to interact
-            if (cg.alpha == 1)
+            if(!showing && CanShowUIPanel())
             {
+                // Change canvas group alpha to Show UI
+                cg.alpha = 1.0f;
+
+                Cursor.lockState = CursorLockMode.Locked;
+
+                // Map is now visible, apply changes made to texture since last opened & allow player to interact
                 cg.blocksRaycasts = true;
                 cg.interactable = true;
                 mapMask.Apply();
                 // Stop player from moving while map is open
                 player.GetComponent<PlayerMovement>().StopMoving();
+
+                showing = true;
+
+                AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
             }
-            else
+            else if(showing)
             {
+                // Change canvas group alpha to Hide UI
+                cg.alpha = 0.0f;
+
+                Cursor.lockState = CursorLockMode.None;
+
                 // Hides map & prevents interaction
                 cg.blocksRaycasts = false;
                 cg.interactable = false;
                 // Allows player to move again
                 player.GetComponent<PlayerMovement>().StartMoving();
+
+                showing = false;
+
+                AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2");
             }
         }
 
