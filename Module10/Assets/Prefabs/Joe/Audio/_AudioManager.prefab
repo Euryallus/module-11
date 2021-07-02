@@ -93,6 +93,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2ae7334f4983af44b9ec4deb1dd2f215, type: 2}
   - {fileID: 11400000, guid: 81f932826694a594ca5796d1df02ed35, type: 2}
   sceneMusicSetup:
+  - SceneName: The Village
+    PlayMode: 3
+    Playlist: []
+  - SceneName: Desert
+    PlayMode: 3
+    Playlist: []
+  - SceneName: Flooded City
+    PlayMode: 3
+    Playlist: []
+  - SceneName: Catacombs
+    PlayMode: 3
+    Playlist: []
   - SceneName: MainMenu
     PlayMode: 2
     Playlist:
@@ -102,13 +114,6 @@ MonoBehaviour:
     Playlist:
     - {fileID: 0}
   - SceneName: JoeTestScene2
-    PlayMode: 2
-    Playlist:
-    - {fileID: 11400000, guid: 481bfedf74be6e24c8914f20dd3849bb, type: 2}
-  - SceneName: DemoScene
-    PlayMode: 3
-    Playlist: []
-  - SceneName: CombinedScene
     PlayMode: 2
     Playlist:
     - {fileID: 11400000, guid: 481bfedf74be6e24c8914f20dd3849bb, type: 2}

@@ -19,12 +19,14 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
     [SerializeField] private ItemContainer parentContainer;
 
+    private HandSlotUI handSlotUI;
+
     public void OnPointerDown(PointerEventData eventData)
     {
         // Called when the bin is clicked
 
-        // Get the slot used for holding/moving items
-        HandSlotUI handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+        // Get the slot used for holding/moving items, if it hasn't been found already
+        FindHandSlotUI();
 
         // Get the number of items in the player's hand
         int handStackSize = handSlotUI.Slot.ItemStack.StackSize;
@@ -46,6 +48,9 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
                 // Update hand slot UI to show the player they are no longer holding items
                 handSlotUI.UpdateUI();
 
+                // Hide the popup that showed what would be binned
+                parentContainer.ItemInfoPopup.HidePopup();
+
                 AudioManager.Instance.PlaySoundEffect2D("bin");
             }
             else
@@ -57,11 +62,35 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", "Click while holding item(s)");
+        // Get the slot used for holding/moving items, if it hasn't been found already
+        FindHandSlotUI();
+
+        int heldItemCount = handSlotUI.Slot.ItemStack.StackSize;
+
+        if (heldItemCount == 0)
+        {
+            // Player is not holding items, show that this button will bin any items being held
+            parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", "Click while holding item(s)");
+        }
+        else
+        {
+            Item heldItemType = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
+
+            // Player is holding items, show that this button will bin them, displaying the item count/name
+            parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", heldItemCount + "x " + heldItemType.UIName);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         parentContainer.ItemInfoPopup.HidePopup();
+    }
+
+    private void FindHandSlotUI()
+    {
+        if(handSlotUI == null)
+        {
+            handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
+        }
     }
 }

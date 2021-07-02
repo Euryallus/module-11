@@ -71,8 +71,8 @@ public class InventoryPanel : UIPanel
     {
         base.Start();
 
-        // Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
-        itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
+        // (No longer used) Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
+        //itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
 
         playerMovement  = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         handSlotUI      = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
@@ -85,8 +85,8 @@ public class InventoryPanel : UIPanel
         //   The item container is shared between the hotbar and main inventory space
         itemContainer.LinkSlotsToUI(allSlotsUI);
 
-        // Update the inventory weight values/UI on start to show the inventory is empty
-        UpdateTotalInventoryWeight();
+        // (No longer used) Update the inventory weight values/UI on start to show the inventory is empty
+        //UpdateTotalInventoryWeight();
 
         //Hide the UI panel by default
         Hide();
@@ -103,12 +103,12 @@ public class InventoryPanel : UIPanel
             handSlotUI.transform.position = Vector3.Lerp(handSlotUI.transform.position, Input.mousePosition, Time.unscaledDeltaTime * 20.0f);
 
             //Don't allow the item info popup to be shown when items are in the player's hand
-            itemContainer.ItemInfoPopup.SetCanShow(false);
+            itemContainer.ItemInfoPopup.SetCanShowItemInfo(false);
         }
         else
         {
             //No items are in the player's hand - allow the ItemInfoPopup to show info about each item in the inventory
-            itemContainer.ItemInfoPopup.SetCanShow(true);
+            itemContainer.ItemInfoPopup.SetCanShowItemInfo(true);
         }
     }
 
@@ -287,6 +287,9 @@ public class InventoryPanel : UIPanel
 
     private void UpdateTotalInventoryWeight()
     {
+        // NOTE: The inventory weight functionality was a planned feature that has since been scrapped,
+        //   hence why this function is no longer called. It has been left here to show what progress was made.
+
         float weight = 0.0f;
 
         // Add the weight of each stack of items in the inventory
@@ -307,7 +310,7 @@ public class InventoryPanel : UIPanel
         // Display the weight as a percentage of the max weight
         weightText.text = "Weight Limit (" + Mathf.FloorToInt(weightVal * 100.0f) + "%)";
 
-        if(totalWeight >= maxWeight)
+        if (totalWeight >= maxWeight)
         {
             // The maximum weight was reached - no gameplay impact for now, this will come later
 

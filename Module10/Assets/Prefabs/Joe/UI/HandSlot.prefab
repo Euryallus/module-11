@@ -79,8 +79,6 @@ MonoBehaviour:
   itemCountPanel: {fileID: 1797322650862875772}
   itemCountText: {fileID: 8984687609483291487}
   outline: {fileID: 0}
-  standardOutlineColour: {r: 0, g: 0, b: 0, a: 0}
-  selectedOutlineColour: {r: 0, g: 0, b: 0, a: 0}
   clickToAddItems: 0
   clickToRemoveItems: 0
 --- !u!95 &7253334313318186793
@@ -184,6 +182,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2085870649317643780}
     m_Modifications:
+    - target: {fileID: 1227461975330834267, guid: eb93d1292884c7649aeedd276f280883, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2161141116028759715, guid: eb93d1292884c7649aeedd276f280883, type: 3}
       propertyPath: m_Name
       value: ItemCountPanel (1)

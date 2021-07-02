@@ -25,10 +25,10 @@ public class ItemInfoPopup : MonoBehaviour
 
     #endregion
 
-    private bool            canShow;        // Whether the popup is allowed to be shown
-    private bool            showing;        // Whether the popup is currently showing
-    private Canvas          canvas;         // The Canvas containing the popup
-    private RectTransform   rectTransform;  // The popup GameObject's RectTransform for getting its size
+    private bool            canShowItemInfo;    // Whether popups containing item info are allowed to be shown
+    private bool            showing;            // Whether the popup is currently showing
+    private Canvas          canvas;             // The Canvas containing the popup
+    private RectTransform   rectTransform;      // The popup GameObject's RectTransform for getting its size
 
     private void Awake()
     {
@@ -42,15 +42,22 @@ public class ItemInfoPopup : MonoBehaviour
         HidePopup();
     }
 
-    public void SetCanShow(bool canShow)
+    public void SetCanShowItemInfo(bool canShow)
     {
-        if(!canShow && showing)
-        {
-            // The popup is showing but is no longer allowed to, hide it
-            HidePopup();
-        }
+        // Allow/disallow popups containing item info to be shown
 
-        this.canShow = canShow;
+        if(canShow != canShowItemInfo)
+        {
+            // The canShowItemInfo value is being changed
+
+            if (!canShow && showing)
+            {
+                // The popup is showing but is no longer allowed to, hide it
+                HidePopup();
+            }
+
+            canShowItemInfo = canShow;
+        }
     }
 
     void Update()
@@ -75,7 +82,7 @@ public class ItemInfoPopup : MonoBehaviour
 
         Item item = ItemManager.Instance.GetItemWithId(itemId);
 
-        if (canShow)
+        if (canShowItemInfo)
         {
             // The popup can be shown
 
@@ -99,16 +106,11 @@ public class ItemInfoPopup : MonoBehaviour
     {
         // For showing popups with any specified text
 
-        if(canShow)
-        {
-            // The popup can be shown
+        // Display the given text on the popup
+        UpdatePopupInfo(mainText, secondaryText);
 
-            // Display the given text on the popup
-            UpdatePopupInfo(mainText, secondaryText);
-
-            // The popup is now being shown
-            showing = true;
-        }
+        // The popup is now being shown
+        showing = true;
     }
 
     public void HidePopup()
