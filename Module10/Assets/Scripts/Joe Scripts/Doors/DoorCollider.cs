@@ -21,6 +21,17 @@ public class DoorCollider : InteractableWithOutline
 
     #endregion
 
+    protected override void Start()
+    {
+        base.Start();
+
+        // Disable the interact tooltip if the door cannot be manually opened
+        if(!doorMainScript.ManualOpen)
+        {
+            enableTooltip = false;
+        }
+    }
+
     public override void Interact()
     {
         base.Interact();

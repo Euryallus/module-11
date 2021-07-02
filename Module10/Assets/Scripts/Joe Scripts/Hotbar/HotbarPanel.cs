@@ -155,26 +155,12 @@ public class HotbarPanel : UIPanel, IPersistentGlobalObject
             if (Input.GetAxis("Mouse ScrollWheel") > 0f)
             {
                 // Scrolling 'up', select the next (right) slot (looping back to slot 0 if the final one is reached)
-                if (selectedSlotIndex < (slotsUI.Count - 1))
-                {
-                    SelectSlot(selectedSlotIndex + 1);
-                }
-                else
-                {
-                    SelectSlot(0);
-                }
+                SelectSlot((selectedSlotIndex + 1) % slotsUI.Count);
             }
             else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
             {
                 // Scrolling 'down', select the previous (left) slot (looping back to rightmost slot if the first one is reached)
-                if (selectedSlotIndex > 0)
-                {
-                    SelectSlot(selectedSlotIndex - 1);
-                }
-                else
-                {
-                    SelectSlot(slotsUI.Count - 1);
-                }
+                SelectSlot(selectedSlotIndex == 0 ? (slotsUI.Count - 1) : (selectedSlotIndex - 1));
             }
         }
     }

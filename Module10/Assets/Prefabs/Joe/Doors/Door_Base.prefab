@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 1683253233141873476}
   - component: {fileID: 934483334191964195}
   m_Layer: 0
-  m_Name: Door
+  m_Name: Door_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,3 +353,5 @@ MonoBehaviour:
   triggers:
   - {fileID: 5648045561901852852}
   - {fileID: 5216704113430736954}
+  openSound: {fileID: 11400000, guid: 984faefc6c6752e4d9913e44a22d8267, type: 2}
+  closeSound: {fileID: 11400000, guid: e092e489efbdbcc41aed0bf6912cdefe, type: 2}

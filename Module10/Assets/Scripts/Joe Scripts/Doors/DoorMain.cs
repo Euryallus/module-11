@@ -34,6 +34,16 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     [SerializeField] private ExternalTrigger[] triggers;    // Triggers to detect if the player is on either side of the door
 
+    [Header("Sounds")]
+    [SerializeField] private SoundClass openSound;
+    [SerializeField] private SoundClass closeSound;
+
+    #endregion
+
+    #region Properties
+
+    public bool ManualOpen { get { return manualOpen; } }
+
     #endregion
 
     // Note: 'inwards' and 'outwards' here are somewhat arbitrary and will vary depending on the rotation of the door when placed.
@@ -49,12 +59,10 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     private float doorOpenTimer;    // The amount of time the door has been open for (seconds)
 
     private InventoryPanel  playerInventory;    // Reference to the player's inventory panel
-    private HotbarPanel     playerHotbar;       // Reference to the player's hotbar panel
 
     private void Start()
     {
         playerInventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-        playerHotbar    = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
 
         // Subscribe to save/load events so this door's data will be saved when the game is saved
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
@@ -65,6 +73,10 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         {
             triggers[i].AddListener(this);
         }
+
+        // Disable sounds temporarily on start so any animations that play to
+        //   get the doors into the correct state do not cause sounds to be played
+        animator.SetBool("DisableSounds", true);
     }
 
     private void OnDestroy()
@@ -177,6 +189,9 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             if (!openIn && !openOut)
             {
                 // Door is currently closed - open it in/out depending on where the player is stood
+
+                // Ensure open/close sounds are enabled
+                animator.SetBool("DisableSounds", false);
 
                 if (inInsideTrigger)
                 {
@@ -310,11 +325,29 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     public void PlayOpenSound()
     {
-        AudioManager.Instance.PlaySoundEffect3D("doorOpen", transform.position);
+        if(!animator.GetBool("DisableSounds"))
+        {
+            // Sounds are enabled, play an open sound at the position of the door model
+            AudioManager.Instance.PlaySoundEffect3D(openSound, transform.GetChild(0).GetChild(0).position);
+        }
+        else
+        {
+            // Sounds were disabled, don't play a sound but re-enable them for next time
+            animator.SetBool("DisableSounds", false);
+        }
     }
 
     public void PlayCloseSound()
     {
-        AudioManager.Instance.PlaySoundEffect3D("doorClose", transform.position);
+        if (!animator.GetBool("DisableSounds"))
+        {
+            // Sounds are enabled, play a close sound at the position of the door model
+            AudioManager.Instance.PlaySoundEffect3D(closeSound, transform.GetChild(0).GetChild(0).position);
+        }
+        else
+        {
+            // Sounds were disabled, don't play a sound but re-enable them for next time
+            animator.SetBool("DisableSounds", false);
+        }
     }
 }

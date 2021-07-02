@@ -32,20 +32,21 @@ public abstract class InteractableObject : MonoBehaviour
 
     #endregion
 
-    private bool        mouseOver;                  // Whether the mouse is currently over the object (at any distance)
-    private bool        hoveringInRange;            // True if the mouse pointer is over the object AND the player is within range
-    private float       hoverTimer;                 // How many seconds the player has been hovering over the object
+    private bool        mouseOver;                      // Whether the mouse is currently over the object (at any distance)
+    private bool        hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
+    private float       hoverTimer;                     // How many seconds the player has been hovering over the object
 
-    private GameObject  playerGameObject;           // Player GameObject used to check for distance from the object
-    private Camera      mainPlayerCamera;           // The player camera for calculating the position of the tooltip in screen space
+    private GameObject  playerGameObject;               // Player GameObject used to check for distance from the object
+    private Camera      mainPlayerCamera;               // The player camera for calculating the position of the tooltip in screen space
 
-    private Transform   canvasTransform;            // Canvas transform used as a parent for the UI tooltip
-    private GameObject  interactTooltip;            // The instantiated interact tooltip, null if not active
-    private Vector3 worldInteractTooltipOffset;     // interactTooltipOffset converted to world space
+    private Transform   canvasTransform;                // Canvas transform used as a parent for the UI tooltip
+    private GameObject  interactTooltip;                // The instantiated interact tooltip, null if not active
+    private Vector3     worldInteractTooltipOffset;     // interactTooltipOffset converted to world space
 
-    protected bool      canInteract = true;
+    protected bool      canInteract = true;             // Whether this object can be interacted with
+    protected bool      enableTooltip = true;           // Whether the interaction tooltip is enabled (when canInteract = true)
 
-    private const float InteractPopupDelay = 0.3f;  // The amount of time the player has to hover over the object before interactTooltip is shown
+    private const float InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown
 
 
     protected virtual void Start()
@@ -155,18 +156,23 @@ public abstract class InteractableObject : MonoBehaviour
 
     private void ShowInteractTooltip()
     {
-        // Instantiate the tooltip GameObject, using the canvas as its parent
-        interactTooltip = Instantiate(interactTooltipPrefab, canvasTransform);
+        if(enableTooltip)
+        {
+            // The interact tooltip is enabled
 
-        if (!string.IsNullOrEmpty(tooltipNameText))
-        {
-            // Tooltip name text was set, display the name above the 'Press E to interact' text
-            interactTooltip.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tooltipNameText;
-        }
-        else
-        {
-            // No tooltip name text was set, disable the GameObject that would usually display this text
-            interactTooltip.transform.GetChild(1).gameObject.SetActive(false);
+            // Instantiate the tooltip GameObject, using the canvas as its parent
+            interactTooltip = Instantiate(interactTooltipPrefab, canvasTransform);
+
+            if (!string.IsNullOrEmpty(tooltipNameText))
+            {
+                // Tooltip name text was set, display the name above the 'Press E to interact' text
+                interactTooltip.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = tooltipNameText;
+            }
+            else
+            {
+                // No tooltip name text was set, disable the GameObject that would usually display this text
+                interactTooltip.transform.GetChild(1).gameObject.SetActive(false);
+            }
         }
     }
 

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Door_WoodDouble
+  m_Controller: {fileID: 9100000, guid: c29b42f5cf389ce41b91f05a93679abb, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: b7a411ce89f03614bba89710168674ee, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 7e01885c7d4c8eb4184624c21a3424e1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c12ad331f31f96a4c8d777a167aeced9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: cb50a553c660ace4697349def63ba927, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 65e46708e1b11fb4fa277ce24362c8ad, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: edf5c4f0c74f5d048a4131afe253fbba, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 38b33935dbd1464479993e5b93129ade, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5c338e2e3322ce04b8cdf394c8ff343f, type: 2}

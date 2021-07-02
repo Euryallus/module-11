@@ -11,7 +11,6 @@ using UnityEngine;
 // Note: The Outline component used in this script was taken from the Unity asset store and was written by Chris Nolet:
 // https://assetstore.unity.com/packages/tools/particles-effects/quick-outline-115488
 
-[RequireComponent(typeof(Outline))]
 public class InteractableWithOutline : InteractableObject
 {
     #region InspectorVariables
@@ -19,6 +18,8 @@ public class InteractableWithOutline : InteractableObject
 
     [SerializeField] protected string interactionSound = "buttonClickMain1"; // id of the sound to be played when the object is interacted with
                                                                              //  (using an id instead of SoundClass so a default value can easily be set)
+
+    [SerializeField] private Outline externalOutline;   // If the object does not contain an outline component, this is a reference to the outline to be shown/hidden on another GameObject
 
     #endregion
 
@@ -29,7 +30,24 @@ public class InteractableWithOutline : InteractableObject
         base.Start();
 
         // Get the outline component and hide it by default.
-        outline = GetComponent<Outline>();
+
+        if(externalOutline != null)
+        {
+            outline = externalOutline;
+        }
+        else
+        {
+            outline = GetComponent<Outline>();
+        }
+
+        if(outline == null)
+        {
+            // No outline found, remove this script from the GameObject
+            Debug.LogWarning(gameObject.name + " has InteractibleWithOutline script with no outline set. Removing script.", gameObject);
+            Destroy(this);
+            return;
+        }
+
         outline.enabled = false;
     }
 
