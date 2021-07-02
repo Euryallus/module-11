@@ -124,16 +124,17 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         if (localConnectedPortal != null)
         {
             // The monument is connected to a portal in the same scene - animate the portal appearing in-engine
+            
+            localConnectedPortal.ShowWithAnimation();
 
-            cutsceneCameraParent.transform.position = localConnectedPortal.MainPortalTransform.position;
+            cutsceneCameraParent.transform.position = localConnectedPortal.MainPortalTransform.position - localConnectedPortal.MainPortalTransform.localPosition;
             cutsceneCameraParent.transform.rotation = localConnectedPortal.MainPortalTransform.rotation;
 
             CameraShake cutsceneCameraShake = cutsceneCameraParent.GetComponent<CameraShake>();
 
-            cutsceneCameraShake.UpdateBasePosition(-localConnectedPortal.MainPortalTransform.localPosition);
-            cutsceneCameraShake.ShakeCameraForTime(4.3f, CameraShakeType.ReduceOverTime, 0.02f);
+            cutsceneCameraShake.UpdateBasePosition(Vector3.zero);
+            cutsceneCameraShake.ShakeCameraForTime(4.3f, CameraShakeType.ReduceOverTime, 0.05f, 0.025f);
 
-            localConnectedPortal.ShowWithAnimation();
         }
         else
         {
