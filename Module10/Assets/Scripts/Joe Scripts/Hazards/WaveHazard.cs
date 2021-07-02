@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveHazard : MonoBehaviour
+public class WaveHazard : MonoBehaviour, IExternalTriggerListener
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -31,8 +31,9 @@ public class WaveHazard : MonoBehaviour
     [SerializeField] [Tooltip("How close the player has to be to the wave before warning UI is shown")]
     private float   warningDistance = 120.0f;
 
-    [SerializeField] private MeshRenderer   waveMesh;
-    [SerializeField] private GameObject     waveParticles;
+    [SerializeField] private MeshRenderer    waveMesh;
+    [SerializeField] private GameObject      waveParticles;
+    [SerializeField] private ExternalTrigger waveTrigger;
 
     #endregion
 
@@ -50,6 +51,8 @@ public class WaveHazard : MonoBehaviour
 
         warningUICanvasGroup = GameObject.FindGameObjectWithTag("WaveWarning").GetComponent<CanvasGroup>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        waveTrigger.AddListener(this);
 
         StopMoving();
     }
@@ -136,13 +139,20 @@ public class WaveHazard : MonoBehaviour
         waveLoopAudioSource = null;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnExternalTriggerEnter(string triggerId, Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (moving && triggerId == "wave" && other.gameObject.CompareTag("Player"))
         {
+            // Player collided with the wave while it was moving
+
+            // Decrease their health by a large amount to kill them
             other.gameObject.GetComponent<PlayerStats>().DecreaseHealth(100.0f, PlayerDeathCause.WaveHit);
         }
     }
+
+    public void OnExternalTriggerStay(string triggerId, Collider other) { }
+
+    public void OnExternalTriggerExit(string triggerId, Collider other) { }
 
     private void OnDrawGizmos()
     {

@@ -31,7 +31,10 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
     [SerializeField] private HazardMode         mode                    = HazardMode.PlayerTrigger; // How the hazard animation is triggered
 
     [SerializeField] [Range(2.0f, 120.0f)]
-    private float                               continuousInverval = 2.5f;  // When using HazardMode.Continuous, how frequently the hazard animation will play
+    private float                               continuousInverval      = 2.5f;  // When using HazardMode.Continuous, how frequently the hazard animation will play
+    
+    [SerializeField] [Range(0.0f, 10.0f)]
+    private float                               continuousStartDelay    = 0.0f;  // When using HazardMode.Continuous, the delay before the initial animation trigger
 
     [Header("Triggers")]
     [SerializeField] private ExternalTrigger[]  hitTriggers;                // All triggers that will kill the player if entered
@@ -112,6 +115,8 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
 
     private IEnumerator ContinuousTriggerCoroutine()
     {
+        yield return new WaitForSeconds(continuousStartDelay);
+
         while(mode == HazardMode.Continuous)
         {
             // Continuously trigger the hazard animation, then wait for the interval, and repeat
