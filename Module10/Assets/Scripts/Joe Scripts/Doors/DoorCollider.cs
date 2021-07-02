@@ -25,6 +25,12 @@ public class DoorCollider : InteractableWithOutline
     {
         base.Start();
 
+        // Disable interaction if the door is opened by entering the trigger area
+        if(doorMainScript.OpenOnTriggerEnter)
+        {
+            canInteract = false;
+        }
+
         // Disable the interact tooltip if the door cannot be manually opened
         if(!doorMainScript.ManualOpen)
         {

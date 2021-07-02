@@ -22,13 +22,16 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     [Header("Door")]
 
     [SerializeField] [Tooltip("Whether the door can be opened manually by a player (rather than an external method such as puzzle button)")]
-    private bool       manualOpen = true;
+    private bool        manualOpen = true;
+
+    [SerializeField] [Tooltip("If true, the door will open when the player enters the trigger area. Otherwise, it will open when pressing the interaction key")]
+    private bool        openOnTriggerEnter;
 
     [SerializeField] [Tooltip("Item required to unlock the door (none if left empty)")]
-    private Item       unlockItem;
+    private Item        unlockItem;
 
     [SerializeField] [Tooltip("Number of seconds before the door closes automatiaclly, 0 = stay open forever")]
-    private float      closeAfterTime = 5.0f;
+    private float       closeAfterTime = 5.0f;
 
     [SerializeField] private Animator   animator;           // Animator used for door open/close animations
 
@@ -42,7 +45,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     #region Properties
 
-    public bool ManualOpen { get { return manualOpen; } }
+    public bool ManualOpen          { get { return manualOpen; } }
+    public bool OpenOnTriggerEnter  { get { return openOnTriggerEnter; } }
 
     #endregion
 
@@ -92,11 +96,14 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             // Door is open either inwards or outwards, increment open timerS
             doorOpenTimer += Time.deltaTime;
 
-            // Door has been open for a while and the player isn't standing in the way of it closing, close it
-            if((closeAfterTime != 0.0f) && (doorOpenTimer >= closeAfterTime) &&
-                ((openIn && !inInsideTrigger) || (openOut && !inOutsideTrigger)) )
+            if(!openOnTriggerEnter)
             {
-                SetAsClosed();
+                // Door has been open for a while and the player isn't standing in the way of it closing, close it
+                if ((closeAfterTime != 0.0f) && (doorOpenTimer >= closeAfterTime) &&
+                    ((openIn && !inInsideTrigger) || (openOut && !inOutsideTrigger)))
+                {
+                    SetAsClosed();
+                }
             }
         }
     }
@@ -211,7 +218,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         }
         else
         {
-            // Notify the player that they can't open the door manually
+            // Notify the player that they can't open the door
             NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorManually);
         }
     }
@@ -223,6 +230,22 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
         inInsideTrigger = inside;
         inOutsideTrigger = !inside;
+
+        if(openOnTriggerEnter)
+        {
+            // The door should open when the player enters a trigger,
+            //   but only if it is allowed to be 'manually' opened by the player
+
+            if (manualOpen)
+            {
+                SetAsOpen(!inside);
+            }
+            else
+            {
+                // Notify the player that they can't open the door
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorManually);
+            }
+        }
     }
 
     private void TriggerExited(bool inside)
@@ -237,6 +260,12 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         else
         {
             inOutsideTrigger = false;
+        }
+
+        if(openOnTriggerEnter && !inInsideTrigger && !inOutsideTrigger && closeAfterTime > 0.0f)
+        {
+            // Door is triggered automatically and player is in neither trigger, close the door
+            SetAsClosed();
         }
     }
 
