@@ -10,7 +10,7 @@ public enum NotificationMessageType
 
     ItemRequiredForDoor,
     DoorUnlocked,
-    CantOpenDoorManually,
+    CantOpenDoorDirectly,
 
     ItemCannotBePlaced,
     CantDestroyObject,
@@ -61,7 +61,7 @@ public class NotificationManager : MonoBehaviour
 
         { NotificationMessageType.ItemRequiredForDoor, "* is required to unlock this door." },
         { NotificationMessageType.DoorUnlocked,        "The door was unlocked with *" },
-        { NotificationMessageType.CantOpenDoorManually,"This door cannot be opened or closed manually." },
+        { NotificationMessageType.CantOpenDoorDirectly,"This door cannot be opened or closed directly." },
 
         { NotificationMessageType.ItemCannotBePlaced,  "The held item cannot be placed there." },
         { NotificationMessageType.CantDestroyObject,   "This object cannot be destroyed." },

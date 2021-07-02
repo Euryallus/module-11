@@ -32,7 +32,7 @@ public class DoorCollider : InteractableWithOutline
         }
 
         // Disable the interact tooltip if the door cannot be manually opened
-        if(!doorMainScript.ManualOpen)
+        if(!doorMainScript.PlayerCanOpen)
         {
             enableTooltip = false;
         }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // ||=======================================================================||
 // || DoorMain: Handles how doors are opened/closed and the events that     ||
@@ -21,8 +22,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     [Header("(See tooltips for info)")]
     [Header("Door")]
 
-    [SerializeField] [Tooltip("Whether the door can be opened manually by a player (rather than an external method such as puzzle button)")]
-    private bool        manualOpen = true;
+    [SerializeField] [FormerlySerializedAs("manualOpen")] [Tooltip("Whether the door can be opened directly by a player (rather than an external method such as puzzle button)")]
+    private bool        playerCanOpen = true;
 
     [SerializeField] [Tooltip("If true, the door will open when the player enters the trigger area. Otherwise, it will open when pressing the interaction key")]
     private bool        openOnTriggerEnter;
@@ -45,7 +46,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     #region Properties
 
-    public bool ManualOpen          { get { return manualOpen; } }
+    public bool PlayerCanOpen          { get { return playerCanOpen; } }
     public bool OpenOnTriggerEnter  { get { return openOnTriggerEnter; } }
 
     #endregion
@@ -189,7 +190,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     public void Interact()
     {
-        if(manualOpen)
+        if(playerCanOpen)
         {
             // Player can open the door by manually interacting
 
@@ -219,7 +220,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         else
         {
             // Notify the player that they can't open the door
-            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorManually);
+            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorDirectly);
         }
     }
 
@@ -234,16 +235,16 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         if(openOnTriggerEnter)
         {
             // The door should open when the player enters a trigger,
-            //   but only if it is allowed to be 'manually' opened by the player
+            //   but only if it is allowed to be opened by the player
 
-            if (manualOpen)
+            if (playerCanOpen)
             {
                 SetAsOpen(!inside);
             }
             else
             {
                 // Notify the player that they can't open the door
-                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorManually);
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantOpenDoorDirectly);
             }
         }
     }
