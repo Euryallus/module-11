@@ -64,6 +64,13 @@ public class EnemyBase : MonoBehaviour
                         protected bool findingNewPos = false;           // Flags if enemy is waiting at point before selecting a new one
                         protected bool isFrozen = false;
 
+    [Header("Evade behabiour")]
+    [Tooltip("Leave at 0 if enemy does not return to fight mode while at low health")]
+    [SerializeField]    protected float evadeCooldown = 0f;
+    [SerializeField]    protected float evadeDistanceFromPlayer = 15f;
+                        private float evadeTimeElapsed = 0f;
+    
+
     public bool canSee = false;
     private bool suspended; // Added by Joe - True when the enemy is suspended in the air by the slam ability
 
@@ -178,8 +185,6 @@ public class EnemyBase : MonoBehaviour
         //{
         //    currentState = EnemyState.engaged;
         //}
-
-
     }
 
     public virtual void EngagedUpdate()
@@ -264,7 +269,6 @@ public class EnemyBase : MonoBehaviour
         {
 
             Engage();
-
             return;
         }
 
@@ -274,14 +278,65 @@ public class EnemyBase : MonoBehaviour
             StartCoroutine(WaitAndMove(patrolWanderDistance, centralHubPos, maxAtEachPatrolPoint));
             // Bool flagged to prevent coroutine being run 4000 times
             findingNewPos = true;
-            
         }
     }
 
     // Evade state update
     public virtual void EvadeUpdate()
     {
+        // TODO: 
+        // 1# move towards point [x] from player
+        // 2# check point is accessable
+        // 3# if reached pos, chose new one
+        // OPTIONAL 4# if enemy has expended "time out" length go back & start searching (see WoW enemies "fear" state for ref)
 
+        if(Vector3.Distance(transform.position, agent.destination) < 2f)
+        {
+            EvadeRandomPos();
+        }
+
+        if(evadeCooldown != 0f)
+        {
+            evadeTimeElapsed += Time.deltaTime;
+            if(evadeTimeElapsed > evadeCooldown)
+            {
+                StartSearching(playerLastSeen);
+            }
+        }
+    }
+
+    protected virtual void EvadeRandomPos()
+    {
+        Vector3 randomDir = new Vector3(Random.Range(0f, 1f), 0, Random.Range(0f, 1f));
+        randomDir.Normalize();
+
+        Vector3 pos = randomDir * evadeDistanceFromPlayer;
+        pos += player.transform.position;
+
+        NavMeshPath path = new NavMeshPath();
+
+        //if(agent.CalculatePath(pos, path) && path.status == NavMeshPathStatus.PathComplete)
+        //{
+        //    agent.SetPath(path);
+        //    return;
+        //}
+        //else
+        //{
+        //    EvadeRandomPos();
+        //}
+
+        GoTo(pos);
+
+    }
+
+    // Begins evade behaviour
+    public virtual void StartEvade()
+    {
+        evadeTimeElapsed = 0f;
+        StopAllCoroutines();
+        currentState = EnemyState.evade;
+
+        EvadeRandomPos();
     }
 
     // Begins searching behaviour

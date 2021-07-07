@@ -10,8 +10,11 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 1f;   // Maximum (initial) health of an enemy
-                     protected float health = 1f;      // Current health of enemy
+    [SerializeField]    private float maxHealth = 1f;   // Maximum (initial) health of an enemy
+                        protected float health = 1f;      // Current health of enemy
+
+                        protected float evadeTriggerHealth = 0.25f;
+
 
     public bool alive = true;
     
@@ -29,6 +32,13 @@ public class EnemyHealth : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+
+            return;
+        }
+
+        else if(health <= evadeTriggerHealth)
+        {
+            gameObject.GetComponent<EnemyBase>().StartEvade();
         }
     }
 
