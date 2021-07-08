@@ -326,6 +326,11 @@ public class SaveLoadManager : MonoBehaviour
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
         activePlayer.PlayerController.enabled = false;
 
+        PlayerMovement playerMovement = activePlayer.GetComponent<PlayerMovement>();
+
+        // Enable the player camera ready to be used in the new scene
+        playerMovement.GetPlayerCamera().SetActive(true);
+
         if (scenesDirectory == "UseCurrentDirectory")
         {
             scenesDirectory = currentScenesDirectory;
@@ -464,6 +469,10 @@ public class SaveLoadManager : MonoBehaviour
 
         loadingAfterDeath = false;
 
+        // Reset the player movement state in case they died in a non-standard state (e.g. in water)
+        playerMovement.ResetMovementState();
+
+        // Allow the player to move now loading is done
         activePlayer.PlayerController.enabled = true;
 
         // Scene data loading done

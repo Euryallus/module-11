@@ -122,8 +122,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
-    {
-       
+    {  
         // Checks if player is [x] m above ground or not
         if (Physics.Raycast(transform.position, -transform.up, gliderOpenDistanceFromGround))
         {
@@ -156,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
         // Toggles crouch
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
-                currentMovementState = (currentMovementState == MovementStates.crouch ? MovementStates.walk : MovementStates.crouch);
+            currentMovementState = (currentMovementState == MovementStates.crouch ? MovementStates.walk : MovementStates.crouch);
         }
 
         // Crouch grow / shrink movement
@@ -500,6 +499,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Added by Joe, used when loading into a scene to reset certain movement variables
+    public void ResetMovementState()
+    {
+        inWater         = false;
+        velocityY       = 0.0f;
+        glideVelocity   = Vector2.zero;
+    }
+
     // Returns if player is on the ground
     public bool PlayerIsGrounded()
     {
@@ -541,9 +548,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Returns if player can move or not
-    public bool GetCanMove()
+    public GameObject GetPlayerCamera()
     {
-        return canMove;
+        return playerCamera;
     }
 
     // Checks if player is currently moving

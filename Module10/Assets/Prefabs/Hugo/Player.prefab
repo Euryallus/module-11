@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf5100f74252024991a869cb179ec35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathPanelPrefab: {fileID: 7809706690116714397, guid: 3550c110b4867ff468d9fe35b4575193, type: 3}
+  deathCanvasPrefab: {fileID: 3862455395880011051, guid: 4938b000834a38b4ba1a4977858e7d4d, type: 3}
 --- !u!114 &7990771386612133257
 MonoBehaviour:
   m_ObjectHideFlags: 0

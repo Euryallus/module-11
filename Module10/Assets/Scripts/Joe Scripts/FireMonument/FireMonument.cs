@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, IExternalTriggerListener
+public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoint, IExternalTriggerListener
 {
     [Header("Main")]
     [Header("Fire Monument")]
@@ -11,9 +10,6 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
     [SerializeField] private FireMonumentInteraction    interaction;
     [SerializeField] private ParticleSystem             fireParticles;
     [SerializeField] private GameObject                 lightIndicator;
-    [SerializeField] private Transform                  cutsceneCameraParent;
-    [SerializeField] private GameObject                 cutsceneCamera;
-    [SerializeField] private Animator                   cutsceneAnimator;
     [SerializeField] private GameObject                 portalUnlockPanelPrefab;
     [SerializeField] private string                     unlockAreaName;
     [SerializeField] private Transform                  respawnTransform;           // Where the player will respawn if the game was last saved after the monument was lit
@@ -33,19 +29,15 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
     private VideoClip unlockVideoClip;
 
     private bool            lit;
-    private GameObject      mainCameraGameObj;
-    private PlayerMovement  playerMovement;
     private PlayerStats     playerStats;
 
-    private void Start()
+    protected override void Start()
     {
-        cutsceneAnimator.enabled = false;
-        cutsceneCamera.SetActive(false);
+        base.Start();
 
         GameObject playerGameObj = GameObject.FindGameObjectWithTag("Player");
 
-        playerMovement  = playerGameObj.GetComponent<PlayerMovement>();
-        playerStats     = playerGameObj.GetComponent<PlayerStats>();
+        playerStats     = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
 
         fireTrigger.AddListener(this);
 
@@ -72,6 +64,23 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
 
     public void OnExternalTriggerExit(string triggerId, Collider other) { }
 
+    public void OnSceneSave(SaveData saveData)
+    {
+        // Save whether the fire is lit
+        saveData.AddData("fireMonumentLit_" + GetUniquePositionId(), lit);
+    }
+
+    public void OnSceneLoadSetup(SaveData saveData)
+    {
+        // Light the fire if it was lit when the game was last saved
+        if (saveData.GetData<bool>("fireMonumentLit_" + GetUniquePositionId()))
+        {
+            LightFire();
+        }
+    }
+
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+
     public void OnInteract()
     {
         LightFire();
@@ -84,33 +93,39 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
         }
     }
 
-    private void StartCutscene()
+    private void LightFire()
     {
-        playerMovement.StopMoving();
+        lit = true;
+
+        interaction.CanInteract = false;
+
+        lightIndicator.SetActive(false);
+
+        StartCoroutine(LightFireEffectsCoroutine());
+    }
+
+    private IEnumerator LightFireEffectsCoroutine()
+    {
+        // Show fire particles and play the lighting sound effect after a small delay
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, transform.position);
+        fireParticles.Play();
+    }
+
+    protected override void StartCutscene()
+    {
+        base.StartCutscene();
 
         cutsceneCameraParent.transform.localPosition = Vector3.zero;
         cutsceneCameraParent.transform.rotation = Quaternion.identity;
-
-        if (Camera.main != null)
-        {
-            mainCameraGameObj = Camera.main.gameObject;
-            mainCameraGameObj.SetActive(false);
-        }
-
-        cutsceneCamera.SetActive(true);
-        cutsceneAnimator.enabled = true;
-
-        GameSceneUI gameUI = GameSceneUI.Instance;
-
-        gameUI.SetUIShowing(false);
-        gameUI.ShowCinematicsCanvas();
 
         // Fade music/sounds out over 0.2 seconds
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
 
         AudioManager.Instance.PlayMusicInterlude("fireLightCutscene");
 
-        CinematicsCanvas cinematicsCanvas = gameUI.GetActiveCinematicsCanvas();
+        CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
 
         if(unlockVideoClip != null)
         {
@@ -118,33 +133,13 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
         }
     }
 
-    // Called by an animation event
-    private void EndCutscene()
-    {
-        cutsceneCamera.SetActive(false);
-        mainCameraGameObj.SetActive(true);
-
-        GameSceneUI gameUI = GameSceneUI.Instance;
-
-        gameUI.SetUIShowing(true);
-        gameUI.HideCinematicsCanvas();
-
-        AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
-
-        // Save the game now the monument is lit and a portal has been activated
-        WorldSave.Instance.UsedSavePointId = GetSavePointId();
-        SaveLoadManager.Instance.SaveGameData();
-
-        playerMovement.StartMoving();
-    }
-
-    // Called during cutscene by an animation event
+    // Called during the fire lighting cutscene by an animation event
     private void CutsceneFadeOut()
     {
         GameSceneUI.Instance.GetActiveCinematicsCanvas().FadeToBlack();
     }
 
-    // Called during cutscene by an animation event
+    // Called during the fire lighting cutscene by an animation event
     private void FocusCutsceneOnPortal()
     {
         CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
@@ -175,41 +170,17 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint, I
         }
     }
 
-    public void OnSceneSave(SaveData saveData)
+    // Called at the end of the fire lighting cutscene by an animation event
+    protected override void EndCutscene()
     {
-        saveData.AddData("fireMonumentLit_" + GetUniquePositionId(), lit);
-    }
+        base.EndCutscene();
 
-    public void OnSceneLoadSetup(SaveData saveData)
-    {
-        lit = saveData.GetData<bool>("fireMonumentLit_" + GetUniquePositionId());
+        // Fade back in background music
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
 
-        if(lit)
-        {
-            LightFire();
-        }
-    }
-
-    public void OnSceneLoadConfigure(SaveData saveData) { }
-
-    private void LightFire()
-    {
-        lit = true;
-
-        interaction.CanInteract = false;
-
-        lightIndicator.SetActive(false);
-
-        StartCoroutine(LightFireEffectsCoroutine());
-    }
-
-    private IEnumerator LightFireEffectsCoroutine()
-    {
-        yield return new WaitForSecondsRealtime(0.2f);
-
-        AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, transform.position);
-
-        fireParticles.Play();
+        // Save the game now the monument is lit and a portal has been activated
+        WorldSave.Instance.UsedSavePointId = GetSavePointId();
+        SaveLoadManager.Instance.SaveGameData();
     }
 
     private string GetUniquePositionId()

@@ -355,6 +355,28 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public LoopingSoundSource GetLoopingSoundSourceFromId(string loopId)
+    {
+        foreach (LoopingSoundSource loopSource in loopingSoundSources)
+        {
+            if (loopSource.Source.gameObject.name == "LoopSound_" + loopId)
+            {
+                return loopSource;
+            }
+        }
+
+        return null;
+    }
+
+    public void SetLoopingSoundBaseVolume(LoopingSoundSource loopingSource, float volume)
+    {
+        // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
+        float volumeMultiplier = GetSavedSoundEffectsVolume() * 0.05f * globalVolumeMultiplier;
+
+        loopingSource.BaseVolume = volume;
+        loopingSource.Source.volume = loopingSource.BaseVolume * volumeMultiplier;
+    }
+
     public void StopAllLoopingSoundEffects()
     {
         foreach (LoopingSoundSource loopSource in loopingSoundSources)
@@ -446,14 +468,8 @@ public class AudioManager : MonoBehaviour
         // Updates the volume of the main music source and any active
         //   dynamic audio sources
 
-        // Get the saved music volume if it hasn't already been set from SaveLoadManager
-        if(savedMusicVolume == -1)
-        {
-            savedMusicVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");
-        }
-
         // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
-        float volumeVal = savedMusicVolume * 0.05f * globalVolumeMultiplier;
+        float volumeVal = GetSavedMusicVolume() * 0.05f * globalVolumeMultiplier;
 
         // Set the volume of the main audio source used for playing music
         musicSource.volume = volumeVal;
@@ -472,14 +488,8 @@ public class AudioManager : MonoBehaviour
     {
         // Updates the volume of all looping sound effects that are currently playing
 
-        // Get the saved sound effects volume if it hasn't already been set from SaveLoadManager
-        if (savedSoundEffectsVolume == -1)
-        {
-            savedSoundEffectsVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume");
-        }
-
         // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
-        float volumeVal = savedSoundEffectsVolume * 0.05f * globalVolumeMultiplier;
+        float volumeVal = GetSavedSoundEffectsVolume() * 0.05f * globalVolumeMultiplier;
 
         // Update the volume of all active loop sources, multiplying by the base
         //   volume that was chosen when the sound first started playing
@@ -487,6 +497,26 @@ public class AudioManager : MonoBehaviour
         {
             loopSource.Source.volume = volumeVal * loopSource.BaseVolume;
         }
+    }
+
+    private float GetSavedSoundEffectsVolume()
+    {
+        if (savedSoundEffectsVolume == -1)
+        {
+            savedSoundEffectsVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume");
+        }
+
+        return savedSoundEffectsVolume;
+    }
+
+    private float GetSavedMusicVolume()
+    {
+        if (savedMusicVolume == -1)
+        {
+            savedMusicVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");
+        }
+
+        return savedMusicVolume;
     }
 }
 
@@ -539,7 +569,7 @@ public class LoopType
 // LoopingSoundSource: Contains info about a sound effect that is currently looping
 //=================================================================================
 
-public struct LoopingSoundSource
+public class LoopingSoundSource
 {
     public LoopingSoundSource(AudioSource source, float baseVolume)
     {

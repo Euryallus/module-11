@@ -31,7 +31,7 @@ public class PlayerDeath : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject deathPanelPrefab;
+    [SerializeField] private GameObject deathCanvasPrefab;
 
     #endregion
 
@@ -42,7 +42,7 @@ public class PlayerDeath : MonoBehaviour
     {
         { PlayerDeathCause.Starved,         new WeightedString[]    {
                                                                         new WeightedString("You starved.", 100),
-                                                                        new WeightedString("Maybe eat next time.", 1)
+                                                                        new WeightedString("Your attempt at fasting didn't work out.", 1)
                                                                     } },
 
         { PlayerDeathCause.Drowned,         new WeightedString[]    {
@@ -67,8 +67,8 @@ public class PlayerDeath : MonoBehaviour
 
         { PlayerDeathCause.Crushed,         new WeightedString[]    {
                                                                         new WeightedString("You were crushed.", 100),
-                                                                        new WeightedString("You were flattened.", 20),
-                                                                        new WeightedString("You were squished.", 20),
+                                                                        new WeightedString("You were flattened.", 10),
+                                                                        new WeightedString("You were squished.", 10),
                                                                         new WeightedString("You were turned into a pancake.", 5),
                                                                         new WeightedString("LOL SQUASHING DEATH", 1),
                                                                     } },
@@ -80,17 +80,17 @@ public class PlayerDeath : MonoBehaviour
 
         { PlayerDeathCause.SwingHit,        new WeightedString[]    {
                                                                         new WeightedString("You were hit by a swinging object.", 100),
-                                                                        new WeightedString("Swoosh swoosh", 1)
+                                                                        new WeightedString("Axe went swoosh swoosh.", 1)
                                                                     } },
 
         { PlayerDeathCause.WaveHit,         new WeightedString[]    {
-                                                                        new WeightedString("You were hit by a wave.", 100),
+                                                                        new WeightedString("You drowned in a wave.", 100),
                                                                         new WeightedString("You were defeated by a liquid.", 1)
                                                                     } },
 
         { PlayerDeathCause.Fire,            new WeightedString[]    {
                                                                         new WeightedString("You were killed by fire.", 100),
-                                                                        new WeightedString("You were roasted on an open flame.", 1),
+                                                                        new WeightedString("You were roasted on an open flame.", 10),
                                                                         new WeightedString("Why would you just step into fire?", 1)
                                                                     } }
     };
@@ -129,9 +129,12 @@ public class PlayerDeath : MonoBehaviour
             Debug.LogError("No dictionary entry for death cause: " + causeOfDeath);
         }
 
-        // Instantiate/show the death panel, making it a child of a canvas
-        Transform canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
-        DeathPanel deathPanel = Instantiate(deathPanelPrefab, canvasTransform).GetComponent<DeathPanel>();
+        // Instantiate/show the death canvas containing death info UI
+        GameObject deathCanvas  = Instantiate(deathCanvasPrefab);
+        DeathPanel deathPanel   = deathCanvas.transform.GetChild(0).GetComponent<DeathPanel>();
+
+        // Hide main UI
+        GameSceneUI.Instance.SetUIShowing(false);
 
         // Set the death showing cause of death on the panel to the chosen string
         deathPanel.SetDeathCauseText(deathCauseText);
