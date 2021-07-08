@@ -149,7 +149,9 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
             transform.localScale = Vector3.Lerp(transform.localScale, startScale, Time.deltaTime * growSpeed);
         }
 
-        if(Vector3.Distance(playerTransform.position, transform.position) <= warningDistance)
+        Vector3 closestPointToPlayer = waterTrigger.TriggerCollider.ClosestPointOnBounds(playerTransform.position);
+
+        if (Vector3.Distance(playerTransform.position, closestPointToPlayer) <= warningDistance)
         {
             warningUICanvasGroup.alpha = 1.0f;
         }
@@ -158,10 +160,8 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
             warningUICanvasGroup.alpha = 0.0f;
         }
 
-
         if(waveLoopSoundSource != null)
         {
-            Vector3 closestPointToPlayer = waterTrigger.TriggerCollider.ClosestPointOnBounds(playerMovement.transform.position);
             waveLoopSoundSource.gameObject.transform.position = closestPointToPlayer;
         }
 
