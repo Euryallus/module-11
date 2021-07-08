@@ -12,7 +12,8 @@ public enum PlayerDeathCause
     Crushed,       
     Skewered,
     SwingHit,
-    WaveHit
+    WaveHit,
+    Fire
 }
 
 // ||=======================================================================||
@@ -85,6 +86,12 @@ public class PlayerDeath : MonoBehaviour
         { PlayerDeathCause.WaveHit,         new WeightedString[]    {
                                                                         new WeightedString("You were hit by a wave.", 100),
                                                                         new WeightedString("You were defeated by a liquid.", 1)
+                                                                    } },
+
+        { PlayerDeathCause.Fire,            new WeightedString[]    {
+                                                                        new WeightedString("You were killed by fire.", 100),
+                                                                        new WeightedString("You were roasted on an open flame.", 1),
+                                                                        new WeightedString("Why would you just step into fire?", 1)
                                                                     } }
     };
 
