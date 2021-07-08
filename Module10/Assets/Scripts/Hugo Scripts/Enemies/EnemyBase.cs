@@ -69,6 +69,9 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]    protected float evadeCooldown = 0f;
     [SerializeField]    protected float evadeDistanceFromPlayer = 15f;
                         private float evadeTimeElapsed = 0f;
+
+    protected float timeSinceLastSeen;
+    [SerializeField] protected float argoTime = 3f;
     
 
     public bool canSee = false;
@@ -195,6 +198,8 @@ public class EnemyBase : MonoBehaviour
         // If player is spotted, act accordingly
         if (CheckForPlayer())
         {
+            timeSinceLastSeen = 0f;
+
             // Check distance between player & enemy
             if (Vector3.Distance(transform.position, player.transform.position) < attackDistance)
             {
@@ -216,11 +221,20 @@ public class EnemyBase : MonoBehaviour
                 // If player is visible but not reachable, follow them
                 GoTo(playerLastSeen);
             }
+            
         }
         else
         {
-            // If player has been lost while engaged, switch to searching the area
-            StartSearching(playerLastSeen);
+            timeSinceLastSeen += Time.deltaTime;
+            if (timeSinceLastSeen < argoTime)
+            {
+                GoTo(playerLastSeen);
+            }
+            else
+            {
+                // If player has been lost while engaged, switch to searching the area
+                StartSearching(playerLastSeen);
+            }
         }
     }
 
@@ -294,6 +308,10 @@ public class EnemyBase : MonoBehaviour
         {
             EvadeRandomPos();
         }
+        else if(!NavMesh.CalculatePath(transform.position, agent.destination, NavMesh.AllAreas, agent.path))
+        {
+            EvadeRandomPos();
+        }
 
         if(evadeCooldown != 0f)
         {
@@ -307,25 +325,25 @@ public class EnemyBase : MonoBehaviour
 
     protected virtual void EvadeRandomPos()
     {
-        Vector3 randomDir = new Vector3(Random.Range(0f, 1f), 0, Random.Range(0f, 1f));
-        randomDir.Normalize();
+        Vector3 inFront = player.transform.forward * evadeDistanceFromPlayer;
+        inFront += player.transform.position;
 
-        Vector3 pos = randomDir * evadeDistanceFromPlayer;
-        pos += player.transform.position;
+        NavMeshHit hit = new NavMeshHit();
 
-        NavMeshPath path = new NavMeshPath();
+        if(NavMesh.SamplePosition(inFront, out hit, evadeDistanceFromPlayer / 2, NavMesh.AllAreas))
+        {
+            GoTo(hit.position);
+        }
+        else
+        {
+            Vector3 randomDir = new Vector3(Random.Range(0f, 1f), 0, Random.Range(0f, 1f));
+            randomDir.Normalize();
 
-        //if(agent.CalculatePath(pos, path) && path.status == NavMeshPathStatus.PathComplete)
-        //{
-        //    agent.SetPath(path);
-        //    return;
-        //}
-        //else
-        //{
-        //    EvadeRandomPos();
-        //}
+            Vector3 pos = randomDir * evadeDistanceFromPlayer;
+            pos += player.transform.position;
 
-        GoTo(pos);
+            GoTo(pos);
+        }
 
     }
 
@@ -358,6 +376,14 @@ public class EnemyBase : MonoBehaviour
         }
         // Debug help
         Debug.Log(gameObject.name + " started searching " + searchPos);
+    }
+
+    public virtual void AlertToDamage()
+    {
+        if(currentState != EnemyState.engaged)
+        {
+            StartSearching(player.transform.position);
+        }
     }
 
     // Begins patrol behaviour

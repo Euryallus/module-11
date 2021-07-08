@@ -51,6 +51,11 @@ public class Enemy2 : EnemyBase
         // Waits [spawnToLaunchTime] seconds with projectile above enemies head
         yield return new WaitForSeconds(spawnToLaunchTime);
 
+        Release();
+    }
+
+    protected virtual void Release()
+    {
         // Calculates direction projectile is to be fired at 
         Vector3 dir = player.transform.position - projSpawnPoint.position;
 
@@ -58,7 +63,7 @@ public class Enemy2 : EnemyBase
         lastProjectile.transform.parent = null;
 
         // Checks if player is still in LOS - if it is, launch the projectile, and if not just destroy the projectile
-        if(CheckForPlayer())
+        if (CheckForPlayer())
         {
             lastProjectile.GetComponent<Enemy2Projectile>().Launch(dir, player.transform);
         }
@@ -67,4 +72,5 @@ public class Enemy2 : EnemyBase
             Destroy(lastProjectile);
         }
     }
+
 }

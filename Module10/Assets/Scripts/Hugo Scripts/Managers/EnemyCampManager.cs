@@ -22,7 +22,21 @@ public class EnemyCampManager : MonoBehaviour
 
                         public bool hasBeenDefeated = false;
                         public bool spawnRandomPosition = true;
-    public int remainingUnits { get { return spawnedEnemies.Count; } }
+    public int remainingUnits 
+    { get 
+        {
+            int left = 0;
+            foreach(EnemyBase enemy in spawnedEnemies)
+            {
+                if(enemy.gameObject.GetComponent<EnemyHealth>().alive)
+                {
+                    left++;
+                }
+            }
+
+            return left; 
+        } 
+    }
 
     public int totalSpawned;
     
@@ -45,18 +59,21 @@ public class EnemyCampManager : MonoBehaviour
 
             for(int i = 0; i < spawnedEnemies.Count; i++)
             {
-                if(!spawnedEnemies[i].gameObject.GetComponent<EnemyHealth>().alive)
+                if(spawnedEnemies[i] != null)
                 {
-                    spawnedEnemies.RemoveAt(i);
-                    if (spawnedEnemies.Count == 0)
+                    if (!spawnedEnemies[i].gameObject.GetComponent<EnemyHealth>().alive)
                     {
-                        hasBeenDefeated = true;
-                        break;
-                        
-                    }
-                    else
-                    {
-                        i--;
+                        spawnedEnemies.RemoveAt(i);
+                        if (spawnedEnemies.Count == 0)
+                        {
+                            hasBeenDefeated = true;
+                            break;
+
+                        }
+                        else
+                        {
+                            i--;
+                        }
                     }
                 }
             }

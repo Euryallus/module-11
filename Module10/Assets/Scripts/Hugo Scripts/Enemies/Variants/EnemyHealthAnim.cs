@@ -26,18 +26,21 @@ public class EnemyHealthAnim : EnemyHealth
         //StopAllCoroutines();
         //render.material = defaultMat;
 
-        alive = false;
+        //alive = false;
+        //
+        //gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
+        //gameObject.GetComponent<EnemyBase>().enabled = false;
+        //gameObject.GetComponent<EnemyHealthAnim>().enabled = false;
+        //gameObject.GetComponent<Collider>().enabled = false; 
+        //gameObject.GetComponent<NavMeshAgent>().enabled = false;
+        //
+        //anim.StopPlayback();
+        //anim.SetBool("Run Forward", false);
+        //anim.SetTrigger("Die");
+        //
 
         gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
-        gameObject.GetComponent<EnemyBase>().enabled = false;
-        gameObject.GetComponent<EnemyHealthAnim>().enabled = false;
-        gameObject.GetComponent<Collider>().enabled = false; 
-        gameObject.GetComponent<NavMeshAgent>().enabled = false;
-
-        anim.StopPlayback();
-        anim.SetBool("Run Forward", false);
-        anim.SetTrigger("Die");
-        //anim.enabled = false;
+        Destroy(gameObject);
     }
 
     IEnumerator FlashHurt()

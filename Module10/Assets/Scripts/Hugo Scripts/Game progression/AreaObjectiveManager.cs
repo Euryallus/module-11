@@ -45,13 +45,12 @@ public class AreaObjectiveManager : MonoBehaviour
     {
         if (hasInteracted)
         {
-            if (enemyManager.remainingUnits == 0)
+            if (enemyManager.hasBeenDefeated)
             {
                 
                 objectiveCharge = 1.0f;
                 onChargedEvents.Invoke();
                 hasFullyCharged = true;
-                
             }
             
 

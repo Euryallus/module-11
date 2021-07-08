@@ -26,6 +26,7 @@ public class Enemy1Anim : Enemy1
        
         if (CheckForPlayer())
         {
+            timeSinceLastSeen = 0f;
             if (Vector3.Distance(transform.position, player.transform.position) < attackDistance)
             {
                 // If player is visible & within the attack distance defined in EnemyBase, STOP moving & turn to face the player
@@ -58,8 +59,16 @@ public class Enemy1Anim : Enemy1
         }
         else
         {
-            // If player cannot be seen, switch to searching for them
-            StartSearching(playerLastSeen);
+            timeSinceLastSeen += Time.deltaTime;
+            if (timeSinceLastSeen < argoTime)
+            {
+                GoTo(playerLastSeen);
+            }
+            else
+            {
+                // If player has been lost while engaged, switch to searching the area
+                StartSearching(playerLastSeen);
+            }
         }
     }
 

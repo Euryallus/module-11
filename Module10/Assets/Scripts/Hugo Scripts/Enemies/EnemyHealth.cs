@@ -40,6 +40,8 @@ public class EnemyHealth : MonoBehaviour
         {
             gameObject.GetComponent<EnemyBase>().StartEvade();
         }
+
+        gameObject.GetComponent<EnemyBase>().AlertToDamage();
     }
 
     protected virtual void Die()
