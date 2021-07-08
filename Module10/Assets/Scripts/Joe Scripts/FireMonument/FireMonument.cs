@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-public class FireMonument : MonoBehaviour, IPersistentSceneObject
+public class FireMonument : MonoBehaviour, IPersistentSceneObject, ISavePoint
 {
     [Header("Main")]
     [Header("Fire Monument")]
@@ -16,6 +16,7 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private Animator                   cutsceneAnimator;
     [SerializeField] private GameObject                 portalUnlockPanelPrefab;
     [SerializeField] private string                     unlockAreaName;
+    [SerializeField] private Transform                  respawnTransform;           // Where the player will respawn if the game was last saved after the monument was lit
 
     [Header("For a portal in this scene:")]
     [Space]
@@ -30,13 +31,16 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     [SerializeField] [Tooltip("The video clip to be shown during the lighting cutscene. This should be a video of the portal appearing in the Village Scene")]
     private VideoClip unlockVideoClip;
 
-    private bool lit;
-    private GameObject mainCameraGameObj;
+    private bool            lit;
+    private GameObject      mainCameraGameObj;
+    private PlayerMovement  playerMovement;
 
     private void Start()
     {
         cutsceneAnimator.enabled = false;
         cutsceneCamera.SetActive(false);
+
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
@@ -62,6 +66,8 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
 
     private void StartCutscene()
     {
+        playerMovement.StopMoving();
+
         cutsceneCameraParent.transform.localPosition = Vector3.zero;
         cutsceneCameraParent.transform.rotation = Quaternion.identity;
 
@@ -104,6 +110,12 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
         gameUI.HideCinematicsCanvas();
 
         AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
+
+        // Save the game now the monument is lit and a portal has been activated
+        WorldSave.Instance.UsedSavePointId = GetSavePointId();
+        SaveLoadManager.Instance.SaveGameData();
+
+        playerMovement.StartMoving();
     }
 
     // Called during cutscene by an animation event
@@ -183,5 +195,15 @@ public class FireMonument : MonoBehaviour, IPersistentSceneObject
     private string GetUniquePositionId()
     {
         return transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
+    }
+
+    public string GetSavePointId()
+    {
+        return GetUniquePositionId();
+    }
+
+    public Vector3 GetRespawnPosition()
+    {
+        return respawnTransform.position;
     }
 }
