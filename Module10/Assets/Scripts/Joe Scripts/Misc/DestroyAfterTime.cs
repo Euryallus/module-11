@@ -16,7 +16,8 @@ public class DestroyAfterTime : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private float delay = 1.0f;    // Seconds before the object is destroyed
+    [SerializeField] private float  delay = 1.0f;   // Seconds before the object is destroyed
+    [SerializeField] private bool   unscaledTime;   // Whether to use unscaled time for the delay (i.e. keep counting when the game is paused/time is slowed)
 
     #endregion
 
@@ -25,11 +26,23 @@ public class DestroyAfterTime : MonoBehaviour
         StartCoroutine(DestroyAfterDelay());
     }
 
+    private void OnDisable()
+    {
+        Destroy(gameObject);
+    }
+
     private IEnumerator DestroyAfterDelay()
     {
         // Wait for the delay, then destroy the GameObject
 
-        yield return new WaitForSeconds(delay);
+        if(unscaledTime)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+        }
+        else
+        {
+            yield return new WaitForSeconds(delay);
+        }
 
         Destroy(gameObject);
     }

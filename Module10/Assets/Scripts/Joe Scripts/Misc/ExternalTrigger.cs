@@ -13,6 +13,7 @@ using UnityEngine;
 
 // Edited for Module 11: added triggerEnabled so external triggers can easily be enabled/disabled
 
+[RequireComponent(typeof(Collider))]
 public class ExternalTrigger : MonoBehaviour
 {
     #region InspectorVariables
@@ -24,13 +25,20 @@ public class ExternalTrigger : MonoBehaviour
 
     #region Properties
 
-    public bool TriggerEnabled { get { return triggerEnabled; } set { triggerEnabled = value; } }
+    public bool     TriggerEnabled  { get { return triggerEnabled; } set { triggerEnabled = value; } }
+    public Collider TriggerCollider { get { return triggerCollider; } }
 
     #endregion
 
     private List<IExternalTriggerListener> listeners = new List<IExternalTriggerListener>(); // List of all IExternalTriggerListeners to notify when a something enters/enters/stays in the trigger
 
-    private bool triggerEnabled = true;
+    private bool        triggerEnabled = true;
+    private Collider    triggerCollider;
+
+    private void Awake()
+    {
+        triggerCollider = GetComponent<Collider>();
+    }
 
     public void AddListener(IExternalTriggerListener listener)
     {

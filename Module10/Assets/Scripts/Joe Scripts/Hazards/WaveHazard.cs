@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveHazard : MonoBehaviour, IExternalTriggerListener
+public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -31,9 +31,16 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
     [SerializeField] [Tooltip("How close the player has to be to the wave before warning UI is shown")]
     private float   warningDistance = 120.0f;
 
+    [SerializeField] [Tooltip("Base material to use for the wave")]
+    private Material waveMaterial;
+
+    [SerializeField] [Tooltip("Particles spawned when the player enters a wave")]
+    private GameObject waveEnterParticlesPrefab;
+
     [SerializeField] private MeshRenderer    waveMesh;
     [SerializeField] private GameObject      waveParticles;
-    [SerializeField] private ExternalTrigger waveTrigger;
+    [SerializeField] private ExternalTrigger deathTrigger;
+    [SerializeField] private ExternalTrigger waterTrigger;
 
     #endregion
 
@@ -42,17 +49,25 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
     private bool moving;
     private CanvasGroup warningUICanvasGroup;
     private Transform playerTransform;
-    private AudioSource waveLoopAudioSource;
+    private AudioSource waveLoopSoundSource;
+    private Vector3 startScale;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         basePosition = transform.position;
 
         warningUICanvasGroup = GameObject.FindGameObjectWithTag("WaveWarning").GetComponent<CanvasGroup>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        waveTrigger.AddListener(this);
+        deathTrigger.AddListener(this);
+        waterTrigger.AddListener(this);
+
+        startScale = transform.localScale;
+
+        waveMesh.material = new Material(waveMaterial);
 
         StopMoving();
     }
@@ -73,6 +88,33 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
         }
     }
 
+    public void OnExternalTriggerEnter(string triggerId, Collider other)
+    {
+        if (moving && other.gameObject.CompareTag("Player"))
+        {
+            if (triggerId == "death")
+            {
+                // Player collided with the inside of the wave/is submerged
+
+                StartCutscene();
+            }
+            else if (triggerId == "water")
+            {
+                // Player collided with the edge of the wave
+
+                AudioManager.Instance.PlaySoundEffect2D("splash");
+                if (Camera.main != null)
+                {
+                    Instantiate(waveEnterParticlesPrefab, Camera.main.transform);
+                }
+            }
+        }
+    }
+
+    public void OnExternalTriggerStay(string triggerId, Collider other) { }
+
+    public void OnExternalTriggerExit(string triggerId, Collider other) { }
+
     private void StartMoving()
     {
         moveIntervalTimer = 0.0f;
@@ -82,10 +124,12 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
         waveMesh.enabled = true;
         waveParticles.SetActive(true);
 
-        transform.localScale = new Vector3(1.0f, 0.0f, 1.0f);
+        transform.localScale = new Vector3(startScale.x, 0.0f, startScale.z);
         waveMesh.material.SetFloat("_Opacity", 0.0f);
 
-        waveLoopAudioSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, transform.position, 30.0f, 100.0f);
+        string loopSoundId = "waveHazardLoop_" + basePosition.x + "_" + basePosition.z;
+
+        waveLoopSoundSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, transform.position, 30.0f, 100.0f);
     }
 
     private void MoveWaveUpdate()
@@ -95,17 +139,19 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
         transform.position = Vector3.MoveTowards(transform.position, endWorldPos, Time.deltaTime * moveSpeed);
 
         float waveOpacity = waveMesh.material.GetFloat("_Opacity");
-        if (waveOpacity < 1.0f)
+        if (waveOpacity < 0.7f)
         {
             waveMesh.material.SetFloat("_Opacity", waveOpacity + Time.deltaTime * growSpeed);
         }
 
-        if(transform.localScale.y < 1.0f)
+        if(transform.localScale.y < startScale.y)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * growSpeed);
+            transform.localScale = Vector3.Lerp(transform.localScale, startScale, Time.deltaTime * growSpeed);
         }
 
-        if(Vector3.Distance(playerTransform.position, transform.position) <= warningDistance)
+        Vector3 closestPointToPlayer = waterTrigger.TriggerCollider.ClosestPointOnBounds(playerTransform.position);
+
+        if (Vector3.Distance(playerTransform.position, closestPointToPlayer) <= warningDistance)
         {
             warningUICanvasGroup.alpha = 1.0f;
         }
@@ -114,12 +160,12 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
             warningUICanvasGroup.alpha = 0.0f;
         }
 
-        if(waveLoopAudioSource != null)
+        if(waveLoopSoundSource != null)
         {
-            waveLoopAudioSource.gameObject.transform.position = transform.position;
+            waveLoopSoundSource.gameObject.transform.position = closestPointToPlayer;
         }
 
-        if(transform.position == endWorldPos)
+        if (transform.position == endWorldPos)
         {
             StopMoving();
         }
@@ -136,23 +182,28 @@ public class WaveHazard : MonoBehaviour, IExternalTriggerListener
         warningUICanvasGroup.alpha = 0.0f;
 
         AudioManager.Instance.StopLoopingSoundEffect("waveHazardLoop_" + basePosition.x + "_" + basePosition.z);
-        waveLoopAudioSource = null;
+
+        waveLoopSoundSource = null;
     }
 
-    public void OnExternalTriggerEnter(string triggerId, Collider other)
+    protected override void StartCutscene()
     {
-        if (moving && triggerId == "wave" && other.gameObject.CompareTag("Player"))
-        {
-            // Player collided with the wave while it was moving
+        base.StartCutscene();
 
-            // Decrease their health by a large amount to kill them
-            other.gameObject.GetComponent<PlayerStats>().DecreaseHealth(100.0f, PlayerDeathCause.WaveHit);
-        }
+        cutsceneCameraParent.position = playerTransform.position;
+
+        StartCoroutine(KillPlayerAfterTime(1.0f));
     }
 
-    public void OnExternalTriggerStay(string triggerId, Collider other) { }
+    private IEnumerator KillPlayerAfterTime(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
 
-    public void OnExternalTriggerExit(string triggerId, Collider other) { }
+        // Decrease the player's health by a large amount to kill them
+        playerTransform.GetComponent<PlayerStats>().DecreaseHealth(100.0f, PlayerDeathCause.WaveHit);
+
+        AudioManager.Instance.PlaySoundEffect2D("waterExit");
+    }
 
     private void OnDrawGizmos()
     {
