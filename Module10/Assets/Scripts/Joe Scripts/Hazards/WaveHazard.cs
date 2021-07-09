@@ -139,7 +139,7 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
         transform.position = Vector3.MoveTowards(transform.position, endWorldPos, Time.deltaTime * moveSpeed);
 
         float waveOpacity = waveMesh.material.GetFloat("_Opacity");
-        if (waveOpacity < 0.7f)
+        if (waveOpacity < 0.9f)
         {
             waveMesh.material.SetFloat("_Opacity", waveOpacity + Time.deltaTime * growSpeed);
         }
