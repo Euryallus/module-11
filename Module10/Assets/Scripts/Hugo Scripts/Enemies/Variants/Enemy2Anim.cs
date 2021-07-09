@@ -86,6 +86,7 @@ public class Enemy2Anim : Enemy2
                 {
                     anim.SetBool("IsWalking", true);
                 }
+
                 // Sets enemy destination to player position
                 GoTo(playerLastSeen);
             }
