@@ -29,7 +29,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
         WorldSave.Instance.RemovePlacedObjectFromSaveList(this);
 
         // Unsibscribe from the ContainerStateChangedEvent to prevent null ref errors
-        inventory.ItemContainer.ContainerStateChangedEvent -= OnInventoryStateChanged;
+        inventory.MainContainer.ContainerStateChangedEvent -= OnInventoryStateChanged;
     }
 
     public void Setup(ItemGroup itemGroup, InventoryPanel playerInventory, bool allowInstantPickup = true)
@@ -38,7 +38,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
         itemQuantity    = itemGroup.Quantity;
 
         inventory       = playerInventory;
-        inventory.ItemContainer.ContainerStateChangedEvent += OnInventoryStateChanged;
+        inventory.MainContainer.ContainerStateChangedEvent += OnInventoryStateChanged;
 
         playerInTrigger = !allowInstantPickup;
         canPickup       = allowInstantPickup;

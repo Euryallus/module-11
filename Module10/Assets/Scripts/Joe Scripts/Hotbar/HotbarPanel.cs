@@ -43,7 +43,7 @@ public class HotbarPanel : UIPanel, IPersistentGlobalObject
         base.Awake();
 
         handSlot                = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
-        inventoryItemContainer  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().ItemContainer;
+        inventoryItemContainer  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>().MainContainer;
     }
 
     protected override void Start()

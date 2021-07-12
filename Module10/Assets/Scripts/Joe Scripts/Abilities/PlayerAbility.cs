@@ -10,6 +10,7 @@ public abstract class PlayerAbility : MonoBehaviour
     [Header("Player Ability")]
 
     [SerializeField] protected KeyCode  triggerKey;
+    [SerializeField] protected bool     useDefaultBehaviour = true;
 
     [Header("Charge & Cooldown")]
     [SerializeField] protected float    chargeTime = 0.5f;
@@ -66,59 +67,62 @@ public abstract class PlayerAbility : MonoBehaviour
             SetupUIIndicator();
         }
 
-        bool triggerKeyPressed = GetTriggerKeyInput();
+        if(useDefaultBehaviour)
+        {
+            bool triggerKeyPressed = GetTriggerKeyInput();
 
-        if (abilityActive)
-        {
-            if (triggerKeyPressed)
-            {
-                AbilityActive();
-            }
-            else
-            {
-                AbilityEnd();
-            }
-        }
-        else
-        {
-            if (cooldown >= 1.0f)
+            if (abilityActive)
             {
                 if (triggerKeyPressed)
                 {
-                    if (!charging)
+                    AbilityActive();
+                }
+                else
+                {
+                    AbilityEnd();
+                }
+            }
+            else
+            {
+                if (cooldown >= 1.0f)
+                {
+                    if (triggerKeyPressed)
                     {
-                        ChargeStart();
-                    }
+                        if (!charging)
+                        {
+                            ChargeStart();
+                        }
 
-                    if (charge < 1.0f)
-                    {
-                        SetChargeAmount(charge + Time.deltaTime / chargeTime);
+                        if (charge < 1.0f)
+                        {
+                            SetChargeAmount(charge + Time.deltaTime / chargeTime);
+                        }
+                        else
+                        {
+                            ChargeEnd();
+
+                            SetCooldownAmount(0.0f);
+
+                            AbilityStart();
+                        }
                     }
                     else
                     {
-                        ChargeEnd();
+                        if (charging)
+                        {
+                            ChargeEnd();
 
-                        SetCooldownAmount(0.0f);
-
-                        AbilityStart();
+                            if (chargeEndSound != null)
+                            {
+                                AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    if (charging)
-                    {
-                        ChargeEnd();
-
-                        if (chargeEndSound != null)
-                        {
-                            AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
-                        }
-                    }
+                    SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
                 }
-            }
-            else
-            {
-                SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
             }
         }
     }
@@ -130,7 +134,7 @@ public abstract class PlayerAbility : MonoBehaviour
         // something like inventory.GetAbilityItem(), then check for unlock status and upgradable properties if unlocked
     }
 
-    private void SetupUIIndicator()
+    protected virtual void SetupUIIndicator()
     {
         SetChargeAmount(charge);
         SetCooldownAmount(cooldown);

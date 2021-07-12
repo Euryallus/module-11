@@ -246,6 +246,6 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     private void ErrorNotLinked()
     {
         // ContainerSlot not linked error
-        Debug.LogError("Slot UI not linked to a ContainerSlot");
+        Debug.LogError("Slot UI not linked to a ContainerSlot", gameObject);
     }
 }

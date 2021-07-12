@@ -6,6 +6,7 @@ public class AbilityIndicator : MonoBehaviour
 {
     [SerializeField] private Image              chargeImage;
     [SerializeField] private Image              cooldownImage;
+    [SerializeField] private GameObject         keyPromptBackground;
     [SerializeField] private TextMeshProUGUI    keyPromptText;
 
     public void SetChargeAmount(float charge)
@@ -21,5 +22,10 @@ public class AbilityIndicator : MonoBehaviour
     public void SetKeyPromptText(string text)
     {
         keyPromptText.text = text;
+    }
+
+    public void HideKeyPrompt()
+    {
+        keyPromptBackground.SetActive(false);
     }
 }

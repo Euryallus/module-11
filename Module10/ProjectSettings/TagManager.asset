@@ -34,6 +34,7 @@ TagManager:
   - Map
   - HotbarAndStats
   - DefaultSpawnPoint
+  - GrabIndicator
   layers:
   - Default
   - TransparentFX

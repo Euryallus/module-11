@@ -816,4 +816,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chargeImage: {fileID: 8994038783561818058}
   cooldownImage: {fileID: 6738051685322201767}
+  keyPromptBackground: {fileID: 5668781764057331450}
   keyPromptText: {fileID: 4458466346716675800}

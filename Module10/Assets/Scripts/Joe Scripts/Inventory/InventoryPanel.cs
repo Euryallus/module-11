@@ -32,8 +32,10 @@ public class InventoryPanel : UIPanel
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private List<ContainerSlotUI>  slotsUI;                // All slots that make up the inventory
-    [SerializeField] private ItemContainer          itemContainer;          // ItemContainer that handles adding/removing/storing items in the hotbar and inventory
+    [SerializeField] private List<ContainerSlotUI>  slotsUI;                // Slots that make up the inventory
+    [SerializeField] private List<ContainerSlotUI>  abilitySlotsUI;         // Slots used to store ability items
+    [SerializeField] private ItemContainer          mainContainer;          // ItemContainer that handles adding/removing/storing items in the hotbar and inventory
+    [SerializeField] private ItemContainer          abilitiesContainer;     // ItemContainer that handles adding/removing/storing ability unlock items
 
     [SerializeField] private LayoutElement          customiseLayoutElement; // Layout element attached to the customisation UI panel that is a child of the main inventory panel
     [SerializeField] private CanvasGroup            customiseCanvasGroup;   // Canvas group attached to the panel described above
@@ -53,7 +55,7 @@ public class InventoryPanel : UIPanel
 
     #region Properties
 
-    public ItemContainer    ItemContainer   { get { return itemContainer; } }
+    public ItemContainer    MainContainer   { get { return mainContainer; } }
 
     #endregion
 
@@ -81,9 +83,12 @@ public class InventoryPanel : UIPanel
         // Get a combined list of ContainerSlotUI for the hotbar and main inventory space
         List<ContainerSlotUI> allSlotsUI = hotbarPanel.SlotsUI.Concat(slotsUI).ToList();
 
-        // Link all of the UI slot elements to the slot objects in the item container
+        // Link all of the UI slot elements to the slot objects in the main (inventory/hotbar) item container
         //   The item container is shared between the hotbar and main inventory space
-        itemContainer.LinkSlotsToUI(allSlotsUI);
+        mainContainer.LinkSlotsToUI(allSlotsUI);
+
+        // Link UI slot elements that hold ability unlock items to the slot objects in the abilities item container
+        abilitiesContainer.LinkSlotsToUI(abilitySlotsUI);
 
         // (No longer used) Update the inventory weight values/UI on start to show the inventory is empty
         //UpdateTotalInventoryWeight();
@@ -103,12 +108,12 @@ public class InventoryPanel : UIPanel
             handSlotUI.transform.position = Vector3.Lerp(handSlotUI.transform.position, Input.mousePosition, Time.unscaledDeltaTime * 20.0f);
 
             //Don't allow the item info popup to be shown when items are in the player's hand
-            itemContainer.ItemInfoPopup.SetCanShowItemInfo(false);
+            mainContainer.ItemInfoPopup.SetCanShowItemInfo(false);
         }
         else
         {
             //No items are in the player's hand - allow the ItemInfoPopup to show info about each item in the inventory
-            itemContainer.ItemInfoPopup.SetCanShowItemInfo(true);
+            mainContainer.ItemInfoPopup.SetCanShowItemInfo(true);
         }
     }
 
@@ -127,25 +132,25 @@ public class InventoryPanel : UIPanel
     public bool TryAddItem(Item item)
     {
         // Attempts to add an item to the item container if there is enough space
-        return itemContainer.TryAddItemToContainer(item);
+        return mainContainer.TryAddItemToContainer(item);
     }
 
     public bool TryRemoveItem(Item item)
     {
         // Attempts to remove an item to the item container if one can be found
-        return itemContainer.TryRemoveItemFromContainer(item.Id);
+        return mainContainer.TryRemoveItemFromContainer(item.Id);
     }
 
     public bool ContainsQuantityOfItem(ItemGroup itemGroup, out List<ContainerSlot> containingSlots)
     {
         // Checks if the inventory/hotbar container has a certain quantity of an item
-        return itemContainer.ContainsQuantityOfItem(itemGroup, out containingSlots);
+        return mainContainer.ContainsQuantityOfItem(itemGroup, out containingSlots);
     }
 
     public int CheckForQuantityOfItem(Item item)
     {
         // Returns the number of the given item in the inventory/hotbar item container
-        return itemContainer.CheckForQuantityOfItem(item); 
+        return mainContainer.CheckForQuantityOfItem(item); 
     }
 
     public void DropItemGroup(ItemGroup groupToDrop, bool showDropNotification, bool allowInstantPickup)
@@ -293,9 +298,9 @@ public class InventoryPanel : UIPanel
         float weight = 0.0f;
 
         // Add the weight of each stack of items in the inventory
-        for (int i = 0; i < itemContainer.Slots.Length; i++)
+        for (int i = 0; i < mainContainer.Slots.Length; i++)
         {
-            weight += itemContainer.Slots[i].ItemStack.StackWeight;
+            weight += mainContainer.Slots[i].ItemStack.StackWeight;
         }
 
         // Set the total weight to the calculated weight

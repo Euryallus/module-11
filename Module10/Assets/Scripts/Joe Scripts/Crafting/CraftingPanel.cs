@@ -56,7 +56,7 @@ public class CraftingPanel : UIPanel
         base.Start();
 
         // Check if the crafting setup is valid each time an item is added to/removed from the inventory/hotbar
-        InventoryPanel.ItemContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
+        InventoryPanel.MainContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
         //hotbarPanel.ItemContainer.ContainerStateChangedEvent += CheckForValidCraftingSetup;
 
         // Deselect all recipes by default
