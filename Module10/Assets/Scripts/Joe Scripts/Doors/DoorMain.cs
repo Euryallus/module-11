@@ -63,12 +63,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private float doorOpenTimer;    // The amount of time the door has been open for (seconds)
 
-    private InventoryPanel  playerInventory;    // Reference to the player's inventory panel
-
     private void Start()
     {
-        playerInventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-
         // Subscribe to save/load events so this door's data will be saved when the game is saved
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
@@ -305,6 +301,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             ItemGroup requiredItemGroup = new ItemGroup(unlockItem, 1);
 
             // Check if the required item is in the player's inventory/hotbar
+
+            InventoryPanel playerInventory = GameSceneUI.Instance.PlayerInventory;
 
             bool itemInInventory = playerInventory.ContainsQuantityOfItem(requiredItemGroup, out _);
 

@@ -47,7 +47,6 @@ public class ShopBuyPanel : MonoBehaviour
 
     #endregion
 
-    private InventoryPanel      inventoryPanel;             // The player's inventory panel
     private ShopNPC             shopNPC;                    // The NPC the player talked to when acessing this shop
     private ShopType            shopType;                   // The shop type - defines what items are sold at the shop
     private PressEffectButton[] categoryButtons;            // Buttons for selecting the different item categories for the shop
@@ -60,12 +59,6 @@ public class ShopBuyPanel : MonoBehaviour
 
     private const int ItemsPerRow           = 5;    // Number of items to display in each row of the shop's UI
     private const int MaxDisplayableItems   = 20;   // Maximum number of items that can be displayed in a single category
-
-    private void Awake()
-    {
-        // Get references to the player's inventory and hotbar
-        inventoryPanel  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-    }
 
     private void Update()
     {
@@ -143,7 +136,7 @@ public class ShopBuyPanel : MonoBehaviour
 
         // Update the values for the quantity of currency items in the player's inventory and hotbar
         //   since each category can use a different currency type
-        playerCurrencyQuantity = inventoryPanel.CheckForQuantityOfItem(selectedCategory.CurrencyItem);
+        playerCurrencyQuantity = GameSceneUI.Instance.PlayerInventory.CheckForQuantityOfItem(selectedCategory.CurrencyItem);
 
         // Update the currency UI to show the values calculated above
         UpdateCurrencyUI();
@@ -267,6 +260,8 @@ public class ShopBuyPanel : MonoBehaviour
         if (itemPurchasable)
         {
             // The player has enough currency to buy the item
+
+            InventoryPanel inventoryPanel = GameSceneUI.Instance.PlayerInventory;
 
             // Remove spent currency
             for (int i = 0; i < selectedItem.Price; i++)

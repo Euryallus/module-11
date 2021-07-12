@@ -255,10 +255,8 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         ItemStackPickup itemStackPickup = Instantiate(itemStackPickupPrefab, new Vector3(data.Position[0], data.Position[1], data.Position[2]),
                                                 Quaternion.Euler(data.Rotation[0], data.Rotation[1], data.Rotation[2])).GetComponent<ItemStackPickup>();
 
-        InventoryPanel inventoryPanel = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-
         // Setup the customising table script
-        itemStackPickup.Setup(data.ItemId, data.ItemQuantity, inventoryPanel);
+        itemStackPickup.Setup(data.ItemId, data.ItemQuantity, GameSceneUI.Instance.PlayerInventory);
     }
 
     private void MovePlayerToSpawnPoint()

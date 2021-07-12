@@ -19,10 +19,7 @@ public class GatherItemsQuestObjective : QuestObjective
         // Saves "type" for easier reference when using lists of different objectives
         objectiveType = Type.Collect;
 
-        // References player's inventory
-        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-
         // Returns if inventory or hotbar contains item(s) listed in toCollect
-        return (inventory.CheckForQuantityOfItem(toCollect.Item) >= toCollect.Quantity);
+        return (GameSceneUI.Instance.PlayerInventory.CheckForQuantityOfItem(toCollect.Item) >= toCollect.Quantity);
     }
 }

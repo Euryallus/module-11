@@ -32,6 +32,7 @@ public class GameSceneUI : MonoBehaviour
 
     #region Properties
 
+    public InventoryPanel PlayerInventory { get { return playerInventory; } }
     public bool ShowingCinematicsCanvas { get { return showingCinematicsCanvas; } }
 
     #endregion
@@ -42,6 +43,8 @@ public class GameSceneUI : MonoBehaviour
 
     private bool             showingCinematicsCanvas;
     private CinematicsCanvas cinematicsCanvas;
+
+    private InventoryPanel   playerInventory;
 
     private void Awake()
     {
@@ -57,6 +60,8 @@ public class GameSceneUI : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        FindPlayerInventory();
     }
 
     private void Start()
@@ -66,7 +71,12 @@ public class GameSceneUI : MonoBehaviour
 
     private void Update()
     {
-        if(!InputFieldSelection.AnyFieldSelected && !showingCinematicsCanvas && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)))
+        if(playerInventory == null)
+        {
+            FindPlayerInventory();
+        }
+
+        if (!InputFieldSelection.AnyFieldSelected && !showingCinematicsCanvas && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)))
         {
             // Esc key was pressed while not editing an input field
 
@@ -88,6 +98,11 @@ public class GameSceneUI : MonoBehaviour
                 PauseAndShowPauseUI();
             }
         }
+    }
+
+    private void FindPlayerInventory()
+    {
+        playerInventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
     }
 
     private void PauseGame()

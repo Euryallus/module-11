@@ -12,7 +12,6 @@ using UnityEngine.UI;
 public class QuestManager : MonoBehaviour, IPersistentGlobalObject
 {
     [SerializeField]    private PlayerQuestBacklog playerQuestData; // Ref. to player's quest data, stored as ScriptableObject
-    [SerializeField]    private InventoryPanel inventory;           // Ref. to player's inventory
 
                         private QuestUI UI;                         // Ref. to QuestUI, controls UI relating to player quests
 
@@ -140,7 +139,7 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         // Displays quest complete UI (rewards & handInDialogue)
         UI.DisplayQuestComplete(quest);
 
-        InventoryPanel  inventory   = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+        InventoryPanel inventory = GameSceneUI.Instance.PlayerInventory;
 
         //Cycles each objective in quest, if any "collect" quests exist make a note of what needs removing from player inventory
         foreach (QuestObjective objective in quest.objectives)

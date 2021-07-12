@@ -17,7 +17,7 @@ public class Collectable : InteractableWithOutline
     {
         base.Interact();
 
-        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+        InventoryPanel inventory = GameSceneUI.Instance.PlayerInventory;
 
         // Added by Joe: Keeps track of any item groups that cannot be added to the player's inventory and should instead be dropped
         List<ItemGroup> dropItemGroups = new List<ItemGroup>();

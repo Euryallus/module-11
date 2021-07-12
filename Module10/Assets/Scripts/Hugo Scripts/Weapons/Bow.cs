@@ -63,7 +63,7 @@ public class Bow : Weapon
         playerCam = GameObject.FindGameObjectWithTag("MainCamera");
         base.EndSecondaryAbility();
 
-        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
+        InventoryPanel inventory = GameSceneUI.Instance.PlayerInventory;
 
         //Checks inventory for required arrows - if found, remove arrows from inventory & fire arrow
         if (inventory.ContainsQuantityOfItem(arrowRequired, out _))

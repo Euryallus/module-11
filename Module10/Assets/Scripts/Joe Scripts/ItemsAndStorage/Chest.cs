@@ -22,12 +22,10 @@ public class Chest : InteractableWithOutline
     #endregion
 
     protected ChestPanel      chestPanel;      // The UI panel that displays the contents of the chest
-    protected InventoryPanel  inventoryPanel;  // Reference to the player's inventory panel which is shown when a chest is open
 
     private void Awake()
     {
         //Find the nventory panel and chest panel in the scene
-        inventoryPanel  = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
         chestPanel      = GameObject.FindGameObjectWithTag("ChestPanel").GetComponent<ChestPanel>();
     }
 
@@ -50,7 +48,7 @@ public class Chest : InteractableWithOutline
 
         // Also show the inventory panel with an offset to it doesn't overlap with the chest UI
         //   This allows the player to drag items between the chest and their inventory
-        inventoryPanel.Show(InventoryShowMode.InventoryOnly, 140.0f);
+        GameSceneUI.Instance.PlayerInventory.Show(InventoryShowMode.InventoryOnly, 140.0f);
     }
 
     protected virtual void SetupChest()

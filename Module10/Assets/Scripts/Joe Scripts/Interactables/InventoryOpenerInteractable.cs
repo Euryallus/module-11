@@ -20,19 +20,11 @@ public class InventoryOpenerInteractable : InteractableWithOutline
 
     #endregion
 
-    private InventoryPanel inventoryPanel;  // The player's inventory panel
-
-    protected override void Start()
-    {
-        base.Start();
-
-        // Get a reference to the player's inventory panel
-        inventoryPanel = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-    }
-
     public override void Interact()
     {
         base.Interact();
+
+        InventoryPanel inventoryPanel = GameSceneUI.Instance.PlayerInventory;
 
         if (!inventoryPanel.Showing)
         {

@@ -123,6 +123,13 @@ public abstract class PlayerAbility : MonoBehaviour
         }
     }
 
+    protected virtual void CheckIfAbilityIsUnlocked()
+    {
+        InventoryPanel inventory = GameSceneUI.Instance.PlayerInventory;
+
+        // something like inventory.GetAbilityItem(), then check for unlock status and upgradable properties if unlocked
+    }
+
     private void SetupUIIndicator()
     {
         SetChargeAmount(charge);

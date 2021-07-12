@@ -284,7 +284,6 @@ public class HeldPlaceableItem : HeldItem
     protected virtual void RemoveItemFromInventory()
     {
         // Remove the item from the player's hotbar/inventory (both use the same ItemContainer)
-        InventoryPanel inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryPanel>();
-        inventory.TryRemoveItem(item);
+        GameSceneUI.Instance.PlayerInventory.TryRemoveItem(item);
     }
 }
