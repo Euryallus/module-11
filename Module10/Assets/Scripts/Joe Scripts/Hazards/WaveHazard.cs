@@ -129,7 +129,7 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
 
         string loopSoundId = "waveHazardLoop_" + basePosition.x + "_" + basePosition.z;
 
-        waveLoopSoundSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, transform.position, 30.0f, 100.0f);
+        waveLoopSoundSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, false, transform.position, 30.0f, 100.0f);
     }
 
     private void MoveWaveUpdate()

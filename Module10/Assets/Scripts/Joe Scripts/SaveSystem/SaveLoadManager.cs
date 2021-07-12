@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 // ||=======================================================================||
 // || SaveLoadManager: Handles saving/loading all game data.                ||
@@ -23,6 +24,7 @@ public class SaveLoadManager : MonoBehaviour
     // Variables in this region are set in the inspector
 
     [SerializeField] private GameObject loadingCanvasPrefab; // UI canvas instantiated when loading a scene
+    [SerializeField] private GameObject titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
 
     #endregion
 
@@ -467,13 +469,21 @@ public class SaveLoadManager : MonoBehaviour
             LoadGlobalObjectsConfigureEvent?.Invoke(globalData);
         }
 
-        loadingAfterDeath = false;
-
         // Reset the player movement state in case they died in a non-standard state (e.g. in water)
         playerMovement.ResetMovementState();
 
         // Allow the player to move now loading is done
         activePlayer.PlayerController.enabled = true;
+
+        // Show the title card if loading into the scene (unless reloading after death)
+        if(!loadingAfterDeath)
+        {
+            Transform titleCardTransform = Instantiate(titleCardPrefab, GameObject.Find("JoeCanvas").transform).transform;
+            titleCardTransform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = sceneToLoadName;
+            titleCardTransform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = sceneToLoadName;
+        }
+
+        loadingAfterDeath = false;
 
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);

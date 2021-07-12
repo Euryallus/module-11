@@ -238,7 +238,7 @@ public class AudioManager : MonoBehaviour
         PlayMusic(currentSceneMusic.Playlist[currentPlaylistIndex], false);
     }
 
-    private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
+    private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace, bool bypassEffects,
                                         Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         // Pick a random volume/sound within the set ranges
@@ -290,6 +290,8 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        audioSource.bypassListenerEffects = bypassEffects;
+
         if (loopType.LoopEnabled)
         {
             // If looping, set the audioSource to loop and give it an identifiable name so it can later be stopped/deleted
@@ -306,13 +308,13 @@ public class AudioManager : MonoBehaviour
         return audioSource;
     }
 
-    private AudioSource PlaySoundEffect(string id, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace,
+    private AudioSource PlaySoundEffect(string id, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace, bool bypassEffects,
                                         Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         if (soundsDict.ContainsKey(id))
         {
             // Play a sound with the given parameters
-            return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
+            return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
         }
         else
         {
@@ -321,16 +323,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public AudioSource PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    public AudioSource PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, bool bypassEffects = false,
+                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound with soundId that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(soundId, LoopType.Loop(loopId), false, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(soundId, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance);
     }
 
-    public AudioSource PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+    public AudioSource PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, bool bypassEffects = false,
+                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
     {
         // Starts playing a sound that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(sound, LoopType.Loop(loopId), false, use3DSpace, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(sound, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void StopLoopingSoundEffect(string loopId)
@@ -392,25 +396,25 @@ public class AudioManager : MonoBehaviour
     public void PlaySoundEffect2D(string id, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays a sound with the given id that is not positioned in 3D space
-        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false);
+        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false, true);
     }
 
     public void PlaySoundEffect2D(SoundClass sound, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays the given sound, not positioned in 3D space
-        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false);
+        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, false, true);
     }
 
     public void PlaySoundEffect3D(string id, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays a sound with the given id positioned in 3D space at sourcePosition
-        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, sourcePosition, min3dDistance, max3dDistance);
+        PlaySoundEffect(id, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, false, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void PlaySoundEffect3D(SoundClass sound, Vector3 sourcePosition, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool overrideGlobalVolumeMultiplier = false)
     {
         // Plays the given sound, positioned in 3D space at sourcePosition
-        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, sourcePosition, min3dDistance, max3dDistance);
+        PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, false, sourcePosition, min3dDistance, max3dDistance);
     }
 
     public void PlayMusicInterlude(string id)
@@ -419,7 +423,7 @@ public class AudioManager : MonoBehaviour
         //   for example when a cutscene is being played. Plays like a sound effect on top of background music, hence the use of PlaySoundEffect
         //   Also overrides globalVolumeMultiplier, allowing background music to be faded out while the interlude plays if desired
 
-        PlaySoundEffect(id, LoopType.DoNotLoop, true, false, default, 0, 0, true);
+        PlaySoundEffect(id, LoopType.DoNotLoop, true, false, true, default, 0, 0, true);
     }
 
     public void PlayAllDynamicSources()

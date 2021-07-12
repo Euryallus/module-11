@@ -180,7 +180,7 @@ public abstract class PlayerAbility : MonoBehaviour
     {
         if (chargeSound != null)
         {
-            AudioManager.Instance.PlayLoopingSoundEffect(chargeSound, "charge_" + uiIndicator.name);
+            AudioManager.Instance.PlayLoopingSoundEffect(chargeSound, "charge_" + uiIndicator.name, false, true);
         }
     }
 

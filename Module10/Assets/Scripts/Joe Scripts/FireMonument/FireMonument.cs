@@ -109,7 +109,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         // Show fire particles and play the lighting sound effect after a small delay
         yield return new WaitForSecondsRealtime(0.2f);
 
-        AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, transform.position);
+        AudioManager.Instance.PlayLoopingSoundEffect("fireLoop", "fireLoop_" + GetUniquePositionId(), true, false, transform.position);
         fireParticles.Play();
     }
 
@@ -131,6 +131,9 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         {
             cinematicsCanvas.SetupVideoPlayer(unlockVideoClip);
         }
+
+        // Snap the player to the respawn position in case they are stood in the fire
+        playerMovement.gameObject.transform.position = respawnTransform.position + Vector3.up;
     }
 
     // Called during the fire lighting cutscene by an animation event

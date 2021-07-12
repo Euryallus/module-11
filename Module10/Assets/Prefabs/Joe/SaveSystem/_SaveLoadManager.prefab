@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingCanvasPrefab: {fileID: 8318778376780048369, guid: 911f04c1ece45e04ba6d8a4fdcfc9854, type: 3}
+  titleCardPrefab: {fileID: 425790455253825924, guid: 036d5432e4084b640bb059e855fced8f, type: 3}
