@@ -73,14 +73,6 @@ public class InventoryPanel : UIPanel
     protected override void Awake()
     {
         base.Awake();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        // (No longer used) Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
-        //itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
 
         playerMovement  = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         handSlotUI      = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
@@ -95,6 +87,14 @@ public class InventoryPanel : UIPanel
 
         // Link UI slot elements that hold ability unlock items to the slot objects in the abilities item container
         abilitiesContainer.LinkSlotsToUI(abilitySlotsUI);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        // (No longer used) Subscribe to the ContainerStateChangedEvent event to update inventory weight when an item is added/removed/moved
+        //itemContainer.ContainerStateChangedEvent += UpdateTotalInventoryWeight;
 
         // (No longer used) Update the inventory weight values/UI on start to show the inventory is empty
         //UpdateTotalInventoryWeight();
