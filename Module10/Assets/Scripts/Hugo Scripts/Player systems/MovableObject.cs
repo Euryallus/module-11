@@ -24,13 +24,32 @@ public class MovableObject : InteractableWithOutline
 
     [SerializeField]    private Transform hand;
 
+    [Header("Object type (if is large, can only be held w/ upgraded Grab)")]
+    [SerializeField] private bool isLargeObject = false;
+
+    private bool canPickUp;
+
+    protected void Awake()
+    {
+        if (!isLargeObject)
+        {
+            canPickUp = true;
+        }
+    }
+
     protected override void Start()
     {
         base.Start();
+
         isHeld = false;
         rb = gameObject.GetComponent<Rigidbody>();
 
         hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
+
+        if(!canPickUp)
+        {
+            gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+        }
     }
 
     private void FixedUpdate()
@@ -71,7 +90,7 @@ public class MovableObject : InteractableWithOutline
     // Sets target position to players hand, turns off grav & sets isHeld to true
     public override void Interact()
     {
-        if(!isHeld)
+        if(!isHeld && canPickUp)
         {
             base.Interact();
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
@@ -116,5 +135,11 @@ public class MovableObject : InteractableWithOutline
         isHeld = false;
         rb.useGravity = true;
         rb.AddForce(direction.normalized * 300);
+    }
+
+    public void EnablePickUp()
+    {
+        gameObject.GetComponent<Outline>().OutlineWidth = 5f;
+        canPickUp = true;
     }
 }
