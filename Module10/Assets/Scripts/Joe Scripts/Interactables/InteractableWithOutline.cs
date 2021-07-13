@@ -23,7 +23,7 @@ public class InteractableWithOutline : InteractableObject
 
     #endregion
 
-    private Outline outline; //The outline that is enabled/disabled depending on if the player is hovering
+    protected Outline outline; //The outline that is enabled/disabled depending on if the player is hovering
 
     protected override void Start()
     {

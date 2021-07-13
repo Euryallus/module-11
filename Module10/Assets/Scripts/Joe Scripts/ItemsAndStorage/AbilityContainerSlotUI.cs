@@ -11,6 +11,13 @@ public class AbilityContainerSlotUI : ContainerSlotUI
 
     private PlayerAbility linkedPlayerAbility;
 
+    public override void LinkToContainerSlot(ContainerSlot slot)
+    {
+        base.LinkToContainerSlot(slot);
+
+        UpdateUI();
+    }
+
     protected override void DoExtraUIUpdates(Item itemInSlot, int stackSize)
     {
         if(stackSize > 0 && itemInSlot != null)

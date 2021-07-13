@@ -138,23 +138,23 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         saveData.AddData("playerBreath", breath);
 
         // Save player's grab ability status
-        saveData.AddData("playerGrabUpgrade", unlockedGrabUpgrade);
+        //saveData.AddData("playerGrabUpgrade", unlockedGrabUpgrade);
     }
 
     public void OnGlobalLoadSetup(SaveData saveData)
     {
 
         // Loads grab ability status
-        bool loadedGrabAbilityStatus = saveData.GetData<bool>("playerGrabUpgrade", out bool grabLoadSuccess);
-        if (grabLoadSuccess)
-        {
-            unlockedGrabUpgrade = loadedGrabAbilityStatus;
+        //bool loadedGrabAbilityStatus = saveData.GetData<bool>("playerGrabUpgrade", out bool grabLoadSuccess);
+        //if (grabLoadSuccess)
+        //{
+        //    unlockedGrabUpgrade = loadedGrabAbilityStatus;
 
-            if(unlockedGrabUpgrade)
-            {
-                FlagMoveables();
-            }
-        }
+        //    if(unlockedGrabUpgrade)
+        //    {
+        //        FlagMoveables();
+        //    }
+        //}
 
 
         // Only load in health/food/breath values if the game is being loaded from the menu
@@ -372,25 +372,25 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     }
 
     // Added by Hugo
-    public void UpgradeGrabAbility()
-    {
-        unlockedGrabUpgrade = true;
-        GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
+    //public void UpgradeGrabAbility()
+    //{
+    //    unlockedGrabUpgrade = true;
+    //    GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
 
-        foreach(GameObject moveable in moveables)
-        {
-            moveable.GetComponent<MovableObject>().EnablePickUp();
-        }    
-    }
+    //    foreach(GameObject moveable in moveables)
+    //    {
+    //        moveable.GetComponent<MovableObject>().EnablePickUp();
+    //    }    
+    //}
 
-    private void FlagMoveables()
-    {
-        GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
+    //private void FlagMoveables()
+    //{
+    //    GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
 
-        foreach (GameObject moveable in moveables)
-        {
-            moveable.GetComponent<MovableObject>().EnablePickUp();
-        }
-    }
+    //    foreach (GameObject moveable in moveables)
+    //    {
+    //        moveable.GetComponent<MovableObject>().EnablePickUp();
+    //    }
+    //}
 
 }

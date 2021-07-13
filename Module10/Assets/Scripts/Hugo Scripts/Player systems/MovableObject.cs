@@ -27,15 +27,13 @@ public class MovableObject : InteractableWithOutline
     [Header("Object type (if is large, can only be held w/ upgraded Grab)")]
     [SerializeField] private bool isLargeObject = false;
 
-    private bool canPickUp;
-
-    protected void Awake()
-    {
-        if (!isLargeObject)
-        {
-            canPickUp = true;
-        }
-    }
+    //protected void Awake()
+    //{
+    //    if (!isLargeObject)
+    //    {
+    //        canPickUp = true;
+    //    }
+    //}
 
     protected override void Start()
     {
@@ -46,10 +44,10 @@ public class MovableObject : InteractableWithOutline
 
         hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
 
-        if(!canPickUp)
-        {
-            gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-        }
+        //if(!canPickUp)
+        //{
+        //    gameObject.GetComponent<Outline>().OutlineWidth = 0f;
+        //}
     }
 
     private void FixedUpdate()
@@ -72,6 +70,17 @@ public class MovableObject : InteractableWithOutline
         }
     }
 
+    public override void StartHoverInRange()
+    {
+        base.StartHoverInRange();
+
+        // Don't show an outline on hover if the object cannot be picked up
+        if(!CanPickUp())
+        {
+            outline.enabled = false;
+        }
+    }
+
     protected override void Update()
     {
         if(isHeld && Input.GetKeyDown(KeyCode.Mouse0))
@@ -90,7 +99,7 @@ public class MovableObject : InteractableWithOutline
     // Sets target position to players hand, turns off grav & sets isHeld to true
     public override void Interact()
     {
-        if(!isHeld && canPickUp)
+        if(!isHeld && CanPickUp())
         {
             base.Interact();
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
@@ -137,9 +146,33 @@ public class MovableObject : InteractableWithOutline
         rb.AddForce(direction.normalized * 300);
     }
 
-    public void EnablePickUp()
+    //public void EnablePickUp()
+    //{
+    //    gameObject.GetComponent<Outline>().OutlineWidth = 5f;
+    //    canPickUp = true;
+    //}
+
+    // Added by Joe, determines whether the object can be picked up based on
+    //   the unlock status and upgrade level of the grab ability
+    private bool CanPickUp()
     {
-        gameObject.GetComponent<Outline>().OutlineWidth = 5f;
-        canPickUp = true;
+        if(PlayerAbility.AbilityIsUnlocked(PlayerAbilityType.Grab))
+        {
+            if(!isLargeObject || PlayerAbility.GetAbilityUpgradeLevel(PlayerAbilityType.Grab) > 1)
+            {
+                // This is a small object, or the grab ability was upgraded to level 2, object can be picked up
+                return true;
+            }
+            else
+            {
+                // This is a large object and the grab ability has not been upgraded, object cannot be picked up
+                return false;
+            }
+        }
+        else
+        {
+            // Grab ability is not unlocked, object cannot be picked up
+            return false;
+        }
     }
 }

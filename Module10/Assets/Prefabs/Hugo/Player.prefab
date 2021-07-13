@@ -280,6 +280,7 @@ MonoBehaviour:
   drownDamageInterval: 2
   baseTimeToDrown: 30
   damageEffectPrefab: {fileID: 3342926187353654585, guid: 38135b846d9b4854d825cb5f5717235e, type: 3}
+  unlockedGrabUpgrade: 0
 --- !u!114 &8688783702949859633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 101
   useDefaultBehaviour: 0
-  maxUpgradeLevel: 0
+  maxUpgradeLevel: 2
   chargeTime: 0
   cooldownTime: 0
   initialFoodDecrease: 0

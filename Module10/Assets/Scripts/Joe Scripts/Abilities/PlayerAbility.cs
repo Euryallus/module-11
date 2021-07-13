@@ -52,9 +52,35 @@ public abstract class PlayerAbility : MonoBehaviour
     protected   bool                abilityActive;
     protected   Item                abilityItem;
 
-    private bool                    unlocked;
     private     PlayerStats         playerStats;    // Reference to the player stats script
     private     InventoryPanel      playerInventory;
+    private     bool                unlocked;
+
+    private static Dictionary<PlayerAbilityType, int> abilityUpgradeLevels = new Dictionary<PlayerAbilityType, int>()
+    {
+        { PlayerAbilityType.Launch, 0 },
+        { PlayerAbilityType.Freeze, 0 },
+        { PlayerAbilityType.Slam,   0 },
+        { PlayerAbilityType.Grab,   0 }
+    };
+
+    private static Dictionary<PlayerAbilityType, bool> abilityUnlockStatuses = new Dictionary<PlayerAbilityType, bool>()
+    {
+        { PlayerAbilityType.Launch, false },
+        { PlayerAbilityType.Freeze, false },
+        { PlayerAbilityType.Slam,   false },
+        { PlayerAbilityType.Grab,   false }
+    };
+
+    public static bool AbilityIsUnlocked(PlayerAbilityType abilityType)
+    {
+        return abilityUnlockStatuses[abilityType];
+    }
+
+    public static int GetAbilityUpgradeLevel(PlayerAbilityType abilityType)
+    {
+        return abilityUpgradeLevels[abilityType];
+    }
 
     protected virtual void Start()
     {
@@ -72,11 +98,13 @@ public abstract class PlayerAbility : MonoBehaviour
 
         SetupUIIndicator();
         LinkToInventory();
+
+        UpdateUnlockStatus();
     }
 
     private void OnAbilityContainerStateChanged()
     {
-        CheckIfAbilityIsUnlocked();
+        UpdateUnlockStatus();
     }
 
     protected virtual void Update()
@@ -158,7 +186,7 @@ public abstract class PlayerAbility : MonoBehaviour
         }
     }
 
-    private void CheckIfAbilityIsUnlocked()
+    private void UpdateUnlockStatus()
     {
         abilityItem = GameSceneUI.Instance.PlayerInventory.GetPlayerAbilityItem(GetAbilityType());
 
@@ -167,8 +195,6 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void SetupUIIndicator()
     {
-        Debug.LogWarning("SETTING UP UI INDICATOR");
-
         SetChargeAmount(charge);
         SetCooldownAmount(cooldown);
 
@@ -182,7 +208,10 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void SetAbilityUnlocked(bool value)
     {
+        PlayerAbilityType abilityType = GetAbilityType();
+
         unlocked = value;
+        abilityUnlockStatuses[abilityType] = value;
 
         uiIndicator.gameObject.SetActive(unlocked);
 
@@ -195,6 +224,8 @@ public abstract class PlayerAbility : MonoBehaviour
                 if(itemUpgradeLevelProperty != null)
                 {
                     uiIndicator.SetUpgradeLevel(itemUpgradeLevelProperty.Value, maxUpgradeLevel);
+
+                    abilityUpgradeLevels[abilityType] = (int)itemUpgradeLevelProperty.Value;
                 }
             }
             else
@@ -279,8 +310,6 @@ public abstract class PlayerAbility : MonoBehaviour
 
     private void LinkToInventory()
     {
-        Debug.LogWarning("LINKING ABILITY TO INVENTORY");
-
         playerInventory = GameSceneUI.Instance.PlayerInventory;
 
         playerInventory.AbilitiesContainer.ContainerStateChangedEvent += OnAbilityContainerStateChanged;

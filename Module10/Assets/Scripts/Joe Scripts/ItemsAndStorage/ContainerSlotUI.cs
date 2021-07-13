@@ -54,7 +54,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
         animator = GetComponent<Animator>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         // Hide the item image/count as the slot is empty by default
         itemImage.gameObject    .SetActive(false);
@@ -69,7 +69,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
         handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
     }
 
-    public void LinkToContainerSlot(ContainerSlot slot)
+    public virtual void LinkToContainerSlot(ContainerSlot slot)
     {
         // Connects the UI element to a container slot object by giving them references to each other
         //   so changes to the object can be reflected in the UI

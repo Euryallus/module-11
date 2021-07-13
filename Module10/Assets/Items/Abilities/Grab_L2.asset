@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
-  m_Name: Grab_L1
+  m_Name: Grab_L2
   m_EditorClassIdentifier: 
-  m_id: grab_level1
+  m_id: grab_level2
   m_specialSlotId: grabAbility
   m_uiName: Grab Ability
   m_uiDescription: Lift, carry and throw objects.
@@ -27,7 +27,7 @@ MonoBehaviour:
   m_customFloatProperties:
   - Name: upgradeLevel
     UIName: Upgrade Level
-    Value: 1
+    Value: 2
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0
