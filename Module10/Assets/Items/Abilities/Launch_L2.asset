@@ -13,20 +13,27 @@ MonoBehaviour:
   m_Name: Launch_L2
   m_EditorClassIdentifier: 
   m_id: launch_level2
-  m_uiName: Launch | Level 2
+  m_specialSlotId: launchAbility
+  m_uiName: Launch Ability
   m_uiDescription: Launch yourself into the air.
   m_stackSize: 1
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: ee97649bb64c4f04abe70110cd4ae761, type: 3}
+  m_sprite: {fileID: 21300000, guid: ca3a37c0a9a76354cba5ce91dd376741, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
   m_customisable: 0
   m_currencyItemId: 
   m_currencyItemQuantity: 0
   m_customFloatProperties:
+  - Name: upgradeLevel
+    UIName: Upgrade Level
+    Value: 2
+    UpgradeIncrease: 0
+    MinValue: 0
+    MaxValue: 0
   - Name: launchPower
     UIName: Launch Power
-    Value: 20
+    Value: 30
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0

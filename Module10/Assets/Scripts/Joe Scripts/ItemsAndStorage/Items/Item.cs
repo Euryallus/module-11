@@ -16,6 +16,7 @@ public class Item : ScriptableObject
     #region Properties
 
     public string                       Id { get { return m_id; } set { m_id = value; } }
+    public string                       SpecialSlotId { get { return m_specialSlotId; } set { m_specialSlotId = value; } }
     public string                       UIName { get { return m_uiName; } set { m_uiName = value; } }
     public string                       UIDescription { get { return m_uiDescription; } }
     public int                          StackSize { get { return m_stackSize; } }
@@ -43,6 +44,10 @@ public class Item : ScriptableObject
 
     [SerializeField] [Tooltip("Unique identifier for this item")]
     private string m_id;
+
+    [SerializeField]
+    [Tooltip("Determines which special slot this item will be placed into when added to the player's inventory. Should be left blank for standard items.")]
+    private string m_specialSlotId;
 
     [SerializeField] [Tooltip("Name to be displayed in the user interface")]
     private string m_uiName;
@@ -91,7 +96,7 @@ public class Item : ScriptableObject
     private bool    m_customItem;   // Whether the item is a custom item made by the player
     private string  m_baseItemId;   // If the item is custom, the id of the original item it is based on
 
-    public CustomFloatProperty GetCustomFloatPropertyWithName(string propertyName)
+    public CustomFloatProperty GetCustomFloatPropertyWithName(string propertyName, bool ignoreInvalidName = false)
     {
         // Returns a custom float property with a matching propertyName
 
@@ -106,8 +111,12 @@ public class Item : ScriptableObject
             }
         }
 
-        // No matching properties found
-        Debug.LogError("Trying to get invalid custom float property: " + propertyName);
+        // No matching properties found, throw an error unless ignoring invalid property names
+        //   (in some cases invalid names are ignored because it is expected that the property may or may not exist when calling the function)
+        if(!ignoreInvalidName)
+        {
+            Debug.LogError("Trying to get invalid custom float property: " + propertyName);
+        }
         return default;
     }
 

@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerAbilityType
+{
+    Launch,
+    Freeze,
+    Slam,
+    Grab
+}
+
 public abstract class PlayerAbility : MonoBehaviour
 {
     #region InspectorVariables
@@ -12,8 +20,12 @@ public abstract class PlayerAbility : MonoBehaviour
     [SerializeField] protected KeyCode  triggerKey;
     [SerializeField] protected bool     useDefaultBehaviour = true;
 
+    [Header("Upgrades")]
+    [SerializeField] [Tooltip("The number of upgrade levels the ability has. Set to 0 if the ability cannot be upgraded")]
+    protected int      maxUpgradeLevel;
+
     [Header("Charge & Cooldown")]
-    [SerializeField] protected float    chargeTime = 0.5f;
+    [SerializeField] protected float    chargeTime   = 0.5f;
     [SerializeField] protected float    cooldownTime = 5.0f;
 
     [Header("Food Level Decrease")]
@@ -29,6 +41,8 @@ public abstract class PlayerAbility : MonoBehaviour
 
     #region Properties
 
+    public int MaxUpgradeLevel { get { return maxUpgradeLevel; } }
+
     #endregion
 
     protected   AbilityIndicator    uiIndicator;
@@ -36,11 +50,18 @@ public abstract class PlayerAbility : MonoBehaviour
     protected   float               cooldown;
     protected   bool                charging;
     protected   bool                abilityActive;
+    protected   Item                abilityItem;
+
+    private bool                    unlocked;
     private     PlayerStats         playerStats;    // Reference to the player stats script
+    private     InventoryPanel      playerInventory;
 
     protected virtual void Start()
     {
         playerStats = GetComponent<PlayerStats>();
+
+        charge = 0.0f;
+        cooldown = 1.0f;
 
         FindUIIndicator();
 
@@ -49,97 +70,138 @@ public abstract class PlayerAbility : MonoBehaviour
             Debug.LogError("Failed to find UI ability indicator", gameObject);
         }
 
-        charge = 0.0f;
-        cooldown = 1.0f;
-
         SetupUIIndicator();
+        LinkToInventory();
+    }
+
+    private void OnAbilityContainerStateChanged()
+    {
+        CheckIfAbilityIsUnlocked();
     }
 
     protected virtual void Update()
     {
-        if (GameSceneUI.Instance.ShowingCinematicsCanvas)
-            return;
-
-        if(uiIndicator == null)
+        if (uiIndicator == null)
         {
             // Re-find and setup the UI indicator if it becomes null (happens when switching scenes)
             FindUIIndicator();
             SetupUIIndicator();
         }
 
-        if(useDefaultBehaviour)
+        if (playerInventory == null)
         {
-            bool triggerKeyPressed = GetTriggerKeyInput();
+            LinkToInventory();
+        }
 
-            if (abilityActive)
+        if (unlocked && (!GameSceneUI.Instance.ShowingCinematicsCanvas))
+        {
+            // The ability was unlocked by the player, and the cinematics canvas is not blocking the ability from being used
+
+            if (useDefaultBehaviour)
             {
-                if (triggerKeyPressed)
-                {
-                    AbilityActive();
-                }
-                else
-                {
-                    AbilityEnd();
-                }
-            }
-            else
-            {
-                if (cooldown >= 1.0f)
+                bool triggerKeyPressed = GetTriggerKeyInput();
+
+                if (abilityActive)
                 {
                     if (triggerKeyPressed)
                     {
-                        if (!charging)
+                        AbilityActive();
+                    }
+                    else
+                    {
+                        AbilityEnd();
+                    }
+                }
+                else
+                {
+                    if (cooldown >= 1.0f)
+                    {
+                        if (triggerKeyPressed)
                         {
-                            ChargeStart();
-                        }
+                            if (!charging)
+                            {
+                                ChargeStart();
+                            }
 
-                        if (charge < 1.0f)
-                        {
-                            SetChargeAmount(charge + Time.deltaTime / chargeTime);
+                            if (charge < 1.0f)
+                            {
+                                SetChargeAmount(charge + Time.deltaTime / chargeTime);
+                            }
+                            else
+                            {
+                                ChargeEnd();
+
+                                SetCooldownAmount(0.0f);
+
+                                AbilityStart();
+                            }
                         }
                         else
                         {
-                            ChargeEnd();
+                            if (charging)
+                            {
+                                ChargeEnd();
 
-                            SetCooldownAmount(0.0f);
-
-                            AbilityStart();
+                                if (chargeEndSound != null)
+                                {
+                                    AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
+                                }
+                            }
                         }
                     }
                     else
                     {
-                        if (charging)
-                        {
-                            ChargeEnd();
-
-                            if (chargeEndSound != null)
-                            {
-                                AudioManager.Instance.PlaySoundEffect2D(chargeEndSound);
-                            }
-                        }
+                        SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
                     }
-                }
-                else
-                {
-                    SetCooldownAmount(cooldown + Time.deltaTime / cooldownTime);
                 }
             }
         }
     }
 
-    protected virtual void CheckIfAbilityIsUnlocked()
+    private void CheckIfAbilityIsUnlocked()
     {
-        InventoryPanel inventory = GameSceneUI.Instance.PlayerInventory;
+        abilityItem = GameSceneUI.Instance.PlayerInventory.GetPlayerAbilityItem(GetAbilityType());
 
-        // something like inventory.GetAbilityItem(), then check for unlock status and upgradable properties if unlocked
+        SetAbilityUnlocked(abilityItem != null);
     }
 
     protected virtual void SetupUIIndicator()
     {
+        Debug.LogWarning("SETTING UP UI INDICATOR");
+
         SetChargeAmount(charge);
         SetCooldownAmount(cooldown);
 
         uiIndicator.SetKeyPromptText(triggerKey.ToString());
+
+        if(maxUpgradeLevel == 0)
+        {
+            uiIndicator.HideUpgradeSlider();
+        }
+    }
+
+    protected virtual void SetAbilityUnlocked(bool value)
+    {
+        unlocked = value;
+
+        uiIndicator.gameObject.SetActive(unlocked);
+
+        if(unlocked)
+        {
+            if(abilityItem != null)
+            {
+                CustomFloatProperty itemUpgradeLevelProperty = abilityItem.GetCustomFloatPropertyWithName("upgradeLevel", true);
+
+                if(itemUpgradeLevelProperty != null)
+                {
+                    uiIndicator.SetUpgradeLevel(itemUpgradeLevelProperty.Value, maxUpgradeLevel);
+                }
+            }
+            else
+            {
+                Debug.LogError("Unlocking ability without setting abilityItem");
+            }
+        }
     }
 
     private bool GetTriggerKeyInput()
@@ -215,5 +277,15 @@ public abstract class PlayerAbility : MonoBehaviour
         uiIndicator.SetCooldownAmount(cooldownAmount);
     }
 
+    private void LinkToInventory()
+    {
+        Debug.LogWarning("LINKING ABILITY TO INVENTORY");
+
+        playerInventory = GameSceneUI.Instance.PlayerInventory;
+
+        playerInventory.AbilitiesContainer.ContainerStateChangedEvent += OnAbilityContainerStateChanged;
+    }
+
     protected abstract void FindUIIndicator();
+    protected abstract PlayerAbilityType GetAbilityType();
 }

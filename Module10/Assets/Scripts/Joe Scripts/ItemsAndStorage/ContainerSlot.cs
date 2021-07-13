@@ -83,6 +83,21 @@ public class ContainerSlot
         otherSlot.ItemsMovedEvent?.Invoke();
     }
 
+    public void ReplaceItemInSlot(Item item)
+    {
+        // Replaces any existing items in this slot's ItemStack with the given item
+
+        // First, remove any existing items from the stack
+        for (int i = 0; i < itemStack.StackSize; i++)
+        {
+            itemStack.TryRemoveItemFromStack();
+        }
+
+        // Then add the new item and update the slot UI to show the new item
+        itemStack.AddItemToStack(item.Id);
+        slotUI.UpdateUI();
+    }
+
     public bool IsEmpty()
     {
         return (string.IsNullOrEmpty(itemStack.StackItemsID) || itemStack.StackSize == 0);

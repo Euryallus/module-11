@@ -234,4 +234,9 @@ public class SlamAbility : PlayerAbility
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, effectRadius);
     }
+
+    protected override PlayerAbilityType GetAbilityType()
+    {
+        return PlayerAbilityType.Slam;
+    }
 }

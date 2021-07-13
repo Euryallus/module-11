@@ -55,7 +55,13 @@ public class InventoryPanel : UIPanel
 
     #region Properties
 
-    public ItemContainer    MainContainer   { get { return mainContainer; } }
+    public ItemContainer     MainContainer       { get { return mainContainer; } }
+    public ItemContainer     AbilitiesContainer  { get { return abilitiesContainer; } }
+
+    private ContainerSlot    LaunchAbilitySlot   { get { return abilitySlotsUI[0].Slot; } }
+    private ContainerSlot    FreezeAbilitySlot   { get { return abilitySlotsUI[1].Slot; } }
+    private ContainerSlot    SlamAbilitySlot     { get { return abilitySlotsUI[2].Slot; } }
+    private ContainerSlot    GrabAbilitySlot     { get { return abilitySlotsUI[3].Slot; } }
 
     #endregion
 
@@ -131,8 +137,35 @@ public class InventoryPanel : UIPanel
 
     public bool TryAddItem(Item item)
     {
-        // Attempts to add an item to the item container if there is enough space
-        return mainContainer.TryAddItemToContainer(item);
+        if(!string.IsNullOrEmpty(item.SpecialSlotId))
+        {
+            switch (item.SpecialSlotId)
+            {
+                case "launchAbility":
+                    LaunchAbilitySlot.ReplaceItemInSlot(item);
+                    return true;
+
+                case "freezeAbility":
+                    FreezeAbilitySlot.ReplaceItemInSlot(item);
+                    return true;
+
+                case "slamAbility":
+                    SlamAbilitySlot.ReplaceItemInSlot(item);
+                    return true;
+
+                case "grabAbility":
+                    GrabAbilitySlot.ReplaceItemInSlot(item);
+                    return true;
+            }
+
+            Debug.LogError("Trying to add item to inventory with unknown SpecialSlotId: " + item.UIName + ", " + item.SpecialSlotId);
+            return false;
+        }
+        else
+        {
+            // For standard items: Attempts to add an item to the item container if there is enough space
+            return mainContainer.TryAddItemToContainer(item);
+        }
     }
 
     public bool TryRemoveItem(Item item)
@@ -151,6 +184,34 @@ public class InventoryPanel : UIPanel
     {
         // Returns the number of the given item in the inventory/hotbar item container
         return mainContainer.CheckForQuantityOfItem(item); 
+    }
+
+    public Item GetPlayerAbilityItem(PlayerAbilityType abilityType)
+    {
+        ContainerSlot abilitySlot = LaunchAbilitySlot;
+
+        switch (abilityType)
+        {
+            case PlayerAbilityType.Freeze:
+                abilitySlot = FreezeAbilitySlot;
+                break;
+            case PlayerAbilityType.Slam:
+                abilitySlot = SlamAbilitySlot;
+                break;
+            case PlayerAbilityType.Grab:
+                abilitySlot = GrabAbilitySlot;
+                break;
+        }
+
+        // Check if the slot used for storint launch ability items contains an item
+        if (abilitySlot.ItemStack.StackSize > 0)
+        {
+            // The player has obtained a launch ability item, return it
+            return ItemManager.Instance.GetItemWithId(abilitySlot.ItemStack.StackItemsID);
+        }
+
+        // The player has not obtained a launch ability item
+        return null;
     }
 
     public void DropItemGroup(ItemGroup groupToDrop, bool showDropNotification, bool allowInstantPickup)

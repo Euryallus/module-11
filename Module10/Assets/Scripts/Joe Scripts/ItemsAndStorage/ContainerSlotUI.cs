@@ -21,6 +21,8 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
+    [Header("Container Slot UI")]
+
     [SerializeField] private UIPanel                parentPanel;                // The UI panel that this slot is a child of
     [SerializeField] private Image                  itemImage;                  // The image displaying the icon of the item type stored in the slot
     [SerializeField] private Image                  coverImage;                 // Image that covers the slot UI, can be used as a highlight/fill
@@ -56,8 +58,12 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     {
         // Hide the item image/count as the slot is empty by default
         itemImage.gameObject    .SetActive(false);
-        itemCountPanel          .SetActive(false);
-        itemCountText.gameObject.SetActive(false);
+
+        if(itemCountPanel != null && itemCountText != null)
+        {
+            itemCountPanel.SetActive(false);
+            itemCountText.gameObject.SetActive(false);
+        }
 
         // Get a reference to the player's hand slot used for moving items
         handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
@@ -82,17 +88,19 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
             // Get the number of items in the linked slot's item stack
             int stackSize = slot.ItemStack.StackSize;
 
+            Item itemInSlot = null;
+
             if (stackSize > 0 && !string.IsNullOrEmpty(slot.ItemStack.StackItemsID))
             {
                 // At least 1 item is being stored in the slot's stack
 
                 // Get the type of the items in the stack
-                Item item = ItemManager.Instance.GetItemWithId(slot.ItemStack.StackItemsID);
+                itemInSlot = ItemManager.Instance.GetItemWithId(slot.ItemStack.StackItemsID);
 
-                if (item != null)
+                if (itemInSlot != null)
                 {
                     // Set the item image to display the contained item type's sprite
-                    itemImage.sprite = item.Sprite;
+                    itemImage.sprite = itemInSlot.Sprite;
                 }
 
                 // Show the item image GameObject so the icon is displayed
@@ -104,17 +112,27 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
                 itemImage.gameObject.SetActive(false);
             }
 
-            // Also display the number of items in the stack if there are more than 1
-            itemCountText.text = stackSize.ToString();
+            // Also display the number of items in the stack if there are more than 1, or hide the count panel/text if there is 1 item or less
+            if(itemCountText != null && ItemCountPanel != null)
+            {
+                itemCountText.text = stackSize.ToString();
 
-            itemCountPanel          .SetActive(stackSize > 1);
-            itemCountText.gameObject.SetActive(stackSize > 1);
+                itemCountPanel.SetActive(stackSize > 1);
+                itemCountText.gameObject.SetActive(stackSize > 1);
+            }
+
+            DoExtraUIUpdates(itemInSlot, stackSize);
         }
         else
         {
             // This slot UI was not linked to a ContainerSlot object
             ErrorNotLinked();
         }
+    }
+
+    protected virtual void DoExtraUIUpdates(Item itemInSlot, int stackSize)
+    {
+        // For use in child classes
     }
 
     public void SetCoverFillAmount(float value)

@@ -56,11 +56,6 @@ public class FreezeAbility : PlayerAbility
 
     }
 
-    protected override void FindUIIndicator()
-    {
-        uiIndicator = GameObject.FindGameObjectWithTag("FreezeIndicator").GetComponent<AbilityIndicator>();
-    }
-
     protected override void AbilityStart()
     {
         base.AbilityStart();
@@ -116,4 +111,13 @@ public class FreezeAbility : PlayerAbility
         }   
     }
 
+    protected override void FindUIIndicator()
+    {
+        uiIndicator = GameObject.FindGameObjectWithTag("FreezeIndicator").GetComponent<AbilityIndicator>();
+    }
+
+    protected override PlayerAbilityType GetAbilityType()
+    {
+        return PlayerAbilityType.Freeze;
+    }
 }

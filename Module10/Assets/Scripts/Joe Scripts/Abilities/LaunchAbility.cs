@@ -63,8 +63,7 @@ public class LaunchAbility : PlayerAbility
         {
             base.AbilityStart();
 
-            //TODO: Make this upgradable/not hard-coded
-            float launchForce = 30.0f;
+            float launchForce = abilityItem.GetCustomFloatPropertyWithName("launchPower").Value;
 
             // Launch the player into the air
             playerMovement.SetJumpVelocity(launchForce);
@@ -74,5 +73,10 @@ public class LaunchAbility : PlayerAbility
     protected override void FindUIIndicator()
     {
         uiIndicator = GameObject.FindGameObjectWithTag("LaunchIndicator").GetComponent<AbilityIndicator>();
+    }
+
+    protected override PlayerAbilityType GetAbilityType()
+    {
+        return PlayerAbilityType.Launch;
     }
 }

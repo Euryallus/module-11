@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class GrabAbility : PlayerAbility
 {
-    //protected override void SetupUIIndicator()
-    //{
-    //    base.SetupUIIndicator();
-
-    //    uiIndicator.HideKeyPrompt();
-    //}
-
     protected override void FindUIIndicator()
     {
         uiIndicator = GameObject.FindGameObjectWithTag("GrabIndicator").GetComponent<AbilityIndicator>();
+    }
+
+    protected override PlayerAbilityType GetAbilityType()
+    {
+        return PlayerAbilityType.Grab;
     }
 }

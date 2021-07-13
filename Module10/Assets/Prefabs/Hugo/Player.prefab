@@ -351,6 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 113
   useDefaultBehaviour: 1
+  maxUpgradeLevel: 3
   chargeTime: 0.5
   cooldownTime: 5
   initialFoodDecrease: 0.1
@@ -373,6 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 114
   useDefaultBehaviour: 1
+  maxUpgradeLevel: 0
   chargeTime: 0.5
   cooldownTime: 5
   initialFoodDecrease: 0.1
@@ -400,6 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 116
   useDefaultBehaviour: 1
+  maxUpgradeLevel: 0
   chargeTime: 0.5
   cooldownTime: 20
   initialFoodDecrease: 0.1
@@ -428,6 +431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 101
   useDefaultBehaviour: 0
+  maxUpgradeLevel: 0
   chargeTime: 0
   cooldownTime: 0
   initialFoodDecrease: 0
