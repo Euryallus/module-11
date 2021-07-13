@@ -13,4 +13,14 @@ public class GrabAbility : PlayerAbility
     {
         return PlayerAbilityType.Grab;
     }
+
+    protected override void SetupUIIndicator()
+    {
+        base.SetupUIIndicator();
+
+        if(uiIndicator != null)
+        {
+            uiIndicator.HideKeyPrompt();
+        }
+    }
 }

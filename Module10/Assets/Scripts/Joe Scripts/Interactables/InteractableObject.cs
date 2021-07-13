@@ -22,7 +22,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     [SerializeField] private GameObject interactTooltipPrefab;  // Prefab for the UI tooltip/popup shown while hovering over the object
     [SerializeField] private Vector3    interactTooltipOffset;  // Offset relative to the object's origin position to use when displaying the above tooltip
-    [SerializeField] private string     tooltipNameText;        // The object name to be displayed on the above tooltip, e.g. 'Crafting Table', 'Door'
+    [SerializeField] protected string   tooltipNameText;        // The object name to be displayed on the above tooltip, e.g. 'Crafting Table', 'Door'
 
     #endregion
 
@@ -45,6 +45,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected bool      canInteract = true;             // Whether this object can be interacted with
     protected bool      enableTooltip = true;           // Whether the interaction tooltip is enabled (when canInteract = true)
+    protected bool      showPressETooltipText = true;   // Whether the 'Press E to interact' should be shown on the tooltip
 
     private const float InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown
 
@@ -172,6 +173,12 @@ public abstract class InteractableObject : MonoBehaviour
             {
                 // No tooltip name text was set, disable the GameObject that would usually display this text
                 interactTooltip.transform.GetChild(1).gameObject.SetActive(false);
+            }
+
+            if(!showPressETooltipText)
+            {
+                // Hide the 'Press E to interact' text if showPressETooltipText is false
+                interactTooltip.transform.GetChild(2).gameObject.SetActive(false);
             }
         }
     }

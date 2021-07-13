@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6125630945617244642}
   - component: {fileID: 6125630945617244641}
   - component: {fileID: 6125630945617244640}
+  - component: {fileID: 7225798016730088717}
   m_Layer: 0
   m_Name: MovableObj
   m_TagString: MovableObj
@@ -109,8 +110,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a24fa3f3dfaf64fa92caecb211635c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionRange: 5
+  interactTooltipPrefab: {fileID: 7833637479385031685, guid: 00b3961c78315924bb78ec4054eb5813, type: 3}
+  interactTooltipOffset: {x: 0, y: 0, z: 0}
+  tooltipNameText: Pick Up
+  interactionSound: buttonClickMain1
+  externalOutline: {fileID: 0}
   isHeld: 0
+  target: {fileID: 0}
   rb: {fileID: 0}
+  jointSpring: 5
+  jointDamper: 10
+  movementDampen: 0.3
+  hand: {fileID: 0}
+  isLargeObject: 0
 --- !u!54 &6125630945617244640
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,3 +140,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7225798016730088717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6125630945617244655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 0.627451, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

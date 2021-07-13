@@ -27,6 +27,11 @@ public class MovableObject : InteractableWithOutline
     [Header("Object type (if is large, can only be held w/ upgraded Grab)")]
     [SerializeField] private bool isLargeObject = false;
 
+    private bool canPickUp;
+
+    // Added by Joe, the tooltip text to show be default when the object can be picked up (as originally set in the inspector)
+    private string defaultTooltipNameText;
+
     //protected void Awake()
     //{
     //    if (!isLargeObject)
@@ -43,6 +48,8 @@ public class MovableObject : InteractableWithOutline
         rb = gameObject.GetComponent<Rigidbody>();
 
         hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
+
+        defaultTooltipNameText = tooltipNameText;
 
         //if(!canPickUp)
         //{
@@ -74,8 +81,10 @@ public class MovableObject : InteractableWithOutline
     {
         base.StartHoverInRange();
 
+        UpdatePickUpStatus();
+
         // Don't show an outline on hover if the object cannot be picked up
-        if(!CanPickUp())
+        if(!canPickUp)
         {
             outline.enabled = false;
         }
@@ -93,13 +102,18 @@ public class MovableObject : InteractableWithOutline
             DropObject();
         }
 
+        // Only show the interaction tooltip when the object is not held
+        enableTooltip = !isHeld;
+
         base.Update();
     }
 
     // Sets target position to players hand, turns off grav & sets isHeld to true
     public override void Interact()
     {
-        if(!isHeld && CanPickUp())
+        UpdatePickUpStatus();
+
+        if(!isHeld && canPickUp)
         {
             base.Interact();
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
@@ -152,27 +166,37 @@ public class MovableObject : InteractableWithOutline
     //    canPickUp = true;
     //}
 
+
     // Added by Joe, determines whether the object can be picked up based on
     //   the unlock status and upgrade level of the grab ability
-    private bool CanPickUp()
+    private void UpdatePickUpStatus()
     {
         if(PlayerAbility.AbilityIsUnlocked(PlayerAbilityType.Grab))
         {
             if(!isLargeObject || PlayerAbility.GetAbilityUpgradeLevel(PlayerAbilityType.Grab) > 1)
             {
                 // This is a small object, or the grab ability was upgraded to level 2, object can be picked up
-                return true;
+                canPickUp = true;
+
+                tooltipNameText = defaultTooltipNameText;
+                showPressETooltipText = true;
             }
             else
             {
                 // This is a large object and the grab ability has not been upgraded, object cannot be picked up
-                return false;
+                canPickUp = false;
+
+                tooltipNameText = "Requires grab ability upgrade";
+                showPressETooltipText = false;
             }
         }
         else
         {
             // Grab ability is not unlocked, object cannot be picked up
-            return false;
+            canPickUp = false;
+
+            tooltipNameText = "Requires grab ability";
+            showPressETooltipText = false;
         }
     }
 }
