@@ -29,8 +29,6 @@ public class AreaObjectiveManager : MonoBehaviour
 
     [Header("Events triggered once fully charged")]
     [SerializeField] private UnityEvent onChargedEvents = new UnityEvent();
-    
-
     void Start()
     {
         gameObject.GetComponent<Rigidbody>().isKinematic = true;

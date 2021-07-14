@@ -26,11 +26,16 @@ public class EnemyCampManager : MonoBehaviour
     { get 
         {
             int left = 0;
-            foreach(EnemyBase enemy in spawnedEnemies)
+
+            if (spawnedEnemies.Count != 0)
             {
-                if(enemy.gameObject.GetComponent<EnemyHealth>().alive)
+
+                foreach (EnemyBase enemy in spawnedEnemies)
                 {
-                    left++;
+                    if (enemy.gameObject.GetComponent<EnemyHealth>().alive)
+                    {
+                        left++;
+                    }
                 }
             }
 
