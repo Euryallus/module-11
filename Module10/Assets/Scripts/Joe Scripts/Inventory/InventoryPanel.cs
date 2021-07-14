@@ -382,7 +382,7 @@ public class InventoryPanel : UIPanel
 
             // Set the slider to a different colour to indicate the weight is an issue
             sliderFillImage.color = sliderFullColour;
-            Debug.LogWarning("MAX INVENTORY WEIGHT REACHED!");
+            //Debug.LogWarning("MAX INVENTORY WEIGHT REACHED!");
         }
         else
         {
