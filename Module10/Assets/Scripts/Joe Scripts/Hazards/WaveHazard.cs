@@ -186,7 +186,7 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
         waveLoopSoundSource = null;
     }
 
-    protected override void StartCutscene()
+    public override void StartCutscene()
     {
         base.StartCutscene();
 

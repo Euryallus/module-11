@@ -7,14 +7,14 @@ public class LaunchAbility : PlayerAbility
     [Header("Launch Ability")]
     [SerializeField] private GameObject prefabLaunchIndicator;  // GameObject instantiated when using the launch ability to visually indicate the launch charge
 
-    private PlayerMovement  playerMovement;     // Reference to the player movement script
     private GameObject      launchIndicator;    // Indicator when using launch ability
+    private PlayerMovement  playerMovement;
 
     protected override void Start()
     {
         base.Start();
 
-        playerMovement  = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     protected override void Update()

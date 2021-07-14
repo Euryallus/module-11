@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerAbilityType
 {
-    Launch,
+    Launch = 0,
     Freeze,
     Slam,
     Grab
@@ -97,14 +97,16 @@ public abstract class PlayerAbility : MonoBehaviour
         }
 
         SetupUIIndicator();
+
         LinkToInventory();
 
-        UpdateUnlockStatus();
+        UpdateUnlockStatus(false);
     }
 
-    private void OnAbilityContainerStateChanged()
+    private void OnAbilityContainerStateChanged(bool loadingContainer)
     {
-        UpdateUnlockStatus();
+        // Update the ability unlock status, only allowing an unlock cutscene to be shown if not being called while loading
+        UpdateUnlockStatus(!loadingContainer);
     }
 
     protected virtual void Update()
@@ -186,11 +188,60 @@ public abstract class PlayerAbility : MonoBehaviour
         }
     }
 
-    private void UpdateUnlockStatus()
+    private void UpdateUnlockStatus(bool allowUnlockCutscene)
     {
+        PlayerAbilityType abilityType = GetAbilityType();
+
         abilityItem = GameSceneUI.Instance.PlayerInventory.GetPlayerAbilityItem(GetAbilityType());
 
-        SetAbilityUnlocked(abilityItem != null);
+        bool nowUnlocked = (abilityItem != null);
+
+        uiIndicator.gameObject.SetActive(nowUnlocked);
+
+        if (nowUnlocked)
+        {
+            if (abilityItem != null)
+            {
+                CustomFloatProperty itemUpgradeLevelProperty = abilityItem.GetCustomFloatPropertyWithName("upgradeLevel", true);
+
+                int currentUpgradeLevel = abilityUpgradeLevels[abilityType];
+                int newUpgradeLevel = 0;
+
+                if (itemUpgradeLevelProperty != null)
+                {
+                    newUpgradeLevel = (int)itemUpgradeLevelProperty.Value;
+
+                    uiIndicator.SetUpgradeLevel(newUpgradeLevel, maxUpgradeLevel);
+                    abilityUpgradeLevels[abilityType] = newUpgradeLevel;
+                }
+
+                if(allowUnlockCutscene)
+                {
+                    if ((!unlocked) || (newUpgradeLevel > currentUpgradeLevel))
+                    {
+                        // The ability has been unlocked when it wasn't before, or has been upgraded to a higher level
+                        //   Show an unlock cutscene displaying the ability that was unlocked and its level
+
+                        TriggerUnlockCutscene(abilityItem, abilityType, newUpgradeLevel);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("Unlocking ability without setting abilityItem");
+            }
+        }
+
+        abilityUnlockStatuses[abilityType] = nowUnlocked;
+        unlocked = nowUnlocked;
+    }
+
+    private void TriggerUnlockCutscene(Item abilityItem, PlayerAbilityType abilityType, int upgradeLevel)
+    {
+        AbilityUnlockCutscene cutscene = GetComponent<AbilityUnlockCutscene>();
+
+        cutscene.Setup(abilityItem, abilityType, upgradeLevel);
+        cutscene.StartCutscene();
     }
 
     protected virtual void SetupUIIndicator()
@@ -203,35 +254,6 @@ public abstract class PlayerAbility : MonoBehaviour
         if(maxUpgradeLevel == 0)
         {
             uiIndicator.HideUpgradeSlider();
-        }
-    }
-
-    protected virtual void SetAbilityUnlocked(bool value)
-    {
-        PlayerAbilityType abilityType = GetAbilityType();
-
-        unlocked = value;
-        abilityUnlockStatuses[abilityType] = value;
-
-        uiIndicator.gameObject.SetActive(unlocked);
-
-        if(unlocked)
-        {
-            if(abilityItem != null)
-            {
-                CustomFloatProperty itemUpgradeLevelProperty = abilityItem.GetCustomFloatPropertyWithName("upgradeLevel", true);
-
-                if(itemUpgradeLevelProperty != null)
-                {
-                    uiIndicator.SetUpgradeLevel(itemUpgradeLevelProperty.Value, maxUpgradeLevel);
-
-                    abilityUpgradeLevels[abilityType] = (int)itemUpgradeLevelProperty.Value;
-                }
-            }
-            else
-            {
-                Debug.LogError("Unlocking ability without setting abilityItem");
-            }
         }
     }
 

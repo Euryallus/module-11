@@ -31,4 +31,7 @@ MonoBehaviour:
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0
-  m_customStringProperties: []
+  m_customStringProperties:
+  - Name: extraInfo
+    UIName: 
+    Value: Heavy Objects

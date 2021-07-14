@@ -39,11 +39,13 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
 
     #endregion
 
-    public event Action     ContainerStateChangedEvent; //Event that is invoked when the container state changes (i.e. items are added/removed/moved)
+    public event Action<bool>     ContainerStateChangedEvent;   //Event that is invoked when the container state changes (i.e. items are added/removed/moved),
+                                                                //   with a bool parameter for whether the event is called while loading
 
     private ContainerSlot[] slots;                      // All slots in the container that can hold items
     private bool            containerStateChanged;      // Set to true each time an action occurs that changes the item container's state
     private ItemInfoPopup   itemInfoPopup;              // Popup for showing info when items in the container's slots are hovered over
+    private bool loading;
 
     private void Awake()
     {
@@ -96,8 +98,13 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         if (containerStateChanged)
         {
             // The container state was changed one or more times in the last frame
-            ContainerStateChangedThisFrame();
+            ContainerStateChangedThisFrame(loading);
             containerStateChanged = false;
+        }
+
+        if(loading)
+        {
+            loading = false;
         }
     }
 
@@ -143,6 +150,8 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
 
     private void OnLoadConfigure(SaveData saveData)
     {
+        loading = true;
+
         Debug.Log("Loading item container data for " + ContainerId);
 
         for (int i = 0; i < slots.Length; i++)
@@ -180,10 +189,10 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         containerStateChanged = true;
     }
 
-    private void ContainerStateChangedThisFrame()
+    private void ContainerStateChangedThisFrame(bool loading)
     {
         // At least one change was made to the state of the container in the last frame, invoke ContainerStateChangedEvent
-        ContainerStateChangedEvent?.Invoke();
+        ContainerStateChangedEvent?.Invoke(loading);
     }
 
     public bool CanAddItemToContainer(Item item, out int firstValidSlotIndex)

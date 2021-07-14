@@ -98,7 +98,7 @@ public class CraftingPanel : UIPanel
             craftButtonText.text = "Craft " + (resultItem.Quantity > 1 ? (resultItem.Quantity + "x ") : "") + resultItem.Item.UIName;
 
             // Update crafting panel state to show the player if they can currently craft the result item
-            CheckForValidCraftingSetup();
+            CheckForValidCraftingSetup(false);
 
             // Show the panel displaying required items and the button used to craft the selected result item
             requiredItemsPanel                      .SetActive(true);
@@ -115,7 +115,7 @@ public class CraftingPanel : UIPanel
         }
     }
 
-    private void CheckForValidCraftingSetup()
+    private void CheckForValidCraftingSetup(bool loadingContainer)
     {
         if(selectedRecipe != null)
         {

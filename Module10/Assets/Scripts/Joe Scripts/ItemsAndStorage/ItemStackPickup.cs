@@ -48,7 +48,7 @@ public class ItemStackPickup : MonoBehaviour, IPersistentPlacedObject
         UpdateItemCountDisplay(itemGroup.Quantity);
     }
 
-    private void OnInventoryStateChanged()
+    private void OnInventoryStateChanged(bool loadingContainer)
     {
         // Try picking up items when inventory state changes in case there is
         //   now more space in the inventory than there was previously

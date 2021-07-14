@@ -113,7 +113,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         fireParticles.Play();
     }
 
-    protected override void StartCutscene()
+    public override void StartCutscene()
     {
         base.StartCutscene();
 

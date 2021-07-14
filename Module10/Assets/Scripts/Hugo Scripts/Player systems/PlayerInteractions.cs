@@ -16,8 +16,8 @@ public class PlayerInteractions : MonoBehaviour
 
     void Update()
     {
-        // Runs when player interacts with an object by pressing E
-        if (Input.GetKeyDown(KeyCode.E))
+        // Runs when player interacts with an object by pressing E while not being blocked by a UI panel
+        if (Input.GetKeyDown(KeyCode.E) && UIPanel.CanShowUIPanel())
         {
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out raycastHit, 4.0f))
             {

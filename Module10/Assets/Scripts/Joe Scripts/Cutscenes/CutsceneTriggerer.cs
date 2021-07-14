@@ -11,29 +11,47 @@ public class CutsceneTriggerer : MonoBehaviour
     protected   PlayerMovement  playerMovement;
     private     GameObject      mainCameraGameObj;
 
+    private bool returnToPlayerMovement;
+
     protected virtual void Start()
     {
         // Hide/disable the cutscene camera and animator by default
-        cutsceneAnimator.enabled = false;
-        cutsceneCamera.SetActive(false);
+        if(cutsceneAnimator != null)
+        {
+            cutsceneAnimator.enabled = false;
+        }
+        if(cutsceneCamera != null)
+        {
+            cutsceneCamera.SetActive(false);
+        }
 
         playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
-    protected virtual void StartCutscene()
+    public virtual void StartCutscene()
     {
+        returnToPlayerMovement = playerMovement.PlayerCanMove();
+
         // Stop the player from moving and disable the character controller to avoid
         //   collisions/trigger events form occuring during the cutscene
         playerMovement.StopMoving();
         playerMovement.Controller.enabled = false;
 
-        // Hide the main (player view) camera
         mainCameraGameObj = playerMovement.GetPlayerCamera();
-        mainCameraGameObj.SetActive(false);
 
-        // Show/enable the camera used to show the cutscene
-        cutsceneCamera.SetActive(true);
-        cutsceneAnimator.enabled = true;
+        if (cutsceneCamera != null)
+        {
+            // Hide the main (player view) camera
+            mainCameraGameObj.SetActive(false);
+
+            // Show/enable the camera used to show the cutscene
+            cutsceneCamera.SetActive(true);
+        }
+
+        if(cutsceneAnimator != null)
+        {
+            cutsceneAnimator.enabled = true;
+        }
 
         // Hide the main UI and show the cinematics canvas (an overlay containing cinematic black bars)
         GameSceneUI gameUI = GameSceneUI.Instance;
@@ -45,7 +63,12 @@ public class CutsceneTriggerer : MonoBehaviour
     protected virtual void EndCutscene()
     {
         // Disable the cutscene camera and re-enable the main/player camera
-        cutsceneCamera.SetActive(false);
+
+        if(cutsceneCamera != null)
+        {
+            cutsceneCamera.SetActive(false);
+        }
+
         mainCameraGameObj.SetActive(true);
 
         // Re-show the main game UI and hide the cinematics canvas
@@ -54,8 +77,13 @@ public class CutsceneTriggerer : MonoBehaviour
         gameUI.SetUIShowing(true);
         gameUI.HideCinematicsCanvas();
 
-        // Allow the player to move again
+        // Re-enable the player controller
         playerMovement.Controller.enabled = true;
-        playerMovement.StartMoving();
+
+        // Allow the player to move again if they could move before triggering the cutscene
+        if(returnToPlayerMovement)
+        {
+            playerMovement.StartMoving();
+        }
     }
 }

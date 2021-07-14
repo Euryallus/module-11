@@ -191,7 +191,7 @@ public class ItemInfoPopup : MonoBehaviour
         for (int i = 0; i < customFloatProperties.Length; i++)
         {
             // Add a line of text showing info about each custom float property - the property name and value
-            customPropertiesText.text += (customFloatProperties[i].UIName + ": " + customFloatProperties[i].Value);
+            customPropertiesText.text += (customFloatProperties[i].GetDisplayText());
             customPropertiesText.text += "\n";
         }
 
@@ -203,16 +203,8 @@ public class ItemInfoPopup : MonoBehaviour
                 // The current property is not an empty string, show info about it
                 shownPropertyCount++;
 
-                // Either show the full string value, or remove the end and append a "..." if it's longer than 10 characters
-                string value = customStringProperties[i].Value;
-                if (value.Length > 10)
-                {
-                    value = value.Remove(10);
-                    value += "...";
-                }
-
                 // Add a line of text showing the property name and value
-                customPropertiesText.text += (customStringProperties[i].UIName + ": " + value);
+                customPropertiesText.text += (customStringProperties[i].GetDisplayText());
                 customPropertiesText.text += "\n";
             }
         }

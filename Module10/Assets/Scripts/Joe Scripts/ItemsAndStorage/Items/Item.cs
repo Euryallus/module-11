@@ -206,6 +206,11 @@ public class CustomFloatProperty
 
     [Tooltip("The Value cannot surpass this no matter how many times the item is customised")]
     public float    MaxValue;
+
+    public string GetDisplayText()
+    {
+        return UIName + ": " + Value;
+    }
 }
 
 // CustomStringProperty: A property with a string value that can be adjusted by the player in a customisation table
@@ -224,4 +229,29 @@ public class CustomStringProperty
 
     [Tooltip("The default value of this property")]
     public string Value;
+
+    private const int MaxDisplayTextLength = 18;
+
+    public string GetDisplayText()
+    {
+        // Either show the full string value, or remove the end and append a "..." if it's longer than 10 characters
+        string displayText;
+
+        if (string.IsNullOrEmpty(UIName))
+        {
+            displayText = Value;
+        }
+        else
+        {
+            displayText = UIName + ": " + Value;
+        }
+
+        if (displayText.Length > MaxDisplayTextLength)
+        {
+            displayText = displayText.Remove(MaxDisplayTextLength - 1);
+            displayText += "...";
+        }
+
+        return displayText;
+    }
 }

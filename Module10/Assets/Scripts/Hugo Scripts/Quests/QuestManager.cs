@@ -22,6 +22,12 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
 
     [SerializeField] private QuestMenuUI questMenuUI;
 
+    private void Awake()
+    {
+        // Added by Joe: Load progress to restore default quest completion values if there is no save file
+        playerQuestData.LoadProgress();
+    }
+
     private void Start()
     {
         SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);

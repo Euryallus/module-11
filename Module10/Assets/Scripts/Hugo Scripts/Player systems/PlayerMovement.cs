@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Switches state to "run" when shift is pressed
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if(Input.GetKeyDown(KeyCode.LeftShift) && !InputFieldSelection.AnyFieldSelected)
         {
             if(currentMovementState == MovementStates.walk && controller.isGrounded)
             {
@@ -144,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Switches state to "walk" when shift is released
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && !InputFieldSelection.AnyFieldSelected)
         {
             if(currentMovementState == MovementStates.run)
             {
@@ -153,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Toggles crouch
-        if(Input.GetKeyDown(KeyCode.LeftControl))
+        if(Input.GetKeyDown(KeyCode.LeftControl) && !InputFieldSelection.AnyFieldSelected)
         {
             currentMovementState = (currentMovementState == MovementStates.crouch ? MovementStates.walk : MovementStates.crouch);
         }
@@ -301,7 +301,7 @@ public class PlayerMovement : MonoBehaviour
                     velocityY -= gravity * gravity * Time.deltaTime;
                     
                     // If space is pressed use that as upward velocity rather than cam. forward Y component
-                    if(Input.GetKeyDown(KeyCode.Space))
+                    if(Input.GetKeyDown(KeyCode.Space) && !InputFieldSelection.AnyFieldSelected)
                     {
                         velocityY = jumpVelocity;
                     }
@@ -428,7 +428,7 @@ public class PlayerMovement : MonoBehaviour
                     velocityY = playerCamera.transform.forward.y * 4f * inputY;
 
                     // Downward velocity also changable using SPACE key
-                    if (Input.GetKey(KeyCode.Space))
+                    if (Input.GetKey(KeyCode.Space) && !InputFieldSelection.AnyFieldSelected)
                     {
                         velocityY = 4f;
                     }
@@ -452,7 +452,7 @@ public class PlayerMovement : MonoBehaviour
             }         
 
             // Checks if player attempts to jump / glide
-            if (Input.GetKeyDown(KeyCode.Space) && currentMovementState != MovementStates.crouch && currentMovementState != MovementStates.swim)
+            if (Input.GetKeyDown(KeyCode.Space) && !InputFieldSelection.AnyFieldSelected && currentMovementState != MovementStates.crouch && currentMovementState != MovementStates.swim)
             {
                 // If player is grounded, first go to jumping state (add jump velocity)
                 if (controller.isGrounded)
@@ -545,6 +545,12 @@ public class PlayerMovement : MonoBehaviour
     public void StartMoving()
     {
         canMove = true;
+    }
+
+    // Getter for canMove
+    public bool PlayerCanMove()
+    {
+        return canMove;
     }
 
     // Returns if player can move or not

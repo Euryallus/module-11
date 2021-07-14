@@ -165,7 +165,7 @@ public class HotbarPanel : UIPanel, IPersistentGlobalObject
         }
     }
 
-    private void UpdateCurrentSlotSelection()
+    private void UpdateCurrentSlotSelection(bool loadingContainer)
     {
         // Selects the slot at the selected index - takes no parameters to be compatible with the ContainerStateChangedEvent
         SelectSlot(selectedSlotIndex);
