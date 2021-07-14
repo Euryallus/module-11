@@ -69,12 +69,12 @@ public class MovableObject : InteractableWithOutline
         }
 
         // If the spring joint has broken, let go of object
-        if(!gameObject.GetComponent<SpringJoint>())
-        {
-            transform.parent = null;
-            isHeld = false;
-            rb.useGravity = true;
-        }
+        //if(!gameObject.GetComponent<SpringJoint>())
+        //{
+        //    transform.parent = null;
+        //    isHeld = false;
+        //    rb.useGravity = true;
+        //}
     }
 
     public override void StartHoverInRange()
@@ -117,6 +117,7 @@ public class MovableObject : InteractableWithOutline
         {
             base.Interact();
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
+
             transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;
 
             joint = gameObject.AddComponent<SpringJoint>();

@@ -53,9 +53,9 @@ public abstract class InteractableObject : MonoBehaviour
     protected virtual void Start()
     {
         // Get references to player GameObject/camera and canvas
-        playerGameObject    = GameObject.FindGameObjectWithTag("Player");
-        mainPlayerCamera    = Camera.main;
-        canvasTransform     = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
+        playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        mainPlayerCamera = Camera.main;
+        canvasTransform  = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
 
         // Calculate the offset of the interact tooltip in world space (changes depending on the object's rotation in the world)
         worldInteractTooltipOffset = transform.TransformDirection(interactTooltipOffset);

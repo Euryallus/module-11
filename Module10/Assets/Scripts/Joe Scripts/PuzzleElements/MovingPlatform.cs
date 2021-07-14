@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // PlatformButtonBehaviour: defines how moving platforms react to
@@ -75,6 +76,9 @@ public class MovingPlatform : MonoBehaviour
 
     private Transform               playerReturnToTransform;    // Transform that acts as the player's parent before they step on the platform,
                                                                 //   and that they should be returned to as a child after stepping off
+
+    private Dictionary<int, Transform> objectReturnToTransforms // Transforms to use as object parents once they leave the platform, indexed by the object's InstanceId
+                                       = new Dictionary<int, Transform>();
 
     void Start()
     {
@@ -202,29 +206,66 @@ public class MovingPlatform : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            Debug.LogWarning("PLAYER ENTERED PLATFORM TRIGGER");
             // The player is on the platform
 
             // Make the player a child of the platform so they move with it, and keep a reference to their previous parent
             playerReturnToTransform = other.transform.parent;
             other.transform.SetParent(transform);
 
-            // autoSyncTransforms prevents the player from sliding off the platform
-            Physics.autoSyncTransforms = true;
+            // (autoSyncTransforms now always on) autoSyncTransforms prevents the player from sliding off the platform
+            //Physics.autoSyncTransforms = true;
+        }
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("MovableObj"))
+        {
+            // Make the object a child of the platform so it moves with it, and keep a reference to their previous parent in objectReturnToTransforms
+
+            int instanceId = other.gameObject.GetInstanceID();
+
+            if(!objectReturnToTransforms.ContainsKey(instanceId))
+            {
+                if (!other.gameObject.GetComponent<MovableObject>().isHeld)
+                {
+                    objectReturnToTransforms.Add(instanceId, other.transform.parent);
+                    other.transform.SetParent(transform);
+                }
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        Debug.LogWarning("PLAYER LEFT PLATFORM TRIGGER");
+
         if (other.CompareTag("Player"))
         {
             // The player left the platform
 
-            // autoSyncTransforms no longer needed, revert to default value
-            Physics.autoSyncTransforms = false;
+            // (autoSyncTransforms now always on) revert autoSyncTransforms to default value
+            //Physics.autoSyncTransforms = false;
 
             // Restore the player's original parent transform
             other.transform.SetParent(playerReturnToTransform);
+        }
+        else if (other.CompareTag("MovableObj"))
+        {
+            // Restore the object's original parent transform by finding it in the
+            //   objectReturnToTransforms dictionary using its instance id
+            int instanceId = other.gameObject.GetInstanceID();
+
+            if (objectReturnToTransforms.ContainsKey(instanceId))
+            {
+                // Only revert the parent if the object is still a child of this platform
+                if(other.transform.parent == transform)
+                {
+                    other.transform.SetParent(objectReturnToTransforms[instanceId]);
+                }
+                objectReturnToTransforms.Remove(instanceId);
+            }
         }
     }
 
