@@ -206,7 +206,6 @@ public class MovingPlatform : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.LogWarning("PLAYER ENTERED PLATFORM TRIGGER");
             // The player is on the platform
 
             // Make the player a child of the platform so they move with it, and keep a reference to their previous parent
@@ -239,8 +238,6 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.LogWarning("PLAYER LEFT PLATFORM TRIGGER");
-
         if (other.CompareTag("Player"))
         {
             // The player left the platform
