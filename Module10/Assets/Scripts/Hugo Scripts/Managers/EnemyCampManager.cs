@@ -17,7 +17,7 @@ public class EnemyCampManager : MonoBehaviour
     [SerializeField]    private bool spawnOnStart = true;
 
     [SerializeField]    private List<EnemyBase> possibleUnits   = new List<EnemyBase>();    // List of enemies that could be spawned from the camp
-                        private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
+    [SerializeField]                    private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
                         private List<EnemyBase> unitsDifficulty = new List<EnemyBase>();    // List of enemies that could possibly spawn, that make up difficulty ~ that defined by diffifultyLevel
 
                         public bool hasBeenDefeated = false;
@@ -30,9 +30,17 @@ public class EnemyCampManager : MonoBehaviour
             if (spawnedEnemies.Count != 0)
             {
 
-                foreach (EnemyBase enemy in spawnedEnemies)
+                for (int i = 0; i < spawnedEnemies.Count; i++)
                 {
-                    if (enemy.gameObject.GetComponent<EnemyHealth>().alive)
+                    EnemyBase enemy = spawnedEnemies[i];
+                    if(enemy == null)
+                    {
+                        spawnedEnemies.RemoveAt(i);
+                        i--;
+                        break;
+                    }
+
+                    else if (enemy.gameObject.GetComponent<EnemyHealth>().alive)
                     {
                         left++;
                     }

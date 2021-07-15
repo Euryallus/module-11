@@ -52,7 +52,7 @@ public class AreaObjectiveManager : MonoBehaviour
             }
             
 
-            //objectiveCharge = (enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned;
+            objectiveCharge = (enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned;
             
             sliderFill.color = progressBarGrad.Evaluate((enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned);
             progressSlider.maxValue = enemyManager.totalSpawned;
