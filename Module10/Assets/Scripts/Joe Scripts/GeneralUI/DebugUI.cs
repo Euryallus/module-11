@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 // ||=======================================================================||
@@ -31,5 +32,15 @@ public class DebugUI : MonoBehaviour
             // The item id was valid, add the item to the player's inventoryS
             GameSceneUI.Instance.PlayerInventory.AddOrDropItem(itemToSpawn, true, true);
         }
+    }
+
+    public void ForceSave()
+    {
+        SaveLoadManager.Instance.SaveGameData();
+    }
+
+    public void ForceLoad()
+    {
+        SaveLoadManager.Instance.LoadGameScene(SceneManager.GetActiveScene().name);
     }
 }

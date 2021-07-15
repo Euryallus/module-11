@@ -11,9 +11,11 @@ public class PlayerInstance : MonoBehaviour
     [SerializeField] private string[] dontDestroyScenes;    // Names of all scenes that the player character should stay active in after loading into them
                                                             //   Prevents the player from staying active in scenes where it doesn't belong, e.g. MainMenu
     public PlayerMovement       PlayerMovement      { get { return playerMovement; } }
+    public PlayerStats          PlayerStats         { get { return playerStats; } }
     public CharacterController  PlayerController    { get { return PlayerMovement.Controller; } }
 
-    private PlayerMovement      playerMovement;
+    private PlayerMovement  playerMovement;
+    private PlayerStats     playerStats;
 
     private bool inFirstScene;
 
@@ -34,7 +36,8 @@ public class PlayerInstance : MonoBehaviour
             return;
         }
 
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement  = GetComponent<PlayerMovement>();
+        playerStats     = GetComponent<PlayerStats>();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }

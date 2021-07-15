@@ -59,9 +59,6 @@ public class PausePanel : UIPanel
         SetMainCanvasGroupShowing(false);
         SetMenuCanvasGroupShowing(true);
 
-        // Reset timeScale to its default value
-        Time.timeScale = 1.0f;
-
         AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
     }
 
@@ -80,6 +77,9 @@ public class PausePanel : UIPanel
 
         // Stop any looping sounds so they don't continue to play in the menu scene
         AudioManager.Instance.StopAllLoopingSoundEffects();
+
+        // Reset timeScale to its default value
+        Time.timeScale = 1.0f;
 
         // Switch to main menu scene
         SceneManager.LoadScene("MainMenu");

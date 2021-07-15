@@ -16,7 +16,8 @@ public class OptionsToggle : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject toggleIcon; // The icon shown when the button is toggled on
+    [SerializeField] private GameObject toggleIcon;     // The icon shown when the button is toggled on
+    [SerializeField] private Animator   toggleAnimator; // Handles toggle animations
 
     #endregion
 
@@ -43,6 +44,12 @@ public class OptionsToggle : MonoBehaviour
 
         // Button was toggled, invoke the ToggleEvent
         ToggleEvent.Invoke(selected);
+
+        // Animate the toggle when turned on
+        if(selected)
+        {
+            toggleAnimator.SetTrigger("ToggleOn");
+        }
     }
 
     public void SetSelected(bool selected)

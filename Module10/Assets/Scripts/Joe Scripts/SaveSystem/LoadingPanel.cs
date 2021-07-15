@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // ||=======================================================================||
@@ -47,6 +48,13 @@ public class LoadingPanel : MonoBehaviour
         loadDone = true;
         animator.SetTrigger("Crack");
 
-        Destroy(gameObject, 1.3f);
+        StartCoroutine(DestroyAfterDelay());
+    }
+
+    private IEnumerator DestroyAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(1.3f);
+
+        Destroy(gameObject);
     }
 }
