@@ -21,6 +21,3 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: df05a4059919e7a499c95d32f924c834, type: 2}
     Weight: 1
     MinimumQuantity: 1
-  - Item: {fileID: 11400000, guid: 9aba9f7f76aa76b4fb78bc8da60a9269, type: 2}
-    Weight: 1
-    MinimumQuantity: 1

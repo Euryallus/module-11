@@ -91,7 +91,7 @@ Material:
     - _UDepthDistance: 0.3
     - _UDistancePower: 0.1
     - _WavesNormalIntensity: 1.76
-    - _WavesSpeed: 0.458
+    - _WavesSpeed: 0.049
     - _WavesTile: 0.15
     - __dirty: 0
     m_Colors:
