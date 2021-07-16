@@ -54,7 +54,7 @@ Material:
     - _ChromaticAberration: 0
     - _CoastOpacity: 0.155
     - _CoastalWavesDensity: 0.5
-    - _DepthDistance: 1.5
+    - _DepthDistance: 4.58
     - _DepthFade: 1
     - _DepthIntensity: 0.411
     - _EdgeFoamTile: 4.24
