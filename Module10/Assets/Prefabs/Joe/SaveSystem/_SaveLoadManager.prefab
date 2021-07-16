@@ -45,3 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingCanvasPrefab: {fileID: 8318778376780048369, guid: 911f04c1ece45e04ba6d8a4fdcfc9854, type: 3}
   titleCardPrefab: {fileID: 425790455253825924, guid: 036d5432e4084b640bb059e855fced8f, type: 3}
+  sceneTitleCardInfo:
+  - sceneName: The Village
+    titleCardText: The Village
+  - sceneName: Desert
+    titleCardText: The Graveyard Desert
+  - sceneName: Flooded City
+    titleCardText: The Flooded City
+  - sceneName: Catacombs
+    titleCardText: The Catacombs

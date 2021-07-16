@@ -86,8 +86,8 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         }
         else
         {
-            // No save point id set, this should never happen
-            Debug.LogError("Trying to save without setting a UsedSavePointId!");
+            // No save point id set, this should not happen unless forcing a save with debug tools
+            Debug.LogWarning("Saving without setting a UsedSavePointId!");
         }
 
         // Also add save data for all objects placed in the world by the player
@@ -109,9 +109,6 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
     {
         // Load all objects placed by the player
         LoadPlayerPlacedObjects(saveData.GetSaveDataEntries());
-
-        // Move the player to the last point they used to save
-        MovePlayerToSpawnPoint();
     }
 
     private void LoadPlayerPlacedObjects(Dictionary<string, object> saveDataEntries)
@@ -259,7 +256,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         itemStackPickup.Setup(data.ItemId, data.ItemQuantity, GameSceneUI.Instance.PlayerInventory);
     }
 
-    private void MovePlayerToSpawnPoint()
+    public bool MovePlayerToSpawnPoint()
     {
         if (!string.IsNullOrEmpty(usedSavePointId))
         {
@@ -285,10 +282,17 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
                     //Move player to the position of the spawn transform at the point they last saved
                     GameObject.FindGameObjectWithTag("Player").transform.position = currentSavePoint.GetRespawnPosition() + Vector3.up;
 
-                    break;
+                    // Player was successfully moved to spawn point
+                    return true;
                 }
             }
+
+            // No matching save point found
+            return false;
         }
+
+        // No used save point was loaded
+        return false;
     }
 
     // Adding/removing placed objects and build points from their respective arrays:

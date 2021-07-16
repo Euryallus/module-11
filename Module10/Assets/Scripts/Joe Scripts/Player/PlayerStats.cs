@@ -63,6 +63,12 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     #endregion
 
+    #region Properties
+
+    public static string PlayerName { get { return playerName; } set { playerName = value; } }
+
+    #endregion
+
     private Transform       canvasTransform;
     private float           health    = 1.0f;       // The player's health (0 = death, 1 = full)
     private float           foodLevel = 1.0f;       // The player's food level (0 = starving, 1 = full)
@@ -74,6 +80,8 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private float           drownDamageTimer;          
     private PlayerMovement  playerMovement;   
     private PlayerStatsUI   statsUI;
+
+    private static string playerName = "Player";        // The name set by the player
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
 
