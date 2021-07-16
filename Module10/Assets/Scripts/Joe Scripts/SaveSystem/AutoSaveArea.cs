@@ -85,8 +85,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
         Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
 
-        // Store the UsedSavePointId so the player can be restored to the save area when the game is next loaded
-        WorldSave.Instance.UsedSavePointId = GetSavePointId();
+        SetAsUsed();
 
         // Try to save the game
         bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
@@ -124,5 +123,16 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     public Vector3 GetRespawnPosition()
     {
         return respawnPointTransform.position;
+    }
+
+    public void SetAsUsed()
+    {
+        WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
+
+        SaveLoadManager.SetLastUsedSavePoint(this);
+    }
+
+    public void SetAsUnused()
+    {
     }
 }

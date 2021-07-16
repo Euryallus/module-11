@@ -100,7 +100,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         {
             AudioManager.Instance.StopAllLoopingSoundEffects();
 
-            WorldSave.Instance.UsedSavePointId = GetSavePointId();
+            SetAsUsed();
 
             SaveLoadManager.Instance.SaveGameData(sceneToLoadName);
 
@@ -136,5 +136,16 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     public string GetSavePointId()
     {
         return id;
+    }
+
+    public void SetAsUsed()
+    {
+        WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
+
+        SaveLoadManager.SetLastUsedSavePoint(this);
+    }
+
+    public void SetAsUnused()
+    {
     }
 }
