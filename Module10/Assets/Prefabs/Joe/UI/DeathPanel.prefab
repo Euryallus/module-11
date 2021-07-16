@@ -535,16 +535,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 5745672281374112902}
     m_Modifications:
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_Color.a
+      value: 0.5686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.b
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.g
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.r
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Transition
@@ -605,6 +609,22 @@ PrefabInstance:
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: hoverSideColour.g
       value: 0.80137205
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonShadowTint.a
+      value: 0.5686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonShadowTint.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonShadowTint.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonShadowTint.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: raiseButtonOnHover
