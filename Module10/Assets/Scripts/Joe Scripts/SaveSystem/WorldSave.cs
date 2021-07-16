@@ -34,12 +34,12 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
 
     #region Properties
 
-    public string           UsedSavePointId     { get { return usedSavePointId; } set { usedSavePointId = value; } }
-    public List<BuildPoint> PlacedBuildPoints   { get { return placedBuildPoints; } }
+    public string           UsedSceneSavePointId    { set { usedSceneSavePointId = value; } }
+    public List<BuildPoint> PlacedBuildPoints       { get { return placedBuildPoints; } }
 
     #endregion
 
-    private string usedSavePointId;     // Id of the last save point that was used, and will be used when respawning the player next time the game is loaded
+    private string usedSceneSavePointId;     // Id of the last save point that was used in the current scene, which will be used when respawning the player next time the scene is loaded
 
     private List<IPersistentPlacedObject>   placedObjectsToSave;    // All player-placed objects that should be saved with the world
     private List<BuildPoint>                placedBuildPoints;      // All build points added to the world when modular pieces were placed
@@ -79,10 +79,10 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
     {
         Debug.Log("Saving world save");
 
-        if (!string.IsNullOrEmpty(usedSavePointId))
+        if (!string.IsNullOrEmpty(usedSceneSavePointId))
         {
             // Save the id of the last used save point
-            saveData.AddData("usedSavePointId", usedSavePointId);
+            saveData.AddData("usedSavePointId", usedSceneSavePointId);
         }
         else
         {
@@ -102,7 +102,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
         Debug.Log("Loading world save");
 
         // Get the id of the save point to respawn the player at
-        usedSavePointId = saveData.GetData<string>("usedSavePointId");
+        usedSceneSavePointId = saveData.GetData<string>("usedSavePointId");
     }
 
     public void OnSceneLoadConfigure(SaveData saveData)
@@ -258,7 +258,7 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
 
     public bool MovePlayerToSpawnPoint()
     {
-        if (!string.IsNullOrEmpty(usedSavePointId))
+        if (!string.IsNullOrEmpty(usedSceneSavePointId))
         {
             // A usedSavePointId was loaded
 
@@ -270,14 +270,13 @@ public class WorldSave : MonoBehaviour, IPersistentSceneObject
                 // Get the ISavePoint component from each point so its id/respawn position can be retrieved
                 ISavePoint currentSavePoint = savePoints[i].GetComponent<ISavePoint>();
 
-                // Get the current save point's id
-                string savePointId = currentSavePoint.GetSavePointId();
-
-                if (savePointId == usedSavePointId)
+                if (currentSavePoint.GetSavePointId() == usedSceneSavePointId)
                 {
                     // Matching ids - found the save point that was used!
 
-                    Debug.Log("Moving player to save point: " + savePointId + ", position: " + currentSavePoint.GetRespawnPosition());
+                    Debug.Log("Moving player to save point: " + usedSceneSavePointId + ", position: " + currentSavePoint.GetRespawnPosition());
+
+                    currentSavePoint.SetAsUsed();
 
                     //Move player to the position of the spawn transform at the point they last saved
                     GameObject.FindGameObjectWithTag("Player").transform.position = currentSavePoint.GetRespawnPosition() + Vector3.up;

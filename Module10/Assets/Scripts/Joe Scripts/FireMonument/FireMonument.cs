@@ -181,8 +181,9 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         // Fade back in background music
         AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
 
+        SetAsUsed();
+
         // Save the game now the monument is lit and a portal has been activated
-        WorldSave.Instance.UsedSavePointId = GetSavePointId();
         SaveLoadManager.Instance.SaveGameData();
     }
 
@@ -199,5 +200,16 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
     public Vector3 GetRespawnPosition()
     {
         return respawnTransform.position;
+    }
+
+    public void SetAsUsed()
+    {
+        WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
+
+        SaveLoadManager.SetLastUsedSavePoint(this);
+    }
+
+    public void SetAsUnused()
+    {
     }
 }

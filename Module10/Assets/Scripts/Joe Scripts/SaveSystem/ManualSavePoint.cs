@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // ||=======================================================================||
@@ -17,18 +18,24 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
 
     [Header("Manual Save Point")]
 
-    [SerializeField] private Transform spawnPlatformTransform;  // Transform used to position the player on respawn at this point
+    [SerializeField] private Transform      spawnPlatformTransform;     // Transform used to position the player on respawn at this point
+    [SerializeField] private SoundClass     saveSound;                  // The sound played when the manual save point is used
+    [SerializeField] private MeshRenderer   glowSphereRenderer;         // Renderer for the glowing sphere that shows the player if this save point was the last one used
+    [SerializeField] private Material       savePointUsedMaterial;      // Material to use on the glow sphere when this save point is currently used
+    [SerializeField] private Material       savePointUnusedMaterial;    // Material to use on the glow sphere when this save point is currently unused
 
     #endregion
 
+
+    private const float SaveCooldownTime = 5.0f;    // Amount of time to wait after using this save point before it can be used again
+    
     public override void Interact()
     {
         base.Interact();
 
         Debug.Log("Attempting to save game at point: " + GetSavePointId());
 
-        // Store the UsedSavePointId so the player can be restored to the save point when the game is next loaded
-        WorldSave.Instance.UsedSavePointId = GetSavePointId();
+        SetAsUsed();
 
         // Try to save the game
         bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
@@ -36,12 +43,25 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
         // Show a notification to tell the player is the save was successful
         if (saveSuccess)
         {
+            AudioManager.Instance.PlaySoundEffect2D(saveSound);
+
             NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveSuccess);
+
+            // Disable saving for SaveCooldownTime
+            canInteract = false;
+            StartCoroutine(AllowSaveAfterCooldown());
         }
         else
         {
             NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveError);
         }
+    }
+
+    private IEnumerator AllowSaveAfterCooldown()
+    {
+        yield return new WaitForSeconds(SaveCooldownTime);
+
+        canInteract = true;
     }
 
     public string GetSavePointId()
@@ -52,5 +72,19 @@ public class ManualSavePoint : InteractableWithOutline, ISavePoint
     public Vector3 GetRespawnPosition()
     {
         return spawnPlatformTransform.position;
+    }
+
+    public void SetAsUsed()
+    {
+        WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
+
+        SaveLoadManager.SetLastUsedSavePoint(this);
+
+        glowSphereRenderer.material = savePointUsedMaterial;
+    }
+
+    public void SetAsUnused()
+    {
+        glowSphereRenderer.material = savePointUnusedMaterial;
     }
 }

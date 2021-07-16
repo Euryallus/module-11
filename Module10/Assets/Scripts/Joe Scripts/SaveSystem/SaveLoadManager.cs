@@ -24,9 +24,9 @@ public class SaveLoadManager : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject             loadingCanvasPrefab; // UI canvas instantiated when loading a scene
-    [SerializeField] private GameObject             titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
-    [SerializeField] private SceneTitleCardInfo[]   sceneTitleCardInfo;  // Array of data determining what names will be shown in the UI when certain scenes are loaded
+    [SerializeField] private GameObject loadingCanvasPrefab; // UI canvas instantiated when loading a scene
+    [SerializeField] private GameObject titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
+    [SerializeField] private SceneTitleCardInfo[] sceneTitleCardInfo;  // Array of data determining what names will be shown in the UI when certain scenes are loaded
 
     #endregion
 
@@ -60,6 +60,8 @@ public class SaveLoadManager : MonoBehaviour
 
     private const string MainSaveDirectory      = "Maps";
     private const string MainStartingSceneName  = "The Village";
+
+    private static ISavePoint lasUsedSavePoint = null;
 
     private void Awake()
     {
@@ -129,6 +131,16 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     #endregion
+
+    public static void SetLastUsedSavePoint(ISavePoint savePoint)
+    {
+        if(lasUsedSavePoint != null)
+        {
+            lasUsedSavePoint.SetAsUnused();
+        }
+
+        lasUsedSavePoint = savePoint;
+    }
 
     public bool SaveGameData(string returnToSceneName = "UseActiveScene", string scenesDirectory = "UseCurrentDirectory")
     {
@@ -351,6 +363,8 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadGameSceneCoroutine(string sceneName, string scenesDirectory)
     {
+        lasUsedSavePoint = null;
+
         float previousTimeScale = Time.timeScale;
         Time.timeScale = 0.0f;
 
