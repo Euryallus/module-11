@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicToTrigger: {fileID: 0}
+  dynamicAudioLayer: 0
   musicSource: {fileID: 3468437755601362430}
 --- !u!82 &3468437755601362430
 AudioSource:

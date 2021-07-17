@@ -49,9 +49,9 @@ public class AudioManager : MonoBehaviour
 
     #region Properties
 
-    public SceneMusic       CurrentSceneMusic       { get { return currentSceneMusic; } }       
-    public DynamicAudioArea CurrentDynamicAudioArea { get { return currentDynamicAudioArea; }
-                                                      set { currentDynamicAudioArea = value; } }
+    public SceneMusic               CurrentSceneMusic       { get { return currentSceneMusic; } }       
+    public List<DynamicAudioArea>   ActiveDynamicAudioAreas { get { return activeDynamicAudioAreas; }
+                                                              set { activeDynamicAudioAreas = value; } }
     public float            GlobalVolumeMultiplier  { get { return globalVolumeMultiplier; } }
 
     public int              SavedMusicVolume        { set { savedMusicVolume = value; } }
@@ -62,8 +62,8 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, SoundClass>  soundsDict;                     // Dictionary containing sound effects indexed by their string id's
     private SceneMusic                      currentSceneMusic;              // Defines how music is handled in the loaded scene
     private int                             currentPlaylistIndex;           // If using a playlist, the index of the song that is currently playing in it
-    private DynamicAudioArea[]              dynamicAudioAreas;              // All (if any) dynamic audio areas in the loaded scene
-    private DynamicAudioArea                currentDynamicAudioArea;        // The dynamic audio area that the player most recently entered
+    private DynamicAudioArea[,]             dynamicAudioAreas;              // All (if any) dynamic audio areas in the loaded scene
+    private List<DynamicAudioArea>          activeDynamicAudioAreas;        // The dynamic audio areas that are currently playing audio
     private List<LoopingSoundSource>        loopingSoundSources;            // List of all active looping sound sources
     private float                           globalVolumeMultiplier = 1.0f;  // Volume multiplier for fading music and sounds in/out without altering saved volume values
 
@@ -90,6 +90,8 @@ public class AudioManager : MonoBehaviour
 
         // Add all sounds to the sound dictionary
         SetupSoundDictionary();
+
+        activeDynamicAudioAreas = new List<DynamicAudioArea>();
 
         // Subscribe to scene loaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -121,8 +123,8 @@ public class AudioManager : MonoBehaviour
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
-        // Ensure the current dynamic audio area is null by default, in case one was set in a previous scene
-        currentDynamicAudioArea = null;
+        // Ensure there are no active dynamic audio areas by default, in case any were set in a previous scene
+        activeDynamicAudioAreas.Clear();
 
         // Set playmode to none by default in case none was set in the inspector
         currentSceneMusic = new SceneMusic(scene.name, MusicPlayMode.None, null);
@@ -159,16 +161,21 @@ public class AudioManager : MonoBehaviour
                     GameObject[] dynamicAudioGameObjs = GameObject.FindGameObjectsWithTag("DynamicAudioArea");
 
                     // Setup the dynamic audio areas array based on the number of areas in the scene
-                    dynamicAudioAreas = new DynamicAudioArea[dynamicAudioGameObjs.Length];
+                    dynamicAudioAreas = new DynamicAudioArea[DynamicAudioArea.MaxDynamicAudioLayers, dynamicAudioGameObjs.Length];
 
                     for (int j = 0; j < dynamicAudioGameObjs.Length; j++)
                     {
+                        DynamicAudioArea areaToAdd = dynamicAudioGameObjs[j].GetComponent<DynamicAudioArea>();
+
                         // Add all dynamic audio areas to the array
-                        dynamicAudioAreas[j] = dynamicAudioGameObjs[j].GetComponent<DynamicAudioArea>();
+                        dynamicAudioAreas[areaToAdd.DynamicAudioLayer, j] = areaToAdd;
                     }
 
                     // Play all dynamic audio sources so they are in sync
-                    PlayAllDynamicSources();
+                    for (int j = 0; j < DynamicAudioArea.MaxDynamicAudioLayers; j++)
+                    {
+                        PlayAllDynamicSourcesOnLayer(j);
+                    }
                 }
 
                 break;
@@ -426,13 +433,22 @@ public class AudioManager : MonoBehaviour
         PlaySoundEffect(id, LoopType.DoNotLoop, true, false, true, default, 0, 0, true);
     }
 
-    public void PlayAllDynamicSources()
+    public void PlayAllDynamicSourcesOnLayer(int dynamicAudioLayer)
     {
+        if(dynamicAudioLayer < 0 || dynamicAudioLayer > (DynamicAudioArea.MaxDynamicAudioLayers - 1))
+        {
+            Debug.LogError("Invalid dynamicAudioLayer given to PlayAllDynamicAudioSources: " + dynamicAudioLayer);
+            return;
+        }
+
         // Plays all dynamic sources at the same time. Dynamic sources should
         //   always be played at the same time so they remain synchronised
-        for (int i = 0; i < dynamicAudioAreas.Length; i++)
+        for (int i = 0; i < dynamicAudioAreas.GetLength(1); i++)
         {
-            dynamicAudioAreas[i].MusicSource.Play();
+            if(dynamicAudioAreas[dynamicAudioLayer, i] != null)
+            {
+                dynamicAudioAreas[dynamicAudioLayer, i].MusicSource.Play();
+            }
         }
     }
 
@@ -481,9 +497,12 @@ public class AudioManager : MonoBehaviour
         // Also update the volume of all active dynamic sources
         if (currentSceneMusic.PlayMode == MusicPlayMode.Dynamic)
         {
-            for (int i = 0; i < dynamicAudioAreas.Length; i++)
+            foreach (DynamicAudioArea area in dynamicAudioAreas)
             {
-                dynamicAudioAreas[i].UpdateSourceVolume(volumeVal);
+                if(area != null)
+                {
+                    area.UpdateSourceVolume(volumeVal);
+                }
             }
         }
     }

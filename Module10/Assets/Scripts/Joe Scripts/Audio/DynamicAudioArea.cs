@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // ||=======================================================================||
@@ -10,20 +11,45 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for mod 11: added dynamicAudioLayer functionality
+
 public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 {
 
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private MusicClass     musicToTrigger; // The music to be triggered when the player enters this area
-    [SerializeField] private AudioSource    musicSource;    // The audio source used to play the triggered music
+    // See tooltips for comments
+
+    [Header("Dynamic Audio Area")]
+
+    [SerializeField] [Tooltip("The music to be triggered when the player enters this area." +
+                              "If left empty, this area will be treated as a trigger for silence")]
+    private MusicClass musicToTrigger;
+
+
+    [Range(0, (MaxDynamicAudioLayers - 1))] [SerializeField]
+    [Tooltip("The dynamic audio layer this area belongs to. DynamicAudioAreas on the same layer will " +
+             "always be forced to stay in sync, so all areas with music of the same length/tempo " +
+             "should be put on the same dynamicAudioLayer")]
+    private int dynamicAudioLayer;
+                                        
+    
+    [SerializeField]
+    [Tooltip("If true, any active DynamicAudioAreas will be faded out when this one is entered. " +
+               "If false, only areas with the same dynamicAudioLayer will be faded out")]
+    private bool fadeOutOtherLayers = true;
+
+
+    [Space]
+    [SerializeField] private AudioSource musicSource; // The audio source used to play the triggered music
 
     #endregion
 
     #region Properties
 
-    public AudioSource MusicSource { get { return musicSource; } }
+    public AudioSource  MusicSource         { get { return musicSource; } }
+    public int          DynamicAudioLayer   { get { return dynamicAudioLayer; } }
 
     #endregion
 
@@ -32,16 +58,23 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     private bool    fadingOut;      // Whether the audio source should be fading out
     private bool    active;
 
+    public const int MaxDynamicAudioLayers = 10; // The number of layers that can be chosen from when setting a dynamicAudioLayer for the area
+
     private void Awake()
     {
-        // Set defaults
-        musicSource.clip = musicToTrigger.AudioClip;
+        if(musicToTrigger != null)
+        {
+            // Set defaults
+            musicSource.clip = musicToTrigger.AudioClip;
 
-        // Mute the source by default until the player enters it
-        musicSource.volume = 0.0f;
+            // Mute the source by default until the player enters it
+            musicSource.volume = 0.0f;
 
-        // Allow volume to be adjusted while the game is paused
-        musicSource.velocityUpdateMode = AudioVelocityUpdateMode.Dynamic;
+            // Allow volume to be adjusted while the game is paused
+            musicSource.velocityUpdateMode = AudioVelocityUpdateMode.Dynamic;
+        }
+
+        // Areas without music to trigger simply trigger silence, so no audio source properties need to be set
     }
 
     private void Start()
@@ -75,25 +108,22 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         if(loadedActive)
         {
             // The area should be active, activate it
-            ActivateAudioArea();
+            ActivateAudioArea(false);
         }
     }
 
     public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
-    private string GetLocationId()
-    {
-        // Returns a unique string id based on object location in the world
-        return (int)transform.position.x + "_" + (int)transform.position.y + "_" + (int)transform.position.z;
-    }
-
     private void Update()
     {
-        if (musicSource.timeSamples >= (musicToTrigger.AudioClip.samples - 2048))
+        if(musicToTrigger != null)
         {
-            // If the current audio clip will be done playing roughly in the next frame,
-            //   restart all dynamic audio sources so the music loops seamlessly
-            AudioManager.Instance.PlayAllDynamicSources();
+            if (musicSource.timeSamples >= (musicToTrigger.AudioClip.samples - 2048))
+            {
+                // If the current audio clip will be done playing roughly in the next frame,
+                //   restart all dynamic audio sources on the same dynamicAudioLayer so their music loops seamlessly
+                AudioManager.Instance.PlayAllDynamicSourcesOnLayer(dynamicAudioLayer);
+            }
         }
 
         if(fadingIn)
@@ -131,7 +161,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void ActivateAudioArea()
+    public void ActivateAudioArea(bool affectOtherAreas = true)
     {
         AudioManager audioManager = AudioManager.Instance;
 
@@ -141,26 +171,37 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         {
             // The loaded scene is using dynamic audio
 
-            if (musicToTrigger != null)
+            List<DynamicAudioArea> currentActiveAreas = audioManager.ActiveDynamicAudioAreas;
+
+            if (affectOtherAreas)
             {
-                if (audioManager.CurrentDynamicAudioArea != null)
+                for (int i = 0; i < currentActiveAreas.Count; i++)
                 {
-                    // If the player previously entered another area, fade its music out for a cross-fade effect
-                    audioManager.CurrentDynamicAudioArea.DeactivateAudioArea();
+                    DynamicAudioArea area = currentActiveAreas[i];
+
+                    if (area != null)
+                    {
+                        if (fadeOutOtherLayers || area.dynamicAudioLayer == dynamicAudioLayer)
+                        {
+                            // If the player previously entered another area, fade its music out for a cross-fade effect
+                            area.DeactivateAudioArea();
+
+                            // Remove the area from the ActiveDynamicAudioAreas list as it is no longer active
+                            currentActiveAreas.Remove(area);
+
+                            i--;
+                        }
+                    }
                 }
-
-                // This is now the current/most recent dynamic audio area
-                audioManager.CurrentDynamicAudioArea = this;
-
-                // Fade music for this are in
-                FadeIn();
-
-                active = true;
             }
-            else
-            {
-                Debug.LogError("Entering DynamicAudioError with no music set!");
-            }
+
+            // This is now the current/most recent dynamic audio area
+            currentActiveAreas.Add(this);
+
+            // Fade music for this are in
+            FadeIn();
+
+            active = true;
         }
     }
 
@@ -175,18 +216,19 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     public void UpdateSourceVolume(float volume)
     {
-        // Update the base volume, and instantly set the music source to have the
-        //   new volume if it's already active/playing
-
-        //Debug.Log("Updating source volume: " + musicToTrigger.name);
-
-        // Multiplying from the set MusicClass volume so the saved volume and default
-        //  volume level are both used to determine the overall volume
-        baseVolume = musicToTrigger.Volume * volume;
-
-        if(active)
+        if(musicToTrigger != null)
         {
-            musicSource.volume = baseVolume;
+            // Update the base volume, and instantly set the music source to have the
+            //   new volume if it's already active/playing
+
+            // Multiplying from the set MusicClass volume so the saved volume and default
+            //  volume level are both used to determine the overall volume
+            baseVolume = musicToTrigger.Volume * volume;
+
+            if (active)
+            {
+                musicSource.volume = baseVolume;
+            }
         }
     }
 
@@ -202,5 +244,19 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         // Start fading out, set fading in to false in case the source is in the process of fading in
         fadingOut = true;
         fadingIn = false;
+    }
+
+    private string GetLocationId()
+    {
+        // Returns a unique string id based on object location in the world
+        return (int)transform.position.x + "_" + (int)transform.position.y + "_" + (int)transform.position.z;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        BoxCollider bc = GetComponent<BoxCollider>();
+        Gizmos.DrawWireCube(transform.position + bc.center, bc.size);
     }
 }
