@@ -452,6 +452,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void RevertActiveDynamicAudioAreas()
+    {
+        foreach (DynamicAudioArea area in dynamicAudioAreas)
+        {
+            if(area != null && area.WaitingForRevert)
+            {
+                if(!area.Active)
+                {
+                    area.ActivateAudioArea(false);
+                }
+                area.WaitingForRevert = false;
+            }
+        }
+    }
+
     public void FadeGlobalVolumeMultiplier(float fadeTo, float fadeTime)
     {
         StartCoroutine(FadeGlobalVolumeMultiplierCoroutine(fadeTo, fadeTime, fadeTo > globalVolumeMultiplier));

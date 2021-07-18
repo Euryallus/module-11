@@ -59,9 +59,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6f8c63f7683c242a8ee8c914e13878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicToTrigger: {fileID: 0}
-  dynamicAudioLayer: 0
   musicSource: {fileID: 3468437755601362430}
+  musicToTrigger: {fileID: 0}
+  fadeOutOtherLayers: 1
+  revertAudioOnExit: 0
+  dynamicAudioLayer: 0
 --- !u!82 &3468437755601362430
 AudioSource:
   m_ObjectHideFlags: 0

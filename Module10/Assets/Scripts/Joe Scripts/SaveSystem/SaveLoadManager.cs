@@ -32,7 +32,8 @@ public class SaveLoadManager : MonoBehaviour
 
     #region Properties
 
-    public bool LoadingAfterDeath { get { return loadingAfterDeath; } set { loadingAfterDeath = value; } }
+    public bool LoadingAfterDeath   { get { return loadingAfterDeath; } set { loadingAfterDeath = value; } }
+    public bool LoadingSceneData    { get { return loadingSceneData; } }
 
     #endregion
 
@@ -47,6 +48,7 @@ public class SaveLoadManager : MonoBehaviour
     private string                      baseSaveDirectory;                  // Path where all save files are stored
     private string                      currentScenesDirectory;             // Directory containing all scene save files that may be required for the loaded game
     private bool                        loadingAfterDeath;                  // Whether the game is being reloaded after the player dies
+    private bool                        loadingSceneData;                   // Whether scene data is currently being loaded
 
     private readonly Dictionary<string, int> playerPrefsDefaultIntValues = new Dictionary<string, int>()
     {
@@ -410,6 +412,8 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)
     {
+        loadingSceneData = true;
+
         // Wait a frame to ensure the player instance is ready
         yield return null;
 
@@ -586,6 +590,8 @@ public class SaveLoadManager : MonoBehaviour
 
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);
+
+        loadingSceneData = false;
     }
 
     private void TryShowTitleCardForScene(string sceneName)

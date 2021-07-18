@@ -15,7 +15,6 @@ using UnityEngine;
 
 public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 {
-
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
@@ -23,17 +22,11 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     [Header("Dynamic Audio Area")]
 
+    [SerializeField] private AudioSource musicSource; // The audio source used to play the triggered music
+
     [SerializeField] [Tooltip("The music to be triggered when the player enters this area." +
                               "If left empty, this area will be treated as a trigger for silence")]
     private MusicClass musicToTrigger;
-
-
-    [Range(0, (MaxDynamicAudioLayers - 1))] [SerializeField]
-    [Tooltip("The dynamic audio layer this area belongs to. DynamicAudioAreas on the same layer will " +
-             "always be forced to stay in sync, so all areas with music of the same length/tempo " +
-             "should be put on the same dynamicAudioLayer")]
-    private int dynamicAudioLayer;
-                                        
     
     [SerializeField]
     [Tooltip("If true, any active DynamicAudioAreas will be faded out when this one is entered. " +
@@ -41,8 +34,20 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     private bool fadeOutOtherLayers = true;
 
 
-    [Space]
-    [SerializeField] private AudioSource musicSource; // The audio source used to play the triggered music
+    [SerializeField]
+    [Tooltip("If true, the DynamicAudioArea that was active before entering this one will be re-enabled " +
+             "once the trigger area is exited (or if no area was previously active, audio will fade to " +
+             "silence). If false, exiting the area will have no effect.")]
+    private bool revertAudioOnExit = false;
+
+
+    [Space] [Space]
+    [Range(0, (MaxDynamicAudioLayers - 1))]
+    [SerializeField]
+    [Tooltip("The dynamic audio layer this area belongs to. DynamicAudioAreas on the same layer will " +
+         "always be forced to stay in sync, so all areas with music of the same length/tempo " +
+         "should be put on the same dynamicAudioLayer")]
+    private int dynamicAudioLayer;
 
     #endregion
 
@@ -50,13 +55,16 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     public AudioSource  MusicSource         { get { return musicSource; } }
     public int          DynamicAudioLayer   { get { return dynamicAudioLayer; } }
+    public bool         Active              { get { return active; } }
+    public bool         WaitingForRevert    { get { return waitingForRevert; } set { waitingForRevert = value; } }
 
     #endregion
 
-    private float   baseVolume;     // Volume of the music before fading is applied
-    private bool    fadingIn;       // Whether the audio source should be fading in
-    private bool    fadingOut;      // Whether the audio source should be fading out
-    private bool    active;
+    private float           baseVolume;     // Volume of the music before fading is applied
+    private bool            fadingIn;       // Whether the audio source should be fading in
+    private bool            fadingOut;      // Whether the audio source should be fading out
+    private bool            active;
+    private bool            waitingForRevert;
 
     public const int MaxDynamicAudioLayers = 10; // The number of layers that can be chosen from when setting a dynamicAudioLayer for the area
 
@@ -97,13 +105,17 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         Debug.Log("Saving data for DynamicAudioArea with location id: " + locationId);
 
         // Save whether the area is active (currently playing music)
-        saveData.AddData("audioAreaActive_" + locationId, active);
+        saveData.AddData("audioAreaActive_"  + locationId, active);
+        saveData.AddData("audioAreaWaiting_" + locationId, waitingForRevert);
     }
 
     public void OnSceneLoadSetup(SaveData saveData)
     {
-        // Load whether this audio area was active when the player last saved
-        bool loadedActive = saveData.GetData<bool>("audioAreaActive_" + GetLocationId());
+        // Load whether this audio area was active or waiting when the player last saved
+
+        waitingForRevert  = saveData.GetData<bool>("audioAreaWaiting_" + GetLocationId());
+
+        bool loadedActive = saveData.GetData<bool>("audioAreaActive_"  + GetLocationId());
 
         if(loadedActive)
         {
@@ -113,6 +125,26 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     }
 
     public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+
+    public string GetMusicToTriggerName()
+    {
+        if(musicToTrigger != null)
+        {
+            return musicToTrigger.name;
+        }
+
+        return "[Silence]";
+    }
+
+    public float GetMusicToTriggerLength()
+    {
+        if(musicToTrigger != null)
+        {
+            return musicToTrigger.AudioClip.length;
+        }
+
+        return 0;
+    }
 
     private void Update()
     {
@@ -154,10 +186,33 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Player"))
+        // Only accept trigger events once loading is done and the player has been moved to the correct location
+
+        if (!SaveLoadManager.Instance.LoadingSceneData)
         {
-            // The player entered the trigger area, activate this dynamic audio
-            ActivateAudioArea();
+            if (other.gameObject.CompareTag("Player"))
+            {
+                // The player entered the trigger area, activate this dynamic audio
+                ActivateAudioArea();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Only accept trigger events once loading is done and the player has been moved to the correct location
+
+        if (!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                if (revertAudioOnExit)
+                {
+                    AudioManager.Instance.RevertActiveDynamicAudioAreas();
+
+                    DeactivateAudioArea();
+                }
+            }
         }
     }
 
@@ -172,6 +227,14 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
             // The loaded scene is using dynamic audio
 
             List<DynamicAudioArea> currentActiveAreas = audioManager.ActiveDynamicAudioAreas;
+
+            if(revertAudioOnExit)
+            {
+                foreach (DynamicAudioArea activeArea in currentActiveAreas)
+                {
+                    activeArea.waitingForRevert = true;
+                }
+            }
 
             if (affectOtherAreas)
             {
@@ -252,11 +315,22 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         return (int)transform.position.x + "_" + (int)transform.position.y + "_" + (int)transform.position.z;
     }
 
+    #if UNITY_EDITOR
+
+    // Debug visualisation, draws a wire cube to represent the collider areaa
+
+    private BoxCollider boxCollider;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
-        BoxCollider bc = GetComponent<BoxCollider>();
-        Gizmos.DrawWireCube(transform.position + bc.center, bc.size);
+        if(boxCollider == null)
+        {
+            boxCollider = GetComponent<BoxCollider>();
+        }
+        Gizmos.DrawWireCube(transform.position + boxCollider.center, boxCollider.size);
     }
+
+    #endif
 }
