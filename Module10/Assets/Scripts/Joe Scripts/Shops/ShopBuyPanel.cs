@@ -11,7 +11,7 @@ using TMPro;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class ShopBuyPanel : MonoBehaviour
+public class ShopBuyPanel : UIPanel
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -59,6 +59,13 @@ public class ShopBuyPanel : MonoBehaviour
 
     private const int ItemsPerRow           = 5;    // Number of items to display in each row of the shop's UI
     private const int MaxDisplayableItems   = 20;   // Maximum number of items that can be displayed in a single category
+
+    protected override void Start()
+    {
+        base.Start();
+
+        showing = true;
+    }
 
     private void Update()
     {

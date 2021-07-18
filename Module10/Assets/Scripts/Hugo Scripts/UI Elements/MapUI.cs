@@ -52,7 +52,7 @@ public class MapUI : UIPanel
                 // Change canvas group alpha to Show UI
                 cg.alpha = 1.0f;
 
-                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.None;
 
                 // Map is now visible, apply changes made to texture since last opened & allow player to interact
                 cg.blocksRaycasts = true;
@@ -70,7 +70,7 @@ public class MapUI : UIPanel
                 // Change canvas group alpha to Hide UI
                 cg.alpha = 0.0f;
 
-                Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.Locked;
 
                 // Hides map & prevents interaction
                 cg.blocksRaycasts = false;
