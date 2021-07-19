@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cca1245acc3d61a4d904e0200233ed62, type: 3}
-  m_Name: FloodedRoomMan
+  m_Name: craftMan
   m_EditorClassIdentifier: 
-  QuestGiverName: floodedRoomMan
+  QuestGiverName: craftMan
   questsToGive:
-  - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
+  - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
   saveQuestsToGive:
-  - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
+  - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}

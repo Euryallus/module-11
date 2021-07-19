@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
-  m_Name: GetRing
+  m_Name: GoToFireM
   m_EditorClassIdentifier: 
-  questName: Find ring
-  questDescription: Could you also keep your eyes peeled for a ring down there in
-    that water? It was my partners, and I'd sure like it back.
-  questCompleteDialogue: Thank you. Keep this for your troubles.
+  questName: Light the Fire Monument
+  questDescription: 'We''re counting on you to do this. If you complete it, you''ll
+    be free from the basement. '
+  questCompleteDialogue: Thank you for this. You're free to leave the basement. The
+    King is waiting for you upstairs.
   nextQuests: []
   rewards:
-  - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
-    Quantity: 2
+  - Item: {fileID: 11400000, guid: b7a5519c75c6de3408d8e5b63fef86a5, type: 2}
+    Quantity: 1
   objectives:
-  - {fileID: 11400000, guid: 82c37251348dc964f82b8a5e376d1ab0, type: 2}
-  forceAccept: 0
-  handInNPCName: floodedRoomMan
-  handOutNPCName: floodedRoomMan
+  - {fileID: 11400000, guid: d71d71d3f0cb3eb47a39671fec8daf76, type: 2}
+  forceAccept: 1
+  handInNPCName: 
+  handOutNPCName: 
   questLineName: 
   questCompleted: 0
   questHandedIn: 0

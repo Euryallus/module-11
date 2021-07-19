@@ -10,19 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
-  m_Name: GetRing
+  m_Name: GetToEnd
   m_EditorClassIdentifier: 
-  questName: Find ring
-  questDescription: Could you also keep your eyes peeled for a ring down there in
-    that water? It was my partners, and I'd sure like it back.
-  questCompleteDialogue: Thank you. Keep this for your troubles.
+  questName: Reach the end of the Challenge
+  questDescription: If you can make it, you'll almost be ready to leave this place.
+    If you can do it, maybe the King was right about you.
+  questCompleteDialogue: 'Well done. There''s only 1 more place for you to go before
+    you leave. '
   nextQuests: []
   rewards:
+  - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
+    Quantity: 3
   - Item: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
-    Quantity: 2
+    Quantity: 3
+  - Item: {fileID: 11400000, guid: 5e2d2660c92b5ff4cbbeb3273ef7f3cb, type: 2}
+    Quantity: 1
   objectives:
-  - {fileID: 11400000, guid: 82c37251348dc964f82b8a5e376d1ab0, type: 2}
-  forceAccept: 0
+  - {fileID: 11400000, guid: c034ae7dc63e6d74f89620bb61ea14b4, type: 2}
+  forceAccept: 1
   handInNPCName: floodedRoomMan
   handOutNPCName: floodedRoomMan
   questLineName: 
