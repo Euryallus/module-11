@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: firstDoorKey
   m_EditorClassIdentifier: 
   m_id: baseBasicKey
-  m_specialSlotId: baseBasicKey1
+  m_specialSlotId: 
   m_uiName: A Basic Key
   m_uiDescription: 
   m_stackSize: 1

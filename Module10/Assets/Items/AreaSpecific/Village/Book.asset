@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
-  m_Name: secondDoorKey
+  m_Name: Book
   m_EditorClassIdentifier: 
-  m_id: baseBasicKey2
+  m_id: book1
   m_specialSlotId: 
-  m_uiName: Another Key...
-  m_uiDescription: 
+  m_uiName: A book?
+  m_uiDescription: Why did he ask for this?...
   m_stackSize: 1
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: 7584ee54255906249ae451f691a9389f, type: 3}
+  m_sprite: {fileID: 21300000, guid: 2dfe566b12faa344aa536a7781506dd7, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
   m_customisable: 0
