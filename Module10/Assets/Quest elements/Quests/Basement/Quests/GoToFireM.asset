@@ -27,7 +27,7 @@ MonoBehaviour:
   handInNPCName: craftMan
   handOutNPCName: craftMan
   questLineName: 
-  questCompleted: 1
+  questCompleted: 0
   questHandedIn: 0
   handInToGiver: 1
   savedQuestCompleted: 0

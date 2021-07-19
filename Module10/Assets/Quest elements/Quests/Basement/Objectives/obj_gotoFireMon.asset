@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectiveType: 0
   taskName: Go To Fire Monument
-  taskComplete: 1
+  taskComplete: 0
   saveTaskComplete: 0
   positionToGoTo: {x: 370.933, y: 124.506, z: 727.599}
   distanceFlagged: 1

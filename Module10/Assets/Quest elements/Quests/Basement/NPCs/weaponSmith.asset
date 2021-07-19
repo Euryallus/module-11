@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuestGiverName: Weapon Smith
   questsToGive:
-  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
+  - {fileID: 11400000, guid: 2cad3c4f93a457d43a6defcf23d551eb, type: 2}
   saveQuestsToGive:
-  - {fileID: 11400000, guid: 2ea4ab040e3f4274bb138ecb2fb3a000, type: 2}
+  - {fileID: 11400000, guid: 2cad3c4f93a457d43a6defcf23d551eb, type: 2}
