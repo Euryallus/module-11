@@ -319,17 +319,30 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     // Debug visualisation, draws a wire cube to represent the collider areaa
 
-    private BoxCollider boxCollider;
+    private Collider areaCollider;
 
     private void OnDrawGizmos()
     {
+        // Matrix code taken from https://forum.unity.com/threads/gizmo-rotation.4817/
+
+        Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+        Gizmos.matrix = rotationMatrix;
+
         Gizmos.color = Color.red;
 
-        if(boxCollider == null)
+        if(areaCollider == null)
         {
-            boxCollider = GetComponent<BoxCollider>();
+            areaCollider = GetComponent<Collider>();
         }
-        Gizmos.DrawWireCube(transform.position + boxCollider.center, boxCollider.size);
+
+        if(areaCollider is SphereCollider sphereCollider)
+        {
+            Gizmos.DrawWireSphere(sphereCollider.center, sphereCollider.radius);
+        }
+        else if (areaCollider is BoxCollider boxCollider)
+        {
+            Gizmos.DrawWireCube(boxCollider.center, boxCollider.size);
+        }
     }
 
     #endif
