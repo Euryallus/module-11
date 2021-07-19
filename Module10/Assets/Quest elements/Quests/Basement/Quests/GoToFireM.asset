@@ -24,10 +24,10 @@ MonoBehaviour:
   objectives:
   - {fileID: 11400000, guid: d71d71d3f0cb3eb47a39671fec8daf76, type: 2}
   forceAccept: 1
-  handInNPCName: 
-  handOutNPCName: 
+  handInNPCName: craftMan
+  handOutNPCName: craftMan
   questLineName: 
-  questCompleted: 0
+  questCompleted: 1
   questHandedIn: 0
   handInToGiver: 1
   savedQuestCompleted: 0

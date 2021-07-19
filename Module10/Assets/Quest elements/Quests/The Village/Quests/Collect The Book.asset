@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
+  m_Name: Collect The Book
+  m_EditorClassIdentifier: 
+  questName: Collect The Book
+  questDescription: But before you go, there's a book in the library I want to you
+    to pick up. It's in a chest, get it for me, and I'll give you something that
+    will help you on your journey.
+  questCompleteDialogue: Thank you. Please take this, it'll allow you to freeze any
+    enemy you come across for a short time. Use it wisely. Here is also the key to
+    leave the Castle.
+  nextQuests: []
+  rewards:
+  - Item: {fileID: 11400000, guid: 63040ba8f16c3364ab6f6deddd409655, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: a589843407f283d43b572b75cdd13c98, type: 2}
+    Quantity: 1
+  objectives:
+  - {fileID: 11400000, guid: 2cfa3de4170ef5241a85cd36c936779a, type: 2}
+  forceAccept: 0
+  handInNPCName: The King
+  handOutNPCName: The King
+  questLineName: 
+  questCompleted: 0
+  questHandedIn: 0
+  handInToGiver: 1
+  savedQuestCompleted: 0
+  savedQuestHandedIn: 0

@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d93999bd2b8d41e4b857b7bbadbfd840, type: 3}
-  m_Name: obj_gotoFireMon
+  m_Script: {fileID: 11500000, guid: e2246740e49653c448acfd3bff328a85, type: 3}
+  m_Name: CastleChest1
   m_EditorClassIdentifier: 
-  objectiveType: 0
-  taskName: Go To Fire Monument
-  taskComplete: 1
-  saveTaskComplete: 0
-  positionToGoTo: {x: 370.933, y: 124.506, z: 727.599}
-  distanceFlagged: 1
+  m_minItems: 1
+  m_maxItems: 1
+  m_itemPool:
+  - Item: {fileID: 11400000, guid: df188b8a641b1b148a1ff719dd41df01, type: 2}
+    Weight: 1
+    MinimumQuantity: 1

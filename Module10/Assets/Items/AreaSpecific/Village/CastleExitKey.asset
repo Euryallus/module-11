@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
-  m_Name: secondDoorKey
+  m_Name: CastleExitKey
   m_EditorClassIdentifier: 
-  m_id: baseBasicKey2
+  m_id: castleExitKey
   m_specialSlotId: 
-  m_uiName: Another Key...
-  m_uiDescription: 
+  m_uiName: Castle Key
+  m_uiDescription: Used to open the gate out the castle
   m_stackSize: 1
   m_weight: 0
   m_sprite: {fileID: 21300000, guid: 7584ee54255906249ae451f691a9389f, type: 3}

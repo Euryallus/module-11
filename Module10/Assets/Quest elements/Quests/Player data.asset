@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pendingQuest: {fileID: 0}
   offer: {fileID: 0}
-  questBacklog: []
-  completedQuests: []
+  questBacklog:
+  - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
+  completedQuests:
+  - {fileID: 11400000, guid: 2cad3c4f93a457d43a6defcf23d551eb, type: 2}
+  - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
   questGivers:
   - {fileID: 11400000, guid: 52aa68ba7f2b98b4c950b08211cc6d0e, type: 2}
   - {fileID: 11400000, guid: 6bc44ab67ee823f4589badfb89fcd3b8, type: 2}
@@ -37,11 +40,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aba5ce0d2df4dca46960563686ea9d73, type: 2}
   - {fileID: 11400000, guid: 2c43552a87af81742845cc4057ac1034, type: 2}
   - {fileID: 11400000, guid: 9fe37f4328647c44fb868ffa7db135f0, type: 2}
+  - {fileID: 11400000, guid: 0270f494962ee884b96c1d6f241c8ec4, type: 2}
   quests:
   - {fileID: 11400000, guid: 8724f0cb4a28744488748b3dfa1b8339, type: 2}
   - {fileID: 11400000, guid: 6a7df13dbaeb5824c831d94abc78c0a8, type: 2}
   - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
   - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
   - {fileID: 11400000, guid: 8724f0cb4a28744488748b3dfa1b8339, type: 2}
-  savedQuestBacklog: []
-  savedCompletedQuests: []
+  - {fileID: 11400000, guid: edcc5e547e9cbc44fad8652fe5371dcc, type: 2}
+  savedQuestBacklog:
+  - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
+  savedCompletedQuests:
+  - {fileID: 11400000, guid: 2cad3c4f93a457d43a6defcf23d551eb, type: 2}
+  - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
