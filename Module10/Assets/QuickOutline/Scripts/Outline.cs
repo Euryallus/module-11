@@ -182,6 +182,10 @@ public class Outline : MonoBehaviour {
     // Retrieve or generate smooth normals
     foreach (var meshFilter in GetComponentsInChildren<MeshFilter>()) {
 
+        // Skip null meshes
+        if (meshFilter.sharedMesh == null)
+            continue;
+
       // Skip if smooth normals have already been adopted
       if (!registeredMeshes.Add(meshFilter.sharedMesh)) {
         continue;
@@ -203,35 +207,34 @@ public class Outline : MonoBehaviour {
     }
   }
 
-  List<Vector3> SmoothNormals(Mesh mesh) {
+    List<Vector3> SmoothNormals(Mesh mesh) {
 
-    // Group vertices by location
-    var groups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy(pair => pair.Key);
+        var groups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy(pair => pair.Key);
 
-    // Copy normals to a new list
-    var smoothNormals = new List<Vector3>(mesh.normals);
+        // Copy normals to a new list
+        var smoothNormals = new List<Vector3>(mesh.normals);
 
-    // Average normals for grouped vertices
-    foreach (var group in groups) {
+        // Average normals for grouped vertices
+        foreach (var group in groups) {
 
-      // Skip single vertices
-      if (group.Count() == 1) {
-        continue;
-      }
+        // Skip single vertices
+        if (group.Count() == 1) {
+          continue;
+        }
 
-      // Calculate the average normal
-      var smoothNormal = Vector3.zero;
+        // Calculate the average normal
+        var smoothNormal = Vector3.zero;
 
-      foreach (var pair in group) {
-        smoothNormal += mesh.normals[pair.Value];
-      }
+        foreach (var pair in group) {
+          smoothNormal += mesh.normals[pair.Value];
+        }
 
-      smoothNormal.Normalize();
+        smoothNormal.Normalize();
 
-      // Assign smooth normal to each vertex
-      foreach (var pair in group) {
-        smoothNormals[pair.Value] = smoothNormal;
-      }
+        // Assign smooth normal to each vertex
+        foreach (var pair in group) {
+          smoothNormals[pair.Value] = smoothNormal;
+        } 
     }
 
     return smoothNormals;
