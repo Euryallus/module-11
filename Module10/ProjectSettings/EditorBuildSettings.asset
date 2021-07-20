@@ -14,16 +14,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Maps/Desert.unity
     guid: b2693b74ef3ad3443a051933b13a2891
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Maps/Flooded City.unity
     guid: b061cecc7fe4e8447bba080952e3a170
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Maps/Catacombs.unity
     guid: 7f87e906d8a71ce428acfa130c5a4594
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Joe test scene/JoeTestScene.unity
     guid: 7b1de85605ec6c24498945b44ff548ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Joe test scene/JoeTestScene2.unity
     guid: ab082dc59d728dc4e8655e4479c6176f
   m_configObjects: {}
