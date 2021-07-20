@@ -61,20 +61,24 @@ public class Arrow : MonoBehaviour
             {
                 collision.gameObject.GetComponent<TestDummy>().TakeHit();
             }
+
+
+            if(collision.transform.CompareTag("Untagged"))
+            {
+                if(!collision.gameObject.GetComponent<DoorCollider>() && !collision.gameObject.GetComponent<NPC>())
+                {
+                    // Checks if object collided with is static - if so, freeze in place
+                    rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                    rb.velocity = Vector3.zero;
+                    rb.isKinematic = true;
+
+                    transform.forward = fireForward;
+                    return;
+                }
+            }
+
+            rb.velocity = Vector3.zero;
             
-            if (collision.transform.gameObject.isStatic)
-            {
-                // Checks if object collided with is static - if so, freeze in place
-                rb.velocity = Vector3.zero;
-                rb.isKinematic = true;
-                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-                transform.forward = fireForward;
-                return;
-            }
-            else
-            {
-                rb.velocity = Vector3.zero;
-            }
         }
     }
 }

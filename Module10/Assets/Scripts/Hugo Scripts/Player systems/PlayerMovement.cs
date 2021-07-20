@@ -594,7 +594,7 @@ public class PlayerMovement : MonoBehaviour
     // Trigger detector used to get on / off ladders
     private void OnTriggerEnter(Collider other)
     {
-        if(currentMovementState == MovementStates.ladder)
+        if(currentMovementState == MovementStates.ladder && other.transform.CompareTag("Ladder"))
         {
             currentMovementState = MovementStates.walk;
         }
