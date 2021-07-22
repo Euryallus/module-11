@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7140115385723593668}
   - component: {fileID: 5974561254523150071}
   - component: {fileID: 8389833582523257542}
+  - component: {fileID: 6014259229577066319}
   m_Layer: 5
   m_Name: CustomStringPropertyPanel
   m_TagString: Untagged
@@ -126,14 +127,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 20
@@ -186,6 +187,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46b259a90bbdfb445a218cfba148c9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6014259229577066319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3227937373915771735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446f23ab744ddfd49a797cfed3bc13b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7382689715109987596

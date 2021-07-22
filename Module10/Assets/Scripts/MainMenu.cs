@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour
     {
         InputInfoPanel nameInputPanel = Instantiate(infoInputPanelPrefab, menusContentCanvas.transform).GetComponent<InputInfoPanel>();
 
-        nameInputPanel.Setup("Player Name", "What will your name be?");
+        nameInputPanel.Setup("Player Name", "What is your name?");
 
         nameInputPanel.ConfirmButtonPressedEvent += OnPlayerNameConfirmed;
         nameInputPanel.CloseButtonPressedEvent += OnPlayerNameInputClosed;
