@@ -31,5 +31,10 @@ public class InventoryOpenerInteractable : InteractableWithOutline
             // Show the inventory panel on interaction
             inventoryPanel.Show(inventoryShowMode);
         }
+
+        if(inventoryShowMode == InventoryShowMode.Craft)
+        {
+            AudioManager.Instance.PlaySoundEffect2D("craftingTableOpen");
+        }
     }
 }

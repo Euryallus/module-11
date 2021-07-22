@@ -19,13 +19,15 @@ public class AbilityUnlockPanel : MonoBehaviour
     {
         abilityImage.sprite = abilitySprites[(int)abilityType];
 
+        string abilityBaseName = abilityItem.UIName.Replace(" Ability", "");
+
         if (unlockLevel > 0)
         {
-            abilityText.text = abilityType.ToString() + ": Level " + unlockLevel;
+            abilityText.text = abilityBaseName + ": Level " + unlockLevel;
         }
         else
         {
-            abilityText.text = abilityType.ToString();
+            abilityText.text = abilityBaseName;
         }
 
         descriptionText.text = abilityItem.UIDescription;

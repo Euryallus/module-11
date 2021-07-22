@@ -26,10 +26,21 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
         if (handStackSize > 0)
         {
-            inventoryPanel.DropItemsInHand(false);
+            Item itemBeingDropped = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
 
-            // Hide the popup that showed what would be binned
-            parentContainer.ItemInfoPopup.HidePopup();
+            if(itemBeingDropped.CanDrop)
+            {
+                inventoryPanel.DropItemsInHand(false);
+
+                // Hide the popup that showed what would be binned
+                parentContainer.ItemInfoPopup.HidePopup();
+
+                AudioManager.Instance.PlaySoundEffect2D("throw");
+            }
+            else
+            {
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantDropItem, new string[] { itemBeingDropped.UIName });
+            }
         }
     }
 

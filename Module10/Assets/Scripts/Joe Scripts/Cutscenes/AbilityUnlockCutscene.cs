@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AbilityUnlockCutscene : CutsceneTriggerer
@@ -37,6 +38,18 @@ public class AbilityUnlockCutscene : CutsceneTriggerer
         // Show/unlock the cursor so the player can interact with the unlock panel
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
+        AudioManager.Instance.PlayMusicInterlude("unlockFanfare");
+
+        StartCoroutine(RestoreGlobalVolumeAfterDelay());
+    }
+
+    private IEnumerator RestoreGlobalVolumeAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(2.5f);
+
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
     }
 
     protected override void EndCutscene()
