@@ -55,10 +55,10 @@ public class AbilityContainerSlotUI : ContainerSlotUI
 
         return abilityType switch
         {
-            PlayerAbilityType.Launch    => playerGameObj.GetComponent<LaunchAbility>(),
-            PlayerAbilityType.Freeze    => playerGameObj.GetComponent<FreezeAbility>(),
-            PlayerAbilityType.Slam      => playerGameObj.GetComponent<SlamAbility>(),
-            PlayerAbilityType.Grab      => playerGameObj.GetComponent<GrabAbility>(),
+            PlayerAbilityType.Launch            => playerGameObj.GetComponent<LaunchAbility>(),
+            PlayerAbilityType.Freeze            => playerGameObj.GetComponent<FreezeAbility>(),
+            PlayerAbilityType.Slam_Levitate     => playerGameObj.GetComponent<SlamAbility>(),
+            PlayerAbilityType.Grab              => playerGameObj.GetComponent<GrabAbility>(),
 
             _ => null,
         };

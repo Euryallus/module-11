@@ -15,22 +15,23 @@ public class Item : ScriptableObject
     // See tooltips below for comments describing each member variable
     #region Properties
 
-    public string                       Id { get { return m_id; } set { m_id = value; } }
-    public string                       SpecialSlotId { get { return m_specialSlotId; } set { m_specialSlotId = value; } }
-    public string                       UIName { get { return m_uiName; } set { m_uiName = value; } }
-    public string                       UIDescription { get { return m_uiDescription; } }
-    public int                          StackSize { get { return m_stackSize; } }
-    public float                        Weight { get { return m_weight; } }
-    public Sprite                       Sprite { get { return m_sprite; } }
-    public GameObject                   HeldItemGameObject { get { return m_heldItemGameObject; } }
-    public bool                         CanThrowAway { get { return m_canThrowAway; } set { m_canThrowAway = value; } }
-    public bool                         Customisable { get { return m_customisable; } }
-    public string                       CurrencyItemId { get { return m_currencyItemId; } }
-    public int                          CurrencyItemQuantity { get { return m_currencyItemQuantity; } }
-    public bool                         CustomItem { get { return m_customItem; } set { m_customItem = value; } }
-    public string                       BaseItemId { get { return m_baseItemId; } set { m_baseItemId = value; } }
-    public CustomFloatProperty[]        CustomFloatProperties { get { return m_customFloatProperties; } set { m_customFloatProperties = value; } }
-    public CustomStringProperty[]       CustomStringProperties { get { return m_customStringProperties; } set { m_customStringProperties = value; } }
+    public string                       Id                      { get { return m_id; } set { m_id = value; } }
+    public string                       SpecialSlotId           { get { return m_specialSlotId; } set { m_specialSlotId = value; } }
+    public string                       UIName                  { get { return m_uiName; } set { m_uiName = value; } }
+    public string                       UIDescription           { get { return m_uiDescription; } }
+    public int                          StackSize               { get { return m_stackSize; } }
+    public float                        Weight                  { get { return m_weight; } }
+    public Sprite                       Sprite                  { get { return m_sprite; } }
+    public GameObject                   HeldItemGameObject      { get { return m_heldItemGameObject; } }
+    public bool                         CanThrowAway            { get { return m_canThrowAway; } set { m_canThrowAway = value; } }
+    public bool                         CanDrop                 { get { return m_canDrop; } set { m_canDrop = value; } }
+    public bool                         Customisable            { get { return m_customisable; } }
+    public string                       CurrencyItemId          { get { return m_currencyItemId; } }
+    public int                          CurrencyItemQuantity    { get { return m_currencyItemQuantity; } }
+    public bool                         CustomItem              { get { return m_customItem; } set { m_customItem = value; } }
+    public string                       BaseItemId              { get { return m_baseItemId; } set { m_baseItemId = value; } }
+    public CustomFloatProperty[]        CustomFloatProperties   { get { return m_customFloatProperties; } set { m_customFloatProperties = value; } }
+    public CustomStringProperty[]       CustomStringProperties  { get { return m_customStringProperties; } set { m_customStringProperties = value; } }
 
     #endregion
 
@@ -67,8 +68,13 @@ public class Item : ScriptableObject
     [SerializeField] [Tooltip("The GameObject to be instantiated when the player holds this item, leave blank if no held item should be shown")]
     private GameObject m_heldItemGameObject;
 
-    [SerializeField] [Tooltip("Whether this item can be permanently thrown away")]
+    [SerializeField] [Tooltip("Whether this item can be permanently thrown away by the player")]
     private bool m_canThrowAway = true;
+
+    [SerializeField]
+    [Tooltip("Whether this item can be manually dropped on the ground by the player. " +
+             "Note: If the player has a full inventory when they collect an item, it will be dropped regardless of this setting, as otherwise it would be lost entirely")]
+    private bool m_canDrop = true;
 
     [Space]
     [Header("Player Customisation")]

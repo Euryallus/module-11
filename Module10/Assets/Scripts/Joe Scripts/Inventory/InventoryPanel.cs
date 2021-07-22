@@ -195,7 +195,7 @@ public class InventoryPanel : UIPanel
             case PlayerAbilityType.Freeze:
                 abilitySlot = FreezeAbilitySlot;
                 break;
-            case PlayerAbilityType.Slam:
+            case PlayerAbilityType.Slam_Levitate:
                 abilitySlot = SlamAbilitySlot;
                 break;
             case PlayerAbilityType.Grab:
@@ -261,8 +261,6 @@ public class InventoryPanel : UIPanel
 
         // Drop items
         DropItemGroup(new ItemGroup(itemTypeToDrop, handStackSize), false, allowInstantPickup);
-
-        AudioManager.Instance.PlaySoundEffect2D("throw");
     }
 
     private void CheckForShowHideInput()

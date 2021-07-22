@@ -17,6 +17,7 @@ public enum NotificationMessageType
 
     CantAffordItem,
     CantThrowAwayItem,
+    CantDropItem,
 
     NoSpaceItemsDropped,
 
@@ -68,6 +69,7 @@ public class NotificationManager : MonoBehaviour
 
         { NotificationMessageType.CantAffordItem,      "You cannot purchase this item - * * required." },
         { NotificationMessageType.CantThrowAwayItem,   "* cannot be thrown away." },
+        { NotificationMessageType.CantDropItem,        "* cannot be dropped." },
 
         { NotificationMessageType.NoSpaceItemsDropped,  "Not enough space in your inventory. Some items were dropped." },
 
@@ -77,6 +79,8 @@ public class NotificationManager : MonoBehaviour
         { NotificationMessageType.AutoSaveSuccess,     "Your progress has been auto-saved.\nSpawn point set." },
         { NotificationMessageType.SaveError,           "Error: Progress could not be saved." }
     };
+
+    private const float NotificationInterval = 2.1f;    // Minimum amount of seconds between each notification being shown
 
     private void Awake()
     {
@@ -104,12 +108,16 @@ public class NotificationManager : MonoBehaviour
 
     private void Update()
     {
-        if(activeNotificationGameObj == null)
+        if(activeNotification != null)
         {
-            // No notification is currently being shown
+            activeNotification.ActiveTimer += Time.deltaTime;
+        }
+
+        if(activeNotification == null || activeNotification.ActiveTimer > NotificationInterval)
+        {
             activeNotification = null;
 
-            if(queuedNotifications.Count > 0)
+            if (queuedNotifications.Count > 0)
             {
                 // There is at least one notification in the queue, show it
                 ShowNotification(queuedNotifications.Dequeue());
@@ -120,12 +128,7 @@ public class NotificationManager : MonoBehaviour
     public void AddNotificationToQueue(NotificationMessageType messageType, string[] parameters = null, string soundName = "notification1")
     {
         // Create a queued notification with the given message/parameters
-        QueuedNotification notificationToAdd = new QueuedNotification()
-        {
-            MessageType = messageType,
-            Parameters = parameters,
-            SoundName = soundName
-        };
+        QueuedNotification notificationToAdd = new QueuedNotification(messageType, parameters, soundName);
 
         if(activeNotification != null && NotificationsAreTheSame(notificationToAdd, activeNotification))
         {
@@ -226,7 +229,20 @@ public class NotificationManager : MonoBehaviour
 // Data for notifications that have been queued
 public class QueuedNotification
 {
-    public NotificationMessageType  MessageType;    // The message type to be displayed
-    public string[]                 Parameters;     // Array of strings to replace any '*' symbols in the message text
-    public string                   SoundName;      // Name of the sound effect to play when the notification is shown
+    public NotificationMessageType  MessageType { get { return m_messageType; } }
+    public string[]                 Parameters  { get { return m_parameters; } }
+    public string                   SoundName   { get { return m_soundName; } }
+    public float                    ActiveTimer { get { return m_activeTimer; } set { m_activeTimer = value; } }
+
+    public QueuedNotification(NotificationMessageType messageType, string[] parameters, string soundName)
+    {
+        m_messageType = messageType;
+        m_parameters  = parameters;
+        m_soundName   = soundName;
+    }
+
+    private NotificationMessageType  m_messageType;         // The message type to be displayed
+    private string[]                 m_parameters;          // Array of strings to replace any '*' symbols in the message text
+    private string                   m_soundName;           // Name of the sound effect to play when the notification is shown
+    private float                    m_activeTimer = 0.0f;  // When a queued notification becomes the active notification, the amount of time it has been active for
 }

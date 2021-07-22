@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Care Package
   m_EditorClassIdentifier: 
   m_id: carePackage
+  m_specialSlotId: 
   m_uiName: Care Package
   m_uiDescription: A small package
   m_stackSize: 1
@@ -20,6 +21,7 @@ MonoBehaviour:
   m_sprite: {fileID: 21300000, guid: 2dfe566b12faa344aa536a7781506dd7, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
+  m_canDrop: 0
   m_customisable: 0
   m_currencyItemId: 
   m_currencyItemQuantity: 0

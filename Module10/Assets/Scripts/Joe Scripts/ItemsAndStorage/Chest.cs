@@ -17,7 +17,11 @@ public class Chest : InteractableWithOutline
     // Variables in this region are set in the inspector
 
     [Header("Chest Properties")]
-    [SerializeField] protected  ItemContainer  itemContainer;  // The ItemContainer that handles adding/removing/storing items
+    [SerializeField] protected  ItemContainer   itemContainer;  // The ItemContainer that handles adding/removing/storing items
+
+    [SerializeField] private Animator           animator;       // Handles chest open/close animations
+    [SerializeField] private SoundClass         openSound;      // Sound played when the chest is opened
+    [SerializeField] private SoundClass         closeSound;     // Sound played when the chest is closed
 
     #endregion
 
@@ -49,6 +53,42 @@ public class Chest : InteractableWithOutline
         // Also show the inventory panel with an offset to it doesn't overlap with the chest UI
         //   This allows the player to drag items between the chest and their inventory
         GameSceneUI.Instance.PlayerInventory.Show(InventoryShowMode.InventoryOnly, 140.0f);
+
+        // Trigger OnChestUIClosed when the chest UI panel is closed
+        chestPanel.UIPanelHiddenEvent += OnChestUIClosed;
+
+        // Animate the chest opening
+        if (animator != null)
+        {
+            animator.SetBool("Open", true);
+        }
+
+        // Play the open sound
+        if(openSound != null)
+        {
+            AudioManager.Instance.PlaySoundEffect3D(openSound, transform.position);
+        }
+    }
+
+    private void OnChestUIClosed()
+    {
+        if(!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            // Animate the chest closing when chest UI is closed
+            if (animator != null)
+            {
+                animator.SetBool("Open", false);
+            }
+
+            // Play the chest closed sound
+            if (closeSound != null)
+            {
+                AudioManager.Instance.PlaySoundEffect3D(closeSound, transform.position);
+            }
+        }
+
+        // Unsubscribe from the UIPanelHiddenEvent event so this funtion will not be triggered when a different chest is closed
+        chestPanel.UIPanelHiddenEvent -= OnChestUIClosed;
     }
 
     protected virtual void SetupChest()

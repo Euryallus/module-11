@@ -5,8 +5,11 @@ using UnityEngine;
 public enum PlayerAbilityType
 {
     Launch = 0,
+
     Freeze,
-    Slam,
+
+    Slam_Levitate,  // Note: You'll see this ability referred to as 'slam' throughout the code as this was the original name,
+                    //   but in-game the name is displayed as 'Levitate' for extra clarity on what the ability does
     Grab
 }
 
@@ -58,18 +61,18 @@ public abstract class PlayerAbility : MonoBehaviour
 
     private static Dictionary<PlayerAbilityType, int> abilityUpgradeLevels = new Dictionary<PlayerAbilityType, int>()
     {
-        { PlayerAbilityType.Launch, 0 },
-        { PlayerAbilityType.Freeze, 0 },
-        { PlayerAbilityType.Slam,   0 },
-        { PlayerAbilityType.Grab,   0 }
+        { PlayerAbilityType.Launch,          0 },
+        { PlayerAbilityType.Freeze,          0 },
+        { PlayerAbilityType.Slam_Levitate,   0 },
+        { PlayerAbilityType.Grab,            0 }
     };
 
     private static Dictionary<PlayerAbilityType, bool> abilityUnlockStatuses = new Dictionary<PlayerAbilityType, bool>()
     {
-        { PlayerAbilityType.Launch, false },
-        { PlayerAbilityType.Freeze, false },
-        { PlayerAbilityType.Slam,   false },
-        { PlayerAbilityType.Grab,   false }
+        { PlayerAbilityType.Launch,          false },
+        { PlayerAbilityType.Freeze,          false },
+        { PlayerAbilityType.Slam_Levitate,   false },
+        { PlayerAbilityType.Grab,            false }
     };
 
     public static bool AbilityIsUnlocked(PlayerAbilityType abilityType)

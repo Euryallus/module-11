@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class UIPanel : MonoBehaviour
     public bool Showing { get { return showing; } set { showing = value; } }
 
     #endregion
+
+    public event Action UIPanelHiddenEvent;
 
     protected   bool        showing;                        // Whether or not the panel is currently showing
     protected   bool        isBlockingPanel = true;         // Whether this panel blocks certain other UI related input when being shown
@@ -69,6 +72,11 @@ public class UIPanel : MonoBehaviour
         // Wait a frame, them mark the panel as hidden
         //  (Waiting a frame first so if multiple panels are opened/closed with esc, they will not all be triggered on the same frame)
         StartCoroutine(HideAfterFrame());
+
+        if(UIPanelHiddenEvent != null)
+        {
+            UIPanelHiddenEvent.Invoke();
+        }
     }
 
     private IEnumerator HideAfterFrame()

@@ -237,6 +237,6 @@ public class SlamAbility : PlayerAbility
 
     protected override PlayerAbilityType GetAbilityType()
     {
-        return PlayerAbilityType.Slam;
+        return PlayerAbilityType.Slam_Levitate;
     }
 }
