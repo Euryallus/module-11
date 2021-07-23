@@ -74,10 +74,6 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         {
             triggers[i].AddListener(this);
         }
-
-        // Disable sounds temporarily on start so any animations that play to
-        //   get the doors into the correct state do not cause sounds to be played
-        animator.SetBool("DisableSounds", true);
     }
 
     private void OnDestroy()
@@ -193,9 +189,6 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             if (!openIn && !openOut)
             {
                 // Door is currently closed - open it in/out depending on where the player is stood
-
-                // Ensure open/close sounds are enabled
-                animator.SetBool("DisableSounds", false);
 
                 if (inInsideTrigger)
                 {
@@ -351,31 +344,23 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     // Open/close sounds triggered by animation events:
     //==================================================
 
+    // Sounds aren't played when loading scene data to avoid sound spam while doors are entering their saved states
+
     public void PlayOpenSound()
     {
-        if(!animator.GetBool("DisableSounds"))
+        if(!SaveLoadManager.Instance.LoadingSceneData)
         {
-            // Sounds are enabled, play an open sound at the position of the door model
+            // Play an open sound at the position of the door model
             AudioManager.Instance.PlaySoundEffect3D(openSound, transform.GetChild(0).GetChild(0).position);
-        }
-        else
-        {
-            // Sounds were disabled, don't play a sound but re-enable them for next time
-            animator.SetBool("DisableSounds", false);
         }
     }
 
     public void PlayCloseSound()
     {
-        if (!animator.GetBool("DisableSounds"))
+        if (!SaveLoadManager.Instance.LoadingSceneData)
         {
-            // Sounds are enabled, play a close sound at the position of the door model
+            // Play a close sound at the position of the door model
             AudioManager.Instance.PlaySoundEffect3D(closeSound, transform.GetChild(0).GetChild(0).position);
-        }
-        else
-        {
-            // Sounds were disabled, don't play a sound but re-enable them for next time
-            animator.SetBool("DisableSounds", false);
         }
     }
 }

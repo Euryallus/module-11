@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 // Main author:         Hugo Bailey
 // Additional author:   N/A
@@ -22,6 +23,12 @@ public class EnemyCampManager : MonoBehaviour
 
                         public bool hasBeenDefeated = false;
                         public bool spawnRandomPosition = true;
+
+    // Added by Joe
+    [SerializeField] private CombatDynamicAudioArea dynamicAudio;   // The dynamic audio area associated with this enemy camp
+
+    [SerializeField] private UnityEvent noActiveEnemiesEvent = new UnityEvent();
+
     public int remainingUnits 
     { get 
         {
@@ -79,9 +86,7 @@ public class EnemyCampManager : MonoBehaviour
                         spawnedEnemies.RemoveAt(i);
                         if (spawnedEnemies.Count == 0)
                         {
-                            hasBeenDefeated = true;
                             break;
-
                         }
                         else
                         {
@@ -91,10 +96,23 @@ public class EnemyCampManager : MonoBehaviour
                 }
             }
         }
-        else
+        else if(!hasBeenDefeated)
         {
             hasBeenDefeated = true;
+
+            NoActiveEnemies();
         }
+    }
+
+    private void NoActiveEnemies()
+    {
+        // Added by Joe: Disable combat audio when all enemies are defeated
+        if (dynamicAudio != null)
+        {
+            dynamicAudio.SetAreaEnabled(false);
+        }
+
+        noActiveEnemiesEvent.Invoke();
     }
 
     // Spawns units with a total difficulty equal to the param passed
@@ -146,6 +164,12 @@ public class EnemyCampManager : MonoBehaviour
         }
 
         totalSpawned = spawnedEnemies.Count;
+
+        // Added by Joe: Enable combat audio enemy units are spawned
+        if (dynamicAudio != null)
+        {
+            dynamicAudio.SetAreaEnabled(true);
+        }
     }
 
     // Calculates remaining units to spawn based on total difficulty of units already selected

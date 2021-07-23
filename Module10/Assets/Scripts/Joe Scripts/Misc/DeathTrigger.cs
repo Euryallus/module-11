@@ -12,6 +12,8 @@ using UnityEngine;
 
 public class DeathTrigger : MonoBehaviour
 {
+    [SerializeField] private PlayerDeathCause deathCause = PlayerDeathCause.FellOutOfWorld;
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
@@ -22,7 +24,7 @@ public class DeathTrigger : MonoBehaviour
             PlayerDeath playerDeath = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeath>();
 
             // Kill the player, with a message saying they fell out of the world
-            playerDeath.KillPlayer(PlayerDeathCause.FellOutOfWorld);
+            playerDeath.KillPlayer(deathCause);
         }
     }
 }

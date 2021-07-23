@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(DynamicAudioArea))]
+[CustomEditor(typeof(DynamicAudioArea), true)]
 public class DynamicAudioAreaEditor : Editor
 {
     public override void OnInspectorGUI()

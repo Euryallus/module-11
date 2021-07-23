@@ -66,6 +66,7 @@ public class AudioManager : MonoBehaviour
     private List<DynamicAudioArea>          activeDynamicAudioAreas;        // The dynamic audio areas that are currently playing audio
     private List<LoopingSoundSource>        loopingSoundSources;            // List of all active looping sound sources
     private float                           globalVolumeMultiplier = 1.0f;  // Volume multiplier for fading music and sounds in/out without altering saved volume values
+    private Coroutine                       fadeGlobalVolumeCoroutine;
 
     private int savedMusicVolume        = -1;   // Keeps track of the saved music volume so PlayerPrefs don't have to be checked each time (set from SaveLoadManager)
     private int savedSoundEffectsVolume = -1;   // Same as above, but for sound effects. (If these values are set to -1 the actual value will be loaded from PlayerPrefs)
@@ -469,7 +470,11 @@ public class AudioManager : MonoBehaviour
 
     public void FadeGlobalVolumeMultiplier(float fadeTo, float fadeTime)
     {
-        StartCoroutine(FadeGlobalVolumeMultiplierCoroutine(fadeTo, fadeTime, fadeTo > globalVolumeMultiplier));
+        if(fadeGlobalVolumeCoroutine != null)
+        {
+            StopCoroutine(fadeGlobalVolumeCoroutine);
+        }
+        fadeGlobalVolumeCoroutine = StartCoroutine(FadeGlobalVolumeMultiplierCoroutine(fadeTo, fadeTime, fadeTo > globalVolumeMultiplier));
     }
 
     private IEnumerator FadeGlobalVolumeMultiplierCoroutine(float fadeTo, float fadeTime, bool fadingIn)
@@ -483,6 +488,8 @@ public class AudioManager : MonoBehaviour
         }
 
         UpdateGlobalVolumeMultiplier(fadeTo);
+
+        fadeGlobalVolumeCoroutine = null;
     }
 
     public void UpdateGlobalVolumeMultiplier(float value)

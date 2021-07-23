@@ -13,6 +13,8 @@ public class AbilityUnlockCutscene : CutsceneTriggerer
     private PlayerAbilityType abilityType;
     private int upgradeLevel;
 
+    private Coroutine restoreVolumeCoroutine;
+
     public void Setup(Item item, PlayerAbilityType ability, int level)
     {
         abilityItem     = item;
@@ -42,7 +44,11 @@ public class AbilityUnlockCutscene : CutsceneTriggerer
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
         AudioManager.Instance.PlayMusicInterlude("unlockFanfare");
 
-        StartCoroutine(RestoreGlobalVolumeAfterDelay());
+        if(restoreVolumeCoroutine != null)
+        {
+            StopCoroutine(restoreVolumeCoroutine);
+        }
+        restoreVolumeCoroutine = StartCoroutine(RestoreGlobalVolumeAfterDelay());
     }
 
     private IEnumerator RestoreGlobalVolumeAfterDelay()
@@ -50,6 +56,8 @@ public class AbilityUnlockCutscene : CutsceneTriggerer
         yield return new WaitForSecondsRealtime(2.5f);
 
         AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.0f);
+
+        restoreVolumeCoroutine = null;
     }
 
     protected override void EndCutscene()

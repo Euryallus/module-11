@@ -85,22 +85,22 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         // Areas without music to trigger simply trigger silence, so no audio source properties need to be set
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         // Subscribe to save/load events so the active value can be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         // Unsubscribe from save/load events if the area GameObject is destroyed to prevent null ref. errors
         SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
-    public void OnSceneSave(SaveData saveData)
+    public virtual void OnSceneSave(SaveData saveData)
     {
-        // Get a unique id for this audio area using its location
-        string locationId = GetLocationId();
+        // Get a unique id for this audio area using its position in the world
+        string locationId = GetUniquePositionId();
 
         Debug.Log("Saving data for DynamicAudioArea with location id: " + locationId);
 
@@ -109,13 +109,13 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         saveData.AddData("audioAreaWaiting_" + locationId, waitingForRevert);
     }
 
-    public void OnSceneLoadSetup(SaveData saveData)
+    public virtual void OnSceneLoadSetup(SaveData saveData)
     {
         // Load whether this audio area was active or waiting when the player last saved
 
-        waitingForRevert  = saveData.GetData<bool>("audioAreaWaiting_" + GetLocationId());
+        waitingForRevert  = saveData.GetData<bool>("audioAreaWaiting_" + GetUniquePositionId());
 
-        bool loadedActive = saveData.GetData<bool>("audioAreaActive_"  + GetLocationId());
+        bool loadedActive = saveData.GetData<bool>("audioAreaActive_"  + GetUniquePositionId());
 
         if(loadedActive)
         {
@@ -124,7 +124,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         }
     }
 
-    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+    public virtual void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
     public string GetMusicToTriggerName()
     {
@@ -206,13 +206,18 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                if (revertAudioOnExit)
-                {
-                    AudioManager.Instance.RevertActiveDynamicAudioAreas();
-
-                    DeactivateAudioArea();
-                }
+                TriggerExitEvents();
             }
+        }
+    }
+
+    protected void TriggerExitEvents()
+    {
+        if (revertAudioOnExit)
+        {
+            AudioManager.Instance.RevertActiveDynamicAudioAreas();
+
+            DeactivateAudioArea();
         }
     }
 
@@ -309,13 +314,12 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         fadingIn = false;
     }
 
-    private string GetLocationId()
+    protected string GetUniquePositionId()
     {
-        // Returns a unique string id based on object location in the world
-        return (int)transform.position.x + "_" + (int)transform.position.y + "_" + (int)transform.position.z;
+        return transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     // Debug visualisation, draws a wire cube to represent the collider areaa
 
@@ -328,14 +332,21 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
         Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
         Gizmos.matrix = rotationMatrix;
 
-        Gizmos.color = Color.red;
-
-        if(areaCollider == null)
+        if (areaCollider == null)
         {
             areaCollider = GetComponent<Collider>();
         }
 
-        if(areaCollider is SphereCollider sphereCollider)
+        if (areaCollider.enabled)
+        {
+            Gizmos.color = Color.red;
+        }
+        else
+        {
+            Gizmos.color = Color.blue;
+        }
+
+        if (areaCollider is SphereCollider sphereCollider)
         {
             Gizmos.DrawWireSphere(sphereCollider.center, sphereCollider.radius);
         }

@@ -13,7 +13,8 @@ public enum PlayerDeathCause
     Skewered,
     SwingHit,
     WaveHit,
-    Fire
+    Fire,
+    Lava
 }
 
 // ||=======================================================================||
@@ -92,6 +93,11 @@ public class PlayerDeath : MonoBehaviour
                                                                         new WeightedString("You were killed by fire.", 100),
                                                                         new WeightedString("You were roasted on an open flame.", 10),
                                                                         new WeightedString("Why would you just step into fire?", 1)
+                                                                    } },
+
+         { PlayerDeathCause.Lava,            new WeightedString[]   {
+                                                                        new WeightedString("You burned in lava.", 100),
+                                                                        new WeightedString("That liquid had a RAG status of orange.", 1),
                                                                     } }
     };
 

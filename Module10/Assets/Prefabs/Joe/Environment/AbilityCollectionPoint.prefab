@@ -165,8 +165,8 @@ MonoBehaviour:
   interactionRange: 5
   interactTooltipPrefab: {fileID: 7833637479385031685, guid: 00b3961c78315924bb78ec4054eb5813, type: 3}
   interactTooltipOffset: {x: 0, y: 1, z: 0}
-  tooltipNameText: 
-  interactionSound: 
+  tooltipNameText: (Ignore, changed through code)
+  interactionSound: buttonClickMain1
   externalOutline: {fileID: 0}
   abilityItem: {fileID: 0}
   abilityType: 0

@@ -18,6 +18,3 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
     Weight: 1
     MinimumQuantity: 5
-  - Item: {fileID: 11400000, guid: df05a4059919e7a499c95d32f924c834, type: 2}
-    Weight: 1
-    MinimumQuantity: 1

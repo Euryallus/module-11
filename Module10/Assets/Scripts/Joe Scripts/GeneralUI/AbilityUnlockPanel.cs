@@ -56,6 +56,6 @@ public class AbilityUnlockPanel : MonoBehaviour
     {
         ContinueButtonPressEvent.Invoke();
 
-        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2");
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2", true);
     }
 }
