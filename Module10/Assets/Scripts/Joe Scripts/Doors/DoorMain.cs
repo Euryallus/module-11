@@ -108,7 +108,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         Debug.Log("Saving data for door: " + id);
 
         // Save the locked state
-        saveData.AddData("unlocked_" + id, unlocked);
+        saveData.AddData("doorUnlocked_" + id, unlocked);
 
         // Save whether the door is closed (0), open in (1) or open out (2)
         byte openStateToSave = 0;
@@ -122,7 +122,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             openStateToSave = 2;
         }
 
-        saveData.AddData("openState_" + GetUniquePositionId(), openStateToSave);
+        saveData.AddData("doorOpenState_" + id, openStateToSave);
     }
 
     public void OnSceneLoadSetup(SaveData saveData)
@@ -131,9 +131,9 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
         Debug.Log("Loading data for door: " + id);
 
-        unlocked = saveData.GetData<bool>("unlocked_" + id);
+        unlocked = saveData.GetData<bool>("doorUnlocked_" + id);
 
-        byte openState = saveData.GetData<byte>("openState_" + id);
+        byte openState = saveData.GetData<byte>("doorOpenState_" + id);
 
         // If the door was open when saved, open it in the correct direction
         if(openState == 1)
@@ -338,7 +338,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private string GetUniquePositionId()
     {
-        return "door_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
+        return transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 
     // Open/close sounds triggered by animation events:

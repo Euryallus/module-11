@@ -52,6 +52,7 @@ public class QuestMenuUI : UIPanel
                 group.blocksRaycasts = true;
 
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
 
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().StopMoving();
 

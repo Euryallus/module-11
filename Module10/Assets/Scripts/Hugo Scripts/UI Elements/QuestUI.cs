@@ -52,6 +52,8 @@ public class QuestUI : UIPanel
     {
         // Allows cursor to move around screen & assigns correct strings to text elements (e.g. quest description)
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         questTitle.text = quest.questName;
         questDescription.text = quest.questDescription;
 
@@ -100,6 +102,8 @@ public class QuestUI : UIPanel
     {
         // Allows cursor to move around screen
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // Fills in text components
         questCompleteTitle.text = quest.questName;
         questCompleteMessage.text = quest.questCompleteDialogue;

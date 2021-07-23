@@ -55,6 +55,7 @@ public class ShopNPC : InteractableWithOutline
 
             // Unlock the cursor so the player can interact with shop UI
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
             // Show the talk UI
             talkUI.ShowAndSetup(this);

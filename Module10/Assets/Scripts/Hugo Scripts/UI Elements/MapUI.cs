@@ -53,6 +53,7 @@ public class MapUI : UIPanel
                 cg.alpha = 1.0f;
 
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
 
                 // Map is now visible, apply changes made to texture since last opened & allow player to interact
                 cg.blocksRaycasts = true;

@@ -23,6 +23,8 @@ public class DialogueUI : UIPanel
     {
         // Sets canvas group alpha to 1 and changes dialogue text component to display string passed
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         dialogueText.text = dialogue;
 
         // Allows player to see & interact w/ dialogue box
