@@ -207,8 +207,8 @@ MonoBehaviour:
   TerminalVelocity: 100
   gravity: 6.5
   mouseSensitivity: 4
-  gliderFallRate: 1
-  gliderSensitivity: 4
+  gliderFallRate: 2
+  gliderSensitivity: 0.5
   gliderTiltAmount: 0.2
   gliderOpenDistanceFromGround: 3
   glideVelocity: {x: 0, y: 0}
