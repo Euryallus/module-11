@@ -18,7 +18,7 @@ GameObject:
   m_TagString: Ladder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2420646929371881863
 Transform:
@@ -99,6 +99,7 @@ MonoBehaviour:
   interactTooltipOffset: {x: 0, y: 0, z: 0}
   tooltipNameText: Ladder
   interactionSound: buttonClickMain1
+  externalOutline: {fileID: 0}
   snapPoint: {fileID: 2420646929622699206}
 --- !u!65 &2420646929371881886
 BoxCollider:
@@ -140,7 +141,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2420646929622699206
 Transform:

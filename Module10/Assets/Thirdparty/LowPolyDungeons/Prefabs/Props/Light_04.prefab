@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6205617110067686490
 Transform:
@@ -104,6 +104,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6205617110067686490}
     m_Modifications:
+    - target: {fileID: 4158288333718790974, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 5279653533481498746, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -156,9 +160,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7096993322143366000, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7969027604573167944, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
       propertyPath: m_Name
       value: Particles_Fire_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7969027604573167944, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 9137311531114470491, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 9197820146775635977, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22a73079f416d9d41a42ddede8fd6e63, type: 3}
