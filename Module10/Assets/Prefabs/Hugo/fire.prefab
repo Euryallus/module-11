@@ -44,12 +44,12 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.6466417, b: 0.3254717, a: 1}
   m_Intensity: 8
-  m_Range: 45
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -80,7 +80,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8183
   m_RenderingLayerMask: 1
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
@@ -91,7 +91,7 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
-  m_ShadowRadius: 0
+  m_ShadowRadius: 0.3
   m_ShadowAngle: 0
 --- !u!1 &6001042205045692015
 GameObject:
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 4343014078050024692}
   - component: {fileID: 4816378603338079669}
   - component: {fileID: 2231758601226125086}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
