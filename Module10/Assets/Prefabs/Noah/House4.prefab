@@ -958,6 +958,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2420646929371881886, guid: 9fee14b90da238e4486a51d3d9c69234, type: 3}
+      propertyPath: m_Center.y
+      value: 7.06
+      objectReference: {fileID: 0}
     - target: {fileID: 2420646929371881887, guid: 9fee14b90da238e4486a51d3d9c69234, type: 3}
       propertyPath: m_Name
       value: Ladder
