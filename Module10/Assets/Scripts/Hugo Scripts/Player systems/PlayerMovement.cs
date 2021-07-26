@@ -326,6 +326,7 @@ public class PlayerMovement : MonoBehaviour
                     if (controller.isGrounded)
                     {
                         currentMovementState = MovementStates.walk;
+                        gliderModel.SetActive(false);
                         glideVelocity = new Vector2(0, 0);
                         break;
                     }
