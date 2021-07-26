@@ -11,10 +11,36 @@ public class QuestMenuButton : MonoBehaviour
 
     public QuestMenuUI ui;
 
+    private void Start()
+    {
+        buttonTitle.text = questDisplay.questName;
+    }
+
     public void DisplayQuestData()
     {
-        ui.title.text = gameObject.GetComponent<QuestMenuButton>().questDisplay.questName;
+        QuestMenuButton button = gameObject.GetComponent<QuestMenuButton>();
 
-        ui.description.text = gameObject.GetComponent<QuestMenuButton>().questDisplay.questDescription;
+        ui.title.text = button.questDisplay.questName;
+
+        ui.description.text = button.questDisplay.questDescription;
+
+        string objectivesText = "";
+        string rewardsText = "";
+        foreach(QuestObjective objective in button.questDisplay.objectives)
+        {
+            objectivesText = objectivesText + objective.taskName + "\n";
+        }
+
+        ui.objectives.text = objectivesText;
+
+        if (button.questDisplay.rewards.Count != 0)
+        {
+            foreach (ItemGroup reward in button.questDisplay.rewards)
+            {
+                rewardsText = rewardsText + reward.Item.UIName + "\n";
+            }
+        }
+
+        ui.rewards.text = rewardsText;
     }
 }

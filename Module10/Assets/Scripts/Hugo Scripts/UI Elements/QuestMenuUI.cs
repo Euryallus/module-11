@@ -87,7 +87,6 @@ public class QuestMenuUI : UIPanel
 
         SortButtonPosition();
 
-        newButton.GetComponent<QuestMenuButton>().buttonTitle.text = questToAdd.questName;
         newButton.GetComponent<QuestMenuButton>().questDisplay = questToAdd;
         newButton.SetActive(true);
     }

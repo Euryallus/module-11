@@ -162,6 +162,7 @@ Transform:
   - {fileID: 3399754591687074841}
   - {fileID: 3785119239588701016}
   - {fileID: 1044087298}
+  - {fileID: 18033806}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -201,18 +202,18 @@ MonoBehaviour:
   walkSpeed: 5
   runSpeed: 10
   crouchSpeed: 3
-  defaultGlideSpeed: 10
+  defaultGlideSpeed: 14
   swimSpeed: 5
   jumpVelocity: 10
   TerminalVelocity: 100
   gravity: 6.5
-  mouseSensitivity: 4
+  mouseSensitivity: 3
   gliderFallRate: 2
   gliderSensitivity: 0.5
-  gliderTiltAmount: 0.2
+  gliderTiltAmount: 0.15
   gliderOpenDistanceFromGround: 3
   glideVelocity: {x: 0, y: 0}
-  glider: {fileID: 0}
+  gliderModel: {fileID: 18033793}
   currentMovementState: 0
 --- !u!143 &3399754590433321698
 CharacterController:
@@ -383,7 +384,7 @@ MonoBehaviour:
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
-  abilityTriggerSound: {fileID: 11400000, guid: 79a7449e680af56449be165c877c0161, type: 2}
+  abilityTriggerSound: {fileID: 11400000, guid: 8fb9993ecbeb7094eadc99ec284e57df, type: 2}
   iceLancePrefab: {fileID: 8668904131355023997, guid: 58561ab03e1eb534ca02793af1e5e264, type: 3}
   range: 100
   FreezeDuration: 5
@@ -536,7 +537,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
+  far clip plane: 1500
   field of view: 70
   orthographic: 0
   orthographic size: 5
@@ -818,3 +819,94 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1001 &7076069901892563472
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3399754590433321692}
+    m_Modifications:
+    - target: {fileID: 1990357014099954243, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.34700227
+      objectReference: {fileID: 0}
+    - target: {fileID: 6167729981687618382, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.34700227
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996156102921111203, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5400f89033af88a448c13765b6e4b774, type: 2}
+    - target: {fileID: 6996156102923388939, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0909977
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187665, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_Name
+      value: GliderModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187665, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8637688432234075719, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.36
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+--- !u!1 &18033793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7076069901910187665, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+  m_PrefabInstance: {fileID: 7076069901892563472}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &18033806 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+  m_PrefabInstance: {fileID: 7076069901892563472}
+  m_PrefabAsset: {fileID: 0}

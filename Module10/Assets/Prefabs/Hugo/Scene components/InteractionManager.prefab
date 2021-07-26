@@ -3297,7 +3297,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -383.5, y: -90.5}
+  m_AnchoredPosition: {x: 372, y: -90.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9204811781107116066
@@ -3543,7 +3543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 380.6, y: -90.5}
+  m_AnchoredPosition: {x: -368.98196, y: -90.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9204811781182896848
@@ -4149,6 +4149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cg: {fileID: 9204811780444024436}
   dialogueText: {fileID: 9204811780954292005}
+  timeBetweenLetterPrint: 0.1
 --- !u!225 &6235016202219771403
 CanvasGroup:
   m_ObjectHideFlags: 0

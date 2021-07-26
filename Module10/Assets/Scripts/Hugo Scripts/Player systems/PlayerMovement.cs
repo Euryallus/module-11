@@ -64,8 +64,9 @@ public class PlayerMovement : MonoBehaviour
     private bool inWater    = false;    // Flags if player is currently underwater
     private bool canMove    = true;     // Flags if player is able to move (changed to prevent moving during dialogue etc.)
     private bool canGlide   = false;    // Flags if player is able to glide (if > [gliderOpenDistanceFromGround] meters off ground)
+    [SerializeField] private GameObject gliderModel;
 
-    public Item glider;                 // Ref. to glider object
+    private bool hasGlider = false;
 
     public CharacterController Controller { get { return controller; } }
 
@@ -119,6 +120,9 @@ public class PlayerMovement : MonoBehaviour
         // Attempts to gets post processing effects (water effect)
         postProcessing.profile.TryGet<Vignette>(out v);
         postProcessing.profile.TryGet<DepthOfField>(out dof);
+
+        gliderModel.SetActive(false);
+
     }
 
     void Update()
@@ -466,6 +470,7 @@ public class PlayerMovement : MonoBehaviour
                 else if (currentMovementState != MovementStates.glide && canGlide)
                 {
                     currentMovementState = MovementStates.glide;
+                    gliderModel.SetActive(true);
 
                     glideVelocity = new Vector2(inputX, inputY).normalized;
 
@@ -474,6 +479,7 @@ public class PlayerMovement : MonoBehaviour
                 // If player is already gliding & hits space again, close glider
                 else if(currentMovementState == MovementStates.glide)
                 {
+                    gliderModel.SetActive(false);
                     currentMovementState = MovementStates.walk;
                 }
                 
