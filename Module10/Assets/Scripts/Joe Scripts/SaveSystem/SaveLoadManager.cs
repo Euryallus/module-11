@@ -301,8 +301,12 @@ public class SaveLoadManager : MonoBehaviour
     {
         lasUsedSavePoint = null;
 
+        // Pause time
+
         float previousTimeScale = Time.timeScale;
         Time.timeScale = 0.0f;
+
+        // Setup loading panel
 
         LoadingPanel loadingPanel = Instantiate(loadingCanvasPrefab).GetComponent<LoadingPanel>();
 
@@ -311,6 +315,14 @@ public class SaveLoadManager : MonoBehaviour
         loadingPanel.SetAreaNameText(sceneUIData.UIName);
         loadingPanel.SetAreaPreviewSprite(sceneUIData.UISprite);
 
+        // Mute global music/sound
+
+        AudioManager audioManager = AudioManager.Instance;
+
+        audioManager.FadeGlobalVolumeMultiplier(0.0f, 1.0f);
+
+        // Disable player controller
+
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
 
         if (activePlayer != null && activePlayer.PlayerController != null)
@@ -318,20 +330,8 @@ public class SaveLoadManager : MonoBehaviour
             activePlayer.PlayerController.enabled = false;
         }
 
-        AudioManager audioManager = AudioManager.Instance;
-
-        float loadFadeTimer = 0.0f;
-
-        // Wait a second for the loading panel to fade in, and fade out audio
-        while (loadFadeTimer < 1.0f)
-        {
-            loadFadeTimer += Time.unscaledDeltaTime;
-            audioManager.UpdateGlobalVolumeMultiplier(audioManager.GlobalVolumeMultiplier - Time.unscaledDeltaTime);
-
-            yield return null;
-        }
-
-        audioManager.UpdateGlobalVolumeMultiplier(0.0f);
+        // Wait a second for the loading panel to fade in
+        yield return new WaitForSecondsRealtime(1.2f);
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -341,6 +341,8 @@ public class SaveLoadManager : MonoBehaviour
 
             yield return null;
         }
+
+        audioManager.UpdateGlobalVolumeMultiplier(0.0f);
 
         // Scene loaded
 

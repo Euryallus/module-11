@@ -262,10 +262,10 @@ public class AudioManager : MonoBehaviour
 
         audioSource.clip        = sound.AudioClips[Random.Range(0, sound.AudioClips.Length)];
 
-        float globalVolume = globalVolumeMultiplier;
+        float globalVolumeInfluence = globalVolumeMultiplier;
         if(overrideGlobalVolumeMultiplier)
         {
-            globalVolume = 1.0f;
+            globalVolumeInfluence = 1.0f;
         }
 
         float savedVolume;
@@ -279,7 +279,7 @@ public class AudioManager : MonoBehaviour
         }
 
         // Multiply the chosen volume value by the saved overall sound effects volume (which is stored as a value from 0 - 20)
-        audioSource.volume      = volume * savedVolume * 0.05f * globalVolume;
+        audioSource.volume      = volume * savedVolume * 0.05f * globalVolumeInfluence;
 
         audioSource.pitch       = pitch;
 
@@ -307,7 +307,7 @@ public class AudioManager : MonoBehaviour
             audioSource.loop = true;
 
             // Add the source GameObject to the list of looping sounds
-            loopingSoundSources.Add(new LoopingSoundSource(audioSource, volume));
+            loopingSoundSources.Add(new LoopingSoundSource(audioSource, volume, overrideGlobalVolumeMultiplier));
         }
 
         // Play the sound
@@ -332,17 +332,17 @@ public class AudioManager : MonoBehaviour
     }
 
     public AudioSource PlayLoopingSoundEffect(string soundId, string loopId, bool use3DSpace = false, bool bypassEffects = false,
-                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         // Starts playing a sound with soundId that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(soundId, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(soundId, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
     }
 
     public AudioSource PlayLoopingSoundEffect(SoundClass sound, string loopId, bool use3DSpace = false, bool bypassEffects = false,
-                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f)
+                                                Vector3 sourcePosition = default, float min3dDistance = 0.0f, float max3dDistance = 0.0f, bool useMusicVolume = false)
     {
         // Starts playing a sound that will loop until StopLoopingSoundEffect is called with the given loopId
-        return PlaySoundEffect(sound, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance);
+        return PlaySoundEffect(sound, LoopType.Loop(loopId), false, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
     }
 
     public void StopLoopingSoundEffect(string loopId)
@@ -425,13 +425,21 @@ public class AudioManager : MonoBehaviour
         PlaySoundEffect(sound, LoopType.DoNotLoop, overrideGlobalVolumeMultiplier, true, false, sourcePosition, min3dDistance, max3dDistance);
     }
 
-    public void PlayMusicInterlude(string id)
+    public void PlayMusicalSoundEffect(string id)
     {
-        // For playing music that does not act as background music, but instead as a short musical interlude,
-        //   for example when a cutscene is being played. Plays like a sound effect on top of background music, hence the use of PlaySoundEffect
-        //   Also overrides globalVolumeMultiplier, allowing background music to be faded out while the interlude plays if desired
+        // For playing music that does not act as background music, but instead as a short, single-fire musical jingle,
+        //   for example when a cutscene is being played or something is unlocked. Plays like a sound effect on top of background music,
+        //    hence the use of PlaySoundEffect. However, the saved music volume will be used rather than sound effects volume.
+        //   Also overrides globalVolumeMultiplier, allowing background music to be faded out while the short music plays if desired
 
         PlaySoundEffect(id, LoopType.DoNotLoop, true, false, true, default, 0, 0, true);
+    }
+
+    public void PlayMusicalLoopingSoundEffect(string id, string loopId)
+    {
+        // Same as above, but for looping sounds
+
+        PlaySoundEffect(id, LoopType.Loop(loopId), true, false, true, default, 0, 0, true);
     }
 
     public void PlayAllDynamicSourcesOnLayer(int dynamicAudioLayer)
@@ -540,7 +548,10 @@ public class AudioManager : MonoBehaviour
         //   volume that was chosen when the sound first started playing
         foreach (LoopingSoundSource loopSource in loopingSoundSources)
         {
-            loopSource.Source.volume = volumeVal * loopSource.BaseVolume;
+            if(!loopSource.OverrideGlobalVolume)
+            {
+                loopSource.Source.volume = volumeVal * loopSource.BaseVolume;
+            }
         }
     }
 
@@ -616,12 +627,14 @@ public class LoopType
 
 public class LoopingSoundSource
 {
-    public LoopingSoundSource(AudioSource source, float baseVolume)
+    public LoopingSoundSource(AudioSource source, float baseVolume, bool overrideGlobalVolume)
     {
-        Source = source;
-        BaseVolume = baseVolume;
+        Source               = source;
+        BaseVolume           = baseVolume;
+        OverrideGlobalVolume = overrideGlobalVolume;
     }
 
-    public AudioSource Source;      // The audio source playing the looping sound
-    public float       BaseVolume;  // The volume chosen when the sound was started
+    public AudioSource Source;                // The audio source playing the looping sound
+    public float       BaseVolume;            // The volume chosen when the sound was started
+    public bool        OverrideGlobalVolume;  // Whether the global volume multiplier should be ignored when updating the volume of this source
 }

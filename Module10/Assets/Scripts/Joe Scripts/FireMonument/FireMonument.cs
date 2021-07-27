@@ -123,7 +123,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         // Fade music/sounds out over 0.2 seconds
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
 
-        AudioManager.Instance.PlayMusicInterlude("fireLightCutscene");
+        AudioManager.Instance.PlayMusicalSoundEffect("fireLightCutscene");
 
         CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
 
