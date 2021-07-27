@@ -24,9 +24,9 @@ public class SaveLoadManager : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private GameObject loadingCanvasPrefab; // UI canvas instantiated when loading a scene
-    [SerializeField] private GameObject titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
-    [SerializeField] private SceneTitleCardInfo[] sceneTitleCardInfo;  // Array of data determining what names will be shown in the UI when certain scenes are loaded
+    [SerializeField] private GameObject    loadingCanvasPrefab; // UI canvas instantiated when loading a scene
+    [SerializeField] private GameObject    titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
+    [SerializeField] private SceneUIData[] sceneUIData;         // Array of data determining what names and images will be shown in the UI to represent each scene
 
     #endregion
 
@@ -292,72 +292,6 @@ public class SaveLoadManager : MonoBehaviour
         }
     }
 
-    //public void LoadGame(string saveDirectoryName = MainSaveDirectory, string defaultStartingSceneName = MainStartingSceneName)
-    //{
-    //    StartCoroutine(LoadGameCoroutine(saveDirectoryName, startingSceneName));
-    //}
-
-    //private IEnumerator LoadGameCoroutine(string saveDirectoryName, string defaultStartingSceneName)
-    //{
-    //    // STEP 1: Attempt to load the global save file for the specified scene group
-    //    //============================================================================
-
-    //    string directoryPath    = baseSaveDirectory + "/" + saveDirectoryName + "/";
-    //    string infoDataPath     = directoryPath + "LoadInfo.save";
-
-    //    currentScenesDirectory = directoryPath;
-
-    //    if (File.Exists(infoDataPath))
-    //    {
-    //        // Global and LoadInfo save files exist - open them and load save data
-
-    //        FileStream infoDataFile;
-
-    //        // Try to open the file for reading
-    //        try
-    //        {
-    //            infoDataFile = File.OpenRead(infoDataPath);
-    //        }
-    //        catch
-    //        {
-    //            Debug.LogError("Could not open info save file when loading: " + infoDataPath);
-    //            yield break;
-    //        }
-
-    //        SaveData infoData;
-
-    //        // Try to deserialise the LoadInfo save data from the file
-    //        try
-    //        {
-    //            BinaryFormatter bf = new BinaryFormatter();
-
-    //            infoData = (SaveData)bf.Deserialize(infoDataFile);
-    //            infoDataFile.Close();
-    //        }
-    //        catch
-    //        {
-    //            infoDataFile.Close();
-
-    //            Debug.LogError("Could not deserialize save data from: " + infoDataPath);
-    //            yield break;
-    //        }
-
-    //        yield return null;
-
-    //        string sceneToLoadName = infoData.GetData<string>("lastLoadedScene");
-
-    //        yield return StartCoroutine(LoadGameSceneCoroutine(sceneToLoadName, directoryPath));
-    //    }
-    //    else
-    //    {
-    //        // No info save file, this should only occur when first loading a scene group with no previously saved data
-
-    //        Debug.Log("No saved data found for save directory: " + saveDirectoryName);
-
-    //        StartCoroutine(LoadGameSceneCoroutine(defaultStartingSceneName, directoryPath));
-    //    }
-    //}
-
     public void LoadGameScene(string sceneName, string scenesDirectory = "UseCurrentDirectory")
     {
         StartCoroutine(LoadGameSceneCoroutine(sceneName, scenesDirectory));
@@ -372,6 +306,11 @@ public class SaveLoadManager : MonoBehaviour
 
         LoadingPanel loadingPanel = Instantiate(loadingCanvasPrefab).GetComponent<LoadingPanel>();
 
+        SceneUIData sceneUIData = GetUIDataForScene(sceneName);
+
+        loadingPanel.SetAreaNameText(sceneUIData.UIName);
+        loadingPanel.SetAreaPreviewSprite(sceneUIData.UISprite);
+
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
 
         if (activePlayer != null && activePlayer.PlayerController != null)
@@ -383,19 +322,23 @@ public class SaveLoadManager : MonoBehaviour
 
         float loadFadeTimer = 0.0f;
 
-        // Wait 0.4 seconds for the loading panel to fade in, and fade out audio
-        while (loadFadeTimer < 0.4f)
+        // Wait a second for the loading panel to fade in, and fade out audio
+        while (loadFadeTimer < 1.0f)
         {
             loadFadeTimer += Time.unscaledDeltaTime;
-            audioManager.UpdateGlobalVolumeMultiplier(audioManager.GlobalVolumeMultiplier - Time.unscaledDeltaTime * 2.5f);
+            audioManager.UpdateGlobalVolumeMultiplier(audioManager.GlobalVolumeMultiplier - Time.unscaledDeltaTime);
 
             yield return null;
         }
+
+        audioManager.UpdateGlobalVolumeMultiplier(0.0f);
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
         while (!sceneLoadOperation.isDone)
         {
+            UpdateLoadingProgress(loadingPanel, sceneLoadOperation.progress * 0.555f); // Converts from 0.0 - 0.9, to 0.0 - 0.5
+
             yield return null;
         }
 
@@ -403,14 +346,14 @@ public class SaveLoadManager : MonoBehaviour
 
         // Load and setup saved global/scene data
         //========================================
-        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory));
+        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, sceneUIData, scenesDirectory, loadingPanel));
 
         loadingPanel.LoadDone();
 
         Time.timeScale = previousTimeScale;
     }
 
-    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory)
+    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, SceneUIData sceneUIData, string scenesDirectory, LoadingPanel loadingPanel = null)
     {
         loadingSceneData = true;
 
@@ -519,14 +462,18 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
+        UpdateLoadingProgress(loadingPanel, 0.55f);
+
         // Setup scene objects
-        if(sceneData != null)
+        if (sceneData != null)
         {
             Debug.Log(">>> Scene load stage 1: setup");
             LoadSceneObjectsSetupEvent?.Invoke(sceneData);
 
             yield return null;
         }
+
+        UpdateLoadingProgress(loadingPanel, 0.6f);
 
         // Setup global objects
         if (globalData != null)
@@ -537,6 +484,8 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
+        UpdateLoadingProgress(loadingPanel, 0.7f);
+
         // Configure scene objects
         if (sceneData != null)
         {
@@ -546,6 +495,8 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
+        UpdateLoadingProgress(loadingPanel, 0.8f);
+
         // Configure global objects
         if (globalData != null)
         {
@@ -553,7 +504,9 @@ public class SaveLoadManager : MonoBehaviour
             LoadGlobalObjectsConfigureEvent?.Invoke(globalData);
         }
 
-        if(WorldSave.Instance != null && WorldSave.Instance.MovePlayerToSpawnPoint())
+        UpdateLoadingProgress(loadingPanel, 0.9f);
+
+        if (WorldSave.Instance != null && WorldSave.Instance.MovePlayerToSpawnPoint())
         {
             // Player was moved to a loaded spawn point
         }
@@ -580,10 +533,15 @@ public class SaveLoadManager : MonoBehaviour
             activePlayer.PlayerController.enabled = true;
         }
 
+        UpdateLoadingProgress(loadingPanel, 1.0f);
+
         // Show the title card if loading into the scene (unless reloading after death)
-        if(!loadingAfterDeath)
+        if (!loadingAfterDeath)
         {
-            TryShowTitleCardForScene(sceneToLoadName);
+            if(sceneUIData != null && !string.IsNullOrEmpty(sceneUIData.UIName))
+            {
+                ShowTitleCardForScene(sceneUIData.UIName);
+            }
         }
 
         loadingAfterDeath = false;
@@ -594,18 +552,33 @@ public class SaveLoadManager : MonoBehaviour
         loadingSceneData = false;
     }
 
-    private void TryShowTitleCardForScene(string sceneName)
+    private void UpdateLoadingProgress(LoadingPanel loadingPanel, float value)
     {
-        foreach (SceneTitleCardInfo titleCardInfo in sceneTitleCardInfo)
+        if(loadingPanel != null)
         {
-            if (titleCardInfo.SceneName == sceneName)
-            {
-                Transform titleCardTransform = Instantiate(titleCardPrefab, GameObject.Find("JoeCanvas").transform).transform;
+            loadingPanel.UpdateLoadProgress(value);
+        }
+    }
 
-                titleCardTransform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = titleCardInfo.TitleCardText;
-                titleCardTransform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = titleCardInfo.TitleCardText;
+    public SceneUIData GetUIDataForScene(string sceneName)
+    {
+        foreach (SceneUIData data in sceneUIData)
+        {
+            if (data.SceneName == sceneName)
+            {
+                return data;
             }
         }
+
+        return null;
+    }
+
+    private void ShowTitleCardForScene(string sceneUIName)
+    {
+        Transform titleCardTransform = Instantiate(titleCardPrefab, GameObject.Find("JoeCanvas").transform).transform;
+
+        titleCardTransform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = sceneUIName;
+        titleCardTransform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = sceneUIName;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -619,21 +592,21 @@ public class SaveLoadManager : MonoBehaviour
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_JoeTestScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_JoeTestScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
             }
             else if (scene.name == "The Village" || scene.name == "Desert" || scene.name == "Flooded City" || scene.name == "Catacombs")
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_MapScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_MapScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
             }
             else
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_" + scene.name);
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_" + scene.name + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
             }
         }
 
@@ -697,18 +670,22 @@ public class SaveLoadManager : MonoBehaviour
     #endregion
 
     [Serializable]
-    public struct SceneTitleCardInfo
+    public class SceneUIData
     {
         public string SceneName { get { return sceneName; } }
-        public string TitleCardText { get { return titleCardText; } }
+        public string UIName { get { return uiName; } }
+        public Sprite UISprite { get { return uiSprite; } }
 
         [SerializeField]
         [Tooltip("The name used for the scene within the Unity editor")]
         private string sceneName;
 
         [SerializeField]
-        [Tooltip("The name to be displayed in the UI when loading the scene")]
-        private string titleCardText;
+        [Tooltip("The name to be displayed in the UI when loading/displaying the scene")]
+        private string uiName;
 
+        [SerializeField]
+        [Tooltip("The sprite to be displayed in the UI when loading/displaying the scene")]
+        private Sprite uiSprite;
     }
 }

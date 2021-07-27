@@ -45,12 +45,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingCanvasPrefab: {fileID: 8318778376780048369, guid: 911f04c1ece45e04ba6d8a4fdcfc9854, type: 3}
   titleCardPrefab: {fileID: 425790455253825924, guid: 036d5432e4084b640bb059e855fced8f, type: 3}
-  sceneTitleCardInfo:
+  sceneUIData:
   - sceneName: The Village
-    titleCardText: The Village
+    uiName: The Village
+    uiSprite: {fileID: 21300000, guid: 97543763e7de96042973851af88a49a5, type: 3}
   - sceneName: Desert
-    titleCardText: The Graveyard Desert
+    uiName: Graveyard Desert
+    uiSprite: {fileID: 21300000, guid: c824aa64f1ae78549b0ba3d723555c98, type: 3}
   - sceneName: Flooded City
-    titleCardText: The Flooded City
+    uiName: Flooded City
+    uiSprite: {fileID: 21300000, guid: 4a4cbbb03d2057e418d8ef5af241a811, type: 3}
   - sceneName: Catacombs
-    titleCardText: The Catacombs
+    uiName: Dark Catacombs
+    uiSprite: {fileID: 21300000, guid: 08b06d4452baa9246b5ffd5d1380dd0b, type: 3}
