@@ -17,11 +17,10 @@ public class NPCManager : MonoBehaviour
         focused
     }
 
-
     [Tooltip("Quest manager ref")]
     [SerializeField]    private QuestManager qmanager;                                                  // Ref to QuestManager
                         private DialogueUI UI;                                                          // Ref to DialogueUI needed to dispay dialogue
-                        private NPC interactingWith                         = null;                     // Ref to NPC data currently being used (NPC player is talking to)
+                        public NPC interactingWith                         = null;                     // Ref to NPC data currently being used (NPC player is talking to)
                         private PlayerMovement playerMove;                                              // Ref. to player movement script (allows movement to be disabled when in conversation)
                         private focusCameraState focusCameraCurrentState    = focusCameraState.normal;  // Current state of the NPC focus camera
                         private Transform targetCameraTransform;                                        // Target transform for the NPC focus camera
@@ -78,6 +77,11 @@ public class NPCManager : MonoBehaviour
 
             playerMove.StopMoving();
             UI.ShowDialogue(dialogueLine);
+            
+            if(npc.gameObject.GetComponent<WalkingNonInteractable>() != null)
+            {
+                npc.gameObject.GetComponent<WalkingNonInteractable>().InteruptWait();
+            }
         }
         else
         // Checks if NPC has any quests to give instead
@@ -93,6 +97,12 @@ public class NPCManager : MonoBehaviour
                 if (qmanager.InteractWith(interactingWith.npcName))
                 {
                     // If the NPC is a quest giver and has something to say to the player, do that instead of this
+
+                    if (npc.gameObject.GetComponent<WalkingNonInteractable>() != null)
+                    {
+                        npc.gameObject.GetComponent<WalkingNonInteractable>().InteruptWait();
+                    }
+
                     return;
                 }
             }
@@ -141,6 +151,12 @@ public class NPCManager : MonoBehaviour
         UI.HideDialogue();
         
         interactingWith.ResetDialogue();
+
+        if (interactingWith.gameObject.GetComponent<WalkingNonInteractable>() != null)
+        {
+            interactingWith.gameObject.GetComponent<WalkingNonInteractable>().StartMovingAgain();
+        }
+
         StopFocusCamera();
     }
 
