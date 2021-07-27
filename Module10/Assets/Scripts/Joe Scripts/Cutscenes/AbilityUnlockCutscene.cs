@@ -42,7 +42,7 @@ public class AbilityUnlockCutscene : CutsceneTriggerer
         Cursor.visible = true;
 
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
-        AudioManager.Instance.PlayMusicInterlude("unlockFanfare");
+        AudioManager.Instance.PlayMusicalSoundEffect("unlockFanfare");
 
         if(restoreVolumeCoroutine != null)
         {

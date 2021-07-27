@@ -512,6 +512,8 @@ public class PlayerMovement : MonoBehaviour
         inWater         = false;
         velocityY       = 0.0f;
         glideVelocity   = Vector2.zero;
+
+        currentMovementState = MovementStates.walk;
     }
 
     // Returns if player is on the ground

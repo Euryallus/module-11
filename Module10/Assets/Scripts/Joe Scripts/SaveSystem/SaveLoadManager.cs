@@ -301,8 +301,12 @@ public class SaveLoadManager : MonoBehaviour
     {
         lasUsedSavePoint = null;
 
+        // Pause time
+
         float previousTimeScale = Time.timeScale;
         Time.timeScale = 0.0f;
+
+        // Setup loading panel
 
         LoadingPanel loadingPanel = Instantiate(loadingCanvasPrefab).GetComponent<LoadingPanel>();
 
@@ -311,6 +315,14 @@ public class SaveLoadManager : MonoBehaviour
         loadingPanel.SetAreaNameText(sceneUIData.UIName);
         loadingPanel.SetAreaPreviewSprite(sceneUIData.UISprite);
 
+        // Mute global music/sound
+
+        AudioManager audioManager = AudioManager.Instance;
+
+        audioManager.FadeGlobalVolumeMultiplier(0.0f, 1.0f);
+
+        // Disable player controller
+
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
 
         if (activePlayer != null && activePlayer.PlayerController != null)
@@ -318,20 +330,8 @@ public class SaveLoadManager : MonoBehaviour
             activePlayer.PlayerController.enabled = false;
         }
 
-        AudioManager audioManager = AudioManager.Instance;
-
-        float loadFadeTimer = 0.0f;
-
-        // Wait a second for the loading panel to fade in, and fade out audio
-        while (loadFadeTimer < 1.0f)
-        {
-            loadFadeTimer += Time.unscaledDeltaTime;
-            audioManager.UpdateGlobalVolumeMultiplier(audioManager.GlobalVolumeMultiplier - Time.unscaledDeltaTime);
-
-            yield return null;
-        }
-
-        audioManager.UpdateGlobalVolumeMultiplier(0.0f);
+        // Wait a second for the loading panel to fade in
+        yield return new WaitForSecondsRealtime(1.2f);
 
         AsyncOperation sceneLoadOperation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -342,18 +342,31 @@ public class SaveLoadManager : MonoBehaviour
             yield return null;
         }
 
+        audioManager.UpdateGlobalVolumeMultiplier(0.0f);
+
         // Scene loaded
 
         // Load and setup saved global/scene data
         //========================================
-        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, sceneUIData, scenesDirectory, loadingPanel));
+        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory, loadingPanel));
+
+        // Show the title card if loading into the scene (unless reloading after death)
+        if (!loadingAfterDeath)
+        {
+            if (sceneUIData != null && !string.IsNullOrEmpty(sceneUIData.UIName))
+            {
+                ShowTitleCardForScene(sceneUIData.UIName);
+            }
+        }
+
+        loadingAfterDeath = false;
 
         loadingPanel.LoadDone();
 
         Time.timeScale = previousTimeScale;
     }
 
-    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, SceneUIData sceneUIData, string scenesDirectory, LoadingPanel loadingPanel = null)
+    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory, LoadingPanel loadingPanel = null)
     {
         loadingSceneData = true;
 
@@ -535,17 +548,6 @@ public class SaveLoadManager : MonoBehaviour
 
         UpdateLoadingProgress(loadingPanel, 1.0f);
 
-        // Show the title card if loading into the scene (unless reloading after death)
-        if (!loadingAfterDeath)
-        {
-            if(sceneUIData != null && !string.IsNullOrEmpty(sceneUIData.UIName))
-            {
-                ShowTitleCardForScene(sceneUIData.UIName);
-            }
-        }
-
-        loadingAfterDeath = false;
-
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);
 
@@ -592,21 +594,21 @@ public class SaveLoadManager : MonoBehaviour
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_JoeTestScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_JoeTestScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else if (scene.name == "The Village" || scene.name == "Desert" || scene.name == "Flooded City" || scene.name == "Catacombs")
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_MapScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_MapScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_" + scene.name);
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_" + scene.name + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
         }
 

@@ -71,6 +71,8 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
         SetShowing(alwaysActive);
 
+        AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
+
         if(string.IsNullOrWhiteSpace(id))
         {
             Debug.LogError("IMPORTANT: Portal exists without id. All portals require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
@@ -98,8 +100,6 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     {
         if(other.CompareTag("Player") && triggerId == "portal")
         {
-            AudioManager.Instance.StopAllLoopingSoundEffects();
-
             SetAsUsed();
 
             SaveLoadManager.Instance.SaveGameData(sceneToLoadName);

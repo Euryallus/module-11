@@ -26,6 +26,9 @@ public class LoadingPanel : MonoBehaviour
     #endregion
 
     private float loadProgress;
+    private float loadTimer;
+
+    private const float MinShowTime = 2.0f;
 
     private void Awake()
     {
@@ -38,10 +41,22 @@ public class LoadingPanel : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+
+        StartCoroutine(TriggerLoadMusicAfterDelay());
+    }
+
+    private IEnumerator TriggerLoadMusicAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(0.7f);
+
+        AudioManager.Instance.StopAllLoopingSoundEffects();
+        AudioManager.Instance.PlayMusicalLoopingSoundEffect("loadLoop", "loadLoop");
     }
 
     private void Update()
     {
+        loadTimer += Time.unscaledDeltaTime;
+
         loadProgressSlider.value = Mathf.Lerp(loadProgressSlider.value, loadProgress, Time.unscaledDeltaTime * 10.0f);
     }
 
@@ -62,14 +77,30 @@ public class LoadingPanel : MonoBehaviour
 
     public void LoadDone()
     {
-        animator.SetTrigger("Crack");
+        float loadDoneDelay = 0.0f;
 
-        StartCoroutine(DestroyAfterDelay());
+        if(loadTimer < MinShowTime)
+        {
+            loadDoneDelay = MinShowTime - loadTimer;
+        }
+
+        StartCoroutine(LoadDoneEvents(loadDoneDelay));
     }
 
-    private IEnumerator DestroyAfterDelay()
+    public IEnumerator LoadDoneEvents(float initialDelay)
     {
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(initialDelay);
+
+        animator.SetTrigger("Crack");
+
+        yield return new WaitForSecondsRealtime(0.78f);
+
+        AudioManager.Instance.StopLoopingSoundEffect("loadLoop");
+        AudioManager.Instance.PlayMusicalSoundEffect("loadEnd");
+
+        yield return new WaitForSecondsRealtime(2.5f);
+
+        AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.5f);
 
         Destroy(gameObject);
     }
