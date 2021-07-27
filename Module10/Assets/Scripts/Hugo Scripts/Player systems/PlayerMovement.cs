@@ -585,6 +585,7 @@ public class PlayerMovement : MonoBehaviour
     // Flags player as having interacted with a ladder
     public void InteractWithLadder(Vector3 snapPos)
     {
+        gliderModel.SetActive(false);
         currentMovementState = currentMovementState == MovementStates.ladder ? MovementStates.walk : MovementStates.ladder;
 
         if(currentMovementState == MovementStates.ladder)
