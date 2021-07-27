@@ -16,8 +16,17 @@ MonoBehaviour:
   m_maxItems: 6
   m_itemPool:
   - Item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
-    Weight: 9
+    Weight: 4
+    MinimumQuantity: 0
+  - Item: {fileID: 11400000, guid: b005af4b3f26f2f4c8fe8da34669eba5, type: 2}
+    Weight: 3
     MinimumQuantity: 0
   - Item: {fileID: 11400000, guid: 7295093da02bb684092433d4c5181ac3, type: 2}
     Weight: 1
+    MinimumQuantity: 0
+  - Item: {fileID: 11400000, guid: fa47ba5214aa1e34fab5746060e118c5, type: 2}
+    Weight: 4
+    MinimumQuantity: 0
+  - Item: {fileID: 11400000, guid: f8dacc19b588066429ff07ce85f7aa67, type: 2}
+    Weight: 4
     MinimumQuantity: 0
