@@ -20,6 +20,7 @@ public class DialogueUI : UIPanel
     private string displayedDialogue;
     private string playerName;
 
+
     protected override void Start()
     {
         base.Start();
@@ -34,6 +35,7 @@ public class DialogueUI : UIPanel
         // Sets canvas group alpha to 1 and changes dialogue text component to display string passed
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
 
         for(int i = 0; i < dialogue.Length; i++)
         {
@@ -89,11 +91,54 @@ public class DialogueUI : UIPanel
     private IEnumerator PrintDialogue(string dialogue)
     {
         string display = "";
-        foreach(char character in dialogue)
+
+        string closingTag = "";
+
+        bool isSyntax = false;
+
+        for(int i = 0; i < dialogue.Length; i++)
         {
-            display += character;
-            dialogueText.text = display;
-            yield return wait;
-        }
+            if(dialogue[i] == '<' && dialogue[i + 2] == '>')
+            {
+                // got the opening tag
+                closingTag = "</" + dialogue[i+1] + ">";
+
+                display = display + dialogue.Substring(i, 3) + closingTag;
+                dialogueText.text = display;
+
+                i += 2;
+
+                yield return wait;
+
+                isSyntax = true;
+            }
+            else if(dialogue[i] == '<' && dialogue[i + 1] == '/')
+            {
+                // got closing tag
+                display = display + closingTag;
+
+                i += 3;
+                isSyntax = false;
+
+                closingTag = "";
+
+                dialogueText.text = display;
+
+
+                yield return wait;
+            }
+            else
+            {
+                if(isSyntax)
+                {
+                    display = display.Substring(0, display.Length - 4); 
+                }
+
+                display = display + dialogue[i] + closingTag;
+                dialogueText.text = display;
+
+                yield return wait;
+            }
+        }   
     }
 }
