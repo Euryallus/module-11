@@ -15,6 +15,9 @@ public class NPC : MonoBehaviour
                         public string npcName;                      // Stores Name of NPC
                         public bool isQuestGiver = false;           // Flags if NPC has quests associated withh them
 
+    [Header("Does dialogue influence NPC movement")]
+    public bool walkAfterConversation = false;
+
     [Header("Dialogue data")]
 
     [TextArea(1, 5)]

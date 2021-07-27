@@ -17,6 +17,9 @@ public class WalkingNonInteractable : MonoBehaviour
     [SerializeField] private bool walkFromBeginning = true;
     [SerializeField] private bool enableQuestsWhenStationary;
 
+    [Header("Determines if NPC will START walking when dialogue finishes (not needed if walk from beginning=true)")]
+    [SerializeField] private bool walkAfterAnyInteraction = false;
+
     private Collider NPCcollider;
 
     [SerializeField] private Animator animator;
@@ -37,11 +40,11 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private void Start()
     {
+        wait = new WaitForSeconds(waitTimeAtPoint);
+
         if(moveSet != MovementType.noMovement && walkFromBeginning)
         {
             animator.SetBool("IsWalking", true);
-            wait = new WaitForSeconds(waitTimeAtPoint);
-
             NewPoint();
         }
 
@@ -63,7 +66,7 @@ public class WalkingNonInteractable : MonoBehaviour
     // 4. move [x] distance to new pos
     // 5. once there, wait [y] seconds in idle before moving on
 
-    private void NewPoint()
+    public void NewPoint()
     {
 
         switch(moveSet)
@@ -181,7 +184,7 @@ public class WalkingNonInteractable : MonoBehaviour
 
     public void StartMovingAgain()
     {
-        if(moveSet != MovementType.noMovement)
+        if(moveSet != MovementType.noMovement && walkAfterAnyInteraction)
         {
             StartCoroutine(WaitAtPoint());
         }

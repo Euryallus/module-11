@@ -73,6 +73,7 @@ public class NPCManager : MonoBehaviour
         // Checks if NPC has any dialogue to say - if so, focus on target & show dialogue UI
         if(dialogueLine != null)
         {
+
             StartFocusCameraMove(npc.cameraFocusPoint);
 
             playerMove.StopMoving();
@@ -80,7 +81,9 @@ public class NPCManager : MonoBehaviour
             
             if(npc.gameObject.GetComponent<WalkingNonInteractable>() != null)
             {
+
                 npc.gameObject.GetComponent<WalkingNonInteractable>().InteruptWait();
+
             }
         }
         else
@@ -154,7 +157,15 @@ public class NPCManager : MonoBehaviour
 
         if (interactingWith.gameObject.GetComponent<WalkingNonInteractable>() != null)
         {
-            interactingWith.gameObject.GetComponent<WalkingNonInteractable>().StartMovingAgain();
+            if (interactingWith.walkAfterConversation)
+            {
+                interactingWith.gameObject.GetComponent<WalkingNonInteractable>().NewPoint();
+            }
+            else
+            {
+                interactingWith.gameObject.GetComponent<WalkingNonInteractable>().StartMovingAgain();
+            }
+            
         }
 
         StopFocusCamera();
