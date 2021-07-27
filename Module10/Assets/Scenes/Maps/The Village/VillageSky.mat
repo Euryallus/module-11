@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SkyboxTest
+  m_Name: VillageSky
   m_Shader: {fileID: -6465566751694194690, guid: 01c11a194aaffe843a46f0ccb4f5d957, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -49,25 +49,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_04cdd461fa264a5087215c639b42b3bc: 10
-    - Vector1_11641d4348584a4386bf478a59a7e98c: 0.98
+    - Vector1_11641d4348584a4386bf478a59a7e98c: 0.72
     - Vector1_175a54a40501484a8a5d3e134d507ced: 0
     - Vector1_4ac907d4a28249d594c537c09b14f84d: 1
-    - Vector1_4b15ea321a3a4e4abf5988e1b4c80d11: 1
-    - Vector1_4cb94bb6e2f34afbae3432e3987aa196: 70
+    - Vector1_4b15ea321a3a4e4abf5988e1b4c80d11: 0.35
+    - Vector1_4cb94bb6e2f34afbae3432e3987aa196: 15
     - Vector1_6558ee236d4f47bd93fbf4b9825b5098: 1
-    - Vector1_695924b639ca41c39446273bfb721f1b: 0.3
+    - Vector1_695924b639ca41c39446273bfb721f1b: 0.15
     - Vector1_752c4a8e4d754bfb88d9964425600bba: 0.05
     - Vector1_834c1ffc420b4b199d8d342c25ca7e54: 0.02
     - Vector1_83ef928f9e7d4b1cba747f32d3257d3d: 0
-    - Vector1_b6b10b474b61427e9ac7eb1c63d9a3a5: 0.1
+    - Vector1_b6b10b474b61427e9ac7eb1c63d9a3a5: 0.05
     - Vector1_c097f57af82a49e3b857008e346034e8: 1
     - Vector1_c4e7ea415a604beeba6288e4ed06a275: 1
     - Vector1_c9cab302de0646af8130a0739fd549e3: 0
     - Vector1_cd33fcd99a2449128bfed658c8515f4a: 0.73
     - Vector1_d56be57f24c54339b528e3b2f7126cc8: 1
-    - Vector1_e084a9c704c445509cd77f82aafe4474: 0.2
-    - Vector1_e4a30a21b5964607aaa0b0f919fccc67: 1.4
-    - Vector1_ec62f272cc94400fb24ad4ec6fc87914: 20.03
+    - Vector1_e084a9c704c445509cd77f82aafe4474: 0.3
+    - Vector1_e4a30a21b5964607aaa0b0f919fccc67: 1
+    - Vector1_ec62f272cc94400fb24ad4ec6fc87914: 30
     - Vector1_eeecf3d04cb84d2b96ff5292b6ab5e38: 1
     - Vector1_efc6a682ce554170bb28f19f458932f0: 50
     m_Colors:
@@ -79,13 +79,13 @@ Material:
     - Color_6c04b932a1c44d2d91f1896036f61757: {r: 0.01312551, g: 0, b: 0.0754717, a: 1}
     - Color_81261544a4014807b5ddf8953030feb7: {r: 0, g: 0, b: 0, a: 1}
     - Color_d8aa0fabed6f4e5dacd4fe12c129c4b4: {r: 0.20274118, g: 0.38397014, b: 0.6415094, a: 1}
-    - Color_d93037eefbb94f7e8795148662b4c99c: {r: 0.48584908, g: 0.72429585, b: 1, a: 1}
-    - Color_e343113068014aaeb6caa18c49b79111: {r: 0.17101282, g: 0.45950782, b: 0.5754717, a: 1}
-    - Color_e41763509ce64cd095ccfdf439c40240: {r: 0, g: 0.4749999, b: 1, a: 1}
+    - Color_d93037eefbb94f7e8795148662b4c99c: {r: 0.43805626, g: 0.7198807, b: 0.8679245, a: 1}
+    - Color_e343113068014aaeb6caa18c49b79111: {r: 0.3160377, g: 0.8463851, b: 1, a: 1}
+    - Color_e41763509ce64cd095ccfdf439c40240: {r: 0.1782218, g: 0.54519993, b: 0.8396226, a: 1}
     - Color_e9ff46fc1e4843a7b1c35f38db6a4865: {r: 0.03984928, g: 0, b: 1, a: 1}
     - Vector2_03a7cca7eb3d4cdd8e28661faecddfa7: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_66fc66a4e8334eae9e607439710df2f5: {r: 0, g: 0, b: 0, a: 0}
-    - _CloudOffset: {r: 0, g: 0.5379615, b: 0, a: 0}
+    - _CloudOffset: {r: 0, g: 1.12, b: 0, a: 0}
     - _StarsOffset: {r: 0, g: 0, b: 0, a: 0}
     - _SunDirection: {r: 0.5, g: -0.5, b: -0.5, a: 0}
   m_BuildTextureStacks: []
