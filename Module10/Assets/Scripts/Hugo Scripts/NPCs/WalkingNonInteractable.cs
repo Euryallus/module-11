@@ -4,13 +4,30 @@ using UnityEngine;
 
 public class WalkingNonInteractable : MonoBehaviour
 {
-    public bool isWalking = true;
+    public enum MovementType
+    {
+        noMovement,
+        cycleInOrder,
+        pingPong,
+        oneOff
+    }
+
+    [Header("Behaviour options")]
+    [SerializeField] private MovementType moveSet;
+    [SerializeField] private bool walkFromBeginning = true;
+    [SerializeField] private bool enableQuestsWhenStationary;
+
+    private NPC npcComp;
+
     [SerializeField] private Animator animator;
 
+    [Header("Points to visit (will be followed in-order if 'cycleInOrder' was selected")]
     [SerializeField] private List<Transform> movementPoints = new List<Transform>();
+
     private int currentPoint = 0;
     private int listMod = 1;
 
+    [Header("Speed, time stamps, etc.")]
     [SerializeField] private float speed = 2f;
     [SerializeField] private float rotationSpeed = 7f;
     [SerializeField] private float waitTimeAtPoint = 3f;
@@ -22,7 +39,7 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private void Start()
     {
-        if(isWalking)
+        if(moveSet != MovementType.noMovement)
         {
             animator.SetBool("IsWalking", true);
             wait = new WaitForSeconds(waitTimeAtPoint);
@@ -58,7 +75,7 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private void Update()
     {
-        if(isWalking)
+        if(moveSet != MovementType.noMovement)
         {
 
         

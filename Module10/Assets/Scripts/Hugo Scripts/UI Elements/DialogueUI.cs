@@ -30,6 +30,7 @@ public class DialogueUI : UIPanel
 
     public void ShowDialogue(string dialogue)
     {
+        StopAllCoroutines();
         // Sets canvas group alpha to 1 and changes dialogue text component to display string passed
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
