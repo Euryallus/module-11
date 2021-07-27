@@ -348,14 +348,25 @@ public class SaveLoadManager : MonoBehaviour
 
         // Load and setup saved global/scene data
         //========================================
-        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, sceneUIData, scenesDirectory, loadingPanel));
+        yield return StartCoroutine(LoadDataForSceneCoroutine(sceneName, scenesDirectory, loadingPanel));
+
+        // Show the title card if loading into the scene (unless reloading after death)
+        if (!loadingAfterDeath)
+        {
+            if (sceneUIData != null && !string.IsNullOrEmpty(sceneUIData.UIName))
+            {
+                ShowTitleCardForScene(sceneUIData.UIName);
+            }
+        }
+
+        loadingAfterDeath = false;
 
         loadingPanel.LoadDone();
 
         Time.timeScale = previousTimeScale;
     }
 
-    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, SceneUIData sceneUIData, string scenesDirectory, LoadingPanel loadingPanel = null)
+    private IEnumerator LoadDataForSceneCoroutine(string sceneToLoadName, string scenesDirectory, LoadingPanel loadingPanel = null)
     {
         loadingSceneData = true;
 
@@ -537,17 +548,6 @@ public class SaveLoadManager : MonoBehaviour
 
         UpdateLoadingProgress(loadingPanel, 1.0f);
 
-        // Show the title card if loading into the scene (unless reloading after death)
-        if (!loadingAfterDeath)
-        {
-            if(sceneUIData != null && !string.IsNullOrEmpty(sceneUIData.UIName))
-            {
-                ShowTitleCardForScene(sceneUIData.UIName);
-            }
-        }
-
-        loadingAfterDeath = false;
-
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);
 
@@ -594,21 +594,21 @@ public class SaveLoadManager : MonoBehaviour
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_JoeTestScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_JoeTestScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else if (scene.name == "The Village" || scene.name == "Desert" || scene.name == "Flooded City" || scene.name == "Catacombs")
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_MapScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_MapScenes" + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else
             {
                 Debug.LogWarning("No save directory was set before entering the scene - using Debug_" + scene.name);
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_" + scene.name + "/";
-                StartCoroutine(LoadDataForSceneCoroutine(scene.name, GetUIDataForScene(scene.name), currentScenesDirectory));
+                StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
         }
 
