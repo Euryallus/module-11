@@ -17,7 +17,7 @@ public class WalkingNonInteractable : MonoBehaviour
     [SerializeField] private bool walkFromBeginning = true;
     [SerializeField] private bool enableQuestsWhenStationary;
 
-    private NPC npcComp;
+    private Collider NPCcollider;
 
     [SerializeField] private Animator animator;
 
@@ -34,17 +34,25 @@ public class WalkingNonInteractable : MonoBehaviour
     private WaitForSeconds wait;
 
     private bool isMoving = false;
-    
-
 
     private void Start()
     {
-        if(moveSet != MovementType.noMovement)
+        if(moveSet != MovementType.noMovement && walkFromBeginning)
         {
             animator.SetBool("IsWalking", true);
             wait = new WaitForSeconds(waitTimeAtPoint);
 
             NewPoint();
+        }
+
+        if(enableQuestsWhenStationary)
+        {
+            NPCcollider = gameObject.GetComponent<Collider>();
+
+            if(!walkFromBeginning)
+            {
+                NPCcollider.enabled = true;
+            }
         }
     }
 
@@ -57,28 +65,69 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private void NewPoint()
     {
-        if(currentPoint == movementPoints.Count - 1)
+
+        switch(moveSet)
         {
-            listMod = -1;
+            case MovementType.cycleInOrder:
+
+                currentPoint += 1;
+                if(currentPoint == movementPoints.Count)
+                {
+                    currentPoint = 0;
+                }
+
+                isMoving = true;
+                animator.SetBool("IsWalking", true);
+
+                break;
+
+
+            case MovementType.oneOff:
+
+                currentPoint += 1;
+                if (currentPoint == movementPoints.Count)
+                {
+                    animator.SetBool("IsWalking", false);
+
+                    if(enableQuestsWhenStationary)
+                    {
+                        NPCcollider.enabled = true;
+                    }
+                }
+                else
+                {
+                    isMoving = true;
+                    animator.SetBool("IsWalking", true);
+                }
+
+
+                break;
+
+
+            case MovementType.pingPong:
+
+                if(currentPoint == movementPoints.Count - 1)
+                {
+                    listMod = -1;
+                }
+                
+                if(currentPoint == 0)
+                {
+                    listMod = 1;
+                }
+                currentPoint += listMod;
+
+                isMoving = true;
+                animator.SetBool("IsWalking", true);
+
+                break;
         }
-
-        if(currentPoint == 0)
-        {
-            listMod = 1;
-        }
-
-        currentPoint += listMod;
-
-        isMoving = true;
-        animator.SetBool("IsWalking", true);
     }
 
     private void Update()
     {
         if(moveSet != MovementType.noMovement)
-        {
-
-        
+        {        
             if(isMoving)
             {
                 if (Vector3.Distance(movementPoints[currentPoint].position, transform.position) >= 0.5f)
@@ -113,8 +162,28 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private IEnumerator WaitAtPoint()
     {
+        if (enableQuestsWhenStationary)
+        {
+            NPCcollider.enabled = true;
+        }
+
         yield return wait;
 
+        NPCcollider.enabled = false;
+
         NewPoint();
+    }
+
+    public void InteruptWait()
+    {
+        StopAllCoroutines();
+    }
+
+    public void StartMovingAgain()
+    {
+        if(moveSet != MovementType.noMovement)
+        {
+            StartCoroutine(WaitAtPoint());
+        }
     }
 }

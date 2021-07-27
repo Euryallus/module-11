@@ -78,6 +78,11 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
             playerQuestData.pendingQuest = null;
         }
 
+        if (npcManager.interactingWith.gameObject.GetComponent<WalkingNonInteractable>() != null)
+        {
+            npcManager.interactingWith.gameObject.GetComponent<WalkingNonInteractable>().StartMovingAgain();
+        }
+
         // Hides quest UI
         UI.HideQuestAccept();
         // Stops camera from focusing on NPC
@@ -93,6 +98,11 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         // Removes refs to quest giver & quest being offered (as quest was declined)
         playerQuestData.pendingQuest = null;
         playerQuestData.offer = null;
+
+        if (npcManager.interactingWith.gameObject.GetComponent<WalkingNonInteractable>() != null)
+        {
+            npcManager.interactingWith.gameObject.GetComponent<WalkingNonInteractable>().StartMovingAgain();
+        }
 
         // Stops cam. from focusing on NPC
         npcManager.StopFocusCamera();
