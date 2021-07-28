@@ -27,7 +27,7 @@ public class WalkingNonInteractable : MonoBehaviour
     [Header("Points to visit (will be followed in-order if 'cycleInOrder' was selected")]
     [SerializeField] private List<Transform> movementPoints = new List<Transform>();
 
-    private int currentPoint = 0;
+    private int currentPoint = -1;
     private int listMod = 1;
 
     [Header("Speed, time stamps, etc.")]
@@ -48,10 +48,10 @@ public class WalkingNonInteractable : MonoBehaviour
             NewPoint();
         }
 
+        NPCcollider = gameObject.GetComponent<Collider>();
+
         if(enableQuestsWhenStationary)
         {
-            NPCcollider = gameObject.GetComponent<Collider>();
-
             if(!walkFromBeginning)
             {
                 NPCcollider.enabled = true;

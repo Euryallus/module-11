@@ -46,7 +46,6 @@ public class Arrow : MonoBehaviour
             collisionPoint = collision.GetContact(0).point;
             // Flags hasHit as true & removes resitual velocity from arrow
             hasHit = true;
-            Debug.LogWarning(collision.transform.name);
 
             if(collision.gameObject.GetComponent<EnemyHealth>())
             {
