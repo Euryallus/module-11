@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8580005072535321836}
   m_Layer: 0
   m_Name: DeathTrigger
-  m_TagString: Untagged
+  m_TagString: DeathTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,4 +57,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fca90511ba6a5740bee2422511c2150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathPanelPrefab: {fileID: 7809706690116714397, guid: 3550c110b4867ff468d9fe35b4575193, type: 3}
+  deathCause: 4

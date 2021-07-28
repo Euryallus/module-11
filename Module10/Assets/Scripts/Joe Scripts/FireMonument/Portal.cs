@@ -56,8 +56,11 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     #endregion
 
+    private bool playingSound;
+
     private void Start()
     {
+        // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         Material portalMaterialInstance = new Material(portalMaterial);
@@ -71,8 +74,6 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
         SetShowing(alwaysActive);
 
-        AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
-
         if(string.IsNullOrWhiteSpace(id))
         {
             Debug.LogError("IMPORTANT: Portal exists without id. All portals require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
@@ -81,6 +82,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     private void OnDestroy()
     {
+        // Unsubscribe from save/load events to prevent null ref errors if the object is destroyed
         SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
@@ -126,6 +128,12 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         animator.SetBool("Showing", show);
 
         PortalsSave.Instance.SetPortalShowing(GetSavePointId(), show);
+
+        if(show && !playingSound)
+        {
+            AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
+            playingSound = true;
+        }
     }
 
     public Vector3 GetRespawnPosition()

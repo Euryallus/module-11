@@ -35,6 +35,7 @@ TagManager:
   - HotbarAndStats
   - DefaultSpawnPoint
   - GrabIndicator
+  - DeathTrigger
   layers:
   - Default
   - TransparentFX
