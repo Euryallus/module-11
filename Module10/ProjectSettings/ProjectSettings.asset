@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: Scary Bean
   productName: Broken World
-  defaultCursor: {fileID: 2800000, guid: b1326166da1353142807dfb76acf5579, type: 3}
+  defaultCursor: {fileID: 2800000, guid: ac392e4d1dbf7a8418711c115051fe0a, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.047169805, g: 0.12971692, b: 0.18867922, a: 1}
   m_ShowUnitySplashScreen: 1
@@ -263,7 +263,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: ebbde7a214c65bd4daa8636bf3495d3a, type: 3}
+      m_Icon: {fileID: 2800000, guid: d3d13d7f5ee55b24cac0c5dd3469a193, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

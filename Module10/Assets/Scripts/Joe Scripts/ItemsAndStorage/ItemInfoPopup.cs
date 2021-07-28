@@ -30,6 +30,8 @@ public class ItemInfoPopup : MonoBehaviour
     private Canvas          canvas;             // The Canvas containing the popup
     private RectTransform   rectTransform;      // The popup GameObject's RectTransform for getting its size
 
+    private readonly Vector3 MouseOffset = new Vector3(10.0f, -5.0f, 0.0f);
+
     private void Awake()
     {
         canvas          = GameObject.FindGameObjectWithTag("JoeCanvas").GetComponent<Canvas>();
@@ -71,8 +73,10 @@ public class ItemInfoPopup : MonoBehaviour
             float width =   (rectTransform.rect.width / 2)  * canvas.scaleFactor;
             float height =  (rectTransform.rect.height / 2) * canvas.scaleFactor;
 
+            Vector3 targetPos = Input.mousePosition + MouseOffset;
+
             // Move the popup to the mouse pointer position, and clamp the position to be within screen bounds
-            transform.position = new Vector2(Mathf.Clamp(Input.mousePosition.x, width, Screen.width - width), Mathf.Clamp(Input.mousePosition.y, height, Screen.height - height));
+            transform.position = new Vector2(Mathf.Clamp(targetPos.x, 0, Screen.width - width  * 2.0f), Mathf.Clamp(targetPos.y, 0, Screen.height - height * 2.0f));
         }
     }
 
