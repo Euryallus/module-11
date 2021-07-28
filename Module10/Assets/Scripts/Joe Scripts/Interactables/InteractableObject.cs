@@ -46,8 +46,9 @@ public abstract class InteractableObject : MonoBehaviour
     protected bool      canInteract = true;             // Whether this object can be interacted with
     protected bool      enableTooltip = true;           // Whether the interaction tooltip is enabled (when canInteract = true)
     protected bool      showPressETooltipText = true;   // Whether the 'Press E to interact' should be shown on the tooltip
+    protected bool      overrideTooltipBehaviour;       // Whether the default tooltip behaviour (show on hover after InteractPopupDelay) is used
 
-    private const float InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown
+    private const float InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown by default
 
 
     protected virtual void Start()
@@ -88,24 +89,9 @@ public abstract class InteractableObject : MonoBehaviour
                     // Player has been hovering for longer than InteractPopupDelay, show the popup if
                     //   it isn't already showing, otherwise move it to the object's position in screen space
 
-                    if (interactTooltip == null)
+                    if (!overrideTooltipBehaviour && interactTooltip == null)
                     {
                         ShowInteractTooltip();
-                    }
-                    else
-                    {
-                        Vector3 popupScreenPos = mainPlayerCamera.WorldToScreenPoint(transform.position + worldInteractTooltipOffset);
-                        if(popupScreenPos.z > 0.0f)
-                        {
-                            // The player is facing the target position of the tooltip, move it to 
-                            //   the object's position + the world offset, all converted to screen space
-                            interactTooltip.transform.position = popupScreenPos;
-                        }
-                        else
-                        {
-                            // The player is facing away from the tooltip position, hide it off-screen
-                            interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
-                        }
                     }
                 }
                 else
@@ -119,6 +105,22 @@ public abstract class InteractableObject : MonoBehaviour
         {
             // Cursor is not locked, the player is probably in a menu. End hovering
             EndHoverInRange();
+        }
+
+        if (interactTooltip != null)
+        {
+            Vector3 popupScreenPos = mainPlayerCamera.WorldToScreenPoint(transform.position + worldInteractTooltipOffset);
+            if (popupScreenPos.z > 0.0f)
+            {
+                // The player is facing the target position of the tooltip, move it to 
+                //   the object's position + the world offset, all converted to screen space
+                interactTooltip.transform.position = popupScreenPos;
+            }
+            else
+            {
+                // The player is facing away from the tooltip position, hide it off-screen
+                interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
+            }
         }
     }
 
@@ -155,8 +157,14 @@ public abstract class InteractableObject : MonoBehaviour
         HideInteractTooltip();
     }
 
-    private void ShowInteractTooltip()
+    protected void ShowInteractTooltip(string overridePressEText = null)
     {
+        // Hide the current popup if one is already showing
+        if (interactTooltip != null)
+        {
+            HideInteractTooltip();
+        }
+
         if(enableTooltip)
         {
             // The interact tooltip is enabled
@@ -175,6 +183,12 @@ public abstract class InteractableObject : MonoBehaviour
                 interactTooltip.transform.GetChild(1).gameObject.SetActive(false);
             }
 
+            if(!string.IsNullOrEmpty(overridePressEText))
+            {
+                // Change the default 'Press E To Interact' text if an override string was given
+                interactTooltip.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = overridePressEText;
+            }
+
             if(!showPressETooltipText)
             {
                 // Hide the 'Press E to interact' text if showPressETooltipText is false
@@ -183,12 +197,16 @@ public abstract class InteractableObject : MonoBehaviour
         }
     }
 
-    private void HideInteractTooltip()
+    protected void HideInteractTooltip()
     {
         // Destroy the tooltip if one exists
         if (interactTooltip != null)
         {
             Destroy(interactTooltip);
+            interactTooltip = null;
+
+            // Also reset the hover timer ready for the next time a tooltip is shown
+            hoverTimer = 0.0f;
         }
     }
 
@@ -237,7 +255,10 @@ public abstract class InteractableObject : MonoBehaviour
         hoverTimer = 0.0f;
         hoveringInRange = false;
 
-        // Hide the interact tooltip to it doesn't stay visible while not hovering
-        HideInteractTooltip();
+        if(!overrideTooltipBehaviour)
+        {
+            // Hide the interact tooltip to it doesn't stay visible while not hovering
+            HideInteractTooltip();
+        }
     }
 }

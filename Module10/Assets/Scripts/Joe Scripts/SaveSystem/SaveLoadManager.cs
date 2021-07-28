@@ -312,8 +312,11 @@ public class SaveLoadManager : MonoBehaviour
 
         SceneUIData sceneUIData = GetUIDataForScene(sceneName);
 
-        loadingPanel.SetAreaNameText(sceneUIData.UIName);
-        loadingPanel.SetAreaPreviewSprite(sceneUIData.UISprite);
+        if(sceneUIData != null)
+        {
+            loadingPanel.SetAreaNameText(sceneUIData.UIName);
+            loadingPanel.SetAreaPreviewSprite(sceneUIData.UISprite);
+        }
 
         // Mute global music/sound
 

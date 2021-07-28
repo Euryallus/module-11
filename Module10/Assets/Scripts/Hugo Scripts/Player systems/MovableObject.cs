@@ -135,7 +135,31 @@ public class MovableObject : InteractableWithOutline
             target = hand;
             rb.useGravity = false;
             isHeld = true;
+
+            ShowCarryingTooltip();
         }
+    }
+
+    // Added by Joe: Shows a tooltip with info about how to drop/throw an object when carrying it
+    private void ShowCarryingTooltip()
+    {
+        // Override default tooltip behaviour so it always shows while carrying
+        //   an object, regardless of whether the mouse is over it
+        overrideTooltipBehaviour = true;
+
+        tooltipNameText = "Right Click: Drop";
+
+        ShowInteractTooltip("Left Click: Throw");
+    }
+
+    // Added by Joe: Opposite of the above function, reverts to standard tooltip behaviour
+    private void HideCarryingTooltip()
+    {
+        overrideTooltipBehaviour = false;
+
+        tooltipNameText = defaultTooltipNameText;
+
+        HideInteractTooltip();
     }
 
     // Sets item down where it is and re-enables grav.
@@ -147,6 +171,8 @@ public class MovableObject : InteractableWithOutline
         Destroy(joint);
         isHeld = false;
         rb.useGravity = true;
+
+        HideCarryingTooltip();
     }
 
     // Throws object in the direction the player is facing, re-enables grav etc.
@@ -159,6 +185,8 @@ public class MovableObject : InteractableWithOutline
         isHeld = false;
         rb.useGravity = true;
         rb.AddForce(direction.normalized * 300);
+
+        HideCarryingTooltip();
     }
 
     //public void EnablePickUp()
@@ -187,7 +215,7 @@ public class MovableObject : InteractableWithOutline
                 // This is a large object and the grab ability has not been upgraded, object cannot be picked up
                 canPickUp = false;
 
-                tooltipNameText = "Requires grab ability upgrade";
+                tooltipNameText = "Requires grab upgrade";
                 showPressETooltipText = false;
             }
         }

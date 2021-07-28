@@ -56,6 +56,8 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     #endregion
 
+    private bool playingSound;
+
     private void Start()
     {
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
@@ -70,8 +72,6 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         portalTrigger.AddListener(this);
 
         SetShowing(alwaysActive);
-
-        AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
 
         if(string.IsNullOrWhiteSpace(id))
         {
@@ -126,6 +126,12 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         animator.SetBool("Showing", show);
 
         PortalsSave.Instance.SetPortalShowing(GetSavePointId(), show);
+
+        if(show && !playingSound)
+        {
+            AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
+            playingSound = true;
+        }
     }
 
     public Vector3 GetRespawnPosition()

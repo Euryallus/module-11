@@ -241,7 +241,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aaa80c02e484ead47a8cd05c6bed5d84, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -883,7 +883,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 30, y: 30}
-  m_SizeDelta: {x: 500, y: 35}
+  m_SizeDelta: {x: 450, y: 35}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1112171154054515735
 MonoBehaviour:
@@ -898,13 +898,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -924,7 +924,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 5947429025610899132}
   m_HandleRect: {fileID: 0}
@@ -1411,7 +1411,7 @@ GameObject:
   - component: {fileID: 3704657387345983078}
   - component: {fileID: 6382882750168048257}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Area Name Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,7 +1433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 32, y: 72}
+  m_AnchoredPosition: {x: 32, y: 73}
   m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &3704657387345983078
@@ -1464,7 +1464,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Loading Area Name
+  m_text: Unknown Area | Loading
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
@@ -1491,8 +1491,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
