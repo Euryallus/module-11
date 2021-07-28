@@ -60,6 +60,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     private void Start()
     {
+        // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         Material portalMaterialInstance = new Material(portalMaterial);
@@ -81,6 +82,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     private void OnDestroy()
     {
+        // Unsubscribe from save/load events to prevent null ref errors if the object is destroyed
         SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 

@@ -26,5 +26,11 @@ public class DeathTrigger : MonoBehaviour
             // Kill the player, with a message saying they fell out of the world
             playerDeath.KillPlayer(deathCause);
         }
+        else if(other.CompareTag("MovableObj"))
+        {
+            // A movable object entered the trigger, move it back to its starting position
+
+            other.GetComponent<MovableObject>().MoveToStartPosition();
+        }
     }
 }

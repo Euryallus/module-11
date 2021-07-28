@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Main author:         Hugo Bailey
 // Additional author:   N/A
@@ -9,7 +10,7 @@ using UnityEngine;
 // Inherits from:       MonoBehaviour
 
 [RequireComponent(typeof(Rigidbody))]
-public class MovableObject : InteractableWithOutline
+public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 {
     [HideInInspector]   public bool isHeld;         // Flags if player is currently holding the object
     [SerializeField]    private Transform target;   // Ref. to transform of the player's ""hand"" - position the object moves towards
@@ -29,20 +30,22 @@ public class MovableObject : InteractableWithOutline
 
     private bool canPickUp;
 
+    private Vector3 startPosition; // The position of the object on scene load, used to generate a unique position id
+
     // Added by Joe, the tooltip text to show be default when the object can be picked up (as originally set in the inspector)
     private string defaultTooltipNameText;
 
-    //protected void Awake()
-    //{
-    //    if (!isLargeObject)
-    //    {
-    //        canPickUp = true;
-    //    }
-    //}
+    protected void Awake()
+    {
+        startPosition = transform.position;
+    }
 
     protected override void Start()
     {
         base.Start();
+
+        // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
+        SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
         isHeld = false;
         rb = gameObject.GetComponent<Rigidbody>();
@@ -50,11 +53,14 @@ public class MovableObject : InteractableWithOutline
         hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
 
         defaultTooltipNameText = tooltipNameText;
+    }
 
-        //if(!canPickUp)
-        //{
-        //    gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-        //}
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        // Unsubscribe from save/load events to prevent null ref errors if the object is destroyed
+        SaveLoadManager.Instance.UnsubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
     }
 
     private void FixedUpdate()
@@ -67,14 +73,12 @@ public class MovableObject : InteractableWithOutline
 
             transform.position = Vector3.SmoothDamp(transform.position, hand.position, ref currentVelocity, movementDampen);
         }
+    }
 
-        // If the spring joint has broken, let go of object
-        //if(!gameObject.GetComponent<SpringJoint>())
-        //{
-        //    transform.parent = null;
-        //    isHeld = false;
-        //    rb.useGravity = true;
-        //}
+    public void MoveToStartPosition()
+    {
+        transform.position = startPosition;
+        transform.rotation = Quaternion.identity;
     }
 
     public override void StartHoverInRange()
@@ -165,12 +169,7 @@ public class MovableObject : InteractableWithOutline
     // Sets item down where it is and re-enables grav.
     public void DropObject()
     {
-        rb.constraints = RigidbodyConstraints.None;
-
-        transform.parent = null;
-        Destroy(joint);
-        isHeld = false;
-        rb.useGravity = true;
+        StopHoldingObject();
 
         HideCarryingTooltip();
     }
@@ -178,23 +177,27 @@ public class MovableObject : InteractableWithOutline
     // Throws object in the direction the player is facing, re-enables grav etc.
     public void ThrowObject(Vector3 direction)
     {
+        StopHoldingObject();
+        
+        rb.AddForce(direction.normalized * 300);
+
+        HideCarryingTooltip();
+    }
+
+    private void StopHoldingObject()
+    {
         rb.constraints = RigidbodyConstraints.None;
 
         transform.parent = null;
         Destroy(joint);
         isHeld = false;
         rb.useGravity = true;
-        rb.AddForce(direction.normalized * 300);
 
-        HideCarryingTooltip();
+        // Added by Joe
+        // Move the GameObject back to the active scene. Since it was made a child of the player when picked up,
+        //   it was moved to the DontDestroyOnLoad scene, and as such needs to be moved back.
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
     }
-
-    //public void EnablePickUp()
-    //{
-    //    gameObject.GetComponent<Outline>().OutlineWidth = 5f;
-    //    canPickUp = true;
-    //}
-
 
     // Added by Joe, determines whether the object can be picked up based on
     //   the unlock status and upgrade level of the grab ability
@@ -227,5 +230,39 @@ public class MovableObject : InteractableWithOutline
             tooltipNameText = "Requires grab ability";
             showPressETooltipText = false;
         }
+    }
+
+    // Save the object's position and rotation
+    public void OnSceneSave(SaveData saveData)
+    {
+        string saveId = "movableObjTransform_" + GetUniquePositionId();
+
+        // Save position and euler rotation values to a float array
+        saveData.AddData(saveId, new float[6] { transform.position.x, transform.position.y, transform.position.z,
+                                                transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z });
+
+        Debug.Log("Saving MovableObject transform for " + saveId); 
+    }
+
+    // Load the objects position and rotation
+    public void OnSceneLoadSetup(SaveData saveData)
+    {
+        string saveId = "movableObjTransform_" + GetUniquePositionId();
+
+        float[] transformVals = saveData.GetData<float[]>(saveId);
+
+        // Set the object's transfrom and rotation from loaded values.
+        //   Adding a small amount to the y value to prevent intersections causing unpredictable behaviour
+        transform.position = new Vector3(transformVals[0], transformVals[1] + 0.1f, transformVals[2]);
+        transform.rotation = Quaternion.Euler(transformVals[3], transformVals[4], transformVals[5]);
+
+        Debug.Log("Loading MovableObject transform for " + saveId);
+    }
+
+    public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
+
+    private string GetUniquePositionId()
+    {
+        return startPosition.x + "_" + startPosition.y + "_" + startPosition.z;
     }
 }
