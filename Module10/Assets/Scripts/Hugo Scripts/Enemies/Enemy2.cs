@@ -73,4 +73,13 @@ public class Enemy2 : EnemyBase
         }
     }
 
+    public void DestroyProj()
+    {
+        if(lastProjectile != null)
+        {
+            Destroy(lastProjectile);
+            lastProjectile = null;
+        }
+    }
+
 }

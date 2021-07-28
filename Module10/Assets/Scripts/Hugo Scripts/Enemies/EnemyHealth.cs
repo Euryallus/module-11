@@ -54,6 +54,11 @@ public class EnemyHealth : MonoBehaviour
         // By default, just destroys the enemy
         gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
 
+        if(gameObject.GetComponent<Enemy2>())
+        {
+            gameObject.GetComponent<Enemy2>().DestroyProj();
+        }
+
         Destroy(gameObject);
     }
 }
