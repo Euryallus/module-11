@@ -2329,7 +2329,7 @@
         }
     ],
     "synonyms": [],
-    "m_Precision": 0,
+    "m_Precision": 1,
     "m_PreviewExpanded": true,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -5791,8 +5791,8 @@
     "m_ShaderOutputName": "Emission",
     "m_StageCapability": 2,
     "m_Value": {
-        "x": 3.858823537826538,
-        "y": 0.3607843220233917,
+        "x": 23.9686279296875,
+        "y": 0.6899093389511108,
         "z": 0.0
     },
     "m_DefaultValue": {
