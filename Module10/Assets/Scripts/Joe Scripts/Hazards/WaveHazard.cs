@@ -31,6 +31,12 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
     [SerializeField] [Tooltip("How close the player has to be to the wave before warning UI is shown")]
     private float   warningDistance = 120.0f;
 
+    [SerializeField] [Tooltip("How far the wave has to be from its starting point before it has 'passed' and is no longer a threat")]
+    private float wavePassedDistance = 450.0f;
+
+    [SerializeField] [Tooltip("The minimum Y position that the player can be at to be considered 'safe' from getting hit by the wave")]
+    private float safeYPos = 95.5f;
+
     [SerializeField] [Tooltip("Base material to use for the wave")]
     private Material waveMaterial;
 
@@ -127,8 +133,6 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
         transform.localScale = new Vector3(startScale.x, 0.0f, startScale.z);
         waveMesh.material.SetFloat("_Opacity", 0.0f);
 
-        string loopSoundId = "waveHazardLoop_" + basePosition.x + "_" + basePosition.z;
-
         waveLoopSoundSource = AudioManager.Instance.PlayLoopingSoundEffect("waveLoop", "waveHazardLoop_" + basePosition.x + "_" + basePosition.z, true, false, transform.position, 30.0f, 100.0f);
     }
 
@@ -150,13 +154,20 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
         }
 
         Vector3 closestPointToPlayer = waterTrigger.TriggerCollider.ClosestPointOnBounds(playerTransform.position);
+        
+        float waveDistanceFromPlayer = Vector3.Distance(playerTransform.position, closestPointToPlayer);
+        float waveDistanceFromStart  = Vector3.Distance(transform.position, basePosition + startPosition);
 
-        if (Vector3.Distance(playerTransform.position, closestPointToPlayer) <= warningDistance)
+        if (waveDistanceFromPlayer <= warningDistance &&
+            waveDistanceFromStart < wavePassedDistance &&
+            playerTransform.position.y < safeYPos)
         {
+            // The wave is within warning distance, has not passed and the player is at risk of getting hit. Show the warning UI
             warningUICanvasGroup.alpha = 1.0f;
         }
         else
         {
+            // The player is safe, do not show the warning UI
             warningUICanvasGroup.alpha = 0.0f;
         }
 
