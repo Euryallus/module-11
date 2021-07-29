@@ -98,7 +98,7 @@ public class LoadingPanel : MonoBehaviour
         AudioManager.Instance.StopLoopingSoundEffect("loadLoop");
         AudioManager.Instance.PlayMusicalSoundEffect("loadEnd");
 
-        yield return new WaitForSecondsRealtime(2.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         AudioManager.Instance.FadeGlobalVolumeMultiplier(1.0f, 1.5f);
 
