@@ -50,8 +50,6 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         isHeld = false;
         rb = gameObject.GetComponent<Rigidbody>();
 
-        hand = GameObject.FindGameObjectWithTag("PlayerHand").transform;
-
         defaultTooltipNameText = tooltipNameText;
     }
 
@@ -96,7 +94,16 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
     protected override void Update()
     {
-        if(isHeld && Input.GetKeyDown(KeyCode.Mouse0))
+        if(hand == null)
+        {
+            GameObject playerHandGameObj = GameObject.FindGameObjectWithTag("PlayerHand");
+            if(playerHandGameObj != null)
+            {
+                hand = playerHandGameObj.transform;
+            }
+        }
+
+        if (isHeld && Input.GetKeyDown(KeyCode.Mouse0))
         {
             ThrowObject(transform.position - GameObject.FindGameObjectWithTag("Player").transform.position);
         }
@@ -249,12 +256,15 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     {
         string saveId = "movableObjTransform_" + GetUniquePositionId();
 
-        float[] transformVals = saveData.GetData<float[]>(saveId);
+        float[] transformVals = saveData.GetData<float[]>(saveId, out bool loadSuccess);
 
-        // Set the object's transfrom and rotation from loaded values.
-        //   Adding a small amount to the y value to prevent intersections causing unpredictable behaviour
-        transform.position = new Vector3(transformVals[0], transformVals[1] + 0.1f, transformVals[2]);
-        transform.rotation = Quaternion.Euler(transformVals[3], transformVals[4], transformVals[5]);
+        if(loadSuccess)
+        {
+            // Set the object's transfrom and rotation from loaded values.
+            //   Adding a small amount to the y value to prevent intersections causing unpredictable behaviour
+            transform.position = new Vector3(transformVals[0], transformVals[1] + 0.1f, transformVals[2]);
+            transform.rotation = Quaternion.Euler(transformVals[3], transformVals[4], transformVals[5]);
+        }
 
         Debug.Log("Loading MovableObject transform for " + saveId);
     }

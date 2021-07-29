@@ -40,5 +40,7 @@ public class DeathPanel : MonoBehaviour
 
         // Reload the active scene and reset progress to where the player last saved
         SaveLoadManager.Instance.LoadGameScene(SceneManager.GetActiveScene().name);
+
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2", true);
     }
 }

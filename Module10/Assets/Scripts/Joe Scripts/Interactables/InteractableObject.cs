@@ -64,6 +64,10 @@ public abstract class InteractableObject : MonoBehaviour
         if(playerGameObject == null)
         {
             playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        }
+
+        if(mainPlayerCamera == null)
+        {
             mainPlayerCamera = Camera.main;
         }
 

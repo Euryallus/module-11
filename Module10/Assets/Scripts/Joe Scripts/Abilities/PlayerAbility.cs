@@ -102,8 +102,6 @@ public abstract class PlayerAbility : MonoBehaviour
         SetupUIIndicator();
 
         LinkToInventory();
-
-        UpdateUnlockStatus(false);
     }
 
     private void OnAbilityContainerStateChanged(bool loadingContainer)
@@ -249,6 +247,8 @@ public abstract class PlayerAbility : MonoBehaviour
 
     protected virtual void SetupUIIndicator()
     {
+        UpdateUnlockStatus(false);
+
         SetChargeAmount(charge);
         SetCooldownAmount(cooldown);
 
