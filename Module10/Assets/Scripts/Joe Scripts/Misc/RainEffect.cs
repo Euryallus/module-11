@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RainEffect : MonoBehaviour
 {
     private GameObject playerGameObj;
+
+    private void Start()
+    {
+        AudioManager.Instance.PlayLoopingSoundEffect("rainStormLoop", "rainEffect");
+    }
 
     void Update()
     {
