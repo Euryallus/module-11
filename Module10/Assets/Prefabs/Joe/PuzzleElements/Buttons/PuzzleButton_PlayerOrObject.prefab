@@ -67,6 +67,7 @@ MonoBehaviour:
   tooltipNameText: Stand/Drop Object
   playerCanActivate: 1
   movableObjCanActivate: 1
+  requiresHeavyObject: 0
   connectedDoors: []
   connectedPlatforms: []
   animator: {fileID: 1841877217178423556}
@@ -126,7 +127,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3689938951515626767
 Transform:
