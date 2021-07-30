@@ -35,6 +35,8 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     // Added by Joe, the tooltip text to show be default when the object can be picked up (as originally set in the inspector)
     private string defaultTooltipNameText;
 
+    public bool IsLargeObject { get { return isLargeObject; } }
+
     protected void Awake()
     {
         startPosition = transform.position;

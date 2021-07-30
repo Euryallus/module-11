@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionRange: 5
   interactTooltipPrefab: {fileID: 7833637479385031685, guid: 00b3961c78315924bb78ec4054eb5813, type: 3}
-  interactTooltipOffset: {x: 0, y: 0.375, z: 0}
+  interactTooltipOffset: {x: 0, y: 0.325, z: 0}
   tooltipNameText: 
   interactionSound: buttonClickMain1
   externalOutline: {fileID: 0}

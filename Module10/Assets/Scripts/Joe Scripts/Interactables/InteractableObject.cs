@@ -164,7 +164,7 @@ public abstract class InteractableObject : MonoBehaviour
         HideInteractTooltip();
     }
 
-    protected void ShowInteractTooltip(string overridePressEText = null)
+    protected virtual void ShowInteractTooltip(string overridePressEText = null)
     {
         // Hide the current popup if one is already showing
         if (interactTooltip != null)

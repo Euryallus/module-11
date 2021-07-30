@@ -10,7 +10,7 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
-public class PuzzleButton : MonoBehaviour
+public class PuzzleButton : InteractableObject
 {
     #region InspectorVariables
     // Variables in this region are set in the inspector
@@ -18,9 +18,26 @@ public class PuzzleButton : MonoBehaviour
     [Header("Puzzle Button")]
     [SerializeField] private bool                   playerCanActivate     = true;  // Whether the player can stand on the button to press it
     [SerializeField] private bool                   movableObjCanActivate = true;  // Whether movable objects can be placed on the button to press it
+    [SerializeField] private bool                   requiresHeavyObject   = false; // If movableObjCanActivate, detemines whether a heavy/large object is required to press the button
     [SerializeField] private DoorPuzzleData[]       connectedDoors;                // Doors that will be opened/closed by the button
     [SerializeField] private PlatformPuzzleData[]   connectedPlatforms;            // Platforms that will be activated/paused by the button
+    
     [SerializeField] private Animator               animator;                      // Controls button press/release animations
+    [SerializeField] private BoxCollider            buttonCollider;
+
+    [Header("Appearance")]
+
+    [SerializeField] private MeshRenderer           buttonMeshRenderer;
+    [SerializeField] private Material               baseButtonMaterial;
+
+    [SerializeField]
+    private Color buttonBaseColour;
+
+    [SerializeField] [ColorUsage(true, true)]
+    private Color standardEmissionColour;
+
+    [SerializeField] [ColorUsage(true, true)]
+    private Color pressedEmissionColour;
 
     #endregion
 
@@ -47,14 +64,21 @@ public class PuzzleButton : MonoBehaviour
         }
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
+        buttonMeshRenderer.material = new Material(baseButtonMaterial);
+        buttonMeshRenderer.material.SetColor("_BaseColor", buttonBaseColour);
+
         // Ensure all connected doors are in the released button state by default
         ButtonReleasedEvents();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+        
         // The button is pressed if the player or a movable object is colliding with it
         pressed = (playerIsColliding || movableObjIsColliding);
 
@@ -82,6 +106,13 @@ public class PuzzleButton : MonoBehaviour
 
     private void ButtonPressedEvents()
     {
+        enableTooltip = false;
+        HideInteractTooltip();
+
+        buttonCollider.enabled = false;
+
+        buttonMeshRenderer.material.SetColor("_EmissionColor", pressedEmissionColour);
+
         for (int i = 0; i < connectedDoors.Length; i++)
         {
             // Open/close all doors depending on their default states
@@ -121,6 +152,12 @@ public class PuzzleButton : MonoBehaviour
 
     private void ButtonReleasedEvents()
     {
+        enableTooltip = true;
+
+        buttonCollider.enabled = true;
+
+        buttonMeshRenderer.material.SetColor("_EmissionColor", standardEmissionColour);
+
         for (int i = 0; i < connectedDoors.Length; i++)
         {
             // Close/open all doors depending on their default states
@@ -159,8 +196,12 @@ public class PuzzleButton : MonoBehaviour
         }
         else if (movableObjCanActivate && other.CompareTag("MovableObj"))
         {
-            // A movable object entered the trigger and can press the button
-            movableObjIsColliding = true;
+            // Check if the movable object is not required to be heavy, or is required and is heavy
+            if(!requiresHeavyObject || (requiresHeavyObject && other.GetComponent<MovableObject>().IsLargeObject))
+            {
+                // A movable object entered the trigger and can press the button
+                movableObjIsColliding = true;
+            }
         }
     }
 
@@ -176,6 +217,11 @@ public class PuzzleButton : MonoBehaviour
             // A movable object exited the trigger and was pressing the button
             movableObjIsColliding = false;
         }
+    }
+
+    protected override void ShowInteractTooltip(string overridePressEText = null)
+    {
+        base.ShowInteractTooltip("To Activate");
     }
 }
 

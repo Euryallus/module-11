@@ -176,8 +176,12 @@ public class SaveLoadManager : MonoBehaviour
             returnToSceneName = loadedSceneName;
         }
 
+        var returnToSceneData = GetUIDataForScene(returnToSceneName);
+
+        string returnToSceneUIName = (returnToSceneData != null ? returnToSceneData.UIName : "Unknown");
+
         infoDataToSave.AddData("lastLoadedScene",   returnToSceneName);
-        infoDataToSave.AddData("loadedSceneUIName", returnToSceneName);
+        infoDataToSave.AddData("loadedSceneUIName", returnToSceneUIName);
 
         if (PlayerInstance.ActivePlayer != null)
         {
