@@ -4109,6 +4109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   qmanager: {fileID: 9204811781302828331}
+  interactingWith: {fileID: 0}
   cameraLerpSpeed: 5
 --- !u!114 &9204811781302828329
 MonoBehaviour:
@@ -4149,7 +4150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cg: {fileID: 9204811780444024436}
   dialogueText: {fileID: 9204811780954292005}
-  timeBetweenLetterPrint: 0.1
+  timeBetweenLetterPrint: 0.04
 --- !u!225 &6235016202219771403
 CanvasGroup:
   m_ObjectHideFlags: 0

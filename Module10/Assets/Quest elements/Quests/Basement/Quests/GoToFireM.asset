@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GoToFireM
   m_EditorClassIdentifier: 
   questName: Light the Fire Monument
-  questDescription: 'We''re counting on you to do this. If you complete it, you''ll
-    be free from the basement. '
+  questDescription: We're counting on you to do this. If you complete it, you'll
+    be free from the basement.
   questCompleteDialogue: Thank you for this. You're free to leave the basement. The
     King is waiting for you upstairs.
   nextQuests: []

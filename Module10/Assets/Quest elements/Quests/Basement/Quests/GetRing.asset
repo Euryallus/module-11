@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questName: Find ring
   questDescription: Could you also keep your eyes peeled for a ring down there in
-    that water? It was my partners, and I'd sure like it back.
+    that water? It was my partner's, and I'd sure like it back.
   questCompleteDialogue: Thank you. Keep this for your troubles.
   nextQuests: []
   rewards:
