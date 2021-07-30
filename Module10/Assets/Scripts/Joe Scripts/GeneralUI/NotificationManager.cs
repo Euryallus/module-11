@@ -10,6 +10,7 @@ public enum NotificationMessageType
 
     ItemRequiredForDoor,
     DoorUnlocked,
+    DoorCannotBeOpened,
     CantOpenDoorDirectly,
     DoorWrongSide,
 
@@ -51,7 +52,6 @@ public class NotificationManager : MonoBehaviour
     #endregion
 
     private Transform                   notificationParentTransform;    // The transform to use as a parent for notification UI elements
-    private GameObject                  activeNotificationGameObj;      // The notification GameObject currently being shown, if any
     private QueuedNotification          activeNotification;             // The notification currently being shown, if any
     private Queue<QueuedNotification>   queuedNotifications;            // All notifications that are queued, ready to be shown
 
@@ -63,6 +63,7 @@ public class NotificationManager : MonoBehaviour
 
         { NotificationMessageType.ItemRequiredForDoor, "* is required to unlock this door." },
         { NotificationMessageType.DoorUnlocked,        "The door was unlocked with *" },
+        { NotificationMessageType.DoorCannotBeOpened,  "This door cannot be opened." },
         { NotificationMessageType.CantOpenDoorDirectly,"This door cannot be opened or closed directly." },
         { NotificationMessageType.DoorWrongSide,       "The door cannot be opened from this side." },
 
@@ -183,7 +184,6 @@ public class NotificationManager : MonoBehaviour
             }
 
             // This is now the active notification
-            activeNotificationGameObj   = notificationGameObj;
             activeNotification          = notification;
         }
         else

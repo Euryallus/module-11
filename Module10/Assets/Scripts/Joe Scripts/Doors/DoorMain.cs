@@ -18,7 +18,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     {
         None,
         OneWayInside,
-        OneWayOutside
+        OneWayOutside,
+        Disabled
     }
 
     #region InspectorVariables
@@ -32,11 +33,11 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     [SerializeField] [FormerlySerializedAs("manualOpen")] [Tooltip("Whether the door can be opened directly by a player (rather than an external method such as puzzle button)")]
     private bool                playerCanOpen = true;
-
+    
     [SerializeField] [Tooltip("If true, the door will open when the player enters the trigger area. Otherwise, it will open when pressing the interaction key")]
     private bool                openOnTriggerEnter;
 
-    [SerializeField] [Tooltip("Whether the door can only be opened from one side")]
+    [SerializeField] [Tooltip("Whether the door can be opened from both sides, only one side, or is completely disabled (regardless of unlock status)")]
     private DoorOpenRestriction openRestriction;
 
     [SerializeField] [Tooltip("Item required to unlock the door (none if left empty)")]
@@ -191,6 +192,16 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         }
     }
 
+    public void SetDoorOpenRestriction(DoorOpenRestriction restriction)
+    {
+        openRestriction = restriction;
+
+        if(openRestriction == DoorOpenRestriction.Disabled && (openIn || openOut))
+        {
+            SetAsClosed();
+        }
+    }
+
     public void Interact()
     {
         if(playerCanOpen)
@@ -297,6 +308,12 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private bool CanOpenDoor(bool inwards)
     {
+        if(openRestriction == DoorOpenRestriction.Disabled)
+        {
+            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.DoorCannotBeOpened);
+            return false;
+        }
+
         if ((inwards && openRestriction == DoorOpenRestriction.OneWayOutside) || (!inwards && openRestriction == DoorOpenRestriction.OneWayInside))
         {
             // The door is one-way and the player is tying to open it from the unallowed side
