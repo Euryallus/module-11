@@ -16,17 +16,10 @@ MonoBehaviour:
   questDescription: 'In the corner, on those benches. Go pick up that sword & bow
     and come back to me. '
   questCompleteDialogue: At least you can follow basic instructions. Take this key
-    and move forward through here, you'll also need this. It's known as the "gauntlet",
-    it'll let you pick up different items throughout the World. You'll need it.
+    and move forward through here.
   nextQuests: []
   rewards:
-  - Item: {fileID: 11400000, guid: 2a20ce22c7ba9544aa4d2027db145312, type: 2}
-    Quantity: 1
-  - Item: {fileID: 11400000, guid: 14ded7b036cb8c04b830d605284e327c, type: 2}
-    Quantity: 1
   - Item: {fileID: 11400000, guid: aad6fb14ea1b4e0469b8bb10c8c97cf7, type: 2}
-    Quantity: 1
-  - Item: {fileID: 11400000, guid: 3dcf28fb9ad659d42a69f4676698dac8, type: 2}
     Quantity: 1
   objectives:
   - {fileID: 11400000, guid: d00373e9b5612a545bf620d6c45ff4c1, type: 2}
