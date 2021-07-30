@@ -11,8 +11,16 @@ using UnityEngine.Serialization;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+
 public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerListener
 {
+    public enum DoorOpenRestriction
+    {
+        None,
+        OneWayInside,
+        OneWayOutside
+    }
+
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
@@ -23,20 +31,23 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     [Header("Door")]
 
     [SerializeField] [FormerlySerializedAs("manualOpen")] [Tooltip("Whether the door can be opened directly by a player (rather than an external method such as puzzle button)")]
-    private bool        playerCanOpen = true;
+    private bool                playerCanOpen = true;
 
     [SerializeField] [Tooltip("If true, the door will open when the player enters the trigger area. Otherwise, it will open when pressing the interaction key")]
-    private bool        openOnTriggerEnter;
+    private bool                openOnTriggerEnter;
+
+    [SerializeField] [Tooltip("Whether the door can only be opened from one side")]
+    private DoorOpenRestriction openRestriction;
 
     [SerializeField] [Tooltip("Item required to unlock the door (none if left empty)")]
-    private Item        unlockItem;
+    private Item                unlockItem;
 
     [SerializeField] [Tooltip("Number of seconds before the door closes automatiaclly, 0 = stay open forever")]
-    private float       closeAfterTime = 5.0f;
+    private float               closeAfterTime = 5.0f;
 
-    [SerializeField] private Animator   animator;           // Animator used for door open/close animations
+    [SerializeField] private Animator           animator;   // Animator used for door open/close animations
 
-    [SerializeField] private ExternalTrigger[] triggers;    // Triggers to detect if the player is on either side of the door
+    [SerializeField] private ExternalTrigger[]  triggers;   // Triggers to detect if the player is on either side of the door
 
     [Header("Sounds")]
     [SerializeField] private SoundClass openSound;
@@ -261,7 +272,7 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     public void SetAsOpen(bool inwards)
     {
-        if(CanOpenDoor())
+        if(CanOpenDoor(inwards))
         {
             // The door can be opened
 
@@ -284,8 +295,15 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         }
     }
 
-    private bool CanOpenDoor()
+    private bool CanOpenDoor(bool inwards)
     {
+        if ((inwards && openRestriction == DoorOpenRestriction.OneWayOutside) || (!inwards && openRestriction == DoorOpenRestriction.OneWayInside))
+        {
+            // The door is one-way and the player is tying to open it from the unallowed side
+            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.DoorWrongSide);
+            return false;
+        }
+
         if (unlockItem != null && !unlocked)
         {
             // The door requires an item to unlock/open
