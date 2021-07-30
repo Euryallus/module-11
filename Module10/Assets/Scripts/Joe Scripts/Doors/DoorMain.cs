@@ -122,6 +122,9 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         // Save the locked state
         saveData.AddData("doorUnlocked_" + id, unlocked);
 
+        // Save the open restiction state
+        saveData.AddData("doorRestriction_" + id, openRestriction);
+
         // Save whether the door is closed (0), open in (1) or open out (2)
         byte openStateToSave = 0;
 
@@ -144,6 +147,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         Debug.Log("Loading data for door: " + id);
 
         unlocked = saveData.GetData<bool>("doorUnlocked_" + id);
+
+        openRestriction = saveData.GetData<DoorOpenRestriction>("doorRestriction_" + id);
 
         byte openState = saveData.GetData<byte>("doorOpenState_" + id);
 
