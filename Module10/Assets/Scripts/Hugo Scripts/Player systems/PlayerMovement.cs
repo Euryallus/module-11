@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("General refs")]
 
-
     [SerializeField]    private Volume postProcessing;      // Post processing volume (used for water post processing)
                         public GameObject playerCamera;    // Reference to player camera (used for forward vect)
 
@@ -45,6 +44,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]    [Range(0.5f, 4)]  private float gliderSensitivity               = 2.0f; // Turn sensitivity of glideer
     [SerializeField]    [Range(0.01f, 1)] private float gliderTiltAmount                = 0.5f; // Amount glider tilts when in use (clamps after [x] amount)
     [SerializeField]    [Range(1, 10)]    private float gliderOpenDistanceFromGround    = 5.0f; // Distance from the ground player must be to open glider
+
+    [Header("Fall damage components")]
+
+    [SerializeField] private float benchmarkTimeInAirDamage = 1f;
+    [SerializeField] private float fallDamageMod = 0.1f;
+    private bool groundedStatusLastUpdate = true;
+    [SerializeField] private float timeFalling = 0f;
 
     private float mouseX;           // x component of raw mouse movement
     private float mouseY;           // y component of raw mouse movement
@@ -504,6 +510,8 @@ public class PlayerMovement : MonoBehaviour
                 controller.Move(moveVect * Time.deltaTime); //applies movement to player
             }
         }
+
+        CalculateFallDamage();
     }
 
     // Added by Joe, used when loading into a scene to reset certain movement variables
@@ -608,5 +616,34 @@ public class PlayerMovement : MonoBehaviour
         {
             currentMovementState = MovementStates.walk;
         }
+    }
+
+    private void CalculateFallDamage()
+    {
+        if(groundedStatusLastUpdate != true && controller.isGrounded)
+        {
+            // Calculate fall damage
+            if(timeFalling > benchmarkTimeInAirDamage)
+            {
+                float damage = timeFalling * fallDamageMod;
+
+                gameObject.GetComponent<PlayerStats>().DecreaseHealth(damage, PlayerDeathCause.FellOutOfWorld);
+                Debug.Log("Takes " + damage + " points of Damage after " + timeFalling);
+                
+            }
+            
+            timeFalling = 0f;
+        }
+
+        if(!controller.isGrounded && velocityY < 0 && (currentMovementState == MovementStates.walk || currentMovementState == MovementStates.run || currentMovementState == MovementStates.crouch))
+        {
+            timeFalling += Time.deltaTime;
+        }
+        else
+        {
+            timeFalling = 0f;
+        }
+
+        groundedStatusLastUpdate = controller.isGrounded;
     }
 }
