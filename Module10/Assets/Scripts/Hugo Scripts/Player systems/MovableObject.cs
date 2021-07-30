@@ -51,6 +51,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
         isHeld = false;
         rb = gameObject.GetComponent<Rigidbody>();
+        rb.isKinematic = true;
 
         defaultTooltipNameText = tooltipNameText;
     }
@@ -129,6 +130,8 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         if(!isHeld && canPickUp)
         {
             base.Interact();
+
+            rb.isKinematic = false;
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
 
             transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;

@@ -635,7 +635,7 @@ public class PlayerMovement : MonoBehaviour
             timeFalling = 0f;
         }
 
-        if(!controller.isGrounded && velocityY < 0 && (currentMovementState == MovementStates.walk || currentMovementState == MovementStates.run || currentMovementState == MovementStates.crouch))
+        if(canMove && !controller.isGrounded && velocityY < 0 && (currentMovementState == MovementStates.walk || currentMovementState == MovementStates.run || currentMovementState == MovementStates.crouch))
         {
             timeFalling += Time.deltaTime;
         }
