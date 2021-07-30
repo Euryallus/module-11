@@ -33,6 +33,8 @@ public class NPCManager : MonoBehaviour
     private GameObject playerCamera;    // Ref to default player camera
     private GameObject focusCamera;     // Ref to 2nd camera used to focus on NPC
 
+    private bool hasFinishedGame = false;
+
     private void Start()
     {
         // Assigns references to components needed & hides NPC dialogue UI by default
@@ -68,7 +70,17 @@ public class NPCManager : MonoBehaviour
     public void InteractWithNPC(NPC npc)
     {
         interactingWith = npc;
-        string dialogueLine = npc.ReturnDialoguePoint();
+        string dialogueLine;
+
+        if (!hasFinishedGame)
+        {
+            dialogueLine = npc.ReturnDialoguePoint();
+        }
+        else
+        {
+            dialogueLine = npc.ReturnEndDialogue();
+        }
+
 
         // Checks if NPC has any dialogue to say - if so, focus on target & show dialogue UI
         if(dialogueLine != null)
@@ -118,7 +130,16 @@ public class NPCManager : MonoBehaviour
     public void ProgressDialogue()
     {
         // Called by "Next" button on dialogue UI
-        string dialogueLine = interactingWith.ReturnDialoguePoint();
+        string dialogueLine;
+
+        if (!hasFinishedGame)
+        {
+            dialogueLine = interactingWith.ReturnDialoguePoint();
+        }
+        else
+        {
+            dialogueLine = interactingWith.ReturnEndDialogue();
+        }
 
         if (dialogueLine != null)
         {

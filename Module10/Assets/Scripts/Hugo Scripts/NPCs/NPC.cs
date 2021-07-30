@@ -22,6 +22,10 @@ public class NPC : MonoBehaviour
 
     [TextArea(1, 5)]
     [SerializeField]    private string[] dialogueLines;             // List of dialogue lines NPC will say if interacted with
+
+    [SerializeField] private string[] endGameDialogueLines;
+    private int endDialogueProgression = 0;
+
     [HideInInspector]   public bool haveTalkedToBefore = false;     // Flags if player has talked to the NPC before 
                         private int dialogueProgression = 0;        // Stores player progression through dialogue lines
 
@@ -53,6 +57,27 @@ public class NPC : MonoBehaviour
         return null;
     }
 
+    public string ReturnEndDialogue()
+    {
+        if(endDialogueProgression < endGameDialogueLines.Length)
+        {
+            string returnString = endGameDialogueLines[endDialogueProgression];
+
+            ++endDialogueProgression;
+            return returnString;
+        }
+        else
+        {
+            // If end of dialogue is met and NPC is a quest giver, dont repeat the lines
+            if (isQuestGiver)
+            {
+                haveTalkedToBefore = true;
+            }
+        }
+
+        return null;
+    }
+
     //Resets dialogue after conversation if NPC is not a quest giver
     public void ResetDialogue()
     {
@@ -60,6 +85,7 @@ public class NPC : MonoBehaviour
         if(!haveTalkedToBefore)
         {
             dialogueProgression = 0;
+            endDialogueProgression = 0;
         }
     }
 
