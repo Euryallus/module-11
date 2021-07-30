@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BasementGuard
   m_EditorClassIdentifier: 
   QuestGiverName: basementGuard
+  initialQuestList:
+  - {fileID: 11400000, guid: 6a7df13dbaeb5824c831d94abc78c0a8, type: 2}
   questsToGive:
   - {fileID: 11400000, guid: 6a7df13dbaeb5824c831d94abc78c0a8, type: 2}
   saveQuestsToGive:

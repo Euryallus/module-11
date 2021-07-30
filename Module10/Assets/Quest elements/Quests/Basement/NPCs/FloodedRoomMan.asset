@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: FloodedRoomMan
   m_EditorClassIdentifier: 
   QuestGiverName: floodedRoomMan
+  initialQuestList:
+  - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
   questsToGive:
   - {fileID: 11400000, guid: 9a1e60e4186f8904bb983e3705897a7f, type: 2}
   saveQuestsToGive:

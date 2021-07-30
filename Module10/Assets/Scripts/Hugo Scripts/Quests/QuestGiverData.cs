@@ -12,27 +12,25 @@ using UnityEngine;
 public class QuestGiverData : ScriptableObject
 {    
     public string QuestGiverName;                                   // Unique name of the quest giver
+    [SerializeField] private List<QuestData> initialQuestList = new List<QuestData>(); // List of initial NPC quests
+
     public List<QuestData> questsToGive = new List<QuestData>();    // List of quests NPC has to offer at any given point
 
     [SerializeField] private List<QuestData> saveQuestsToGive = new List<QuestData>();
 
     public void SaveProgress()
     {
-        saveQuestsToGive = new List<QuestData>();
-
-        foreach (QuestData quest in questsToGive)
-        {
-            saveQuestsToGive.Add(quest);
-        }
+        saveQuestsToGive = new List<QuestData>(questsToGive);
     }
 
     public void LoadProgress()
     {
-        questsToGive = new List<QuestData>();
+        questsToGive = new List<QuestData>(saveQuestsToGive);
+    }
 
-        foreach (QuestData quest in saveQuestsToGive)
-        {
-            questsToGive.Add(quest);
-        }
+    public void ResetProgress()
+    {
+        saveQuestsToGive = new List<QuestData>(initialQuestList);
+        questsToGive = new List<QuestData>(initialQuestList);
     }
 }

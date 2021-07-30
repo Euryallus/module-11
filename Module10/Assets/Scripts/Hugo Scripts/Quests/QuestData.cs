@@ -90,4 +90,18 @@ public class QuestData : ScriptableObject
         questCompleted = (objectiveCount == objectives.Count);
         return questCompleted;
     }
+
+    public void ResetProgress()
+    {
+        savedQuestCompleted = false;
+        savedQuestHandedIn = false;
+
+        questCompleted = false;
+        questHandedIn = false;
+
+        foreach (QuestObjective objective in objectives)
+        {
+            objective.taskComplete = false;
+        }
+    }
 }

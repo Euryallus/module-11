@@ -34,7 +34,9 @@ public class AreaObjectiveManager : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<BoxCollider>().isTrigger = true;
 
+        progressSlider.maxValue = 1f;
         progressSlider.gameObject.SetActive(false);
+        
         isCharging = false;
         hasFullyCharged = false;
     }
@@ -52,11 +54,10 @@ public class AreaObjectiveManager : MonoBehaviour
             }
             
 
-            objectiveCharge = (enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned;
+            objectiveCharge = ((float)enemyManager.totalSpawned - (float)enemyManager.remainingUnits) / (float)enemyManager.totalSpawned;
             
-            sliderFill.color = progressBarGrad.Evaluate((enemyManager.totalSpawned - enemyManager.remainingUnits) / enemyManager.totalSpawned);
-            progressSlider.maxValue = enemyManager.totalSpawned;
-            progressSlider.value = enemyManager.totalSpawned - enemyManager.remainingUnits;
+            sliderFill.color = progressBarGrad.Evaluate(objectiveCharge);
+            progressSlider.value = objectiveCharge;
         }
 
     }

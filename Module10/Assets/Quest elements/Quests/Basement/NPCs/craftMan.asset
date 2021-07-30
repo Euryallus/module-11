@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: craftMan
   m_EditorClassIdentifier: 
   QuestGiverName: craftMan
+  initialQuestList:
+  - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
   questsToGive:
   - {fileID: 11400000, guid: 218c4ac71d4e02d4281d349ce56e96a2, type: 2}
   saveQuestsToGive:

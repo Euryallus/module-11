@@ -30,21 +30,21 @@ public class PlayerQuestBacklog : ScriptableObject
 
     public void SaveProgress()
     {
-        savedQuestBacklog = new List<QuestData>();
-        savedCompletedQuests = new List<QuestData>();
+        savedQuestBacklog = new List<QuestData>(questBacklog);
+        savedCompletedQuests = new List<QuestData>(completedQuests);
 
-        foreach(QuestData quest in questBacklog)
-        {
-            savedQuestBacklog.Add(quest);
-        }
-
-        foreach(QuestData quest in completedQuests)
-        {
-            savedCompletedQuests.Add(quest);
-        }
-
-        savedQuestBacklog = questBacklog;
-        savedCompletedQuests = completedQuests;
+        //foreach(QuestData quest in questBacklog)
+        //{
+        //    savedQuestBacklog.Add(quest);
+        //}
+        //
+        //foreach(QuestData quest in completedQuests)
+        //{
+        //    savedCompletedQuests.Add(quest);
+        //}
+        
+        //savedQuestBacklog = questBacklog;
+        //savedCompletedQuests = completedQuests;
 
         foreach(QuestData quest in quests)
         {
@@ -59,18 +59,18 @@ public class PlayerQuestBacklog : ScriptableObject
 
     public void LoadProgress()
     {
-        questBacklog = new List<QuestData>();
-        completedQuests = new List<QuestData>();
+        questBacklog = new List<QuestData>(savedQuestBacklog);
+        completedQuests = new List<QuestData>(savedCompletedQuests);
 
-        foreach (QuestData quest in savedQuestBacklog)
-        {
-            questBacklog.Add(quest);
-        }
-
-        foreach (QuestData quest in savedCompletedQuests)
-        {
-            completedQuests.Add(quest);
-        }
+        //foreach (QuestData quest in savedQuestBacklog)
+        //{
+        //    questBacklog.Add(quest);
+        //}
+        //
+        //foreach (QuestData quest in savedCompletedQuests)
+        //{
+        //    completedQuests.Add(quest);
+        //}
 
         foreach (QuestData quest in quests)
         {
@@ -80,6 +80,25 @@ public class PlayerQuestBacklog : ScriptableObject
         foreach (QuestGiverData questGiver in questGivers)
         {
             questGiver.LoadProgress();
+        }
+    }
+
+    public void ResetProgress()
+    {
+        completedQuests = new List<QuestData>();
+        questBacklog = new List<QuestData>();
+
+        savedCompletedQuests = new List<QuestData>();
+        savedQuestBacklog = new List<QuestData>();
+
+        foreach (QuestData quest in quests)
+        {
+            quest.ResetProgress();
+        }
+
+        foreach (QuestGiverData questGiver in questGivers)
+        {
+            questGiver.ResetProgress();
         }
     }
 }
