@@ -116,9 +116,6 @@ public class GameSceneUI : MonoBehaviour
 
         // Pause time to prevent any movement of other objects
         Time.timeScale = 0.0f;
-
-        // Play a click sound
-        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
     }
 
     private void UnpauseGame()

@@ -28,6 +28,8 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private GameObject    titleCardPrefab;     // UI element that shows the name of a scene when one is loaded
     [SerializeField] private SceneUIData[] sceneUIData;         // Array of data determining what names and images will be shown in the UI to represent each scene
 
+    [SerializeField] private PlayerQuestBacklog playerData;
+
     #endregion
 
     #region Properties
@@ -52,6 +54,8 @@ public class SaveLoadManager : MonoBehaviour
 
     private readonly Dictionary<string, int> playerPrefsDefaultIntValues = new Dictionary<string, int>()
     {
+        { "optionsSelectedTab", 0 },
+
         { "musicVolume"       , 8 },
         { "soundEffectsVolume", 8 },
 
@@ -588,6 +592,41 @@ public class SaveLoadManager : MonoBehaviour
 
         titleCardTransform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = sceneUIName;
         titleCardTransform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = sceneUIName;
+    }
+
+    public bool ResetGameData()
+    {
+        string deleteDirectory = baseSaveDirectory + "/" + MainSaveDirectory + "/"; ;
+
+        if (!string.IsNullOrEmpty(currentScenesDirectory))
+        {
+            deleteDirectory = currentScenesDirectory;
+        }
+
+        Debug.LogWarning("Resetting game data - attempting to delete directory: " + deleteDirectory);
+
+        bool resetSuccess = true;
+
+        if(Directory.Exists(deleteDirectory))
+        {
+            try
+            {
+                Directory.Delete(deleteDirectory, true);
+            }
+            catch
+            {
+                Debug.LogError("Failed to delete directory: " + deleteDirectory);
+                resetSuccess = false;
+            }
+        }
+
+        if(resetSuccess)
+        {
+            // Also reset quest data
+            playerData.ResetProgress();
+        }
+
+        return resetSuccess;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

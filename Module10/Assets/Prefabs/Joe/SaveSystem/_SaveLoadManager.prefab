@@ -58,3 +58,4 @@ MonoBehaviour:
   - sceneName: Catacombs
     uiName: Dark Catacombs
     uiSprite: {fileID: 21300000, guid: 08b06d4452baa9246b5ffd5d1380dd0b, type: 3}
+  playerData: {fileID: 11400000, guid: 849c1f5215c88084a9b1b17fbd0a6bf6, type: 2}

@@ -127,6 +127,8 @@ public class MainMenu : MonoBehaviour
 
         // Hide main menu content
         mainContentCanvas.enabled = false;
+
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2");
     }
 
     public void ButtonCredits()
