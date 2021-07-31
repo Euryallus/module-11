@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca1245acc3d61a4d904e0200233ed62, type: 3}
   m_Name: The King
   m_EditorClassIdentifier: 
-  questsToGive:
-  - {fileID: 11400000, guid: 9c2362113b55bb841a804e93892376b4, type: 2}
-  QuestGiverName: The King
+  QuestGiverName: The King old
+  initialQuestList: []
+  questsToGive: []
+  saveQuestsToGive: []

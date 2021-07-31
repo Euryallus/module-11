@@ -36,9 +36,20 @@ public class MainMenu : MonoBehaviour
             logoImage.sprite = logoSprites[1];
         }
 
-        playButtonText.text = NewGameText;
+        CheckForSavedGame();
+    }
 
-        if(SaveLoadManager.Instance.LoadGameInfo(out sceneToLoadName, out savedPlayerName, out savedAreaName))
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideOptionsPanel();
+        }
+    }
+
+    private void CheckForSavedGame()
+    {
+        if (SaveLoadManager.Instance.LoadGameInfo(out sceneToLoadName, out savedPlayerName, out savedAreaName))
         {
             startingNewGame = false;
             playButtonText.text = ContinueGameText + savedPlayerName + "\n" + savedAreaName;
@@ -47,14 +58,6 @@ public class MainMenu : MonoBehaviour
         {
             startingNewGame = true;
             playButtonText.text = NewGameText;
-        }
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            HideOptionsPanel();
         }
     }
 
@@ -68,6 +71,8 @@ public class MainMenu : MonoBehaviour
 
         // Show main menu content
         mainContentCanvas.enabled = true;
+
+        CheckForSavedGame();
     }
 
     // Called by UI events:

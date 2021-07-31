@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -26,17 +27,19 @@ public class OptionsPanel : UIPanel
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private TabButtonsGroup tabs;
-    [SerializeField] private GameObject[]    optionsGroups;
+    [SerializeField] private TabButtonsGroup    tabs;
+    [SerializeField] private GameObject[]       optionsGroups;
 
-    [SerializeField] private TextMeshProUGUI musicVolumeText;        // Text displaying music volume title/percentage
-    [SerializeField] private TextMeshProUGUI soundEffectsVolumeText; // Text displaying sound effects volume title/percentage
+    [SerializeField] private TextMeshProUGUI    musicVolumeText;        // Text displaying music volume title/percentage
+    [SerializeField] private TextMeshProUGUI    soundEffectsVolumeText; // Text displaying sound effects volume title/percentage
 
-    [SerializeField] private Slider          musicSlider;            // Slider for adjusting music volume
-    [SerializeField] private Slider          soundEffectsSlider;     // Slider for adjusting sound effects volume
+    [SerializeField] private Slider             musicSlider;            // Slider for adjusting music volume
+    [SerializeField] private Slider             soundEffectsSlider;     // Slider for adjusting sound effects volume
 
-    [SerializeField] private OptionsToggle  screenShakeToggle;       // Toggle for enabling/disabling the screen shake effect
-    [SerializeField] private OptionsToggle  viewBobbingToggle;       // Toggle for enabling/disabling the view bobbing effect
+    [SerializeField] private OptionsToggle      screenShakeToggle;      // Toggle for enabling/disabling the screen shake effect
+    [SerializeField] private OptionsToggle      viewBobbingToggle;      // Toggle for enabling/disabling the view bobbing effect
+
+    [SerializeField] private PressEffectButton  resetGameDataButton;
 
     [SerializeField] private GameObject     confirmPanelPrefab;
 
@@ -107,8 +110,6 @@ public class OptionsPanel : UIPanel
 
     private void SetupGraphicsOptions()
     {
-        Debug.Log("Setting up graphics options");
-
         SaveLoadManager slm = SaveLoadManager.Instance;
 
         // Update UI to show the current saved values for graphics options:
@@ -120,8 +121,6 @@ public class OptionsPanel : UIPanel
 
     private void SetupAudioOptions()
     {
-        Debug.Log("Setting up audio options");
-
         SaveLoadManager slm = SaveLoadManager.Instance;
 
         // Update UI to show the current saved values for audio options:
@@ -135,7 +134,7 @@ public class OptionsPanel : UIPanel
     {
         // Update UI to show the current saved values for game options:
 
-        Debug.Log("Setting up game options");
+        resetGameDataButton.SetInteractable(SceneManager.GetActiveScene().name == "MainMenu");
     }
 
     private void UpdateMusicVolumeUI(int savedMusicVolume)

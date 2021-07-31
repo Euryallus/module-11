@@ -247,21 +247,17 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     // Save the object's position and rotation
     public void OnSceneSave(SaveData saveData)
     {
-        string saveId = "movableObjTransform_" + GetUniquePositionId();
-
         // Save position and euler rotation values to a float array
-        saveData.AddData(saveId, new float[6] { transform.position.x, transform.position.y, transform.position.z,
+        saveData.AddData(GetSaveId(), new float[6] { transform.position.x, transform.position.y, transform.position.z,
                                                 transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z });
 
-        Debug.Log("Saving MovableObject transform for " + saveId); 
+        Debug.Log("Saving MovableObject transform for " + GetSaveId(), gameObject); 
     }
 
     // Load the objects position and rotation
     public void OnSceneLoadSetup(SaveData saveData)
     {
-        string saveId = "movableObjTransform_" + GetUniquePositionId();
-
-        float[] transformVals = saveData.GetData<float[]>(saveId, out bool loadSuccess);
+        float[] transformVals = saveData.GetData<float[]>(GetSaveId(), out bool loadSuccess);
 
         if(loadSuccess)
         {
@@ -271,7 +267,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             transform.rotation = Quaternion.Euler(transformVals[3], transformVals[4], transformVals[5]);
         }
 
-        Debug.Log("Loading MovableObject transform for " + saveId);
+        Debug.Log("Loading MovableObject transform for " + GetSaveId());
     }
 
     public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
@@ -279,5 +275,10 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     private string GetUniquePositionId()
     {
         return startPosition.x + "_" + startPosition.y + "_" + startPosition.z;
+    }
+
+    private string GetSaveId()
+    {
+        return "movableObjTransform_" + gameObject.name + "_" + GetUniquePositionId(); ;
     }
 }

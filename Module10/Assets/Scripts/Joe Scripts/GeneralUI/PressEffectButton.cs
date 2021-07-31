@@ -32,10 +32,13 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private Image                  buttonSideImage;                                 // Image that makes up the 'side' of the button
     [SerializeField] private float                  pressSpeed = 120f;                               // How quick the press animation will be
     [SerializeField] private ButtonPressInputType   inputType = ButtonPressInputType.DepressOnClick; // Whether the button will press when hovered or clicked
+
     [SerializeField] private Color                  buttonColour = Color.grey;                       // The base colour of the button, also partially determines 'shadow' colour of the button's side
+    [SerializeField] private Color                  buttonDisabledColour = Color.grey;               // The base colour of the button when not interactable
     [SerializeField] private Color                  buttonShadowTint = new Color(0.8f, 0.8f, 0.8f);  // The base colour is multiplied by this colour to get the shadow/side colour
     [SerializeField] private bool                   changeSideColourHover;
     [SerializeField] private Color                  hoverSideColour;
+
     [SerializeField] private bool                   raiseButtonOnHover;
     [SerializeField] private float                  hoverRaiseAmount;
 
@@ -46,6 +49,12 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private Vector3 targetPos;              // The position the top of the button should move towards
     private bool    interactable = true;    // Whether the button can currently be pressed
     private float   pressSpeedMultiplier = 1.0f;
+    private Color   defaultButtonColour;
+
+    private void Awake()
+    {
+        defaultButtonColour = buttonColour;
+    }
 
     private void Start()
     {
@@ -72,6 +81,15 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         button.interactable = interactable;
         this.interactable = interactable;
+
+        if(interactable)
+        {
+            SetButtonColour(defaultButtonColour);
+        }
+        else
+        {
+            SetButtonColour(buttonDisabledColour);
+        }
     }
 
     public void SetButtonColour(Color colour)
@@ -103,22 +121,22 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Visually 'press' the button on hover if the input type is DepressOnHover
-        if (inputType == ButtonPressInputType.DepressOnHover)
+        if(interactable)
         {
-            if(interactable)
+            // Visually 'press' the button on hover if the input type is DepressOnHover
+            if (inputType == ButtonPressInputType.DepressOnHover)
             {
                 Press();
             }
-        }
-        else if(raiseButtonOnHover)
-        {
-            Raise(hoverRaiseAmount);
-        }
+            else if (raiseButtonOnHover)
+            {
+                Raise(hoverRaiseAmount);
+            }
 
-        if (changeSideColourHover)
-        {
-            SetButtonSideColour(false, hoverSideColour);
+            if (changeSideColourHover)
+            {
+                SetButtonSideColour(false, hoverSideColour);
+            }
         }
     }
 

@@ -13,16 +13,13 @@ MonoBehaviour:
   m_Name: Collect The Book
   m_EditorClassIdentifier: 
   questName: Collect The Book
-  questDescription: But before you go, there's a book in the library I want to you
-    to pick up. It's in a chest, get it for me, and I'll give you something that
-    will help you on your journey.
-  questCompleteDialogue: Thank you. Please take this, it'll allow you to freeze any
-    enemy you come across for a short time. Use it wisely. Here is also the key to
-    leave the Castle.
+  questDescription: Before you go, there's a book in the library I want to you to
+    pick up. It's in a chest. Get it for me and I'll send you on your way.
+  questCompleteDialogue: Thank you for the book. I'll get one of the guards to read
+    it to me at bedtime. I didn't need to tell you that. Anyway, here's the key to
+    leave the castle.
   nextQuests: []
   rewards:
-  - Item: {fileID: 11400000, guid: 63040ba8f16c3364ab6f6deddd409655, type: 2}
-    Quantity: 1
   - Item: {fileID: 11400000, guid: a589843407f283d43b572b75cdd13c98, type: 2}
     Quantity: 1
   objectives:

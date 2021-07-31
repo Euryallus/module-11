@@ -48,8 +48,10 @@ public class UIPanel : MonoBehaviour
 
     public virtual void Show()
     {
-        if (GameSceneUI.Instance.ShowingCinematicsCanvas)
+        if (GameSceneUI.Instance != null && GameSceneUI.Instance.ShowingCinematicsCanvas)
+        {
             return;
+        }
 
         // Set the canvas group alpha to 1 to fully show the panel
         canvasGroup.alpha = 1.0f;

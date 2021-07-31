@@ -21,6 +21,8 @@ MonoBehaviour:
   rewards:
   - Item: {fileID: 11400000, guid: aad6fb14ea1b4e0469b8bb10c8c97cf7, type: 2}
     Quantity: 1
+  - Item: {fileID: 11400000, guid: 2a20ce22c7ba9544aa4d2027db145312, type: 2}
+    Quantity: 1
   objectives:
   - {fileID: 11400000, guid: d00373e9b5612a545bf620d6c45ff4c1, type: 2}
   forceAccept: 0
@@ -28,7 +30,7 @@ MonoBehaviour:
   handOutNPCName: Weapon Smith
   questLineName: 
   questCompleted: 1
-  questHandedIn: 1
+  questHandedIn: 0
   handInToGiver: 1
-  savedQuestCompleted: 0
+  savedQuestCompleted: 1
   savedQuestHandedIn: 0

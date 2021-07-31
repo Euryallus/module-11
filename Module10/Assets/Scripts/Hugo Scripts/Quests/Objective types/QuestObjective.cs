@@ -39,4 +39,10 @@ public class QuestObjective : ScriptableObject
     {
         return false;
     }
+
+    public void ResetProgress()
+    {
+        taskComplete     = false;
+        saveTaskComplete = false;
+    }
 }

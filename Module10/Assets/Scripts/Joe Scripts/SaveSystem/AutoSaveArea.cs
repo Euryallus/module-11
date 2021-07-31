@@ -77,27 +77,33 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (disableWhenUsed)
+        if (SaveLoadManager.Instance.LoadingSceneData)
+            return;
+
+        if(other.gameObject.CompareTag("Player"))
         {
-            // The collider is set to be disabled on use, disable it
-            DisableCollider();
-        }
+            if (disableWhenUsed)
+            {
+                // The collider is set to be disabled on use, disable it
+                DisableCollider();
+            }
 
-        Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
+            Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
 
-        SetAsUsed();
+            SetAsUsed();
 
-        // Try to save the game
-        bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
+            // Try to save the game
+            bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
 
-        // Show a notification to tell the player is the save was successful
-        if (saveSuccess)
-        {
-            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.AutoSaveSuccess);
-        }
-        else
-        {
-            NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveError);
+            // Show a notification to tell the player is the save was successful
+            if (saveSuccess)
+            {
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.AutoSaveSuccess);
+            }
+            else
+            {
+                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveError);
+            }
         }
     }
 

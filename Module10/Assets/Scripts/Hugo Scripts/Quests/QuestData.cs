@@ -101,7 +101,7 @@ public class QuestData : ScriptableObject
 
         foreach (QuestObjective objective in objectives)
         {
-            objective.taskComplete = false;
+            objective.ResetProgress();
         }
     }
 }

@@ -637,21 +637,21 @@ public class SaveLoadManager : MonoBehaviour
         {
             if (scene.name == "JoeTestScene" || scene.name == "JoeTestScene2")
             {
-                Debug.LogWarning("No save directory was set before entering the scene - using Debug_JoeTestScenes");
+                Debug.Log("No save directory was set before entering the scene - using Debug_JoeTestScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_JoeTestScenes" + "/";
                 StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else if (scene.name == "The Village" || scene.name == "Desert" || scene.name == "Flooded City" || scene.name == "Catacombs")
             {
-                Debug.LogWarning("No save directory was set before entering the scene - using Debug_MapScenes");
+                Debug.Log("No save directory was set before entering the scene - using Debug_MapScenes");
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_MapScenes" + "/";
                 StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
             }
             else
             {
-                Debug.LogWarning("No save directory was set before entering the scene - using Debug_" + scene.name);
+                Debug.Log("No save directory was set before entering the scene - using Debug_" + scene.name);
 
                 currentScenesDirectory = baseSaveDirectory + "/" + "Debug_" + scene.name + "/";
                 StartCoroutine(LoadDataForSceneCoroutine(scene.name, currentScenesDirectory));
