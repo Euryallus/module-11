@@ -56,7 +56,7 @@ public class HeldItem : MonoBehaviour
         // For example, drop an object
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         // If the player is performing an ability when this held item is destroyed,
         //   make sure the puzzle ability behaviour is stopped

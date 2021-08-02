@@ -213,6 +213,9 @@ public class CustomFloatProperty
     [Tooltip("The Value cannot surpass this no matter how many times the item is customised")]
     public float    MaxValue;
 
+    [Tooltip("How much more currency is required to customise the item each time this property value is increased")]
+    public int      CurrencyIncrease;
+
     public string GetDisplayText()
     {
         return UIName + ": " + Value;

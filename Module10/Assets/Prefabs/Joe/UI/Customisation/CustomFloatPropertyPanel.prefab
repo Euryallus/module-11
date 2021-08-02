@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.105882354, g: 0.039215688, b: 0.18867922, a: 0.9019608}
+  m_Color: {r: 0.047169805, g: 0.12971692, b: 0.18867922, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -264,6 +264,10 @@ PrefabInstance:
       value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Colors.m_HighlightedColor.b
       value: 0.9411765
       objectReference: {fileID: 0}
@@ -285,6 +289,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: buttonColour.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverRaiseAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.g
+      value: 0.80137205
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: raiseButtonOnHover
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: changeSideColourHover
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078353, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
@@ -469,6 +497,10 @@ PrefabInstance:
       value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_Transition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Colors.m_HighlightedColor.b
       value: 0.9411765
       objectReference: {fileID: 0}
@@ -490,6 +522,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: buttonColour.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverRaiseAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: hoverSideColour.g
+      value: 0.80137205
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: raiseButtonOnHover
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: changeSideColourHover
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078353, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}

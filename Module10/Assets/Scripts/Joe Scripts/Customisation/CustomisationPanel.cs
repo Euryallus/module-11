@@ -37,6 +37,8 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
     private ContainerSlot           resultSlot;        // The resulting item which is based on the original item with customisation options applied
     private List<TMP_InputField>    customInputFields; // List of all input fields used for altering custom string properties
 
+    private int additionalRequiredCurrency;
+
     private void Awake()
     {
         // Setup the 3 slots used for customisation. The customise slot takes a maximum of 1 item
@@ -164,7 +166,9 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         // Get the unique id that will be used for the custom item being added/removed
         string customItemId = itemManager.GetUniqueCustomItemId();
 
-        if (CheckForValidItemInputs())
+        CheckForValidItemInputs(out bool validCustomiseItem, out bool validCurrencyItem);
+
+        if (validCustomiseItem)
         {
             // The player has put a valid combination of items into the customise/currency slots, the output item should be shown
 
@@ -201,6 +205,8 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             //   with a valid combination of items without being picked up. Once the setup becomes invalid that custom
             //   item was never used and as such can be removed
             itemManager.RemoveCustomItem(customItemId);
+
+            additionalRequiredCurrency = 0;
         }
 
         //Update the result slot UI to reflect changes
@@ -232,8 +238,11 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             CustomFloatPropertyPanel propertyPanel = Instantiate(customFloatPropertyPrefab, customisationOptionsPanel.transform)
                                                         .GetComponent<CustomFloatPropertyPanel>();
 
+            CustomFloatProperty resultItemProperty = itemManager.GetItemWithId(resultSlot.ItemStack.StackItemsID).CustomFloatProperties[i];
+
             // By default, the value of the current property to be displayed is the same as the base item's value
-            SetupFloatPropertyValueText(propertyPanel.ValueText, baseProperty.Value, baseProperty.Value);
+            //SetupFloatPropertyValueText(propertyPanel.ValueText, baseProperty.Value, baseProperty.Value);
+            SetupFloatPropertyValueText(propertyPanel.ValueText, resultItemProperty.Value, baseProperty.Value);
 
             // Set the PropertyAddButton and PropertySubtractButton functions to be called when the corresponding buttons are clicked
             propertyPanel.AddButton     .onClick.AddListener(delegate { FloatPropertyAddButton       (baseProperty.Name, propertyPanel.ValueText); });
@@ -287,10 +296,10 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
     private void FloatPropertyAddButton(string propertyName, TextMeshProUGUI valueText)
     {
-        Item itemBeingCustomised = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
+        Item customResultItem = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
 
         // Get the current values for the float property being edited
-        CustomFloatProperty property = itemBeingCustomised.GetCustomFloatPropertyWithName(propertyName);
+        CustomFloatProperty property = customResultItem.GetCustomFloatPropertyWithName(propertyName);
 
         // Add the upgrade increase to the current property value to get the new added value
         float addedValue = property.Value + property.UpgradeIncrease;
@@ -304,20 +313,28 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
             SetupFloatPropertyValueText(valueText, addedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
+
+            additionalRequiredCurrency += property.CurrencyIncrease;
+
+            CheckForValidItemInputs(out _, out _);
+
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
         }
     }
 
     private void FloatPropertySubtractButton(string propertyName, TextMeshProUGUI valueText)
     {
-        Item itemBeingCustomised = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
+        Item customiseItem    = itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID);
+        Item customResultItem = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
 
         // Get the current values for the float property being edited
-        CustomFloatProperty property = itemBeingCustomised.GetCustomFloatPropertyWithName(propertyName);
+        CustomFloatProperty baseProperty       = customiseItem.GetCustomFloatPropertyWithName(propertyName);
+        CustomFloatProperty customisedProperty = customResultItem.GetCustomFloatPropertyWithName(propertyName);
 
         // Subtract the upgrade increase (in this case decrease) from the current property value to get the new added value
-        float subtractedValue = property.Value - property.UpgradeIncrease;
+        float subtractedValue = customisedProperty.Value - customisedProperty.UpgradeIncrease;
 
-        if (subtractedValue >= property.MinValue)
+        if (subtractedValue >= baseProperty.Value)
         {
             // The subtracted value is within the allowed value range
 
@@ -326,6 +343,12 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
             SetupFloatPropertyValueText(valueText, subtractedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
+
+            additionalRequiredCurrency -= customisedProperty.CurrencyIncrease;
+
+            CheckForValidItemInputs(out _, out _);
+
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
         }
     }
 
@@ -347,9 +370,11 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
-    private bool CheckForValidItemInputs()
+    private void CheckForValidItemInputs(out bool validCustomiseItem, out bool validCurrencyItem)
     {
         //This function checks if the items in the customise and currency slots create a valid setup to produce a resulting item
+
+        bool resultSlotEnabled = false;
 
         if (customiseSlot.ItemStack.StackSize > 0)
         {
@@ -374,6 +399,8 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
                     requiredCurrencyQuantity = itemToCustomise.CurrencyItemQuantity;
                 }
 
+                requiredCurrencyQuantity += additionalRequiredCurrency;
+
                 if ((currencySlot.ItemStack.StackSize >= requiredCurrencyQuantity) && (currencyItem == null || currencySlot.ItemStack.StackItemsID == currencyItem.Id))
                 {
                     // Either no currency is required or the player has added the required amount/type of currency item
@@ -381,14 +408,18 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
                     infoText.text = "<color=#FFFFFF>Customising " + itemToCustomise.UIName + ".</color>";
 
-                    return true;
+                    validCustomiseItem = true;
+                    validCurrencyItem = true;
+                    resultSlotEnabled = true;
                 }
                 else
                 {
                     // The required currency type or amount is not in place, setup is invalid. Dhow warning text
 
-                    infoText.text = "Requires " + requiredCurrencyQuantity + "x " + currencyItem.UIName + " to customise.";
-                    return false;
+                    infoText.text = "Requires " + requiredCurrencyQuantity + "x " + currencyItem.UIName + ".";
+
+                    validCustomiseItem = true;
+                    validCurrencyItem = false;
                 }
             }
             else
@@ -396,7 +427,9 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
                 // The item in the customise slot is not allowed to be customised, setup is invalid. Show warning text
 
                 infoText.text = itemToCustomise.UIName + " cannot be customised.";
-                return false;
+
+                validCustomiseItem = false;
+                validCurrencyItem = false;
             }
         }
         else
@@ -404,7 +437,21 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             // There is nothing in the customise slot, setup is invalid. Show info text
 
             ShowDefaultInfoText();
-            return false;
+
+            validCustomiseItem = false;
+            validCurrencyItem = false;
+            resultSlotEnabled = true;
+        }
+
+        if (resultSlotEnabled)
+        {
+            resultSlot.SlotUI.ClickToRemoveItems = true;
+            resultSlot.SlotUI.SetCoverFillAmount(0.0f);
+        }
+        else
+        {
+            resultSlot.SlotUI.ClickToRemoveItems = false;
+            resultSlot.SlotUI.SetCoverFillAmount(1.0f);
         }
     }
 

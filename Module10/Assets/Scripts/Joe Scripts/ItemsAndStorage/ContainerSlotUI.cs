@@ -41,6 +41,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     public GameObject ItemCountPanel { get { return itemCountPanel; } }
     public TextMeshProUGUI ItemCountText { get { return itemCountText; } }
     public ContainerSlot Slot { get { return slot; } }
+    public bool ClickToRemoveItems { set { clickToRemoveItems = value; } }
 
     #endregion
 

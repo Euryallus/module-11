@@ -1744,6 +1744,38 @@ PrefabInstance:
       propertyPath: clickToAddItems
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4849742818281629275, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9c9f3a128db3f7245b7ae2c40c33d06f, type: 3}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Color.g
+      value: 0.37254903
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559182848883717704, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7732154104530810068, guid: c02098545b15fef4fb5209bb4ce73b12, type: 3}
       propertyPath: ParentPanel
       value: 

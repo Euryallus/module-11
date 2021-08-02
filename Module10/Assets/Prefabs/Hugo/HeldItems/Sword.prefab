@@ -81,9 +81,11 @@ MonoBehaviour:
   damageVariation: 0.1
   critDamageMultiplier: 1.5
   damageModifier: 1
-  cooldownTime: 0.5
+  cooldownTime: 0.9
   animator: {fileID: 5941972748324674398}
   reachLength: 4
+  damageUpgadeMultiplier: 0.3
+  cooldownUpgadeMultiplier: 0.25
 --- !u!1001 &797270604329689266
 PrefabInstance:
   m_ObjectHideFlags: 0

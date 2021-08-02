@@ -20,15 +20,24 @@ public class Weapon : HeldItem
     protected float cooldown = 0f;                          // internal countdown
 
     public Animator animator;                               // Ref. to weapon animator
-    
+
     public virtual void Update()
     {
         // Increases cooldown clock by [Time.deltaTime]
         cooldown += Time.deltaTime;
+
+        if(cooldown < cooldownTime)
+        {
+            containerSlot.SetCoverFillAmount(1.0f - cooldown / cooldownTime);
+        }
+        else
+        {
+            containerSlot.SetCoverFillAmount(0.0f);
+        }
     }
 
     // Generates damage done
-    public float CalculateDamage()
+    public virtual float CalculateDamage()
     {
         // Generates random damage within (damageVariation / 2) of base damage, multiplied by modifier (default is 1 so no change)
         float damage = Random.Range(baseDamage - (damageVariation / 2), baseDamage + (damageVariation / 2)) * damageModifier;
@@ -41,5 +50,12 @@ public class Weapon : HeldItem
         }
 
         return damage;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        containerSlot.SetCoverFillAmount(0.0f);
     }
 }

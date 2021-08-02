@@ -24,6 +24,20 @@ MonoBehaviour:
   m_canDrop: 1
   m_customisable: 1
   m_currencyItemId: shinyThing
-  m_currencyItemQuantity: 4
-  m_customFloatProperties: []
+  m_currencyItemQuantity: 1
+  m_customFloatProperties:
+  - Name: damage
+    UIName: Damage Level
+    Value: 1
+    UpgradeIncrease: 1
+    MinValue: 1
+    MaxValue: 3
+    CurrencyIncrease: 3
+  - Name: attackSpeed
+    UIName: Attack Speed
+    Value: 1
+    UpgradeIncrease: 1
+    MinValue: 1
+    MaxValue: 3
+    CurrencyIncrease: 3
   m_customStringProperties: []
