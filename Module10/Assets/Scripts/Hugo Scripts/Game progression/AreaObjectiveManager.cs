@@ -29,6 +29,7 @@ public class AreaObjectiveManager : MonoBehaviour
 
     [Header("Events triggered once fully charged")]
     [SerializeField] private UnityEvent onChargedEvents = new UnityEvent();
+
     void Start()
     {
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -47,17 +48,19 @@ public class AreaObjectiveManager : MonoBehaviour
         {
             if (enemyManager.hasBeenDefeated)
             {
-                
+
                 objectiveCharge = 1.0f;
                 onChargedEvents.Invoke();
                 hasFullyCharged = true;
             }
-            
 
             objectiveCharge = ((float)enemyManager.totalSpawned - (float)enemyManager.remainingUnits) / (float)enemyManager.totalSpawned;
-            
-            sliderFill.color = progressBarGrad.Evaluate(objectiveCharge);
-            progressSlider.value = objectiveCharge;
+
+            if(isCharging)
+            {
+                sliderFill.color = progressBarGrad.Evaluate(objectiveCharge);
+                progressSlider.value = objectiveCharge;
+            }
         }
 
     }

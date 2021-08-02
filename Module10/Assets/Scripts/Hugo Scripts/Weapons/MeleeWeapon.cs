@@ -22,8 +22,6 @@ public class MeleeWeapon : Weapon
         // Decrease the cooldown time value based on how much the player has upgraded attack speed
         //   (subtracting 1.0 so nothing is decreased if the value was not upgraded)
         cooldownTime -= (item.GetCustomFloatPropertyWithName("attackSpeed").Value - 1.0f) * cooldownUpgadeMultiplier;
-
-        Debug.Log("Cooldown time is " + cooldownTime);
     }
 
     public override void PerformMainAbility()
