@@ -19,9 +19,14 @@ public class MeleeWeapon : Weapon
 
     private void Start()
     {
-        // Decrease the cooldown time value based on how much the player has upgraded attack speed
-        //   (subtracting 1.0 so nothing is decreased if the value was not upgraded)
-        cooldownTime -= (item.GetCustomFloatPropertyWithName("attackSpeed").Value - 1.0f) * cooldownUpgadeMultiplier;
+        CustomFloatProperty attackSpeedPoperty = item.GetCustomFloatPropertyWithName("attackSpeed", true);
+
+        if(attackSpeedPoperty != null)
+        {
+            // Decrease the cooldown time value based on how much the player has upgraded attack speed
+            //   (subtracting 1.0 so nothing is decreased if the value was not upgraded)
+            cooldownTime -= (attackSpeedPoperty.Value - 1.0f) * cooldownUpgadeMultiplier;
+        }
     }
 
     public override void PerformMainAbility()
@@ -60,13 +65,20 @@ public class MeleeWeapon : Weapon
     // Added by Joe, adds player upgraded damage level to the base damage:
     public override float CalculateDamage()
     {
-        float baseDamage = base.CalculateDamage();
+        CustomFloatProperty upgradedDamagePoperty = item.GetCustomFloatPropertyWithName("damage");
+        
+        if(upgradedDamagePoperty != null)
+        {
+            // Get the customised damage value, subtracting 1 because the base (non-upgraded) value is 1.0f
+            float damageUpgrade = (upgradedDamagePoperty.Value - 1.0f);
 
-        // Get the customised damage value, subtracting 1 because the base (non-upgraded) value is 1.0f
-        float damageUpgrade = (item.GetCustomFloatPropertyWithName("damage").Value - 1.0f);
-
-        // Return the modified damage value, multiplying by damageUpgadeMultiplier
-        //   so the amount of damage added for each upgrade level can be balanced
-        return baseDamage + damageUpgrade * damageUpgadeMultiplier;
+            // Return the modified damage value, multiplying by damageUpgadeMultiplier
+            //   so the amount of damage added for each upgrade level can be balanced
+            return base.CalculateDamage() + damageUpgrade * damageUpgadeMultiplier;
+        }
+        else
+        {
+            return base.CalculateDamage();
+        }
     }
 }
