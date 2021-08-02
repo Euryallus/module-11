@@ -22,8 +22,15 @@ MonoBehaviour:
   m_heldItemGameObject: {fileID: 4898281670870417890, guid: 0314f964f9bf1f246954c63a79bf37d7, type: 3}
   m_canThrowAway: 1
   m_canDrop: 1
-  m_customisable: 0
-  m_currencyItemId: 
-  m_currencyItemQuantity: 0
-  m_customFloatProperties: []
+  m_customisable: 1
+  m_currencyItemId: shinyThing
+  m_currencyItemQuantity: 2
+  m_customFloatProperties:
+  - Name: damage
+    UIName: Attack damage
+    Value: 1
+    UpgradeIncrease: 1
+    MinValue: 1
+    MaxValue: 2
+    CurrencyIncrease: 3
   m_customStringProperties: []
