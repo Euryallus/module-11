@@ -87,14 +87,14 @@ public class UIPanel : MonoBehaviour
         showing = false;
     }
 
-    public static bool AnyBlockingPanelShowing()
+    public static bool AnyBlockingPanelShowing(string ignorePanelName = "")
     {
         // Returns true if any UIPanels where isBlockingPanel = true are currently being shown
 
         // Loop through all UIPanels
         for (int i = 0; i < uiPanels.Count; i++)
         {
-            if(uiPanels[i].showing && uiPanels[i].isBlockingPanel)
+            if(uiPanels[i].showing && uiPanels[i].isBlockingPanel && uiPanels[i].gameObject.name != ignorePanelName)
             {
                 // Found a blocking panel that is showing
 
