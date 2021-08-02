@@ -64,7 +64,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 16247
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -212,6 +212,9 @@ MonoBehaviour:
   gliderSensitivity: 0.5
   gliderTiltAmount: 0.15
   gliderOpenDistanceFromGround: 3
+  benchmarkTimeInAirDamage: 1
+  fallDamageMod: 0.1
+  timeFalling: 0
   glideVelocity: {x: 0, y: 0}
   gliderModel: {fileID: 18033793}
   currentMovementState: 0
@@ -442,6 +445,7 @@ MonoBehaviour:
   chargeSound: {fileID: 0}
   chargeEndSound: {fileID: 0}
   abilityTriggerSound: {fileID: 0}
+  objectPlacementMat: {fileID: 2100000, guid: ad8dd7b432e6aef47a43497c87895dd1, type: 2}
 --- !u!136 &438708729
 CapsuleCollider:
   m_ObjectHideFlags: 0

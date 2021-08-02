@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GrabAbility : PlayerAbility
 {
+    // Hugo added
+    public Material objectPlacementMat;
     protected override void FindUIIndicator()
     {
         uiIndicator = GameObject.FindGameObjectWithTag("GrabIndicator").GetComponent<AbilityIndicator>();

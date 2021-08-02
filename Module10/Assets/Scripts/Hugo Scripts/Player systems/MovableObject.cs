@@ -28,7 +28,10 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     [Header("Object type (if is large, can only be held w/ upgraded Grab)")]
     [SerializeField] private bool isLargeObject = false;
 
+    private GameObject player;
+
     private bool canPickUp;
+    private Material originalMat;
 
     private Vector3 startPosition; // The position of the object on scene load, used to generate a unique position id
 
@@ -54,6 +57,9 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         rb.isKinematic = true;
 
         defaultTooltipNameText = tooltipNameText;
+
+        originalMat = gameObject.GetComponent<MeshRenderer>().material;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     protected override void OnDestroy()
@@ -136,6 +142,9 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
             transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;
 
+
+            gameObject.GetComponent<MeshRenderer>().material = player.GetComponent<GrabAbility>().objectPlacementMat;
+
             joint = gameObject.AddComponent<SpringJoint>();
             joint.spring = jointSpring;
             joint.damper = jointDamper;
@@ -204,6 +213,8 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         Destroy(joint);
         isHeld = false;
         rb.useGravity = true;
+
+        gameObject.GetComponent<MeshRenderer>().material = originalMat;
 
         // Added by Joe
         // Move the GameObject back to the active scene. Since it was made a child of the player when picked up,
