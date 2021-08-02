@@ -140,16 +140,19 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
     {
         // Alters how much of the cover image is shown (cover image uses a vertical fill)
 
-        if(value == 0.0f)
+        if(coverImage != null)
         {
-            // Showing none of the cover image, hide its GameObject
-            coverImage.gameObject.SetActive(false);
-        }
-        else
-        {
-            // Show a certain amount of the image based on the given value
-            coverImage.gameObject.SetActive(true);
-            coverImage.fillAmount = value;
+            if (value == 0.0f)
+            {
+                // Showing none of the cover image, hide its GameObject
+                coverImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Show a certain amount of the image based on the given value
+                coverImage.gameObject.SetActive(true);
+                coverImage.fillAmount = value;
+            }
         }
     }
 

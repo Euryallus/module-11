@@ -132,8 +132,9 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
             cinematicsCanvas.SetupVideoPlayer(unlockVideoClip);
         }
 
-        // Snap the player to the respawn position in case they are stood in the fire
+        // Snap the player to the respawn position/rotation in case they are stood in the fire or elsewhere
         playerMovement.gameObject.transform.position = respawnTransform.position + Vector3.up;
+        playerMovement.gameObject.transform.rotation = respawnTransform.rotation;
     }
 
     // Called during the fire lighting cutscene by an animation event
