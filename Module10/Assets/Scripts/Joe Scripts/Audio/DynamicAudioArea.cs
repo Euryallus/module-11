@@ -277,8 +277,6 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     public void DeactivateAudioArea()
     {
-        Debug.LogError("DeactivateAudioArea: " + gameObject.name);
-
         // Deactivate this area and fade its music out
 
         if(AudioManager.Instance.ActiveDynamicAudioAreas.Contains(this))
