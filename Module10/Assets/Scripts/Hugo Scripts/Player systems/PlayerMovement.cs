@@ -73,8 +73,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject gliderModel;
 
     private bool hasGlider = false;
+    private bool onPlatform = false;
 
     public CharacterController Controller { get { return controller; } }
+    public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
 
     public enum MovementStates      // Possible states player can be in when moving
     {

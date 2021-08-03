@@ -32,23 +32,24 @@ public abstract class InteractableObject : MonoBehaviour
 
     #endregion
 
-    private bool        mouseOver;                      // Whether the mouse is currently over the object (at any distance)
-    private bool        hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
-    private float       hoverTimer;                     // How many seconds the player has been hovering over the object
+    private bool            mouseOver;                      // Whether the mouse is currently over the object (at any distance)
+    private bool            hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
+    private float           hoverTimer;                     // How many seconds the player has been hovering over the object
 
-    private GameObject  playerGameObject;               // Player GameObject used to check for distance from the object
-    private Camera      mainPlayerCamera;               // The player camera for calculating the position of the tooltip in screen space
+    private GameObject      playerGameObject;               // Player GameObject used to check for distance from the object
+    private PlayerMovement  playerMovement;
+    private Camera          mainPlayerCamera;               // The player camera for calculating the position of the tooltip in screen space
 
-    private Transform   canvasTransform;                // Canvas transform used as a parent for the UI tooltip
-    private GameObject  interactTooltip;                // The instantiated interact tooltip, null if not active
-    private Vector3     worldInteractTooltipOffset;     // interactTooltipOffset converted to world space
+    private Transform       canvasTransform;                // Canvas transform used as a parent for the UI tooltip
+    private GameObject      interactTooltip;                // The instantiated interact tooltip, null if not active
+    private Vector3         worldInteractTooltipOffset;     // interactTooltipOffset converted to world space
 
-    protected bool      canInteract = true;             // Whether this object can be interacted with
-    protected bool      enableTooltip = true;           // Whether the interaction tooltip is enabled (when canInteract = true)
-    protected bool      showPressETooltipText = true;   // Whether the 'Press E to interact' should be shown on the tooltip
-    protected bool      overrideTooltipBehaviour;       // Whether the default tooltip behaviour (show on hover after InteractPopupDelay) is used
+    protected bool          canInteract = true;             // Whether this object can be interacted with
+    protected bool          enableTooltip = true;           // Whether the interaction tooltip is enabled (when canInteract = true)
+    protected bool          showPressETooltipText = true;   // Whether the 'Press E to interact' should be shown on the tooltip
+    protected bool          overrideTooltipBehaviour;       // Whether the default tooltip behaviour (show on hover after InteractPopupDelay) is used
 
-    private const float InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown by default
+    private const float     InteractPopupDelay = 0.3f;      // The amount of time the player has to hover over the object before interactTooltip is shown by default
 
 
     protected virtual void Start()
@@ -64,6 +65,7 @@ public abstract class InteractableObject : MonoBehaviour
         if(playerGameObject == null)
         {
             playerGameObject = GameObject.FindGameObjectWithTag("Player");
+            playerMovement = playerGameObject.GetComponent<PlayerMovement>();
         }
 
         if(mainPlayerCamera == null)
@@ -85,7 +87,7 @@ public abstract class InteractableObject : MonoBehaviour
             if (hoveringInRange)
             {
                 //  Ensure no input field is selected to prevent unintended behaviour when pressing E while typing
-                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
+                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas && !playerMovement.OnPlatform)
                 {
                     // The player has pressed E while hovering over the object, interact with it
                     Interact();

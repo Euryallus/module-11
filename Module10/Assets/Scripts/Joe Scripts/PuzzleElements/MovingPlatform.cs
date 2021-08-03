@@ -214,6 +214,8 @@ public class MovingPlatform : MonoBehaviour
 
             // (autoSyncTransforms now always on) autoSyncTransforms prevents the player from sliding off the platform
             //Physics.autoSyncTransforms = true;
+
+            other.gameObject.GetComponent<PlayerMovement>().OnPlatform = true;
         }
     }
 
@@ -247,6 +249,8 @@ public class MovingPlatform : MonoBehaviour
 
             // Restore the player's original parent transform
             other.transform.SetParent(playerReturnToTransform);
+
+            other.gameObject.GetComponent<PlayerMovement>().OnPlatform = false;
 
             DontDestroyOnLoad(other.gameObject);
         }
