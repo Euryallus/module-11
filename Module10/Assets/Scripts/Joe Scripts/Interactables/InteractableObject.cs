@@ -33,7 +33,7 @@ public abstract class InteractableObject : MonoBehaviour
     #endregion
 
     private bool            mouseOver;                      // Whether the mouse is currently over the object (at any distance)
-    private bool            hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
+    protected bool          hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
     private float           hoverTimer;                     // How many seconds the player has been hovering over the object
 
     private GameObject      playerGameObject;               // Player GameObject used to check for distance from the object

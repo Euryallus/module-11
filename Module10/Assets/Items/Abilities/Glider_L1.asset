@@ -18,7 +18,7 @@ MonoBehaviour:
   m_uiDescription: Glide through the air.
   m_stackSize: 1
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: 311aac3f555b99143bab862523c3c01b, type: 3}
+  m_sprite: {fileID: 21300000, guid: 58375ed477ac26d48a4e52928faf3ccb, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
   m_canDrop: 0

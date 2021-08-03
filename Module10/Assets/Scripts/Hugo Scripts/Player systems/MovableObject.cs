@@ -32,6 +32,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
     private bool canPickUp;
     private Material originalMat;
+    private GrabAbility grabAbility;
 
     private Vector3 startPosition; // The position of the object on scene load, used to generate a unique position id
 
@@ -94,10 +95,24 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
         UpdatePickUpStatus();
 
-        // Don't show an outline on hover if the object cannot be picked up
-        if(!canPickUp)
+        if(canPickUp)
         {
+            grabAbility.SetCooldownAmount(1.0f);
+        }
+        else
+        {
+            // Don't show an outline on hover if the object cannot be picked up
             outline.enabled = false;
+        }
+    }
+
+    public override void EndHoverInRange()
+    {
+        base.EndHoverInRange();
+
+        if(!isHeld)
+        {
+            grabAbility.SetCooldownAmount(0.0f);
         }
     }
 
@@ -110,6 +125,11 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             {
                 hand = playerHandGameObj.transform;
             }
+        }
+
+        if(grabAbility == null)
+        {
+            grabAbility = PlayerInstance.ActivePlayer.gameObject.GetComponent<GrabAbility>();
         }
 
         if (isHeld && Input.GetKeyDown(KeyCode.Mouse0))
@@ -162,6 +182,8 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             isHeld = true;
 
             ShowCarryingTooltip();
+
+            grabAbility.SetChargeAmount(1.0f);
         }
     }
 
@@ -215,6 +237,13 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         rb.useGravity = true;
 
         gameObject.GetComponent<MeshRenderer>().material = originalMat;
+        
+        grabAbility.SetChargeAmount(0.0f);
+
+        if(hoveringInRange)
+        {
+            grabAbility.SetCooldownAmount(1.0f);
+        }
 
         // Added by Joe
         // Move the GameObject back to the active scene. Since it was made a child of the player when picked up,

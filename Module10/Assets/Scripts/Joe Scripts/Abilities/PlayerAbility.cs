@@ -325,13 +325,17 @@ public abstract class PlayerAbility : MonoBehaviour
         }
     }
 
-    private void SetChargeAmount(float chargeAmount)
+    public void SetChargeAmount(float chargeAmount)
     {
+        if(this is GliderAbility)
+        {
+            Debug.Log(name + " CHAGE AMOUNT: " + chargeAmount);
+        }
         charge = chargeAmount;
         uiIndicator.SetChargeAmount(chargeAmount);
     }
 
-    private void SetCooldownAmount(float cooldownAmount)
+    public void SetCooldownAmount(float cooldownAmount)
     {
         cooldown = cooldownAmount;
         uiIndicator.SetCooldownAmount(cooldownAmount);

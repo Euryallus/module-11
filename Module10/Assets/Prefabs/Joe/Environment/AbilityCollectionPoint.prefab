@@ -175,6 +175,7 @@ MonoBehaviour:
   - {r: 0, g: 9.537255, b: 23.968628, a: 0.050980393}
   - {r: 9.035295, g: 0, b: 28.109804, a: 0.050980393}
   - {r: 0, g: 24.84706, b: 3.3882353, a: 0.050980393}
+  - {r: 0, g: 0.2509804, b: 47.937256, a: 0.050980393}
   abilityGlowMaterial: {fileID: 2100000, guid: 09032c75a366c294081e484d94af0438, type: 2}
   abilityGlowMeshRenderer: {fileID: 2020441730708123070}
   abilityIconSprites:
@@ -182,6 +183,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0007a6d581394b943abf6019205e0562, type: 3}
   - {fileID: 21300000, guid: 5a74b2266cdeba342ae5198c21f83afe, type: 3}
   - {fileID: 21300000, guid: 05f73028d18a2d348acdad5a83e92756, type: 3}
+  - {fileID: 21300000, guid: cf4162ab7bde3f94f8e026ee9889df1e, type: 3}
   iconSpriteRenderer: {fileID: 8792900890613643608}
 --- !u!1 &5475663015621324080
 GameObject:

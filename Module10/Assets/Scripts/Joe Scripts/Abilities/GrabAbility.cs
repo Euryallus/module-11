@@ -21,9 +21,6 @@ public class GrabAbility : PlayerAbility
     {
         base.SetupUIIndicator();
 
-        if(uiIndicator != null)
-        {
-            uiIndicator.HideKeyPrompt();
-        }
+        SetCooldownAmount(0.0f);
     }
 }

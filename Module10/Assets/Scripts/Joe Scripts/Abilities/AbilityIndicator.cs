@@ -19,6 +19,15 @@ public class AbilityIndicator : MonoBehaviour
     public void SetCooldownAmount(float cooldown)
     {
         cooldownImage.fillAmount = cooldown;
+
+        if(cooldown >= 1.0f && chargeImage.fillAmount == 0.0f)
+        {
+            keyPromptBackground.SetActive(true);
+        }
+        else
+        {
+            keyPromptBackground.SetActive(false);
+        }
     }
 
     public void SetKeyPromptText(string text)
@@ -29,11 +38,6 @@ public class AbilityIndicator : MonoBehaviour
     public void SetUpgradeLevel(float currentLevel, float maxLevel)
     {
         upgradeSlider.value = currentLevel / maxLevel;
-    }
-
-    public void HideKeyPrompt()
-    {
-        keyPromptBackground.SetActive(false);
     }
 
     public void HideUpgradeSlider()

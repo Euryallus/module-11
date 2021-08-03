@@ -72,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
     private bool canGlide   = false;    // Flags if player is able to glide (if > [gliderOpenDistanceFromGround] meters off ground)
     [SerializeField] private GameObject gliderModel;
 
-    private bool hasGlider = false;
+    private GliderAbility gliderAbility;
+
     private bool onPlatform = false;
 
     public CharacterController Controller { get { return controller; } }
@@ -129,8 +130,9 @@ public class PlayerMovement : MonoBehaviour
         postProcessing.profile.TryGet<Vignette>(out v);
         postProcessing.profile.TryGet<DepthOfField>(out dof);
 
-        gliderModel.SetActive(false);
+        gliderAbility = gameObject.GetComponent<GliderAbility>();
 
+        HideGlider();
     }
 
     void Update()
@@ -336,7 +338,7 @@ public class PlayerMovement : MonoBehaviour
                         if (controller.isGrounded)
                         {
                             currentMovementState = MovementStates.walk;
-                            gliderModel.SetActive(false);
+                            HideGlider();
                             glideVelocity = new Vector2(0, 0);
                             break;
                         }
@@ -478,10 +480,10 @@ public class PlayerMovement : MonoBehaviour
                         AudioManager.Instance.PlaySoundEffect2D("jump");
                     }
                     // If player is already in the air, isn't already gliding but is far enough off ground to glide, start gliding
-                    else if (currentMovementState != MovementStates.glide && canGlide)
+                    else if (currentMovementState != MovementStates.glide && canGlide && PlayerAbility.AbilityIsUnlocked(PlayerAbilityType.Glider))
                     {
                         currentMovementState = MovementStates.glide;
-                        gliderModel.SetActive(true);
+                        ShowGlider();
 
                         glideVelocity = new Vector2(inputX, inputY).normalized;
 
@@ -490,10 +492,18 @@ public class PlayerMovement : MonoBehaviour
                     // If player is already gliding & hits space again, close glider
                     else if (currentMovementState == MovementStates.glide)
                     {
-                        gliderModel.SetActive(false);
+                        HideGlider();
                         currentMovementState = MovementStates.walk;
                     }
+                }
 
+                if(canGlide)
+                {
+                    gliderAbility.SetCooldownAmount(1.0f);
+                }
+                else
+                {
+                    gliderAbility.SetCooldownAmount(0.0f);
                 }
 
                 // Normalises movement if mag. is over 1
@@ -516,12 +526,28 @@ public class PlayerMovement : MonoBehaviour
         CalculateFallDamage();
     }
 
+    private void ShowGlider()
+    {
+        Debug.Log("SHOW G");
+        gliderModel.SetActive(true);
+        gliderAbility.SetChargeAmount(1.0f);
+    }
+
+    private void HideGlider()
+    {
+        Debug.Log("HIDE G");
+        gliderModel.SetActive(false);
+        gliderAbility.SetChargeAmount(0.0f);
+    }
+
     // Added by Joe, used when loading into a scene to reset certain movement variables
     public void ResetMovementState()
     {
         inWater         = false;
         velocityY       = 0.0f;
         glideVelocity   = Vector2.zero;
+
+        HideGlider();
 
         currentMovementState = MovementStates.walk;
     }
@@ -597,7 +623,8 @@ public class PlayerMovement : MonoBehaviour
     // Flags player as having interacted with a ladder
     public void InteractWithLadder(Vector3 snapPos)
     {
-        gliderModel.SetActive(false);
+        HideGlider();
+
         currentMovementState = currentMovementState == MovementStates.ladder ? MovementStates.walk : MovementStates.ladder;
 
         if(currentMovementState == MovementStates.ladder)

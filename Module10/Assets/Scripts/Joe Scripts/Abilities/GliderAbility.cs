@@ -13,14 +13,4 @@ public class GliderAbility : PlayerAbility
     {
         return PlayerAbilityType.Glider;
     }
-
-    protected override void SetupUIIndicator()
-    {
-        base.SetupUIIndicator();
-
-        if (uiIndicator != null)
-        {
-            uiIndicator.HideKeyPrompt();
-        }
-    }
 }
