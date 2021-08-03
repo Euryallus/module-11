@@ -127,7 +127,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 250}
+  m_SizeDelta: {x: 0, y: 241}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8221509448078208287
 CanvasRenderer:
@@ -685,8 +685,6 @@ MonoBehaviour:
   requiredItemsContent: {fileID: 4766280320164534471}
   craftButton: {fileID: 1419857477519273695}
   craftButtonText: {fileID: 1419857476261806707}
-  validCraftColour: {r: 0, g: 0.81960785, b: 0.31764707, a: 1}
-  invalidCraftColour: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
 --- !u!225 &2990183588200366110
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1465,15 +1463,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.b
-      value: 0.47058827
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.g
-      value: 0.47058827
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961692, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.r
-      value: 0.47058827
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1505,27 +1503,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: buttonColour.b
-      value: 0.5882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: buttonColour.g
-      value: 0.5882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: buttonColour.r
-      value: 0.5882353
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.b
+      value: 0.7686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.g
+      value: 0.7686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.r
+      value: 0.76470596
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078355, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.b
-      value: 0.5882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078355, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.g
-      value: 0.5882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078355, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Color.r
-      value: 0.5882353
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218721166667, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_Pivot.x
@@ -1628,6 +1638,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 3128c565e5ff9d54b855a88c017e659c, type: 2}
     - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.18867922
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.12971692
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.047169805
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_fontSizeMax
       value: 20
       objectReference: {fileID: 0}
@@ -1650,6 +1672,10 @@ PrefabInstance:
     - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_enableAutoSizing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353219039615282, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4281344268
       objectReference: {fileID: 0}
     - target: {fileID: 3694353219039615283, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_AnchorMax.y

@@ -247,6 +247,8 @@ public class MovingPlatform : MonoBehaviour
 
             // Restore the player's original parent transform
             other.transform.SetParent(playerReturnToTransform);
+
+            DontDestroyOnLoad(other.gameObject);
         }
         else if (other.CompareTag("MovableObj"))
         {

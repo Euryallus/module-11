@@ -28,9 +28,6 @@ public class CraftingPanel : UIPanel
     [SerializeField] private PressEffectButton  craftButton;                // Button that crafts the selected item when clicked
     [SerializeField] private TextMeshProUGUI    craftButtonText;            // Text displayed on the above button
 
-    [SerializeField] private Color              validCraftColour;           // Colour to use for UI when an item can be crafted
-    [SerializeField] private Color              invalidCraftColour;         // Colour to use for UI when an item cannot be crafted
-
     #endregion
 
     #region Properties
@@ -152,16 +149,6 @@ public class CraftingPanel : UIPanel
 
             // Make the button interactable only if the player has all the required items
             craftButton.SetInteractable(requiredItemsAreInInventory);
-
-            // Change the button colour depending on if the player has all the required items
-            if (requiredItemsAreInInventory)
-            {
-                craftButton.SetButtonColour(validCraftColour);
-            }
-            else
-            {
-                craftButton.SetButtonColour(invalidCraftColour);
-            }
         }
     }
 

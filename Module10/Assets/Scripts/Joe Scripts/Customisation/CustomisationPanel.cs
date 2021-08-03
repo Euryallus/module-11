@@ -69,6 +69,8 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
         itemManager = ItemManager.Instance;
 
+        resultSlot.SlotUI.SetCoverFillAmount(0.0f);
+
         ShowDefaultInfoText();
     }
 

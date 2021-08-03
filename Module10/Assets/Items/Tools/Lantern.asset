@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Lantern
   m_EditorClassIdentifier: 
   m_id: lantern
+  m_specialSlotId: 
   m_uiName: Lantern
   m_uiDescription: 
   m_stackSize: 1
   m_weight: 2
   m_sprite: {fileID: 21300000, guid: 401e7970dc583ea45bb494f1ec0f5948, type: 3}
   m_heldItemGameObject: {fileID: 5895334839440877198, guid: 2968e11b7e8433c48b06f29a24c478bb, type: 3}
-  m_customisable: 0
-  m_currencyItemId: 
-  m_currencyItemQuantity: 0
+  m_canThrowAway: 1
+  m_canDrop: 1
+  m_customisable: 1
+  m_currencyItemId: shinyThing
+  m_currencyItemQuantity: 1
   m_customFloatProperties: []
   m_customStringProperties: []

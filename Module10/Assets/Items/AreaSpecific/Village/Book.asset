@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_id: book1
   m_specialSlotId: 
-  m_uiName: A book?
+  m_uiName: A Book?
   m_uiDescription: Why did he ask for this?...
   m_stackSize: 1
   m_weight: 0

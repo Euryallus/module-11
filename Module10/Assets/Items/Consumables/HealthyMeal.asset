@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: HealthyMeal
   m_EditorClassIdentifier: 
   m_id: nuggets
-  m_uiName: 20 Chicken McNuggets
-  m_uiDescription: 
+  m_specialSlotId: 
+  m_uiName: Small Meal
+  m_uiDescription: Nutritious.
   m_stackSize: 4
-  m_weight: 0.1
+  m_weight: 0
   m_sprite: {fileID: 21300000, guid: c73cf6d508d4aa344a6a5eef387152d9, type: 3}
   m_heldItemGameObject: {fileID: 2978869022576664170, guid: 565e60afd9fc7504290b9a5d5514f0cf, type: 3}
+  m_canThrowAway: 1
+  m_canDrop: 1
   m_customisable: 0
   m_currencyItemId: 
   m_currencyItemQuantity: 0

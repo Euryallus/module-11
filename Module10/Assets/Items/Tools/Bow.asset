@@ -21,8 +21,9 @@ MonoBehaviour:
   m_sprite: {fileID: 21300000, guid: 0dd9f65799cbd66429c46a31cdf15d97, type: 3}
   m_heldItemGameObject: {fileID: 6169693249474336889, guid: 926dec144e299124581e1f69d5cfc859, type: 3}
   m_canThrowAway: 1
+  m_canDrop: 1
   m_customisable: 1
   m_currencyItemId: shinyThing
-  m_currencyItemQuantity: 4
+  m_currencyItemQuantity: 1
   m_customFloatProperties: []
   m_customStringProperties: []

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_recipeItems:
   - Item: {fileID: 11400000, guid: b005af4b3f26f2f4c8fe8da34669eba5, type: 2}
-    Quantity: 10
+    Quantity: 3
+  - Item: {fileID: 11400000, guid: 7295093da02bb684092433d4c5181ac3, type: 2}
+    Quantity: 1
   m_resultItem:
     Item: {fileID: 11400000, guid: 4fac35ef5ec53a0428ddcec516a37518, type: 2}
     Quantity: 1
