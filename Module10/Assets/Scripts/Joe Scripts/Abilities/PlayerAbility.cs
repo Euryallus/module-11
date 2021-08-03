@@ -327,10 +327,6 @@ public abstract class PlayerAbility : MonoBehaviour
 
     public void SetChargeAmount(float chargeAmount)
     {
-        if(this is GliderAbility)
-        {
-            Debug.Log(name + " CHAGE AMOUNT: " + chargeAmount);
-        }
         charge = chargeAmount;
         uiIndicator.SetChargeAmount(chargeAmount);
     }

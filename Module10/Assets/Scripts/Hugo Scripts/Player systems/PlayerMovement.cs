@@ -127,8 +127,11 @@ public class PlayerMovement : MonoBehaviour
         glideVelocity = new Vector2(0, 0);
 
         // Attempts to gets post processing effects (water effect)
-        postProcessing.profile.TryGet<Vignette>(out v);
-        postProcessing.profile.TryGet<DepthOfField>(out dof);
+        if(postProcessing != null)
+        {
+            postProcessing.profile.TryGet<Vignette>(out v);
+            postProcessing.profile.TryGet<DepthOfField>(out dof);
+        }
 
         gliderAbility = gameObject.GetComponent<GliderAbility>();
 
@@ -528,14 +531,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void ShowGlider()
     {
-        Debug.Log("SHOW G");
         gliderModel.SetActive(true);
         gliderAbility.SetChargeAmount(1.0f);
     }
 
     private void HideGlider()
     {
-        Debug.Log("HIDE G");
         gliderModel.SetActive(false);
         gliderAbility.SetChargeAmount(0.0f);
     }

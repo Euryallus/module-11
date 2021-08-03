@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 619647011095839926}
   - component: {fileID: 974219338676725152}
   - component: {fileID: 5471601986673665725}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TriggerArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,6 +251,7 @@ MonoBehaviour:
   cameraShakeMultiplier: 0
   mode: 1
   continuousInverval: 2
+  continuousStartDelay: 0
   hitTriggers:
   - {fileID: 1653915479}
   areaTrigger: {fileID: 974219338676725152}
