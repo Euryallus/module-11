@@ -54,7 +54,9 @@ public class ObjectiveStartTrigger : InteractableWithOutline, IPersistentSceneOb
 
     public void OnSceneLoadSetup(SaveData saveData)
     {
-        SetTriggerEnabled(saveData.GetData<bool>(GetUniquePositionId() + "_triggerEnabled"));
+        bool triggerEnabled = saveData.GetData<bool>(GetUniquePositionId() + "_triggerEnabled");
+
+        SetTriggerEnabled(triggerEnabled);
     }
 
     public void OnSceneLoadConfigure(SaveData saveData) { }

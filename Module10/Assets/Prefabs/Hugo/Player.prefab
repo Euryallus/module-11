@@ -139,8 +139,8 @@ GameObject:
   - component: {fileID: 6077804760642909401}
   - component: {fileID: 6405603233027840712}
   - component: {fileID: 918040319109814595}
-  - component: {fileID: 438708729}
   - component: {fileID: 1410683020918178434}
+  - component: {fileID: 4196478871933432847}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -447,20 +447,6 @@ MonoBehaviour:
   chargeEndSound: {fileID: 0}
   abilityTriggerSound: {fileID: 0}
   objectPlacementMat: {fileID: 2100000, guid: ad8dd7b432e6aef47a43497c87895dd1, type: 2}
---- !u!136 &438708729
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3399754590433321695}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1410683020918178434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +463,20 @@ MonoBehaviour:
   cutsceneCamera: {fileID: 0}
   cutsceneAnimator: {fileID: 0}
   abilityUnlockPanelPrefab: {fileID: 7484088228009242376, guid: 92f702111ce886e4397e23758a92dc9b, type: 3}
+--- !u!136 &4196478871933432847
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399754590433321695}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3399754590781465955
 GameObject:
   m_ObjectHideFlags: 0

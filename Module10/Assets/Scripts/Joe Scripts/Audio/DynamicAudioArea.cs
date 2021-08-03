@@ -187,7 +187,6 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     private void OnTriggerEnter(Collider other)
     {
         // Only accept trigger events once loading is done and the player has been moved to the correct location
-
         if (!SaveLoadManager.Instance.LoadingSceneData)
         {
             if (other.gameObject.CompareTag("Player"))
@@ -247,7 +246,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
                 {
                     DynamicAudioArea area = currentActiveAreas[i];
 
-                    if (area != null)
+                    if (area != null && area != this)
                     {
                         if (fadeOutOtherLayers || area.dynamicAudioLayer == dynamicAudioLayer)
                         {
@@ -263,8 +262,11 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
                 }
             }
 
-            // This is now the current/most recent dynamic audio area
-            currentActiveAreas.Add(this);
+            if(!currentActiveAreas.Contains(this))
+            {
+                // This is now the current/most recent dynamic audio area
+                currentActiveAreas.Add(this);
+            }
 
             // Fade music for this are in
             FadeIn();
@@ -276,6 +278,11 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     public void DeactivateAudioArea()
     {
         // Deactivate this area and fade its music out
+
+        if(AudioManager.Instance.ActiveDynamicAudioAreas.Contains(this))
+        {
+            AudioManager.Instance.ActiveDynamicAudioAreas.Remove(this);
+        }
 
         FadeOut();
 

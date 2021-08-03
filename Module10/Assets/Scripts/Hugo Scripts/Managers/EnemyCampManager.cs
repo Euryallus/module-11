@@ -44,9 +44,7 @@ public class EnemyCampManager : MonoBehaviour
                     {
                         spawnedEnemies.RemoveAt(i);
                         i--;
-                        break;
                     }
-
                     else if (enemy.gameObject.GetComponent<EnemyHealth>().alive)
                     {
                         left++;
