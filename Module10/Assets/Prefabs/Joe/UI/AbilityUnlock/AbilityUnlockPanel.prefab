@@ -929,6 +929,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0007a6d581394b943abf6019205e0562, type: 3}
   - {fileID: 21300000, guid: 5a74b2266cdeba342ae5198c21f83afe, type: 3}
   - {fileID: 21300000, guid: 05f73028d18a2d348acdad5a83e92756, type: 3}
+  - {fileID: 21300000, guid: 311aac3f555b99143bab862523c3c01b, type: 3}
   propertyTextParent: {fileID: 247776837318028697}
   propertyTextPrefab: {fileID: 1883552059671967305, guid: 340c555e62bb878479df1946b337d1f4, type: 3}
 --- !u!1 &8379339311463682353

@@ -83,13 +83,16 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
 
     public void OnInteract()
     {
-        LightFire();
-
-        StartCutscene();
-
-        if(!string.IsNullOrEmpty(villagePortalId))
+        if(!playerMovement.OnPlatform)
         {
-            PortalsSave.Instance.SetPortalShowing(villagePortalId, true);
+            LightFire();
+
+            StartCutscene();
+
+            if (!string.IsNullOrEmpty(villagePortalId))
+            {
+                PortalsSave.Instance.SetPortalShowing(villagePortalId, true);
+            }
         }
     }
 

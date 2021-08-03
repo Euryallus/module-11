@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 6077804760642909401}
   - component: {fileID: 6405603233027840712}
   - component: {fileID: 918040319109814595}
+  - component: {fileID: 4056308491555121780}
   - component: {fileID: 1410683020918178434}
   - component: {fileID: 4196478871933432847}
   m_Layer: 7
@@ -447,6 +448,28 @@ MonoBehaviour:
   chargeEndSound: {fileID: 0}
   abilityTriggerSound: {fileID: 0}
   objectPlacementMat: {fileID: 2100000, guid: ad8dd7b432e6aef47a43497c87895dd1, type: 2}
+--- !u!114 &4056308491555121780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399754590433321695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1669ffd63646946469dd5d0c0c1bf747, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerKey: 32
+  useDefaultBehaviour: 0
+  maxUpgradeLevel: 0
+  chargeTime: 0
+  cooldownTime: 0
+  initialFoodDecrease: 0
+  continuousFoodDecrease: 0
+  chargeSound: {fileID: 0}
+  chargeEndSound: {fileID: 0}
+  abilityTriggerSound: {fileID: 0}
 --- !u!114 &1410683020918178434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1763,13 +1786,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
---- !u!1 &18033793 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7076069901910187665, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
-  m_PrefabInstance: {fileID: 7076069901892563472}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &18033806 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7076069901910187678, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
+  m_PrefabInstance: {fileID: 7076069901892563472}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &18033793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7076069901910187665, guid: ea5dd9c351b82a640aa3e16f7ca6f146, type: 3}
   m_PrefabInstance: {fileID: 7076069901892563472}
   m_PrefabAsset: {fileID: 0}

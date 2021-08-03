@@ -37,7 +37,6 @@ public abstract class InteractableObject : MonoBehaviour
     private float           hoverTimer;                     // How many seconds the player has been hovering over the object
 
     private GameObject      playerGameObject;               // Player GameObject used to check for distance from the object
-    private PlayerMovement  playerMovement;
     private Camera          mainPlayerCamera;               // The player camera for calculating the position of the tooltip in screen space
 
     private Transform       canvasTransform;                // Canvas transform used as a parent for the UI tooltip
@@ -65,7 +64,6 @@ public abstract class InteractableObject : MonoBehaviour
         if(playerGameObject == null)
         {
             playerGameObject = GameObject.FindGameObjectWithTag("Player");
-            playerMovement = playerGameObject.GetComponent<PlayerMovement>();
         }
 
         if(mainPlayerCamera == null)
@@ -87,7 +85,7 @@ public abstract class InteractableObject : MonoBehaviour
             if (hoveringInRange)
             {
                 //  Ensure no input field is selected to prevent unintended behaviour when pressing E while typing
-                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas && !playerMovement.OnPlatform)
+                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
                 {
                     // The player has pressed E while hovering over the object, interact with it
                     Interact();

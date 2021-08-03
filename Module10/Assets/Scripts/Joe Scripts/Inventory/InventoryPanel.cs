@@ -62,6 +62,7 @@ public class InventoryPanel : UIPanel
     private ContainerSlot    FreezeAbilitySlot   { get { return abilitySlotsUI[1].Slot; } }
     private ContainerSlot    SlamAbilitySlot     { get { return abilitySlotsUI[2].Slot; } }
     private ContainerSlot    GrabAbilitySlot     { get { return abilitySlotsUI[3].Slot; } }
+    private ContainerSlot    GliderAbilitySlot   { get { return abilitySlotsUI[4].Slot; } }
 
     #endregion
 
@@ -156,6 +157,10 @@ public class InventoryPanel : UIPanel
                 case "grabAbility":
                     GrabAbilitySlot.ReplaceItemInSlot(item);
                     return true;
+
+                case "gliderAbility":
+                    GliderAbilitySlot.ReplaceItemInSlot(item);
+                    return true;
             }
 
             Debug.LogError("Trying to add item to inventory with unknown SpecialSlotId: " + item.UIName + ", " + item.SpecialSlotId);
@@ -200,6 +205,10 @@ public class InventoryPanel : UIPanel
                 break;
             case PlayerAbilityType.Grab:
                 abilitySlot = GrabAbilitySlot;
+                break;
+
+            case PlayerAbilityType.Glider:
+                abilitySlot = GliderAbilitySlot;
                 break;
         }
 

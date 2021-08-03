@@ -36,6 +36,7 @@ TagManager:
   - DefaultSpawnPoint
   - GrabIndicator
   - DeathTrigger
+  - GliderIndicator
   layers:
   - Default
   - TransparentFX

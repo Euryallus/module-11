@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7636474248557049916}
   - component: {fileID: 7716255618638194729}
   - component: {fileID: 8173533126178801627}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4815,7 +4815,7 @@ GameObject:
   - component: {fileID: 3286019070289703371}
   - component: {fileID: 1300046846930939584}
   - component: {fileID: 6416934347324222857}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10297,7 +10297,7 @@ GameObject:
   - component: {fileID: 8069915206502717162}
   - component: {fileID: 8069915206502717164}
   - component: {fileID: 8069915206502717163}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15233,7 +15233,7 @@ GameObject:
   - component: {fileID: 3566302862750853785}
   - component: {fileID: 1036824190510357482}
   - component: {fileID: 7223291989570626570}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

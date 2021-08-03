@@ -10,7 +10,9 @@ public enum PlayerAbilityType
 
     Slam_Levitate,  // Note: You'll see this ability referred to as 'slam' throughout the code as this was the original name,
                     //   but in-game the name is displayed as 'Levitate' for extra clarity on what the ability does
-    Grab
+    Grab,
+
+    Glider
 }
 
 public abstract class PlayerAbility : MonoBehaviour
@@ -64,7 +66,8 @@ public abstract class PlayerAbility : MonoBehaviour
         { PlayerAbilityType.Launch,          0 },
         { PlayerAbilityType.Freeze,          0 },
         { PlayerAbilityType.Slam_Levitate,   0 },
-        { PlayerAbilityType.Grab,            0 }
+        { PlayerAbilityType.Grab,            0 },
+        { PlayerAbilityType.Glider,          0 }
     };
 
     private static Dictionary<PlayerAbilityType, bool> abilityUnlockStatuses = new Dictionary<PlayerAbilityType, bool>()
@@ -72,7 +75,8 @@ public abstract class PlayerAbility : MonoBehaviour
         { PlayerAbilityType.Launch,          false },
         { PlayerAbilityType.Freeze,          false },
         { PlayerAbilityType.Slam_Levitate,   false },
-        { PlayerAbilityType.Grab,            false }
+        { PlayerAbilityType.Grab,            false },
+        { PlayerAbilityType.Glider,          false }
     };
 
     public static bool AbilityIsUnlocked(PlayerAbilityType abilityType)
