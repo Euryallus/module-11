@@ -26,7 +26,7 @@ MonoBehaviour:
     - m_item: {fileID: 11400000, guid: 4fac35ef5ec53a0428ddcec516a37518, type: 2}
       m_price: 2
   - m_uiName: Food
-    m_currencyItem: {fileID: 11400000, guid: b005af4b3f26f2f4c8fe8da34669eba5, type: 2}
+    m_currencyItem: {fileID: 11400000, guid: fdbddb5abb8574845b13811304314e46, type: 2}
     m_soldItems:
     - m_item: {fileID: 11400000, guid: 0d09b3c55fa7c90419d812ff7d752e3d, type: 2}
       m_price: 1

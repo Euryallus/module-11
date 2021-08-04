@@ -133,7 +133,12 @@ public abstract class InteractableObject : MonoBehaviour
 
     public Vector3 GetPopupScreenPos(Vector3 offset = default)
     {
-        return mainPlayerCamera.WorldToScreenPoint(transform.position + offset + worldInteractTooltipOffset);
+        if(mainPlayerCamera != null)
+        {
+            return mainPlayerCamera.WorldToScreenPoint(transform.position + offset + worldInteractTooltipOffset);
+        }
+
+        return new Vector3(0.0f, -10000.0f, 0.0f);
     }
 
     public Vector3 GetPopupWorldPos(Vector3 offset = default)

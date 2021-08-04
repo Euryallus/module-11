@@ -562,6 +562,9 @@ public class SaveLoadManager : MonoBehaviour
         // Scene data loading done
         Debug.Log(">>> Finished loading data for " + sceneToLoadName);
 
+        yield return null;
+        yield return null;
+
         loadingSceneData = false;
     }
 
