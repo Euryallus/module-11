@@ -73,6 +73,11 @@ public class PuzzleButton : InteractableObject
 
         // Ensure all connected doors are in the released button state by default
         ButtonReleasedEvents();
+
+        if(sequence != null)
+        {
+            SetToStandardColour();
+        }
     }
 
     protected override void Update()
@@ -111,7 +116,7 @@ public class PuzzleButton : InteractableObject
 
         buttonCollider.enabled = false;
 
-        buttonMeshRenderer.material.SetColor("_EmissionColor", pressedEmissionColour);
+        SetToPressedColour();
 
         for (int i = 0; i < connectedDoors.Length; i++)
         {
@@ -148,6 +153,11 @@ public class PuzzleButton : InteractableObject
         {
             sequence.ButtonInSequencePressed(this);
         }
+
+        if (!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            AudioManager.Instance.PlaySoundEffect3D("puzzleButtonOn", transform.position);
+        }
     }
 
     private void ButtonReleasedEvents()
@@ -156,7 +166,10 @@ public class PuzzleButton : InteractableObject
 
         buttonCollider.enabled = true;
 
-        buttonMeshRenderer.material.SetColor("_EmissionColor", standardEmissionColour);
+        if(sequence == null)
+        {
+            SetToStandardColour();
+        }
 
         for (int i = 0; i < connectedDoors.Length; i++)
         {
@@ -185,6 +198,26 @@ public class PuzzleButton : InteractableObject
                 platformData.Platform.Paused = false;
             }
         }
+
+        if(!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            AudioManager.Instance.PlaySoundEffect3D("puzzleButtonOff", transform.position);
+        }
+    }
+
+    public void SetToStandardColour()
+    {
+        buttonMeshRenderer.material.SetColor("_EmissionColor", standardEmissionColour);
+    }
+
+    public void SetToPressedColour()
+    {
+        buttonMeshRenderer.material.SetColor("_EmissionColor", pressedEmissionColour);
+    }
+
+    public void SetMaterialColour(Color colour)
+    {
+        buttonMeshRenderer.material.SetColor("_EmissionColor", colour);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4dcf7bbce7fb8304ba0c23453388c8d6, type: 3}
-  m_Name: Notification2
+  m_Name: SequenceWrong
   m_EditorClassIdentifier: 
   m_audioClips:
-  - {fileID: 8300000, guid: 6f1e7831e67c22e4aa211da975552393, type: 3}
-  m_id: notification2
+  - {fileID: 8300000, guid: 0d89154490b0c2147b21e11b724aaa9d, type: 3}
+  m_id: sequenceWrong
   m_volumeRange:
-    Min: 0.4
-    Max: 0.4
+    Min: 1
+    Max: 1
   m_pitchRange:
     Min: 1
     Max: 1

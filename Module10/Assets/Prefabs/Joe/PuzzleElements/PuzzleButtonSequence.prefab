@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 291a5cf03db95594e9a47794bc7b2791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  sequenceType: 0
   buttonsInSequence: []
+  connectedDoors: []
+  completeSequenceButtonColour: {r: 0, g: 11.984314, b: 0.1254902, a: 1}

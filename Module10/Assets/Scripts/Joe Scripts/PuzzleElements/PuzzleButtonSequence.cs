@@ -21,6 +21,9 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private List<PuzzleButton>  buttonsInSequence;     // All buttons that make up the sequence
     [SerializeField] private DoorPuzzleData[]    connectedDoors;        // Doors that will be opened/closed when the sequence is complete
 
+    [SerializeField] [ColorUsage(true, true)]
+    private Color completeSequenceButtonColour;
+
     #endregion
 
     private int     currentSequenceIndex = 0;   // Number of successful button presses
@@ -63,6 +66,8 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
 
         if (sequenceCompleted)
         {
+            currentSequenceIndex = buttonsInSequence.Count;
+
             // The sequence was completed, trigger complete events
             SequenceCompleteEvents();
         }
@@ -88,16 +93,13 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
                 // All buttons were pressed in order, sequence complete
                 sequenceCompleted = true;
 
-                // Completion sound
-                AudioManager.Instance.PlaySoundEffect2D("notification1");
-
                 // Trigger sequence complete events
                 SequenceCompleteEvents();
             }
             else
             {
                 // Correct button sound
-                AudioManager.Instance.PlaySoundEffect2D("coins");
+                AudioManager.Instance.PlaySoundEffect2D("notification2");
             }
         }
         else
@@ -105,9 +107,6 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
             // The wrong button was pressed, reset sequence
             sequenceCompleted = false;
             currentSequenceIndex = 0;
-
-            // Incorrect button sound
-            AudioManager.Instance.PlaySoundEffect2D("sealExplosion");
 
             // Trigger sequence failed events
             SequenceFailedEvents();
@@ -129,6 +128,17 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
                 doorData.Door.SetAsOpen(doorData.OpenInwards);
             }
         }
+
+        for (int i = 0; i < buttonsInSequence.Count; i++)
+        {
+            buttonsInSequence[i].SetMaterialColour(completeSequenceButtonColour);
+        }
+
+        if (!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            // Completion sound
+            AudioManager.Instance.PlaySoundEffect2D("sequenceComplete");
+        }
     }
 
     private void SequenceFailedEvents()
@@ -145,6 +155,17 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
             {
                 doorData.Door.SetAsClosed();
             }
+        }
+
+        for (int i = 0; i < buttonsInSequence.Count; i++)
+        {
+            buttonsInSequence[i].SetToStandardColour();
+        }
+
+        if(!SaveLoadManager.Instance.LoadingSceneData)
+        {
+            // Incorrect button sound
+            AudioManager.Instance.PlaySoundEffect2D("sequenceWrong");
         }
     }
 
