@@ -87,6 +87,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3dcf28fb9ad659d42a69f4676698dac8, type: 2}
   - {fileID: 11400000, guid: df05a4059919e7a499c95d32f924c834, type: 2}
   - {fileID: 11400000, guid: f01c7b15f37669e43a3786262288885f, type: 2}
+  - {fileID: 11400000, guid: aad6fb14ea1b4e0469b8bb10c8c97cf7, type: 2}
+  - {fileID: 11400000, guid: 5e2d2660c92b5ff4cbbeb3273ef7f3cb, type: 2}
+  - {fileID: 11400000, guid: a589843407f283d43b572b75cdd13c98, type: 2}
+  - {fileID: 11400000, guid: df188b8a641b1b148a1ff719dd41df01, type: 2}
   craftingRecipes:
   - {fileID: 11400000, guid: 257d2e1fd5a6e4c40a52582e9903e316, type: 2}
   - {fileID: 11400000, guid: d0b78d587d1adda49aeb8123b9f25ea3, type: 2}

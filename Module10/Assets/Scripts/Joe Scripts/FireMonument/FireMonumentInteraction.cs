@@ -7,8 +7,9 @@ public class FireMonumentInteraction : InteractableWithOutline
 
     public override void Interact()
     {
-        base.Interact();
-
-        mainScipt.OnInteract();
+        if(mainScipt.OnInteract())
+        {
+            base.Interact();
+        }
     }
 }

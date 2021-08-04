@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8469793415610450170}
   - component: {fileID: 417417724539760989}
   - component: {fileID: 6416597050968030798}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 1377550675}
   - component: {fileID: 8392204907162602167}
   - component: {fileID: 4709127255897857869}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Hinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,6 +221,7 @@ MonoBehaviour:
   interactTooltipOffset: {x: 1.5, y: 2.25, z: 0}
   tooltipNameText: 
   interactionSound: 
+  externalOutline: {fileID: 0}
   doorMainScript: {fileID: 934483334191964195}
 --- !u!1 &3433794667551740714
 GameObject:
@@ -346,12 +347,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e861e1d3e9fd6f4192719b6546f56f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manualOpen: 1
+  mainCollider: {fileID: 4709127255897857869}
+  playerCanOpen: 1
+  openOnTriggerEnter: 0
+  openRestriction: 0
   unlockItem: {fileID: 0}
   closeAfterTime: 5
   animator: {fileID: 1683253233141873476}
   triggers:
   - {fileID: 5648045561901852852}
   - {fileID: 5216704113430736954}
+  lockedSymbolPrefab: {fileID: 4232546912972201440, guid: fbe3fe1f9c75e4440973746aec0ab768, type: 3}
   openSound: {fileID: 11400000, guid: 984faefc6c6752e4d9913e44a22d8267, type: 2}
   closeSound: {fileID: 11400000, guid: e092e489efbdbcc41aed0bf6912cdefe, type: 2}

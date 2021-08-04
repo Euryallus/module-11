@@ -81,7 +81,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
 
     public void OnSceneLoadConfigure(SaveData saveData) { } // Nothing to configure
 
-    public void OnInteract()
+    public bool OnInteract()
     {
         if(!playerMovement.OnPlatform)
         {
@@ -93,7 +93,11 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
             {
                 PortalsSave.Instance.SetPortalShowing(villagePortalId, true);
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private void LightFire()

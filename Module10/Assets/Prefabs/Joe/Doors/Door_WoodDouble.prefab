@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 289414643188282878}
   - component: {fileID: 706042629322479758}
   - component: {fileID: 788693699198809901}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Hinge2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 3803807536142556507}
   - component: {fileID: 7909644546554284274}
   - component: {fileID: 4994543725730525332}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Hinge1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,6 +254,10 @@ PrefabInstance:
       value: Door_06
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: c477f2e1a610fc046bf191ea77e12104, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c477f2e1a610fc046bf191ea77e12104, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -328,6 +332,10 @@ PrefabInstance:
       value: DoorFurniture_03
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -396,6 +404,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_Name
       value: DoorFurniture_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -468,6 +480,10 @@ PrefabInstance:
       value: DoorFurniture_03
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -536,6 +552,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_Name
       value: DoorFurniture_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -608,6 +628,10 @@ PrefabInstance:
       value: Door_05
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 66b718b29cae2324c8a7eea85fbce15d, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 66b718b29cae2324c8a7eea85fbce15d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -676,6 +700,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
       propertyPath: m_Name
       value: DoorFurniture_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -748,6 +776,10 @@ PrefabInstance:
       value: DoorFurniture_04
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -818,6 +850,10 @@ PrefabInstance:
       value: DoorFurniture_03
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9c53176c65b84df4bbe7b89cf3f9efbd, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -886,6 +922,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_Name
       value: DoorFurniture_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: f5e95185ae4e28b4cb87147df0dc5b0e, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -977,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 934483334191964195, guid: 860d7feb6487dd04cb04f8e2837df895, type: 3}
+      propertyPath: mainCollider
+      value: 
+      objectReference: {fileID: 4994543725730525332}
     - target: {fileID: 1683253233141873476, guid: 860d7feb6487dd04cb04f8e2837df895, type: 3}
       propertyPath: m_Controller
       value: 

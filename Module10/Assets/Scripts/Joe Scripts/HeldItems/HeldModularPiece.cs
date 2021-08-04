@@ -25,8 +25,10 @@ public class HeldModularPiece : HeldPlaceableItem
 
     private Coroutine setupBuildPointsCoroutine;    // Coroutine used to enable/disable certain BuildPoints based on the item being held
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         // Ensure that setupBuildPointsCoroutine is stopped if it's
         //   still active while this modular piece is being destroyed 
         if (setupBuildPointsCoroutine != null)

@@ -22,6 +22,15 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         Disabled
     }
 
+    public enum DoorLockSymbolMode
+    {
+        NeverShow,
+        CanShowWhenOpen,
+        CanShowWhenClosed,
+        CanAlwaysShow
+    }
+
+
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
@@ -30,6 +39,9 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     [Space]
     [Header("(See tooltips for info)")]
     [Header("Door")]
+
+    [SerializeField]
+    private DoorCollider        mainCollider;
 
     [SerializeField] [FormerlySerializedAs("manualOpen")] [Tooltip("Whether the door can be opened directly by a player (rather than an external method such as puzzle button)")]
     private bool                playerCanOpen = true;
@@ -40,15 +52,20 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
     [SerializeField] [Tooltip("Whether the door can be opened from both sides, only one side, or is completely disabled (regardless of unlock status)")]
     private DoorOpenRestriction openRestriction;
 
+    [SerializeField]
+    private DoorLockSymbolMode  lockSymbolMode = DoorLockSymbolMode.CanShowWhenClosed;
+
     [SerializeField] [Tooltip("Item required to unlock the door (none if left empty)")]
     private Item                unlockItem;
 
     [SerializeField] [Tooltip("Number of seconds before the door closes automatiaclly, 0 = stay open forever")]
     private float               closeAfterTime = 5.0f;
 
-    [SerializeField] private Animator           animator;   // Animator used for door open/close animations
+    [SerializeField] private Animator           animator;           // Animator used for door open/close animations
 
-    [SerializeField] private ExternalTrigger[]  triggers;   // Triggers to detect if the player is on either side of the door
+    [SerializeField] private ExternalTrigger[]  triggers;           // Triggers to detect if the player is on either side of the door
+
+    [SerializeField] private GameObject         lockedSymbolPrefab;
 
     [Header("Sounds")]
     [SerializeField] private SoundClass openSound;
@@ -75,6 +92,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private float doorOpenTimer;    // The amount of time the door has been open for (seconds)
 
+    private DoorLockedSymbol lockedSymbol;
+
     private void Start()
     {
         // Subscribe to save/load events so this door's data will be saved when the game is saved
@@ -86,6 +105,8 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         {
             triggers[i].AddListener(this);
         }
+
+        lockedSymbol = Instantiate(lockedSymbolPrefab, GameSceneUI.Instance.transform.Find("DoorSymbols")).GetComponent<DoorLockedSymbol>();
     }
 
     private void OnDestroy()
@@ -96,9 +117,68 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private void Update()
     {
-        if(openIn || openOut)
+        bool drawLockSymbol = false;
+        float symbolDrawSize = -1.0f;
+
+        Vector3 lockSymbolOffset = new Vector3(0.0f, -0.4f, 0.0f);
+        Vector3 lockedSymbolScreenPos = mainCollider.GetPopupScreenPos(lockSymbolOffset);
+        Vector3 lockedSymbolWorldPos = mainCollider.GetPopupWorldPos(lockSymbolOffset);
+
+        if (lockedSymbolScreenPos.z > 0.0f)
         {
-            // Door is open either inwards or outwards, increment open timerS
+            if(ShouldShowDoorPopups() && Camera.main != null)
+            {
+                Vector3 rayDirection = Vector3.Normalize(Camera.main.transform.position - lockedSymbolWorldPos);
+
+                // adding rayDirection * 0.5f to start point so the ray ignoers any part of the door itself
+                Ray r = new Ray(lockedSymbolWorldPos + rayDirection * 0.5f, rayDirection);
+
+                if (Physics.Raycast(r, out RaycastHit hitInfo, 50.0f) && hitInfo.collider.CompareTag("Player"))
+                {
+                    drawLockSymbol = true;
+                    symbolDrawSize = 1.0f - hitInfo.distance / 45.0f;
+                    symbolDrawSize = Mathf.Clamp01(symbolDrawSize);
+                }
+            }
+        }
+
+        if (drawLockSymbol)
+        {
+            lockedSymbol.Show();
+
+            if(unlockItem != null && GameSceneUI.Instance.PlayerInventory.ContainsItem(unlockItem))
+            {
+                lockedSymbol.SetIcon(DoorSymbolIcon.ReadyToUnlock);
+            }
+            else
+            {
+                lockedSymbol.SetIcon(DoorSymbolIcon.Locked);
+            }
+        }
+        else
+        {
+            lockedSymbol.Hide();
+        }
+
+        if (lockedSymbol.Visible)
+        {
+            if (lockedSymbolScreenPos.z > 0.0f)
+            {
+                lockedSymbol.gameObject.transform.position = lockedSymbolScreenPos;
+                if(symbolDrawSize != -1.0f)
+                {
+                    lockedSymbol.gameObject.transform.localScale = new Vector3(symbolDrawSize, symbolDrawSize, 1.0f);
+                }
+            }
+            else
+            {
+                lockedSymbol.gameObject.transform.position = new Vector3(0.0f, -10000f, 0.0f);
+            }
+        }
+
+        if (openIn || openOut)
+        {
+            // Door is open either inwards or outwards, increment open timer
             doorOpenTimer += Time.deltaTime;
 
             if(!openOnTriggerEnter)
@@ -195,6 +275,31 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
                 TriggerExited(false);
             }
         }
+    }
+
+    private bool ShouldShowDoorPopups()
+    {
+        if ((lockSymbolMode == DoorLockSymbolMode.NeverShow) ||
+            (lockSymbolMode == DoorLockSymbolMode.CanShowWhenOpen && !IsOpen()) ||
+            (lockSymbolMode == DoorLockSymbolMode.CanShowWhenClosed && IsOpen()))
+        {
+            return false;
+        }
+
+        Vector3 playerRelativePos = transform.InverseTransformPoint(PlayerInstance.ActivePlayer.transform.position);
+
+        if ((openRestriction == DoorOpenRestriction.OneWayInside && playerRelativePos.z > 0.0f) ||
+            (openRestriction == DoorOpenRestriction.OneWayOutside && playerRelativePos.z < 0.0f))
+        {
+            return true;
+        }
+
+        return openRestriction == DoorOpenRestriction.Disabled || (unlockItem != null && !unlocked) || !playerCanOpen;
+    }
+
+    private bool IsOpen()
+    {
+        return openIn || openOut;
     }
 
     public void SetDoorOpenRestriction(DoorOpenRestriction restriction)
@@ -330,14 +435,11 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
         {
             // The door requires an item to unlock/open
 
-            // Creating a group of 1 since the ContainsQuantityOfItem functions take an item group
-            ItemGroup requiredItemGroup = new ItemGroup(unlockItem, 1);
-
             // Check if the required item is in the player's inventory/hotbar
 
             InventoryPanel playerInventory = GameSceneUI.Instance.PlayerInventory;
 
-            bool itemInInventory = playerInventory.ContainsQuantityOfItem(requiredItemGroup, out _);
+            bool itemInInventory = playerInventory.ContainsItem(unlockItem);
 
             if (itemInInventory)
             {

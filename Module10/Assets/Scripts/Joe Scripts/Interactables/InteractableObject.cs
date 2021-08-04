@@ -21,7 +21,7 @@ public abstract class InteractableObject : MonoBehaviour
     [SerializeField] private float      interactionRange        = 5.0f;
 
     [SerializeField] private GameObject interactTooltipPrefab;  // Prefab for the UI tooltip/popup shown while hovering over the object
-    [SerializeField] private Vector3    interactTooltipOffset;  // Offset relative to the object's origin position to use when displaying the above tooltip
+    [SerializeField] protected Vector3  interactTooltipOffset;  // Offset relative to the object's origin position to use when displaying the above tooltip
     [SerializeField] protected string   tooltipNameText;        // The object name to be displayed on the above tooltip, e.g. 'Crafting Table', 'Door'
 
     #endregion
@@ -116,7 +116,7 @@ public abstract class InteractableObject : MonoBehaviour
 
         if (interactTooltip != null)
         {
-            Vector3 popupScreenPos = mainPlayerCamera.WorldToScreenPoint(transform.position + worldInteractTooltipOffset);
+            Vector3 popupScreenPos = GetPopupScreenPos();
             if (popupScreenPos.z > 0.0f)
             {
                 // The player is facing the target position of the tooltip, move it to 
@@ -129,6 +129,16 @@ public abstract class InteractableObject : MonoBehaviour
                 interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
             }
         }
+    }
+
+    public Vector3 GetPopupScreenPos(Vector3 offset = default)
+    {
+        return mainPlayerCamera.WorldToScreenPoint(transform.position + offset + worldInteractTooltipOffset);
+    }
+
+    public Vector3 GetPopupWorldPos(Vector3 offset = default)
+    {
+        return (transform.position + offset + worldInteractTooltipOffset);
     }
 
     private void UpdateHoverState()

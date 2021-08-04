@@ -23,6 +23,13 @@ public class DoorCollider : InteractableWithOutline
 
     protected override void Start()
     {
+        interactTooltipOffset.Scale(doorMainScript.transform.localScale);
+
+        if(interactTooltipOffset.y > 2.2f)
+        {
+            interactTooltipOffset = new Vector3(interactTooltipOffset.x, 2.2f, interactTooltipOffset.z);
+        }
+
         base.Start();
 
         // Disable interaction if the door is opened by entering the trigger area

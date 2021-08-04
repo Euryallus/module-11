@@ -85,9 +85,6 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
 
-    // Added by Hugo
-    [SerializeField] private bool unlockedGrabUpgrade = false;
-
     private void Awake()
     {
         // Get player movement script and animators for various UI elements

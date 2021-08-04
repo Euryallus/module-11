@@ -179,6 +179,11 @@ public class InventoryPanel : UIPanel
         return mainContainer.TryRemoveItemFromContainer(item.Id);
     }
 
+    public bool ContainsItem(Item item)
+    {
+        return mainContainer.CheckForQuantityOfItem(item) > 0;
+    }
+
     public bool ContainsQuantityOfItem(ItemGroup itemGroup, out List<ContainerSlot> containingSlots)
     {
         // Checks if the inventory/hotbar container has a certain quantity of an item
