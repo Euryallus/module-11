@@ -44,7 +44,6 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     [SerializeField] [Tooltip("The renderers that display the portal emblem sprite")]
     private SpriteRenderer[]    portalEmblemRenderers;
 
-    [Header("Please use a 512x512 sprite for the emblem")]
     [SerializeField] [Tooltip("The sprite shown on each side of the portal")]
     private Sprite              portalEmblem;
 
