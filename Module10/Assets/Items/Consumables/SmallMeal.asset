@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dda6879d75d983e45af171e37df7120f, type: 3}
-  m_Name: HealthyMeal
+  m_Name: SmallMeal
   m_EditorClassIdentifier: 
   m_id: nuggets
   m_specialSlotId: 
   m_uiName: Small Meal
-  m_uiDescription: Nutritious.
+  m_uiDescription: 
   m_stackSize: 4
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: c73cf6d508d4aa344a6a5eef387152d9, type: 3}
+  m_sprite: {fileID: 21300000, guid: 950396db45defe247b12dcf2613df1ca, type: 3}
   m_heldItemGameObject: {fileID: 2978869022576664170, guid: 565e60afd9fc7504290b9a5d5514f0cf, type: 3}
   m_canThrowAway: 1
   m_canDrop: 1

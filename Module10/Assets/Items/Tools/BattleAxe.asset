@@ -18,7 +18,7 @@ MonoBehaviour:
   m_uiDescription: 
   m_stackSize: 1
   m_weight: 1
-  m_sprite: {fileID: 21300000, guid: bd347e8f4aa8a57429c6b5fc3317d8d3, type: 3}
+  m_sprite: {fileID: 21300000, guid: cdfbeafc88a530a46bdf54cc4239c06c, type: 3}
   m_heldItemGameObject: {fileID: 4898281670870417890, guid: 0314f964f9bf1f246954c63a79bf37d7, type: 3}
   m_canThrowAway: 1
   m_canDrop: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   m_currencyItemQuantity: 2
   m_customFloatProperties:
   - Name: damage
-    UIName: Attack damage
+    UIName: Attack Damage
     Value: 1
     UpgradeIncrease: 1
     MinValue: 1

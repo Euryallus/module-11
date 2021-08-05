@@ -18,7 +18,7 @@ MonoBehaviour:
   m_uiDescription: A stolen ring that needs returning to its owner...
   m_stackSize: 1
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: 2dfe566b12faa344aa536a7781506dd7, type: 3}
+  m_sprite: {fileID: 21300000, guid: 982dd4291a67614449f2b9220da52f82, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
   m_canDrop: 0

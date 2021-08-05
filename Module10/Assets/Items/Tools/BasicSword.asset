@@ -27,7 +27,7 @@ MonoBehaviour:
   m_currencyItemQuantity: 1
   m_customFloatProperties:
   - Name: damage
-    UIName: Damage Level
+    UIName: Attack Damage
     Value: 1
     UpgradeIncrease: 1
     MinValue: 1

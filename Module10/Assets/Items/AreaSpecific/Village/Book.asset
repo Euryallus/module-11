@@ -18,7 +18,7 @@ MonoBehaviour:
   m_uiDescription: Why did he ask for this?...
   m_stackSize: 1
   m_weight: 0
-  m_sprite: {fileID: 21300000, guid: 2dfe566b12faa344aa536a7781506dd7, type: 3}
+  m_sprite: {fileID: 21300000, guid: ddb90b5d75897304fae72905a6c9fc52, type: 3}
   m_heldItemGameObject: {fileID: 0}
   m_canThrowAway: 0
   m_canDrop: 0
