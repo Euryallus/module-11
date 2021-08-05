@@ -16,6 +16,12 @@ public class PlayerInteractions : MonoBehaviour
 
     void Update()
     {
+        // Added by Joe, re-finds the NPC manager after reloading a scene
+        if(npcManager == null)
+        {
+            npcManager = GameObject.FindGameObjectWithTag("QuestManager").GetComponent<NPCManager>();
+        }
+
         // Runs when player interacts with an object by pressing E while not being blocked by a UI panel
         if (Input.GetKeyDown(KeyCode.E) && UIPanel.CanShowUIPanel())
         {
