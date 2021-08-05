@@ -156,7 +156,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
 
         PortalUnlockPanel unlockPanel = Instantiate(portalUnlockPanelPrefab, cinematicsCanvas.transform).GetComponent<PortalUnlockPanel>();
-        unlockPanel.Setup(unlockAreaName, localConnectedPortal == null);
+        unlockPanel.Setup(unlockAreaName, true);
         unlockPanel.transform.SetSiblingIndex(2);
 
         if (localConnectedPortal != null)

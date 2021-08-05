@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Find it in The Village
+  m_text: Find it on the edge of The Village
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
@@ -385,7 +385,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 15, y: 75}
-  m_SizeDelta: {x: 450, y: 100}
+  m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &5666328574846809515
 CanvasRenderer:
