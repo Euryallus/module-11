@@ -76,12 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13f33daac6e9e347b50ba9bd71557fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainAbilityHunger: 0.01
-  secondaryAbilityHunger: 0.1
+  mainAbilityHunger: 0
+  secondaryAbilityHunger: 0
   useToolSound: {fileID: 11400000, guid: 8fb9993ecbeb7094eadc99ec284e57df, type: 2}
   toolRenderer: {fileID: 8101348564790557087}
-  launchSound: {fileID: 11400000, guid: 13d1a629e2e42324383bd7710e4c4046, type: 2}
-  prefabLaunchIndicator: {fileID: 5471077257805614410, guid: 2f3f530dde1702e4891d824138cee50f, type: 3}
 --- !u!95 &3353871326783803619
 Animator:
   serializedVersion: 3

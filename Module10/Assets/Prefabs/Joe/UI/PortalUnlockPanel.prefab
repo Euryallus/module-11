@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Find it on the edge of The Village
+  m_text: Find it at the edge of The Village
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
