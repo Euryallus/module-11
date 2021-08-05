@@ -102,6 +102,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7974e323523c2f14db08493967db3317, type: 2}
   - {fileID: 11400000, guid: 56f0ec5c26530e34b909f5076257549a, type: 2}
   - {fileID: 11400000, guid: bc774bd54ff8ad3409f68f15bf8206bc, type: 2}
+  - {fileID: 11400000, guid: 9aa03cfb4ae40d34d94b931c730f9d94, type: 2}
+  - {fileID: 11400000, guid: 79e11558f0a001146bff4aabe4463ea6, type: 2}
+  - {fileID: 11400000, guid: 204bb2b7b05f6c44296f96b5b2baa112, type: 2}
+  - {fileID: 11400000, guid: c873e5483ca154f419cdc3284178ae7a, type: 2}
   sceneMusicSetup:
   - SceneName: The Village
     PlayMode: 2

@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject gliderModel;
 
     private GliderAbility gliderAbility;
+    private LoopingSoundSource gliderSoundSource;
 
     private bool onPlatform = false;
 
@@ -341,7 +342,7 @@ public class PlayerMovement : MonoBehaviour
                         if (controller.isGrounded)
                         {
                             currentMovementState = MovementStates.walk;
-                            HideGlider();
+                            HideGlider(true);
                             glideVelocity = new Vector2(0, 0);
                             break;
                         }
@@ -524,6 +525,16 @@ public class PlayerMovement : MonoBehaviour
                 // Tells controller to move
                 controller.Move(moveVect * Time.deltaTime); //applies movement to player
             }
+
+            // Added by Joe: Adjusts glider sound pitch/volume based on glide velocity
+            if(gliderSoundSource != null && gliderSoundSource.Source != null)
+            {
+                float gliderSpeedMultiplier = Mathf.Clamp((glideVelocity.magnitude - 0.5f) / 1.5f, 0.06f, 1.0f);
+
+                gliderSoundSource.BaseVolume = gliderSpeedMultiplier;
+                gliderSoundSource.Source.pitch = Mathf.Clamp01(0.5f + gliderSpeedMultiplier / 2.0f);
+                AudioManager.Instance.UpdateActiveLoopingSoundsVolume();
+            }
         }
 
         CalculateFallDamage();
@@ -533,12 +544,33 @@ public class PlayerMovement : MonoBehaviour
     {
         gliderModel.SetActive(true);
         gliderAbility.SetChargeAmount(1.0f);
+
+        AudioManager.Instance.PlaySoundEffect2D("gliderOut");
+
+        AudioManager.Instance.PlayLoopingSoundEffect("windLoop", "gliderLoop");
+        gliderSoundSource = AudioManager.Instance.GetLoopingSoundSourceFromId("gliderLoop");
     }
 
-    private void HideGlider()
+    private void HideGlider(bool hittingGround = false)
     {
         gliderModel.SetActive(false);
         gliderAbility.SetChargeAmount(0.0f);
+
+        if(gliderSoundSource != null)
+        {
+            if(hittingGround)
+            {
+                AudioManager.Instance.PlaySoundEffect2D("gliderAway1");
+            }
+            else
+            {
+                AudioManager.Instance.PlaySoundEffect2D("gliderAway2");
+            }
+
+            AudioManager.Instance.StopLoopingSoundEffect("gliderLoop");
+
+            gliderSoundSource = null;
+        }
     }
 
     // Added by Joe, used when loading into a scene to reset certain movement variables
