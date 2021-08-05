@@ -302,8 +302,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         if(loadSuccess)
         {
             // Set the object's transfrom and rotation from loaded values.
-            //   Adding a small amount to the y value to prevent intersections causing unpredictable behaviour
-            transform.position = new Vector3(transformVals[0], transformVals[1] + 0.1f, transformVals[2]);
+            transform.position = new Vector3(transformVals[0], transformVals[1], transformVals[2]);
             transform.rotation = Quaternion.Euler(transformVals[3], transformVals[4], transformVals[5]);
         }
 
