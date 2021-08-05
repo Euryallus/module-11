@@ -130,6 +130,7 @@ MonoBehaviour:
   colliderDisableOnDestroy: {fileID: 5737471269060409744}
   canBeHit: 1
   toolRenderer: {fileID: 0}
+  toBeDestroyed: 0
   treeTop: {fileID: 4067573745018078422}
 --- !u!1 &5258807610609576446
 GameObject:
@@ -9927,6 +9928,14 @@ PrefabInstance:
     - target: {fileID: 2259795246380597830, guid: f00df208b62c11f44a29d76be3c78ac9, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3597377488391884046, guid: f00df208b62c11f44a29d76be3c78ac9, type: 3}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.32129273
+      objectReference: {fileID: 0}
+    - target: {fileID: 3597377488391884046, guid: f00df208b62c11f44a29d76be3c78ac9, type: 3}
+      propertyPath: m_LODs.Array.data[2].screenRelativeHeight
+      value: 0.06955664
       objectReference: {fileID: 0}
     - target: {fileID: 4813678203532645376, guid: f00df208b62c11f44a29d76be3c78ac9, type: 3}
       propertyPath: m_Name
