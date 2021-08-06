@@ -80,7 +80,7 @@ public class ItemInfoPopup : MonoBehaviour
         }
     }
 
-    public void ShowPopupWithItemInfo(string itemId)
+    public void ShowPopupWithItemInfo(string itemId, bool showMaxFloatValues = false)
     {
         // For showing popups with info about an item with the given id
 
@@ -93,7 +93,7 @@ public class ItemInfoPopup : MonoBehaviour
             if (item != null)
             {
                 // Show the popup with info based on the item's properties
-                UpdatePopupInfo(item);
+                UpdatePopupInfo(item, showMaxFloatValues);
             }
             //else
             //{
@@ -123,7 +123,7 @@ public class ItemInfoPopup : MonoBehaviour
         canvasGroup.alpha = 0.0f;
     }
 
-    private void UpdatePopupInfo(Item item)
+    private void UpdatePopupInfo(Item item, bool showMaxFloatValues)
     {
         // Updates popup UI to display various info about an item
 
@@ -159,7 +159,7 @@ public class ItemInfoPopup : MonoBehaviour
         if (item.CustomFloatProperties.Length > 0 || item.CustomStringProperties.Length > 0)
         {
             // Item has some sort of custom property/properties, show custom property info
-            ShowCustomPropertyInfo(item.CustomFloatProperties, item.CustomStringProperties);
+            ShowCustomPropertyInfo(item.CustomFloatProperties, item.CustomStringProperties, showMaxFloatValues);
         }
         else
         {
@@ -186,7 +186,7 @@ public class ItemInfoPopup : MonoBehaviour
         customPropertiesText.gameObject.SetActive(false);
     }
 
-    private void ShowCustomPropertyInfo(CustomFloatProperty[] customFloatProperties, CustomStringProperty[] customStringProperties)
+    private void ShowCustomPropertyInfo(CustomFloatProperty[] customFloatProperties, CustomStringProperty[] customStringProperties, bool showMaxFloatValues)
     {
         customPropertiesText.text = "";
 
@@ -196,7 +196,14 @@ public class ItemInfoPopup : MonoBehaviour
         for (int i = 0; i < customFloatProperties.Length; i++)
         {
             // Add a line of text showing info about each custom float property - the property name and value
-            customPropertiesText.text += (customFloatProperties[i].GetDisplayText());
+            string floatValText = customFloatProperties[i].GetDisplayText();
+
+            if(showMaxFloatValues)
+            {
+                floatValText += " <color=#FFFFA0>(Max: " + customFloatProperties[i].MaxValue + ")</color>";
+            }
+
+            customPropertiesText.text += floatValText;
             customPropertiesText.text += "\n";
         }
 

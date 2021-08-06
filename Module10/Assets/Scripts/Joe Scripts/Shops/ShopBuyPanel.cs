@@ -211,7 +211,7 @@ public class ShopBuyPanel : UIPanel
 
     private void ShowItemInfoPopup(Item item)
     {
-        GameSceneUI.Instance.ItemInfoPopup.ShowPopupWithItemInfo(item.Id);
+        GameSceneUI.Instance.ItemInfoPopup.ShowPopupWithItemInfo(item.Id, true);
     }
 
     private void HideItemInfoPopup()

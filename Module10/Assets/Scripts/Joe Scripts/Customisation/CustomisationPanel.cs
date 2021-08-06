@@ -12,6 +12,8 @@ using System.Collections.Generic;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// updated for mod11: added additionalRequiredCurrency, ui now allows changes to be previewed without having the required currency amount, and improved how float value buttons respond to changes
+
 public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 {
     #region InspectorVariables
@@ -168,7 +170,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         // Get the unique id that will be used for the custom item being added/removed
         string customItemId = itemManager.GetUniqueCustomItemId();
 
-        CheckForValidItemInputs(out bool validCustomiseItem, out bool validCurrencyItem);
+        CheckForValidItemInputs(out bool validCustomiseItem);
 
         if (validCustomiseItem)
         {
@@ -326,7 +328,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
             additionalRequiredCurrency += property.CurrencyIncrease;
 
-            CheckForValidItemInputs(out _, out _);
+            CheckForValidItemInputs(out _);
 
             AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
         }
@@ -359,7 +361,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
             additionalRequiredCurrency -= customisedProperty.CurrencyIncrease;
 
-            CheckForValidItemInputs(out _, out _);
+            CheckForValidItemInputs(out _);
 
             AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
         }
@@ -390,7 +392,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
-    private void CheckForValidItemInputs(out bool validCustomiseItem, out bool validCurrencyItem)
+    private void CheckForValidItemInputs(out bool validCustomiseItem)
     {
         //This function checks if the items in the customise and currency slots create a valid setup to produce a resulting item
 
@@ -429,7 +431,6 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
                     infoText.text = "<color=#FFFFFF>Customising " + itemToCustomise.UIName + ".</color>";
 
                     validCustomiseItem = true;
-                    validCurrencyItem = true;
                     resultSlotEnabled = true;
                 }
                 else
@@ -439,7 +440,6 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
                     infoText.text = "Requires " + requiredCurrencyQuantity + "x " + currencyItem.UIName + ".";
 
                     validCustomiseItem = true;
-                    validCurrencyItem = false;
                 }
             }
             else
@@ -449,7 +449,6 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
                 infoText.text = itemToCustomise.UIName + " cannot be customised.";
 
                 validCustomiseItem = false;
-                validCurrencyItem = false;
             }
         }
         else
@@ -459,7 +458,6 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             ShowDefaultInfoText();
 
             validCustomiseItem = false;
-            validCurrencyItem = false;
             resultSlotEnabled = true;
         }
 
