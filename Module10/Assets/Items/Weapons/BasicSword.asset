@@ -10,27 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30db721631325bd4aab1c03410f7bc54, type: 3}
-  m_Name: BattleAxe
+  m_Name: BasicSword
   m_EditorClassIdentifier: 
-  m_id: battleAxe
+  m_id: basicSword
   m_specialSlotId: 
-  m_uiName: Battle Axe
+  m_uiName: Basic Sword
   m_uiDescription: 
   m_stackSize: 1
-  m_weight: 1
-  m_sprite: {fileID: 21300000, guid: cdfbeafc88a530a46bdf54cc4239c06c, type: 3}
-  m_heldItemGameObject: {fileID: 4898281670870417890, guid: 0314f964f9bf1f246954c63a79bf37d7, type: 3}
+  m_weight: 0.5
+  m_sprite: {fileID: 21300000, guid: 2fc7c1a934b69e84ab5fa76bf05508fc, type: 3}
+  m_heldItemGameObject: {fileID: 4898281670870417890, guid: e3bfd926b17b5ab40aca30e762776450, type: 3}
   m_canThrowAway: 1
   m_canDrop: 1
   m_customisable: 1
   m_currencyItemId: shinyThing
-  m_currencyItemQuantity: 2
+  m_currencyItemQuantity: 1
   m_customFloatProperties:
   - Name: damage
     UIName: Attack Damage
-    Value: 1
-    UpgradeIncrease: 1
-    MinValue: 1
-    MaxValue: 2
+    Value: 0.3
+    UpgradeIncrease: 0.3
+    MinValue: 0.3
+    MaxValue: 0.9
+    CurrencyIncrease: 3
+  - Name: attackSpeed
+    UIName: Attack Speed
+    Value: 0.2
+    UpgradeIncrease: 0.2
+    MinValue: 0.2
+    MaxValue: 0.6
     CurrencyIncrease: 3
   m_customStringProperties: []

@@ -11,21 +11,14 @@ public class MeleeWeapon : Weapon
 {
     public float reachLength = 5f;  // Range of weapon (how far in front of player it reaches)
 
-    [SerializeField] [Tooltip("How much each upgraded damage level adds to the base damage this weapon does")]
-    private float damageUpgadeMultiplier = 0.3f;
-
-    [SerializeField] [Tooltip("How much each upgraded attack speed level decreases to cooldown time of the weapon")]
-    private float cooldownUpgadeMultiplier = 0.2f;
-
     private void Start()
     {
-        CustomFloatProperty attackSpeedPoperty = item.GetCustomFloatPropertyWithName("attackSpeed", true);
+        CustomFloatProperty itemAttackSpeedPoperty = item.GetCustomFloatPropertyWithName("attackSpeed", true);
 
-        if(attackSpeedPoperty != null)
+        if(itemAttackSpeedPoperty != null)
         {
-            // Decrease the cooldown time value based on how much the player has upgraded attack speed
-            //   (subtracting 1.0 so nothing is decreased if the value was not upgraded)
-            cooldownTime -= (attackSpeedPoperty.Value - 1.0f) * cooldownUpgadeMultiplier;
+            // Use the custom attack speed value (which can be upgraded by the player) if it was set on the weapon item
+            cooldownTime = 1.0f - itemAttackSpeedPoperty.Value;
         }
     }
 
@@ -49,7 +42,8 @@ public class MeleeWeapon : Weapon
             // If weapon cooldown has ended & player can be hit by weapon, deal damage
             if (weaponHit.transform.GetComponent<EnemyHealth>())
             {
-                float damage = CalculateDamage();
+                // Calculate damage based on the value set on the weapon item that can be upgraded by the player
+                float damage = CalculateDamage(item.GetCustomFloatPropertyWithName("damage").Value);
 
                 Debug.Log("Sword swung, did " + damage + " damage");
 
@@ -60,25 +54,5 @@ public class MeleeWeapon : Weapon
                 weaponHit.transform.GetComponent<TestDummy>().TakeHit();
             }
         }        
-    }
-
-    // Added by Joe, adds player upgraded damage level to the base damage:
-    public override float CalculateDamage()
-    {
-        CustomFloatProperty upgradedDamagePoperty = item.GetCustomFloatPropertyWithName("damage");
-        
-        if(upgradedDamagePoperty != null)
-        {
-            // Get the customised damage value, subtracting 1 because the base (non-upgraded) value is 1.0f
-            float damageUpgrade = (upgradedDamagePoperty.Value - 1.0f);
-
-            // Return the modified damage value, multiplying by damageUpgadeMultiplier
-            //   so the amount of damage added for each upgrade level can be balanced
-            return base.CalculateDamage() + damageUpgrade * damageUpgadeMultiplier;
-        }
-        else
-        {
-            return base.CalculateDamage();
-        }
     }
 }

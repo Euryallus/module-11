@@ -149,7 +149,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         customiseSlot.ItemStack.TryRemoveItemFromStack();
 
         // Remove a certain amount of items from the currency slot based on the customisation cost
-        for (int i = 0; i < customiseSlotItem.CurrencyItemQuantity; i++)
+        for (int i = 0; i < (customiseSlotItem.CurrencyItemQuantity + additionalRequiredCurrency); i++)
         {
             currencySlot.ItemStack.TryRemoveItemFromStack();
         }
@@ -247,8 +247,13 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             SetupFloatPropertyValueText(propertyPanel.ValueText, resultItemProperty.Value, baseProperty.Value);
 
             // Set the PropertyAddButton and PropertySubtractButton functions to be called when the corresponding buttons are clicked
-            propertyPanel.AddButton     .onClick.AddListener(delegate { FloatPropertyAddButton       (baseProperty.Name, propertyPanel.ValueText); });
-            propertyPanel.SubtractButton.onClick.AddListener(delegate { FloatPropertySubtractButton  (baseProperty.Name, propertyPanel.ValueText); });
+            propertyPanel.AddButton.Button.onClick.AddListener(delegate { FloatPropertyAddButton(baseProperty.Name, propertyPanel); });
+            propertyPanel.SubtractButton.Button.onClick.AddListener(delegate { FloatPropertySubtractButton(baseProperty.Name, propertyPanel); });
+
+            propertyPanel.AddButton.Setup();
+            propertyPanel.SubtractButton.Setup();
+
+            UpdateFloatPropertyButtons(propertyPanel, baseProperty.Value, baseProperty.Value, baseProperty.MaxValue);
         }
 
         customInputFields = new List<TMP_InputField>();
@@ -296,7 +301,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
-    private void FloatPropertyAddButton(string propertyName, TextMeshProUGUI valueText)
+    private void FloatPropertyAddButton(string propertyName, CustomFloatPropertyPanel propertyPanel)
     {
         Item customResultItem = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
 
@@ -306,15 +311,18 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         // Add the upgrade increase to the current property value to get the new added value
         float addedValue = property.Value + property.UpgradeIncrease;
 
-        if (addedValue <= property.MaxValue)
+        // Adding 0.01 to prevent errors caused by float inaccuracies when comparing the two values
+        if (FloatHelper.FloatIsLessThanOrEqualTo(addedValue, property.MaxValue))
         {
             // The added value is within the allowed value range
+
+            UpdateFloatPropertyButtons(propertyPanel, addedValue, property.Value, property.MaxValue);
 
             // Set the custom float property on the item being customised to have the new value
             itemManager.SetCustomFloatItemData(itemManager.GetUniqueCustomItemId(), propertyName, addedValue);
 
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
-            SetupFloatPropertyValueText(valueText, addedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
+            SetupFloatPropertyValueText(propertyPanel.ValueText, addedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
 
             additionalRequiredCurrency += property.CurrencyIncrease;
 
@@ -324,27 +332,30 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
-    private void FloatPropertySubtractButton(string propertyName, TextMeshProUGUI valueText)
+    private void FloatPropertySubtractButton(string propertyName, CustomFloatPropertyPanel propertyPanel)
     {
         Item customiseItem    = itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID);
         Item customResultItem = itemManager.GetCustomItemWithId(itemManager.GetUniqueCustomItemId());
 
         // Get the current values for the float property being edited
-        CustomFloatProperty baseProperty       = customiseItem.GetCustomFloatPropertyWithName(propertyName);
+        CustomFloatProperty property = customiseItem.GetCustomFloatPropertyWithName(propertyName);
         CustomFloatProperty customisedProperty = customResultItem.GetCustomFloatPropertyWithName(propertyName);
 
         // Subtract the upgrade increase (in this case decrease) from the current property value to get the new added value
         float subtractedValue = customisedProperty.Value - customisedProperty.UpgradeIncrease;
 
-        if (subtractedValue >= baseProperty.Value)
+        // Subtracting 0.01 to prevent errors caused by float inaccuracies when comparing the two values
+        if (FloatHelper.FloatIsGreaterThanOrEqualTo(subtractedValue, property.Value))
         {
             // The subtracted value is within the allowed value range
+
+            UpdateFloatPropertyButtons(propertyPanel, subtractedValue, property.Value, property.MaxValue);
 
             // Set the custom float property on the item being customised to have the new value
             itemManager.SetCustomFloatItemData(itemManager.GetUniqueCustomItemId(), propertyName, subtractedValue);
 
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
-            SetupFloatPropertyValueText(valueText, subtractedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
+            SetupFloatPropertyValueText(propertyPanel.ValueText, subtractedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
 
             additionalRequiredCurrency -= customisedProperty.CurrencyIncrease;
 
@@ -354,12 +365,19 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
+    private void UpdateFloatPropertyButtons(CustomFloatPropertyPanel propertyPanel, float propertyValue, float minValue, float maxValue)
+    {
+        propertyPanel.SubtractButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, minValue));
+
+        propertyPanel.AddButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, maxValue));
+    }
+
     private void SetupFloatPropertyValueText(TextMeshProUGUI valueText, float value, float baseValue)
     {
         // Set the UI text to show the value
         valueText.text = value.ToString();
 
-        if (value == baseValue)
+        if (FloatHelper.FloatsAreEqual(value, baseValue))
         {
             // The value of the customised item is the same as the original item, show the value in white
             valueText.color = Color.white;

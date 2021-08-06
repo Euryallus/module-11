@@ -45,7 +45,8 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     #endregion
 
-    public bool ChangeSideColourHover { set { changeSideColourHover = value; } }
+    public Button   Button                  { get { return button; } }
+    public bool     ChangeSideColourHover   { set { changeSideColourHover = value; } }
 
     private Vector3 startPos;               // The default position of the top of the button
     private Vector3 targetPos;              // The position the top of the button should move towards
@@ -53,9 +54,20 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private float   pressSpeedMultiplier = 1.0f;
     private Color   defaultButtonColour;
 
+    private bool setupComplete;
+
     private void Awake()
     {
-        defaultButtonColour = buttonColour;
+        Setup();
+    }
+
+    public void Setup()
+    {
+        if(!setupComplete)
+        {
+            defaultButtonColour = buttonColour;
+            setupComplete = true;
+        }
     }
 
     private void Start()

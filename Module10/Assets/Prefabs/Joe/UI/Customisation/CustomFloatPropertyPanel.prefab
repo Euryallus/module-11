@@ -226,8 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ValueText: {fileID: 4680429477346090642}
-  AddButton: {fileID: 9079532530945378316}
-  SubtractButton: {fileID: 6730124203600075148}
+  AddButton: {fileID: 9079532530945378319}
+  SubtractButton: {fileID: 6730124203600075151}
 --- !u!1001 &5567575137672527249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -314,6 +314,18 @@ PrefabInstance:
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: changeSideColourHover
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.b
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.g
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.r
+      value: 0.7647059
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078353, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_SizeDelta.y
@@ -458,15 +470,15 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3694353218721166667, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
   m_PrefabInstance: {fileID: 5567575137672527249}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9079532530945378316 stripped
+--- !u!114 &9079532530945378319 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
   m_PrefabInstance: {fileID: 5567575137672527249}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 04309e5c009beee4a9e064497be770f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7936132970233555985
@@ -547,6 +559,18 @@ PrefabInstance:
     - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: changeSideColourHover
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.b
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.g
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+      propertyPath: buttonDisabledColour.r
+      value: 0.7647059
       objectReference: {fileID: 0}
     - target: {fileID: 3694353218226078353, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
       propertyPath: m_SizeDelta.y
@@ -699,14 +723,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3694353218721166667, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
   m_PrefabInstance: {fileID: 7936132970233555985}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6730124203600075148 stripped
+--- !u!114 &6730124203600075151 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3694353218052961693, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3694353218052961694, guid: 413b0250d20b9bd4594bf156e68fd144, type: 3}
   m_PrefabInstance: {fileID: 7936132970233555985}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 04309e5c009beee4a9e064497be770f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -17,9 +17,9 @@ public class CustomFloatPropertyPanel : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    public TextMeshProUGUI  ValueText;      // UI text showing the value being edited
-    public Button           AddButton;      // Button for increasing the float value
-    public Button           SubtractButton; // Button for decreasing the float value
+    public TextMeshProUGUI    ValueText;      // UI text showing the value being edited
+    public PressEffectButton  AddButton;      // Button for increasing the float value
+    public PressEffectButton  SubtractButton; // Button for decreasing the float value
 
     #endregion
 }
