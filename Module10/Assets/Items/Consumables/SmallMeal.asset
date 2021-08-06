@@ -26,5 +26,8 @@ MonoBehaviour:
   m_currencyItemId: 
   m_currencyItemQuantity: 0
   m_customFloatProperties: []
-  m_customStringProperties: []
-  m_hungerIncrease: 0.5
+  m_customStringProperties:
+  - Name: foodLevelIncrease
+    UIName: 
+    Value: Food Level +0.4
+  m_hungerIncrease: 0.4

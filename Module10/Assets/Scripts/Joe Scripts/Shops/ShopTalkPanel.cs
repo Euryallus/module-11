@@ -66,6 +66,7 @@ public class ShopTalkPanel : UIPanel
 
         // Instantiate/show the buy panel
         GameObject buyPanel = Instantiate(buyUIPrefab, GameObject.FindGameObjectWithTag("JoeCanvas").transform);
+        buyPanel.transform.SetSiblingIndex(1);
 
         // Setup the buy panel with the currentNPC so it can display items from the correct shop type
         ShopBuyPanel panelScript = buyPanel.GetComponent<ShopBuyPanel>();

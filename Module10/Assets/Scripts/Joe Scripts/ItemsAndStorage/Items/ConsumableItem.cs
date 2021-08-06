@@ -23,4 +23,16 @@ public class ConsumableItem : Item
 
     [SerializeField] [Tooltip("How much the player's food level will increase by when this item is eaten")]
     private float m_hungerIncrease;
+
+    private void OnValidate()
+    {
+        if(CustomStringProperties.Length == 0)
+        {
+            CustomStringProperties = new CustomStringProperty[1];
+            CustomStringProperties[0] = new CustomStringProperty();
+        }
+
+        CustomStringProperties[0].Name = "foodLevelIncrease";
+        CustomStringProperties[0].Value = "Food Level +" + m_hungerIncrease;
+    }
 }

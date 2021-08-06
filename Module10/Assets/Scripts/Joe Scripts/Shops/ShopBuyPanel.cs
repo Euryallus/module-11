@@ -38,7 +38,6 @@ public class ShopBuyPanel : UIPanel
 
     [Header("UI Colours")]
 
-    [SerializeField] private Color              standardTabColour;      //Default colour of category tabs
     [SerializeField] private Color              selectedTabColour;      //Colour of category tabs when selected
     [SerializeField] private Color              standardButtonColour;   //Default colour of item selection buttons
     [SerializeField] private Color              selectedButtonColour;   //Colour of selected item selection buttons
@@ -111,10 +110,13 @@ public class ShopBuyPanel : UIPanel
 
     private void ButtonSelectCategory(int categoryIndex)
     {
-        // Select the category and play a sound on button press
-        SelectCategory(categoryIndex);
+        if(selectedCategoryIndex != categoryIndex)
+        {
+            // Select the category and play a sound on button press
+            SelectCategory(categoryIndex);
 
-        AudioManager.Instance.PlaySoundEffect2D("buttonClickMain1");
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall");
+        }
     }
 
     private void SelectCategory(int categoryIndex)
@@ -129,14 +131,14 @@ public class ShopBuyPanel : UIPanel
         // If another category was selected, reset the corresponding button's colour to default
         if (selectedCategoryIndex != -1)
         {
-            categoryButtons[selectedCategoryIndex].SetButtonColour(standardTabColour);
+            categoryButtons[selectedCategoryIndex].SetButtonSideColour();
         }
 
         // Set the selected category index to be the new index
         selectedCategoryIndex = categoryIndex;
 
         // Set the newly-selected button's colour
-        categoryButtons[categoryIndex].SetButtonColour(selectedTabColour);
+        categoryButtons[categoryIndex].SetButtonSideColour(false, selectedTabColour);
 
         // Get the selected category from the shop type's categories array
         ShopCategory selectedCategory = shopNPC.ShopType.Categories[categoryIndex];
@@ -180,15 +182,22 @@ public class ShopBuyPanel : UIPanel
 
                 // Add a GameObject to display the current item
                 GameObject shopItem = Instantiate(shopItemPrefab, parent);
-                Transform shopItemBG = shopItem.transform.Find("BG");
-                Transform pricePanel = shopItemBG.Find("PricePanel");
+                Transform shopItemBG = shopItem.transform.GetChild(1);
+                Transform pricePanel = shopItemBG.GetChild(1);
 
                 // When the button on the created GameObject us clicked, the corresponding item will be selected
                 int index = i;
-                shopItem.GetComponent<Button>().onClick.AddListener(delegate { SelectItemButton(shopItem.GetComponent<Image>(), category.SoldItems[index]); });
+
+                ButtonEvents itemButtonEvents = shopItem.GetComponent<ButtonEvents>();
+
+                itemButtonEvents.PointerClickEvent += delegate { SelectItemButton(shopItem.transform.GetChild(0).GetComponent<Image>(), category.SoldItems[index]); };
+
+                itemButtonEvents.PointerEnterEvent += delegate { ShowItemInfoPopup(category.SoldItems[index].Item); };
+
+                itemButtonEvents.PointerExitEvent  += HideItemInfoPopup;
 
                 // Set the item icon, currency icon and text displaying the item's price
-                shopItemBG.Find("ItemIcon").GetComponent<Image>().sprite = category.SoldItems[i].Item.Sprite;
+                shopItemBG.transform.Find("ItemIcon").GetComponent<Image>().sprite = category.SoldItems[i].Item.Sprite;
                 pricePanel.Find("CurrencyItem").GetComponent<Image>().sprite = category.CurrencyItem.Sprite;
                 pricePanel.Find("PriceText").GetComponent<TextMeshProUGUI>().text = category.SoldItems[i].Price.ToString();
             }
@@ -200,22 +209,35 @@ public class ShopBuyPanel : UIPanel
         }
     }
 
+    private void ShowItemInfoPopup(Item item)
+    {
+        GameSceneUI.Instance.ItemInfoPopup.ShowPopupWithItemInfo(item.Id);
+    }
+
+    private void HideItemInfoPopup()
+    {
+        GameSceneUI.Instance.ItemInfoPopup.HidePopup();
+    }
+
     private void SelectItemButton(Image itemButton, ShopItem shopItem)
     {
-        // If another item button was selected, reset its colour to default
-        if (selectedItemButton != null)
+        if(itemButton != selectedItemButton)
         {
-            selectedItemButton.color = standardButtonColour;
+            // If another item button was selected, reset its colour to default
+            if (selectedItemButton != null)
+            {
+                selectedItemButton.color = standardButtonColour;
+            }
+
+            // Set the new button to be the selected one and update its colour to show it's selected
+            selectedItemButton = itemButton;
+            selectedItemButton.color = selectedButtonColour;
+
+            // Select the item that the button corresponds to
+            SelectItem(shopItem);
+
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall");
         }
-
-        // Set the new button to be the selected one and update its colour to show it's selected
-        selectedItemButton = itemButton;
-        selectedItemButton.color = selectedButtonColour;
-
-        // Select the item that the button corresponds to
-        SelectItem(shopItem);
-
-        AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall");
     }
 
     private void SelectItem(ShopItem shopItem)
@@ -227,7 +249,7 @@ public class ShopBuyPanel : UIPanel
 
             // Show the buy button and update its text based on the selected item
             buyButtonGameObj.SetActive(true);
-            buyButtonText.text = "Buy " + shopItem.Item.UIName + " for " + shopItem.Price + " " + shopType.Categories[selectedCategoryIndex].CurrencyItem.UIName;
+            buyButtonText.text = "Buy <b>" + shopItem.Item.UIName + "</b> for " + shopItem.Price + " " + shopType.Categories[selectedCategoryIndex].CurrencyItem.UIName;
 
             // Check if the player has enough currency in their inventory/hotbar to buy the item
             itemPurchasable = (playerCurrencyQuantity >= shopItem.Price);
@@ -235,10 +257,12 @@ public class ShopBuyPanel : UIPanel
             // Change the colour of the buy button depending on if the item can be bought
             if(itemPurchasable)
             {
+                buyButton.ChangeSideColourHover = true;
                 buyButton.SetButtonColour(buyButtonColour);
             }
             else
             {
+                buyButton.ChangeSideColourHover = false;
                 buyButton.SetButtonColour(cannotBuyColour);
             }
         }
@@ -256,7 +280,7 @@ public class ShopBuyPanel : UIPanel
         Item currencyItem = shopType.Categories[selectedCategoryIndex].CurrencyItem;
 
         // Update currency UI to display the item and how much of it remains in the player's inventory/hotbar
-        currencyTitleText.text = "Remaining " + currencyItem.UIName + ":";
+        currencyTitleText.text = "Remaining " + currencyItem.UIName;
 
         currencyIcon.sprite = currencyItem.Sprite;
         currencyQuantityText.text = playerCurrencyQuantity.ToString();

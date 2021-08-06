@@ -93,13 +93,13 @@ public class ItemInfoPopup : MonoBehaviour
             if (item != null)
             {
                 // Show the popup with info based on the item's properties
-                UpdatePopupInfo(item.UIName, item.UIDescription, item.CustomItem, item.BaseItemId, item.CustomFloatProperties, item.CustomStringProperties);
+                UpdatePopupInfo(item);
             }
-            else
-            {
-                // Item is null, show an error popup
-                UpdatePopupInfo("Error: Unknown Item", "", false, "", new CustomFloatProperty[] { }, new CustomStringProperty[] { });
-            }
+            //else
+            //{
+            //    // Item is null, show an error popup
+            //    UpdatePopupInfo("Error: Unknown Item", "", false, "", new CustomFloatProperty[] { }, new CustomStringProperty[] { });
+            //}
 
             // The popup is now being shown
             showing = true;
@@ -123,19 +123,20 @@ public class ItemInfoPopup : MonoBehaviour
         canvasGroup.alpha = 0.0f;
     }
 
-    private void UpdatePopupInfo(string itemName, string itemDescription, bool customItem, string baseItemId,
-                                    CustomFloatProperty[] customFloatProperties, CustomStringProperty[] customStringProperties)
+    private void UpdatePopupInfo(Item item)
     {
         // Updates popup UI to display various info about an item
 
         // Set item name text
-        itemNameText.text = itemName;
+        itemNameText.text = item.UIName;
 
-        if (customItem)
+        if (item.CustomItem)
         {
+            Item baseItem = ItemManager.Instance.GetItemWithId(item.BaseItemId);
+
             // Item is customised - show text displaying the name of the original item it's based on
             itemCustomisedText.gameObject.SetActive(true);
-            itemCustomisedText.text = ItemManager.Instance.GetItemWithId(baseItemId).UIName;
+            itemCustomisedText.text = baseItem.UIName;
         }
         else
         {
@@ -143,11 +144,11 @@ public class ItemInfoPopup : MonoBehaviour
             itemCustomisedText.gameObject.SetActive(false);
         }
 
-        if (!string.IsNullOrWhiteSpace(itemDescription))
+        if (!string.IsNullOrWhiteSpace(item.UIDescription))
         {
             // Item has a description, display it
             itemDescriptionText.gameObject.SetActive(true);
-            itemDescriptionText.text = itemDescription;
+            itemDescriptionText.text = item.UIDescription;
         }
         else
         {
@@ -155,10 +156,10 @@ public class ItemInfoPopup : MonoBehaviour
             itemDescriptionText.gameObject.SetActive(false);
         }
 
-        if (customFloatProperties.Length > 0 || customStringProperties.Length > 0)
+        if (item.CustomFloatProperties.Length > 0 || item.CustomStringProperties.Length > 0)
         {
             // Item has some sort of custom property/properties, show custom property info
-            ShowCustomPropertyInfo(customFloatProperties, customStringProperties);
+            ShowCustomPropertyInfo(item.CustomFloatProperties, item.CustomStringProperties);
         }
         else
         {

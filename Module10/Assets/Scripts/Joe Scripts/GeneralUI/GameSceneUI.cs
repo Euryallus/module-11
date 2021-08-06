@@ -32,8 +32,9 @@ public class GameSceneUI : MonoBehaviour
 
     #region Properties
 
-    public InventoryPanel PlayerInventory { get { return playerInventory; } }
-    public bool ShowingCinematicsCanvas { get { return showingCinematicsCanvas; } }
+    public InventoryPanel   PlayerInventory         { get { return playerInventory; } }
+    public ItemInfoPopup    ItemInfoPopup           { get { return itemInfoPopup; } }
+    public bool             ShowingCinematicsCanvas { get { return showingCinematicsCanvas; } }
 
     #endregion
 
@@ -45,6 +46,8 @@ public class GameSceneUI : MonoBehaviour
     private CinematicsCanvas cinematicsCanvas;
 
     private InventoryPanel   playerInventory;
+
+    private ItemInfoPopup itemInfoPopup;
 
     private void Awake()
     {
@@ -67,6 +70,8 @@ public class GameSceneUI : MonoBehaviour
     private void Start()
     {
         playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        itemInfoPopup = GameObject.FindGameObjectWithTag("ItemInfoPopup").GetComponent<ItemInfoPopup>();
     }
 
     private void Update()

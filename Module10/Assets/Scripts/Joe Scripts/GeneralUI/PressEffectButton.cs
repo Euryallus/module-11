@@ -45,6 +45,8 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     #endregion
 
+    public bool ChangeSideColourHover { set { changeSideColourHover = value; } }
+
     private Vector3 startPos;               // The default position of the top of the button
     private Vector3 targetPos;              // The position the top of the button should move towards
     private bool    interactable = true;    // Whether the button can currently be pressed

@@ -240,8 +240,8 @@ MonoBehaviour:
   itemImage: {fileID: 382648560397516765}
   itemQuantityContainer: {fileID: 8936290432284230130}
   itemQuantityText: {fileID: 1748890237686062801}
-  standardColour: {r: 0, g: 0, b: 0, a: 0.8627451}
-  selectedColour: {r: 1, g: 0.82385063, b: 0, a: 1}
+  standardColour: {r: 0, g: 0, b: 0, a: 1}
+  selectedColour: {r: 0, g: 0.80137205, b: 1, a: 1}
 --- !u!1 &6832066446778645404
 GameObject:
   m_ObjectHideFlags: 0
