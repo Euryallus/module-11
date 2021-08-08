@@ -12,6 +12,7 @@ using TMPro;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+[RequireComponent(typeof(CanvasGroup))]
 public class DebugUI : MonoBehaviour
 {
     #region InspectorVariables
@@ -20,6 +21,30 @@ public class DebugUI : MonoBehaviour
     [SerializeField] private TMP_InputField itemSpawnInputField; // Input field for entering an item id to spawn
 
     #endregion
+
+    private CanvasGroup canvGroup;
+    private bool        showing;
+
+    private void Start()
+    {
+        canvGroup = GetComponent<CanvasGroup>();
+
+        // Hide debug options by default when not in the unity editor
+        #if !UNITY_EDITOR
+            SetShowing(false);
+        #else
+            SetShowing(true);
+        #endif
+    }
+
+    private void Update()
+    {
+        // Ctl + Alt + D toggles debug options
+        if(!InputFieldSelection.AnyFieldSelected && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D))
+        {
+            SetShowing(!showing);
+        }
+    }
 
     //Called when the 'Spawn Item' button is pressed
     public void ButtonSpawnItem()
@@ -42,5 +67,14 @@ public class DebugUI : MonoBehaviour
     public void ForceLoad()
     {
         SaveLoadManager.Instance.LoadGameScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void SetShowing(bool show)
+    {
+        canvGroup.alpha = show ? 1.0f : 0.0f;
+        canvGroup.blocksRaycasts = show;
+        canvGroup.interactable = show;
+
+        showing = show;
     }
 }

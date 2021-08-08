@@ -287,7 +287,6 @@ MonoBehaviour:
   drownDamageInterval: 2
   baseTimeToDrown: 30
   damageEffectPrefab: {fileID: 3342926187353654585, guid: 38135b846d9b4854d825cb5f5717235e, type: 3}
-  unlockedGrabUpgrade: 0
 --- !u!114 &8688783702949859633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,7 +361,7 @@ MonoBehaviour:
   maxUpgradeLevel: 3
   chargeTime: 0.5
   cooldownTime: 5
-  initialFoodDecrease: 0.1
+  initialFoodDecrease: 0.01
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
@@ -385,7 +384,7 @@ MonoBehaviour:
   maxUpgradeLevel: 0
   chargeTime: 0.5
   cooldownTime: 5
-  initialFoodDecrease: 0.1
+  initialFoodDecrease: 0.05
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
@@ -413,7 +412,7 @@ MonoBehaviour:
   maxUpgradeLevel: 0
   chargeTime: 0.5
   cooldownTime: 20
-  initialFoodDecrease: 0.1
+  initialFoodDecrease: 0.05
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
