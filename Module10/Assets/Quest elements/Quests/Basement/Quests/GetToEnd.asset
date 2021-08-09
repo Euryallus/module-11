@@ -31,8 +31,8 @@ MonoBehaviour:
   handInNPCName: floodedRoomMan
   handOutNPCName: floodedRoomMan
   questLineName: 
-  questCompleted: 1
-  questHandedIn: 1
+  questCompleted: 0
+  questHandedIn: 0
   handInToGiver: 1
-  savedQuestCompleted: 1
-  savedQuestHandedIn: 1
+  savedQuestCompleted: 0
+  savedQuestHandedIn: 0

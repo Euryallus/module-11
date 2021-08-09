@@ -29,8 +29,8 @@ MonoBehaviour:
   handInNPCName: Weapon Smith
   handOutNPCName: Weapon Smith
   questLineName: 
-  questCompleted: 1
+  questCompleted: 0
   questHandedIn: 0
   handInToGiver: 1
-  savedQuestCompleted: 1
+  savedQuestCompleted: 0
   savedQuestHandedIn: 0

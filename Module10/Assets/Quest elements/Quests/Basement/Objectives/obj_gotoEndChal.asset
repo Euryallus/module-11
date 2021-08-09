@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectiveType: 0
   taskName: Get to the end of the challenge!
-  taskComplete: 1
-  saveTaskComplete: 1
+  taskComplete: 0
+  saveTaskComplete: 0
   positionToGoTo: {x: 537.436, y: 99.591, z: 821.727}
   distanceFlagged: 6
