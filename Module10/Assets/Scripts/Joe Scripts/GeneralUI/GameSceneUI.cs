@@ -196,6 +196,8 @@ public class GameSceneUI : MonoBehaviour
                 canvases[i].enabled = show;
             }
         }
+
+        GameObject.FindGameObjectWithTag("QuestManager").GetComponent<CanvasGroup>().alpha = show ? 1.0f : 0.0f;
     }
 
     public void ShowCinematicsCanvas()

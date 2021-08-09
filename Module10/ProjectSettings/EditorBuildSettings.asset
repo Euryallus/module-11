@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Maps/Catacombs.unity
     guid: 7f87e906d8a71ce428acfa130c5a4594
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 2cacc50b03218354eb3d9486055956b8
   - enabled: 0
     path: Assets/Scenes/Joe test scene/JoeTestScene.unity
     guid: 7b1de85605ec6c24498945b44ff548ab

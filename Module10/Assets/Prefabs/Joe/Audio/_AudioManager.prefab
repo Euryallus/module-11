@@ -88,6 +88,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cf5baa675ad147d409606eb66a6c4333, type: 2}
   - {fileID: 11400000, guid: 8c0f89773a4149c4786b90332330bb21, type: 2}
   - {fileID: 11400000, guid: 8c6418128ac7dca48b2258dd865ba7d2, type: 2}
+  - {fileID: 11400000, guid: 2d7c3d9a5f064424795e008607cb9a05, type: 2}
   - {fileID: 11400000, guid: d7937863df34a1c4f8a902dd0f4b7a74, type: 2}
   - {fileID: 11400000, guid: b1e56c1635b84c14281a3d5093e36e69, type: 2}
   - {fileID: 11400000, guid: 2ae7334f4983af44b9ec4deb1dd2f215, type: 2}
@@ -106,6 +107,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 79e11558f0a001146bff4aabe4463ea6, type: 2}
   - {fileID: 11400000, guid: 204bb2b7b05f6c44296f96b5b2baa112, type: 2}
   - {fileID: 11400000, guid: c873e5483ca154f419cdc3284178ae7a, type: 2}
+  - {fileID: 11400000, guid: abd7e19e2cbe778458d3e30155a7682e, type: 2}
   sceneMusicSetup:
   - SceneName: The Village
     PlayMode: 2

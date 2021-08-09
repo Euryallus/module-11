@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoint, IExternalTriggerListener
@@ -14,6 +15,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
     [SerializeField] private string                     unlockAreaName;
     [SerializeField] private Transform                  respawnTransform;           // Where the player will respawn if the game was last saved after the monument was lit
     [SerializeField] private ExternalTrigger            fireTrigger;
+    [SerializeField] private bool                       isLastMonument;
 
     [Header("For a portal in this scene:")]
     [Space]
@@ -83,7 +85,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
 
     public bool OnInteract()
     {
-        if(!playerMovement.OnPlatform)
+        if(!PlayerInstance.ActivePlayer.PlayerMovement.OnPlatform)
         {
             LightFire();
 
@@ -130,7 +132,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         // Fade music/sounds out over 0.2 seconds
         AudioManager.Instance.FadeGlobalVolumeMultiplier(0.0f, 0.2f);
 
-        AudioManager.Instance.PlayMusicalSoundEffect("fireLightCutscene");
+        AudioManager.Instance.PlayMusicalSoundEffect(isLastMonument ? "fireLightEndCutscene" : "fireLightCutscene");
 
         CinematicsCanvas cinematicsCanvas = GameSceneUI.Instance.GetActiveCinematicsCanvas();
 
@@ -138,6 +140,8 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         {
             cinematicsCanvas.SetupVideoPlayer(unlockVideoClip);
         }
+
+        PlayerMovement playerMovement = PlayerInstance.ActivePlayer.PlayerMovement;
 
         // Snap the player to the respawn position/rotation in case they are stood in the fire or elsewhere
         playerMovement.gameObject.transform.position = respawnTransform.position + Vector3.up;
@@ -193,6 +197,26 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
 
         // Save the game now the monument is lit and a portal has been activated
         SaveLoadManager.Instance.SaveGameData();
+    }
+
+    // Called at the end of the final monument cutscene by an animation event
+    private void LastMonumentEvents()
+    {
+        StartCoroutine(LastMonumentEventsCoroutine());
+    }
+
+    private IEnumerator LastMonumentEventsCoroutine()
+    {
+        GameSceneUI.Instance.GetActiveCinematicsCanvas().CutToBlack();
+
+        SaveLoadManager.Instance.SaveGameData("The Village");
+
+        yield return new WaitForSecondsRealtime(4.0f);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadSceneAsync("Credits");
     }
 
     private string GetUniquePositionId()

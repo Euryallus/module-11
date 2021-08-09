@@ -33,6 +33,12 @@ public class CinematicsCanvas : MonoBehaviour
         fadeEffectSpeed = fadeSpeed;
     }
 
+    public void CutToBlack()
+    {
+        fadePanelCanvGroup.alpha = 1.0f;
+        targetFadeValue = 1.0f;
+    }
+
     public void SetupVideoPlayer(VideoClip clipToPlay)
     {
         videoPlayer.clip = clipToPlay;

@@ -67,7 +67,7 @@ public class SaveLoadManager : MonoBehaviour
     private const string MainSaveDirectory      = "Maps";
     private const string MainStartingSceneName  = "The Village";
 
-    private static ISavePoint lasUsedSavePoint = null;
+    private static ISavePoint lastUsedSavePoint = null;
 
     private void Awake()
     {
@@ -140,12 +140,12 @@ public class SaveLoadManager : MonoBehaviour
 
     public static void SetLastUsedSavePoint(ISavePoint savePoint)
     {
-        if(lasUsedSavePoint != null)
+        if(lastUsedSavePoint != null)
         {
-            lasUsedSavePoint.SetAsUnused();
+            lastUsedSavePoint.SetAsUnused();
         }
 
-        lasUsedSavePoint = savePoint;
+        lastUsedSavePoint = savePoint;
     }
 
     public bool SaveGameData(string returnToSceneName = "UseActiveScene", string scenesDirectory = "UseCurrentDirectory")
@@ -307,7 +307,9 @@ public class SaveLoadManager : MonoBehaviour
 
     private IEnumerator LoadGameSceneCoroutine(string sceneName, string scenesDirectory)
     {
-        lasUsedSavePoint = null;
+        loadingSceneData = true;
+
+        lastUsedSavePoint = null;
 
         // Pause time
 
@@ -538,7 +540,7 @@ public class SaveLoadManager : MonoBehaviour
         {
             // No scene save data to control player position, instead try moving the player to a default spawn point if one exists
 
-            GameObject defaultSpawnPoint = GameObject.Find("DefaultSpawnPoint");
+            GameObject defaultSpawnPoint = GameObject.FindGameObjectWithTag("DefaultSpawnPoint");
             if (defaultSpawnPoint != null)
             {
                 // Adding Vector3.up to the spawn position so the player doesn't spawn halfway in the ground

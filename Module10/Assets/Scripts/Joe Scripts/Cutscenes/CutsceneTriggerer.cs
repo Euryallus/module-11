@@ -8,7 +8,6 @@ public class CutsceneTriggerer : MonoBehaviour
     [SerializeField] private    GameObject cutsceneCamera;
     [SerializeField] private    Animator   cutsceneAnimator;
 
-    protected   PlayerMovement  playerMovement;
     private     GameObject      mainCameraGameObj;
 
     private bool returnToPlayerMovement;
@@ -24,12 +23,12 @@ public class CutsceneTriggerer : MonoBehaviour
         {
             cutsceneCamera.SetActive(false);
         }
-
-        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
     public virtual void StartCutscene()
     {
+        PlayerMovement playerMovement = PlayerInstance.ActivePlayer.PlayerMovement;
+
         returnToPlayerMovement = playerMovement.PlayerCanMove();
 
         // Stop the player from moving and disable the character controller to avoid
@@ -76,6 +75,8 @@ public class CutsceneTriggerer : MonoBehaviour
 
         gameUI.SetUIShowing(true);
         gameUI.HideCinematicsCanvas();
+
+        PlayerMovement playerMovement = PlayerInstance.ActivePlayer.PlayerMovement;
 
         // Re-enable the player controller
         playerMovement.Controller.enabled = true;

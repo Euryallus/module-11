@@ -247,8 +247,11 @@ public class PlayerMovement : MonoBehaviour
                     // If hits water layer above & mode isnt swimming, enable post processing effects
                     if (currentMovementState != MovementStates.dive)
                     {
-                        dof.active = true;
-                        v.active = true;
+                        if(dof != null)
+                            dof.active = true;
+
+                        if(v != null)
+                            v.active = true;
                     }
 
                     // Added by Joe: plays a sound when the player first enters water and starts looping underwater sound
@@ -269,8 +272,11 @@ public class PlayerMovement : MonoBehaviour
                     if (inWater == true)
                     {
                         // Disable post processing effects
-                        dof.active = false;
-                        v.active = false;
+                        if (dof != null)
+                            dof.active = false;
+
+                        if (v != null)
+                            v.active = false;
 
                         // Change state to "swim" on top of water
                         currentMovementState = MovementStates.swim;
