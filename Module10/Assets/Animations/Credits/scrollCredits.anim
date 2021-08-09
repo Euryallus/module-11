@@ -88,11 +88,11 @@ AnimationClip:
       - serializedVersion: 3
         time: 30
         value: 1585
-        inSlope: 28.946133
+        inSlope: 4.3638735
         outSlope: Infinity
         tangentMode: 97
         weightedMode: 0
-        inWeight: 0.6041248
+        inWeight: 0.5267097
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 32
@@ -276,11 +276,11 @@ AnimationClip:
       - serializedVersion: 3
         time: 30
         value: 1585
-        inSlope: 28.946133
+        inSlope: 4.3638735
         outSlope: Infinity
         tangentMode: 97
         weightedMode: 0
-        inWeight: 0.6041248
+        inWeight: 0.5267097
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 32
