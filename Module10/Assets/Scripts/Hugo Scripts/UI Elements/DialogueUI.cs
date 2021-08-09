@@ -12,7 +12,8 @@ using TMPro;
 public class DialogueUI : UIPanel
 {
     [SerializeField]    private CanvasGroup cg;         // Ref. to NPC Dialogue UI canvas group
-    [SerializeField]    private TMP_Text dialogueText;  // Ref to dialogue text box
+    [SerializeField]    private TMP_Text dialogueText;  // Ref. to dialogue text box
+    [SerializeField]    private TMP_Text nameText;      // Ref. to NPC name in dialogue
 
     [SerializeField] private float timeBetweenLetterPrint = 0.005f;
     private WaitForSeconds wait;
@@ -29,7 +30,7 @@ public class DialogueUI : UIPanel
         playerName = PlayerStats.PlayerName;
     }
 
-    public void ShowDialogue(string dialogue)
+    public void ShowDialogue(string dialogue, string NPCName)
     {
         StopAllCoroutines();
         // Sets canvas group alpha to 1 and changes dialogue text component to display string passed
@@ -52,6 +53,7 @@ public class DialogueUI : UIPanel
         }
         
         displayedDialogue = dialogue;
+        nameText.text = NPCName;
 
         StartCoroutine(PrintDialogue(dialogue));
         //dialogueText.text = dialogue;

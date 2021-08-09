@@ -89,7 +89,7 @@ public class NPCManager : MonoBehaviour
             StartFocusCameraMove(npc.cameraFocusPoint);
 
             playerMove.StopMoving();
-            UI.ShowDialogue(dialogueLine);
+            UI.ShowDialogue(dialogueLine, npc.displayName);
             
             if(npc.gameObject.GetComponent<WalkingNonInteractable>() != null)
             {
@@ -144,7 +144,7 @@ public class NPCManager : MonoBehaviour
         if (dialogueLine != null)
         {
             // If the NPC has something else to say, show it
-            UI.ShowDialogue(dialogueLine);
+            UI.ShowDialogue(dialogueLine, interactingWith.displayName);
         }
         else
         {

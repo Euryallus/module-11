@@ -14,6 +14,7 @@ public class NPC : MonoBehaviour
 
                         public string npcName;                      // Stores Name of NPC
                         public bool isQuestGiver = false;           // Flags if NPC has quests associated withh them
+                        public string displayName = "A Stranger";   // Name displayed during dialogue
 
     [Header("Does dialogue influence NPC movement")]
     public bool walkAfterConversation = false;
