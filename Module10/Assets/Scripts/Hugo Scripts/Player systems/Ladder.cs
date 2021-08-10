@@ -5,16 +5,17 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   Base class written by Joe Allen
 // Description:         Allows player to interact & get on / off ladders
-// Development window:  Prototype phase
+// Development window:  Prototype phase (with alterations done in Production phase)
 // Inherits from:       InteractableWithOutline
 
 public class Ladder : InteractableWithOutline
 {
-    [SerializeField]    private Transform snapPoint;
+    [SerializeField]    private Transform snapPoint;    // Saves X and Z co-ords player should "snap" to when using ladder
+
     public override void Interact()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        // Flags ladder as having been interacted with in PlayerMovement script
+        // Flags player as having interacted w/ laadder
         player.GetComponent<PlayerMovement>().InteractWithLadder(snapPoint.position);
         base.Interact();
     }

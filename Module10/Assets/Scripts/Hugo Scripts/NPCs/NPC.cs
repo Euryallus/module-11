@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Stores data retaining to the NPC component is attached to. Manages dialogue & flags if NPC is also a quest giver
-// Development window:  Prototype phase
+// Development window:  Prototype phase (with alterations done in Production phase)
 // Inherits from:       MonoBehaviour
 
 public class NPC : MonoBehaviour
@@ -17,15 +17,15 @@ public class NPC : MonoBehaviour
                         public string displayName = "A Stranger";   // Name displayed during dialogue
 
     [Header("Does dialogue influence NPC movement")]
-    public bool walkAfterConversation = false;
+    public bool walkAfterConversation = false;                      // Flags if player interactions could cause NPC to move (only works if NPC also has walkingNonInteractable component)
 
     [Header("Dialogue data")]
 
     [TextArea(1, 5)]
     [SerializeField]    private string[] dialogueLines;             // List of dialogue lines NPC will say if interacted with
 
-    [SerializeField] private string[] endGameDialogueLines;
-    private int endDialogueProgression = 0;
+    [SerializeField]    private string[] endGameDialogueLines;      // Flags if NPC has alternative dialogue lines for after player has completed game
+                        private int endDialogueProgression = 0;     // Stores player progression through end dialogue lines
 
     [HideInInspector]   public bool haveTalkedToBefore = false;     // Flags if player has talked to the NPC before 
                         private int dialogueProgression = 0;        // Stores player progression through dialogue lines
@@ -60,8 +60,10 @@ public class NPC : MonoBehaviour
 
     public string ReturnEndDialogue()
     {
-        if(endDialogueProgression < endGameDialogueLines.Length)
+        // Checks if NPC has more to say using endDialogueProgression pointer
+        if (endDialogueProgression < endGameDialogueLines.Length)
         {
+            // Returns next line from list & incriments pointer
             string returnString = endGameDialogueLines[endDialogueProgression];
 
             ++endDialogueProgression;

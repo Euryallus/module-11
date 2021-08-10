@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Used by the Grab ability (currently tied to the Pickaxe) to pick up & move physics objects around
-// Development window:  Prototype phase
-// Inherits from:       MonoBehaviour
+// Development window:  Prototype phase (overhauled in Production phase)
+// Inherits from:       InteractableWithOutline & IPersistentSceneObject
 
 [RequireComponent(typeof(Rigidbody))]
 public class MovableObject : InteractableWithOutline, IPersistentSceneObject
@@ -23,18 +23,16 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
                         private SpringJoint joint;                          // Ref. to own spring joint
                         private Vector3 currentVelocity = Vector3.zero;     // Current velocity of object (used & altered by Vector3.SmoothDamp)
 
-    [SerializeField]    private Transform hand;
+    [SerializeField]    private Transform hand;                             // Ref. to position of player's ""hand""
 
     [Header("Object type (if is large, can only be held w/ upgraded Grab)")]
     [SerializeField] private bool isLargeObject = false;
 
-    private GameObject player;
-
-    private bool canPickUp;
-    private Material originalMat;
-    private GrabAbility grabAbility;
-
-    private Vector3 startPosition; // The position of the object on scene load, used to generate a unique position id
+    private GameObject player;          // Ref. to player
+    private bool canPickUp;             // Flags is object can be picked up
+    private Material originalMat;       // Ref. to objects original material
+    private GrabAbility grabAbility;    // Ref. to GrabAbility main component
+    private Vector3 startPosition;      // The position of the object on scene load, used to generate a unique position id
 
     // Added by Joe, the tooltip text to show be default when the object can be picked up (as originally set in the inspector)
     private string defaultTooltipNameText;
@@ -53,13 +51,18 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
+
         isHeld = false;
+
+        // Prevents object moving unless the player has picked it up at least once (e.g. large objects can't just be pushed to button, must be picked up)
         rb = gameObject.GetComponent<Rigidbody>();
         rb.isKinematic = true;
 
         defaultTooltipNameText = tooltipNameText;
-
+        
+        // Saves originalMat as material used on start
         originalMat = gameObject.GetComponent<MeshRenderer>().material;
+        // Saves ref. to player
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -83,38 +86,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         }
     }
 
-    public void MoveToStartPosition()
-    {
-        transform.position = startPosition;
-        transform.rotation = Quaternion.identity;
-    }
 
-    public override void StartHoverInRange()
-    {
-        base.StartHoverInRange();
-
-        UpdatePickUpStatus();
-
-        if(canPickUp)
-        {
-            grabAbility.SetCooldownAmount(1.0f);
-        }
-        else
-        {
-            // Don't show an outline on hover if the object cannot be picked up
-            outline.enabled = false;
-        }
-    }
-
-    public override void EndHoverInRange()
-    {
-        base.EndHoverInRange();
-
-        if(!isHeld)
-        {
-            grabAbility.SetCooldownAmount(0.0f);
-        }
-    }
 
     protected override void Update()
     {
@@ -186,29 +158,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             grabAbility.SetChargeAmount(1.0f);
         }
     }
-
-    // Added by Joe: Shows a tooltip with info about how to drop/throw an object when carrying it
-    private void ShowCarryingTooltip()
-    {
-        // Override default tooltip behaviour so it always shows while carrying
-        //   an object, regardless of whether the mouse is over it
-        overrideTooltipBehaviour = true;
-
-        tooltipNameText = "Right Click: Drop";
-
-        ShowInteractTooltip("Left Click: Throw");
-    }
-
-    // Added by Joe: Opposite of the above function, reverts to standard tooltip behaviour
-    private void HideCarryingTooltip()
-    {
-        overrideTooltipBehaviour = false;
-
-        tooltipNameText = defaultTooltipNameText;
-
-        HideInteractTooltip();
-    }
-
+    
     // Sets item down where it is and re-enables grav.
     public void DropObject()
     {
@@ -250,6 +200,64 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         //   it was moved to the DontDestroyOnLoad scene, and as such needs to be moved back.
         SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
     }
+
+    // All below added by Joe
+    public void MoveToStartPosition()
+    {
+        transform.position = startPosition;
+        transform.rotation = Quaternion.identity;
+    }
+
+    public override void StartHoverInRange()
+    {
+        base.StartHoverInRange();
+
+        UpdatePickUpStatus();
+
+        if(canPickUp)
+        {
+            grabAbility.SetCooldownAmount(1.0f);
+        }
+        else
+        {
+            // Don't show an outline on hover if the object cannot be picked up
+            outline.enabled = false;
+        }
+    }
+
+    public override void EndHoverInRange()
+    {
+        base.EndHoverInRange();
+
+        if(!isHeld)
+        {
+            grabAbility.SetCooldownAmount(0.0f);
+        }
+    }
+
+    // Shows a tooltip with info about how to drop/throw an object when carrying it
+    private void ShowCarryingTooltip()
+    {
+        // Override default tooltip behaviour so it always shows while carrying
+        //   an object, regardless of whether the mouse is over it
+        overrideTooltipBehaviour = true;
+
+        tooltipNameText = "Right Click: Drop";
+
+        ShowInteractTooltip("Left Click: Throw");
+    }
+
+    // Added by Joe: Opposite of the above function, reverts to standard tooltip behaviour
+    private void HideCarryingTooltip()
+    {
+        overrideTooltipBehaviour = false;
+
+        tooltipNameText = defaultTooltipNameText;
+
+        HideInteractTooltip();
+    }
+
+    
 
     // Added by Joe, determines whether the object can be picked up based on
     //   the unlock status and upgrade level of the grab ability

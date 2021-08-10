@@ -5,9 +5,9 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 
 // Main author:         Hugo Bailey
-// Additional author:   N/A
+// Additional author:   Joe Allen
 // Description:         Enemy camp entity - spawns & manages enemies that patrol an area surrounding it
-// Development window:  Prototype phase
+// Development window:  Prototype phase (with alterations done in Production phase)
 // Inherits from:       MonoBehaviour
 
 public class EnemyCampManager : MonoBehaviour
@@ -18,25 +18,21 @@ public class EnemyCampManager : MonoBehaviour
     [SerializeField]    private bool spawnOnStart = true;
 
     [SerializeField]    private List<EnemyBase> possibleUnits   = new List<EnemyBase>();    // List of enemies that could be spawned from the camp
-    [SerializeField]                    private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
+    [SerializeField]    private List<EnemyBase> spawnedEnemies  = new List<EnemyBase>();    // List of refs to enemies that were spawned
                         private List<EnemyBase> unitsDifficulty = new List<EnemyBase>();    // List of enemies that could possibly spawn, that make up difficulty ~ that defined by diffifultyLevel
 
-                        public bool hasBeenDefeated = false;
-                        public bool spawnRandomPosition = true;
+    public bool hasBeenDefeated = false;        // Flags if all spawned enemies have been defeated
+    public bool spawnRandomPosition = true;     // Flags whether enemies spawn in random pos or only at camp position
+    public int totalSpawned;                    // Stores total # of enemies that have been spawned
 
-    // Added by Joe
-    [SerializeField] private CombatDynamicAudioArea dynamicAudio;   // The dynamic audio area associated with this enemy camp
 
-    [SerializeField] private UnityEvent noActiveEnemiesEvent = new UnityEvent();
-
-    public int remainingUnits 
-    { get 
-        {
+    public int remainingUnits // returns # of remaining units (not always just spawnedEnemies.Count so some more calculations needed)
+    { get {
             int left = 0;
 
             if (spawnedEnemies.Count != 0)
             {
-
+                // Cycles each spawned ref., if ref. is null OR enemy is flagged as !alive enemy is dead (don't incriment "left" int)
                 for (int i = 0; i < spawnedEnemies.Count; i++)
                 {
                     EnemyBase enemy = spawnedEnemies[i];
@@ -52,35 +48,39 @@ public class EnemyCampManager : MonoBehaviour
                 }
             }
 
-            return left; 
-        } 
+            // Returns remaining enemy count
+            return left; } 
     }
 
-    public int totalSpawned;
-    
+    // Added by Joe
+    [SerializeField] private CombatDynamicAudioArea dynamicAudio;   // The dynamic audio area associated with this enemy camp
+    [SerializeField] private UnityEvent noActiveEnemiesEvent = new UnityEvent();    // Functions that play when all enemies have been defeated    
 
     void Start()
     {
         totalSpawned = 0;
         if (spawnOnStart)
         { 
-            // Spawns units 
+            // If spawnOnStart is flagged, immediately spawn units
             SpawnUnits(difficultyLevel, Vector3.zero);
         }
     }
 
     private void Update()
     {
+        // Checks whether encounter has been defeated
         if(spawnedEnemies.Count != 0)
         {
             hasBeenDefeated = false;
 
+            // Cycles each enemy, if any are still alive hasBeenDefeated = false
             for(int i = 0; i < spawnedEnemies.Count; i++)
             {
                 if(spawnedEnemies[i] != null)
                 {
                     if (!spawnedEnemies[i].gameObject.GetComponent<EnemyHealth>().alive)
                     {
+                        // If any enemies are not alive OR the ref. is null, remove from list
                         spawnedEnemies.RemoveAt(i);
                         if (spawnedEnemies.Count == 0)
                         {
@@ -88,6 +88,7 @@ public class EnemyCampManager : MonoBehaviour
                         }
                         else
                         {
+                            // if enemy was removed & more remain decrement i by 1 to account for altered list
                             i--;
                         }
                     }
@@ -96,6 +97,7 @@ public class EnemyCampManager : MonoBehaviour
         }
         else if(!hasBeenDefeated)
         {
+            // If no spawned enemies remain but hasBeenDefeated hasnt been flagged, flag & call "end" func.
             hasBeenDefeated = true;
 
             NoActiveEnemies();
@@ -206,6 +208,7 @@ public class EnemyCampManager : MonoBehaviour
         }
     }
 
+    // Adds externally spawned enemy to list of spawned enemies (e.g. if Enemy#1 spawns 3 minions, adds minions to list)
     public void AddUnitToList(EnemyBase enemy)
     {
         spawnedEnemies.Add(enemy);
