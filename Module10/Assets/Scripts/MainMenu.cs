@@ -138,7 +138,7 @@ public class MainMenu : MonoBehaviour
 
     public void ButtonCredits()
     {
-        // Show credits
+        SceneManager.LoadScene("Credits");
 
         AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2");
     }

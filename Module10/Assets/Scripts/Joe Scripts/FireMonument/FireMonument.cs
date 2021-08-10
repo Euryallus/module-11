@@ -209,6 +209,12 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
     {
         GameSceneUI.Instance.GetActiveCinematicsCanvas().CutToBlack();
 
+        SetAsUsed();
+
+        SaveLoadManager.Instance.SaveGameData();
+
+        yield return null;
+
         SaveLoadManager.Instance.SaveGameData("The Village");
 
         yield return new WaitForSecondsRealtime(4.0f);
