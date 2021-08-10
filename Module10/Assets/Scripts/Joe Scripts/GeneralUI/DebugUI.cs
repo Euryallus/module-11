@@ -23,7 +23,7 @@ public class DebugUI : MonoBehaviour
     #endregion
 
     private CanvasGroup canvGroup;
-    private bool        showing;
+    private bool        showing;    // Whether debug UI is being shown
 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class DebugUI : MonoBehaviour
         }
     }
 
-    //Called when the 'Spawn Item' button is pressed
+    // Called when the 'Spawn Item' button is pressed
     public void ButtonSpawnItem()
     {
         // Find an item with the entered id
@@ -59,16 +59,19 @@ public class DebugUI : MonoBehaviour
         }
     }
 
+    // Called on button press, forces the game to save
     public void ForceSave()
     {
         SaveLoadManager.Instance.SaveGameData();
     }
 
+    // Called on button press, forces the game to reload the active scene
     public void ForceLoad()
     {
         SaveLoadManager.Instance.LoadGameScene(SceneManager.GetActiveScene().name);
     }
 
+    // Shows/hides the debug UI panel
     private void SetShowing(bool show)
     {
         canvGroup.alpha = show ? 1.0f : 0.0f;

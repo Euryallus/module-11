@@ -10,6 +10,8 @@ using TMPro;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for mod 11: bug fixes and added GetPopupScreenPos & GetPopupWorldPos
+
 public abstract class InteractableObject : MonoBehaviour
 {
     #region InspectorVariables

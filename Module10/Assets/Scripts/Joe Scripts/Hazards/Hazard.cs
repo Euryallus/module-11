@@ -17,6 +17,8 @@ public enum HazardMode
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for mod 11: allowed animations to be reversed for use in QTE hazards and added continuousStartDelay: an optional start delay for continuous animations
+
 public class Hazard : MonoBehaviour, IExternalTriggerListener
 {
     #region InspectorVariables

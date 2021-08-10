@@ -28,10 +28,12 @@ public class InventoryOpenerInteractable : InteractableWithOutline
 
         if (!inventoryPanel.Showing)
         {
-            // Show the inventory panel on interaction
+            // Show the inventory panel on interaction, potentially also showing
+            //   crafting/customisation menus depending on inventoryShowMode 
             inventoryPanel.Show(inventoryShowMode);
         }
 
+        // Play a crafting-specific sound if opening the crafting menu
         if(inventoryShowMode == InventoryShowMode.Craft)
         {
             AudioManager.Instance.PlaySoundEffect2D("craftingTableOpen");

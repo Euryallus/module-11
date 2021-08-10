@@ -9,6 +9,8 @@ using UnityEngine;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// mod 11: added candrop and canthrowaway
+
 [CreateAssetMenu(fileName = "Item", menuName = "Item/Item")]
 public class Item : ScriptableObject
 {

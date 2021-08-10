@@ -12,6 +12,8 @@ using UnityEngine.UI;
 // || for the prototype phase.                                              ||
 // ||=======================================================================||
 
+// Edited for mod11: changed AddButton & SubtractButton from standard unity buttons to PressEffectButton to allow for extra visual options/functionality
+
 public class CustomFloatPropertyPanel : MonoBehaviour
 {
     #region InspectorVariables
