@@ -9,8 +9,7 @@ using UnityEngine;
 // Inherits from:       Enemy1
 
 // ## NOTE! ##
-// This class is being used to test animations - it will not be used as the final version
-// Once changes are approved & animations are finalised, we will migrate this all to the base Enemy1 class
+// This class is being used to test animations and diferentiate between base & functional
 
 public class Enemy1Anim : Enemy1
 {

@@ -2,36 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Main author:         Hugo Bailey
+// Additional author:   N/A
+// Description:         Adapted version of Enemy2 - used to test enemy animations & visuals
+// Development window:  Production phase
+// Inherits from:       Enemy2
+
 public class Enemy2Anim : Enemy2
 {
-
-    [SerializeField] private Animator anim;
+    [SerializeField] private Animator anim; // Stores ref. to animator component of enemy
 
     public override void StartEvade()
     {
         base.StartEvade();
-
+        // Starts enemy walking anim when evading the player
         anim.SetBool("IsWalking", true);
     }
 
     public override void StartPatrolling()
     {
         base.StartPatrolling();
-
+        // Starts enemy walking when patrolling an area
         anim.SetBool("IsWalking", true);
     }
 
     public override void Engage()
     {
         base.Engage();
-
+        // Starts enemy walking when engaging with player
         anim.SetBool("IsWalking", true);
     }
 
     protected override void Release()
     {
         base.Release();
-
+        // Runs attack animation when enemy launches projectile
         anim.SetTrigger("Attack");
     }
 
@@ -74,6 +79,7 @@ public class Enemy2Anim : Enemy2
                     return;
                 }
 
+                // If enemy has reached destination, stop walking
                 if (anim.GetBool("IsWalking"))
                 {
                     anim.SetBool("IsWalking", false);

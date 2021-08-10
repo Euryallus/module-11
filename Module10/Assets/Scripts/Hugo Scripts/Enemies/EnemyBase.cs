@@ -6,7 +6,7 @@ using UnityEngine.AI;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Base class used for all Enemy types within the game. Handles state behaviour & default attacks
-// Development window:  Prototype phase
+// Development window:  Prototype phase (with alterations done in Production phase)
 // Inherits from:       MonoBehaviour
 
 public class EnemyBase : MonoBehaviour
@@ -61,26 +61,26 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]    protected float maxAtEachPatrolPoint;           // Maximum time enemy will spent at a patrol point
     [SerializeField]    protected float patrolSpeed;                    // Speed enemy patrols at
     [SerializeField]    protected float defaultSpeed;                   // Speed enemy moves when searching / engaged
+    [SerializeField]    protected float argoTime = 3f;                  // Time enemy remains in "engaged" when loses sight of player
                         protected bool findingNewPos = false;           // Flags if enemy is waiting at point before selecting a new one
-                        protected bool isFrozen = false;
+                        protected bool isFrozen = false;                // Flags if enemy is unable to move
+                        protected float timeSinceLastSeen;              // Time since the player was last in direct sight of enemy
+                        public bool canSee = false;                     // Flags is enemy can see player
 
     [Header("Evade behabiour")]
     [Tooltip("Leave at 0 if enemy does not return to fight mode while at low health")]
-    [SerializeField]    protected float evadeCooldown = 0f;
-    [SerializeField]    protected float evadeDistanceFromPlayer = 15f;
-                        private float evadeTimeElapsed = 0f;
+    [SerializeField]    protected float evadeCooldown = 0f;                 // Time enemy will spend running from player when below [x]% health before returning
+    [SerializeField]    protected float evadeDistanceFromPlayer = 15f;      // Distance enemy will evade to
+                        private float evadeTimeElapsed = 0f;                // Time enemy has spent running
 
-    protected float timeSinceLastSeen;
-    [SerializeField] protected float argoTime = 3f;
-    
 
-    public bool canSee = false;
-    private bool suspended; // Added by Joe - True when the enemy is suspended in the air by the slam ability
 
     // Added by Joe
     public bool AgentEnabled { get { return agent.enabled; } }
     public bool Suspended { get { return suspended; } set { suspended = value; } }
     public Renderer MeshRenderer { get { return meshRenderer; }}
+    
+    private bool suspended;     // True when the enemy is suspended in the air by the slam ability
 
     public virtual void Awake()
     {
@@ -91,9 +91,6 @@ public class EnemyBase : MonoBehaviour
 
         // Sets default speed to that set by NavMeshAgent
         defaultSpeed = agent.speed;
-
-        //// Initial state is patrolling
-        //StartPatrolling();
     }
 
     // Update is called once per frame
@@ -304,18 +301,24 @@ public class EnemyBase : MonoBehaviour
         // 3# if reached pos, chose new one
         // OPTIONAL 4# if enemy has expended "time out" length go back & start searching (see WoW enemies "fear" state for ref)
 
+        // Calculates if destination is within 2m of current position
         if(Vector3.Distance(transform.position, agent.destination) < 2f)
         {
+            // If near destination, pick new destination
             EvadeRandomPos();
         }
+        // If NOT near destination & cannot reach destination on NavMesh, chose new destination
         else if(!NavMesh.CalculatePath(transform.position, agent.destination, NavMesh.AllAreas, agent.path))
         {
             EvadeRandomPos();
         }
 
+        // If evade cooldown is not ""active"", increase value by DT
         if(evadeCooldown != 0f)
         {
             evadeTimeElapsed += Time.deltaTime;
+
+            // If evade time has elapsed, start searching for player again
             if(evadeTimeElapsed > evadeCooldown)
             {
                 StartSearching(playerLastSeen);
@@ -323,37 +326,44 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    // Generates a random position for the enemy to flee to when at low health
     protected virtual void EvadeRandomPos()
     {
+        // Calculates position in front of player using player forward vect & position
         Vector3 inFront = player.transform.forward * evadeDistanceFromPlayer;
         inFront += player.transform.position;
 
         NavMeshHit hit = new NavMeshHit();
 
+        // Checks if point calculated hits the navmesh - if so, go to position in NavMeshHit
         if(NavMesh.SamplePosition(inFront, out hit, evadeDistanceFromPlayer / 2, NavMesh.AllAreas))
         {
             GoTo(hit.position);
         }
         else
         {
+            // If point calculated isn't on navmesh, calculate pos. in "old fashioned" way
+            // Select a random direction, multiply by evadeDistance & add to player position
             Vector3 randomDir = new Vector3(Random.Range(0f, 1f), 0, Random.Range(0f, 1f));
             randomDir.Normalize();
 
             Vector3 pos = randomDir * evadeDistanceFromPlayer;
             pos += player.transform.position;
 
+            // Call GoTo on newly calculated position
             GoTo(pos);
         }
-
     }
 
     // Begins evade behaviour
     public virtual void StartEvade()
     {
+        // Resets evadeTimeElapsed, stops all coroutines & sets state to Evade
         evadeTimeElapsed = 0f;
         StopAllCoroutines();
         currentState = EnemyState.evade;
 
+        // Generates first evade position
         EvadeRandomPos();
     }
 
@@ -426,14 +436,12 @@ public class EnemyBase : MonoBehaviour
                 // Creates raycast mask for excluding colliders on "enemies" layer
                 int mask = 1 << 6;
 
-
                 // Raycasts from enemy towards player - if it hits, nothing's obstructing the view
                 if (Physics.Raycast(transform.position, player.transform.position - transform.position, out RaycastHit hit, viewDistance, ~mask))
                 {
                     // If raycast does hit player
                     if (hit.transform != null)
                     {
-                        
                             if(hit.transform.gameObject.CompareTag("Player"))
                             {
                                 // Draw a debug line to show connection, store position player was seen at, and return true
@@ -442,16 +450,11 @@ public class EnemyBase : MonoBehaviour
                                 searchPointsVisited = 0;
                                 return true;
                             }
-
-                        
                     }
                 }
             }
         }
-        
-
         // If player is not visible, return false
-        
         return false;
     }
 
@@ -541,57 +544,50 @@ public class EnemyBase : MonoBehaviour
         GoToRandom(maxDistance, newPointOrigin);
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(other.CompareTag("FreezeAbility"))
-    //    {
-    //        agent.speed = 0f;
-    //        isFrozen = true;
-    //    }
-    //}
-    //
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("FreezeAbility"))
-    //    {
-    //        isFrozen = false;
-    //        StartSearching(playerLastSeen);
-    //    }
-    //}
-
+    // Called to freeze enemy when on the ground
     public void Freeze()
     {
+        // Stops enemy from moving
         StopAgentMovement();
 
+        // Creates ice prefab (looks like enemy is encased in ice)
         if(freezeIce == null)
         {
             freezeIce = Instantiate(freezeIcePrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
         }
     }
 
+    // Removes freeze effect, allows enemy to move again
     public void UnFreeze()
     {
+        // Re-endables navmesh agent etc.
         StartAgentMovement();
+
+        // Destroys ice prefab
         if(freezeIce != null)
         {
             Destroy(freezeIce);
         }
     }
 
+    // Stops all enemy movement
     public void StopAgentMovement()
     {
+        // Disables navmesh agent
         if (agent.enabled == true)
         {
             agent.enabled = false;
         }
 
+        // Stops all coroutines & sets state to stationary
         StopAllCoroutines();
-
         currentState = EnemyState.stationary;
     }
 
+    // Enables enemy movement again
     public void StartAgentMovement()
     {
+        // Re-enables navmesh agent & sets state to Engage
         agent.enabled = true;
         Engage();
     }
