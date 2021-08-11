@@ -28,6 +28,9 @@ public class QuestUI : UIPanel
     [SerializeField]    private GameObject questMarkerBackground;
     [SerializeField]    private float questNameHeight = 35f;
 
+    [SerializeField] private TMP_Text latestQuestNameText;
+    [SerializeField] private List<TMP_Text> latestQuestObjectivesText;
+
     [Header("Canvas groups")]                                           // References to UI canvas groups
     [SerializeField]    private CanvasGroup questAcceptCanvasGroup;
     [SerializeField]    private CanvasGroup questCompleteCanvasGroup;
@@ -37,6 +40,13 @@ public class QuestUI : UIPanel
 
     [Header("HUD list element blueprint")]
     [SerializeField]    private TMP_Text defaultName;                   // HUD quest name blueprint 
+
+    protected override void Awake()
+    {
+        RemoveHUDQuestName();
+        base.Awake();
+
+    }
 
     protected override void Start()
     {
@@ -137,71 +147,96 @@ public class QuestUI : UIPanel
     }
 
     // Adds quest name to HUD side bar
-    public void AddHUDQuestName(string name)
+    public void AddHUDQuestName(QuestData quest)
     {
-        if(questNamesHUD.Count < 6)
+        //if(questNamesHUD.Count < 6)
+        //{
+        //    // Creates new HUD quest name object, enables it & sets transform parent
+        //    TMP_Text newName = Instantiate(defaultName);
+        //    newName.transform.gameObject.SetActive(true);
+        //    newName.transform.SetParent(questMarkerBackground.transform);
+        //
+        //    // If there are already quest names in list, adjust position to be at bottom of list
+        //    if(questNamesHUD.Count != 0)
+        //    {
+        //        newName.rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - ((questNameHeight + 5) * questNamesHUD.Count));
+        //    }
+        //    else
+        //    {
+        //        // If no other names are in the list, set to top of list (*default* position)
+        //        newName.rectTransform.anchoredPosition = defaultName.rectTransform.anchoredPosition;
+        //    }
+        //
+        //    // Set display name to corrispond with quest
+        //    newName.text = name;
+        //    // Add new naame to list
+        //    questNamesHUD.Add(newName);
+        //}
+
+        latestQuestNameText.text = quest.questName;
+
+        // Cycles each objective display & if the quest has that many tasks it displays them (if not spare objective displays set to "")
+        if(quest.objectives.Count > 0)
         {
-            // Creates new HUD quest name object, enables it & sets transform parent
-            TMP_Text newName = Instantiate(defaultName);
-            newName.transform.gameObject.SetActive(true);
-            newName.transform.SetParent(questMarkerBackground.transform);
-
-            // If there are already quest names in list, adjust position to be at bottom of list
-            if(questNamesHUD.Count != 0)
+            for(int i = 0; i < latestQuestObjectivesText.Count; i++)
             {
-                newName.rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - ((questNameHeight + 5) * questNamesHUD.Count));
+                if (quest.objectives.Count > i)
+                {
+                    latestQuestObjectivesText[i].text = quest.objectives[i].taskName;
+                }
+                else
+                {
+                    latestQuestObjectivesText[i].text = "";
+                }
             }
-            else
-            {
-                // If no other names are in the list, set to top of list (*default* position)
-                newName.rectTransform.anchoredPosition = defaultName.rectTransform.anchoredPosition;
-            }
-
-            // Set display name to corrispond with quest
-            newName.text = name;
-            // Add new naame to list
-            questNamesHUD.Add(newName);
         }
     }
 
     // Changes quest HUD display to reflect when quest is complete but not handed in
-    public void SetHUDQuestNameCompleted(string name)
+    public void SetHUDQuestNameCompleted(QuestData quest)
     {
-        // Tries to locate name in list of HUD names
-        foreach(TMP_Text questName in questNamesHUD)
+        for(int i = 0; i < quest.objectives.Count; i++)
         {
-            if(questName.text == name)
+            if(quest.objectives[i].taskComplete)
             {
-                // If found, change its colour to green and drop out of func.
-                questName.color = Color.green;
-                return;
+                if(i < latestQuestObjectivesText.Count)
+                {
+                    latestQuestObjectivesText[i].fontStyle = FontStyles.Strikethrough;
+                }
             }
         }
     }
 
     // Removes name of HUD quest list (used when quest is completed)
-    public void RemoveHUDQuestName(string name)
+    public void RemoveHUDQuestName()
     {
-        for(int i = 0; i < questNamesHUD.Count; i++)
-        {
-            // Cycles each name in list to find match with name passed as param
-            if(questNamesHUD[i].text == name)
-            {
-                // Destroys quest name HUD element
-                Destroy(questNamesHUD[i]);
-                questNamesHUD.RemoveAt(i);
+        //for(int i = 0; i < questNamesHUD.Count; i++)
+        //{
+        //    // Cycles each name in list to find match with name passed as param
+        //    if(questNamesHUD[i].text == name)
+        //    {
+        //        // Destroys quest name HUD element
+        //        Destroy(questNamesHUD[i]);
+        //        questNamesHUD.RemoveAt(i);
+        //
+        //        // Shifts all other quest names around so no gaps appear
+        //        if(questNamesHUD.Count != 0)
+        //        {
+        //            for(int j = 0; j < questNamesHUD.Count; j ++)
+        //            {
+        //                questNamesHUD[j].rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - (60 * j));
+        //            }
+        //        }
+        //        // Drops out of func. once name has been found & adjusted
+        //        return;
+        //    }
+        //}
 
-                // Shifts all other quest names around so no gaps appear
-                if(questNamesHUD.Count != 0)
-                {
-                    for(int j = 0; j < questNamesHUD.Count; j ++)
-                    {
-                        questNamesHUD[j].rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - (60 * j));
-                    }
-                }
-                // Drops out of func. once name has been found & adjusted
-                return;
-            }
+        latestQuestNameText.text = "";
+        foreach(TMP_Text textDis in latestQuestObjectivesText)
+        {
+            textDis.text = "";
+            textDis.fontStyle = FontStyles.Normal;
         }
     }
 

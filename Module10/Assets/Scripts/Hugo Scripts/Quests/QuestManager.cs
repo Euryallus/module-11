@@ -70,7 +70,7 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
             // Removes quest from questGiver's list of quests to give out
             playerQuestData.offer.questsToGive.RemoveAt(0);
             // Add quest data to HUD
-            UI.AddHUDQuestName(playerQuestData.pendingQuest.questName);
+            UI.AddHUDQuestName(playerQuestData.pendingQuest);
             questMenuUI.AddQuestButton(playerQuestData.pendingQuest);
 
             // Resets refs to quest giver & quest being offered (as quest has been accepted)
@@ -118,18 +118,14 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
             {
                 // Cycles each quest in the backlog and assins a temp ref. to it
                 QuestData quest = playerQuestData.questBacklog[i];
-
-                
                 if(!(quest.questCompleted))
                 {
                     // Checks if quest is already completed, & if not checks if it's just been completed
-                    if(quest.CheckCompleted())
-                    {
-                        // Updates HUD quest list to reflect completion
-                        UI.SetHUDQuestNameCompleted(quest.questName);
-                    }
+                    quest.CheckCompleted();
                 }
             }
+            // Updates HUD quest list to reflect completion
+            UI.SetHUDQuestNameCompleted(playerQuestData.questBacklog[0]);
         }
     }
 
@@ -137,7 +133,12 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
     public void CompleteQuest(QuestData quest)
     {
         // Removes quest from UI and flags quest as having been handed in
-        UI.RemoveHUDQuestName(quest.questName);
+
+        if(playerQuestData.questBacklog[0] == quest)
+        {
+            UI.RemoveHUDQuestName();
+        }
+
         questMenuUI.RemoveButton(quest);
 
         Debug.Log("REMOVED " + quest.questName);
@@ -147,6 +148,11 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         // Removes quest from backlog & puts in completed list
         playerQuestData.questBacklog.Remove(quest);
         playerQuestData.completedQuests.Add(quest);
+
+        if(playerQuestData.questBacklog.Count > 0)
+        {
+            UI.AddHUDQuestName(playerQuestData.questBacklog[0]);
+        }
 
         //Stops player from moving while talking to NPC
         playerMove.StopMoving();
@@ -299,16 +305,18 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         playerQuestData.LoadProgress();
 
         // Cycles each quest in player's backlog adds to the HUD UI and marks as completed if quest is flagged as completed
-        foreach (QuestData quest in playerQuestData.questBacklog)
-        {
-            // Adds to the HUD UI and marks as completed if quest is flagged as completed
-            UI.AddHUDQuestName(quest.questName);
-            questMenuUI.AddQuestButton(quest);
 
-            if (quest.questCompleted)
+        if (playerQuestData.questBacklog.Count != 0)
+        {
+            foreach (QuestData quest in playerQuestData.questBacklog)
             {
-                UI.SetHUDQuestNameCompleted(quest.questName);
+                // Adds to the HUD UI and marks as completed if quest is flagged as completed
+                questMenuUI.AddQuestButton(quest);
             }
+            
+            UI.AddHUDQuestName(playerQuestData.questBacklog[0]);
+            UI.SetHUDQuestNameCompleted(playerQuestData.questBacklog[0]);
+            
         }
     }
 
