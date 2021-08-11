@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 // ||=======================================================================||
 // || CustomFloatPropertyPanel: Panel for displaying customisable float     ||
@@ -9,10 +8,13 @@ using UnityEngine.UI;
 // || Used on prefab: Joe/UI/Customisation/CustomFloatPropertyPanel         ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Changed AddButton & SubtractButton from standard Unity Buttons to   ||
+// ||    PressEffectButtons, allows for extra visual options/functionality. ||
 // ||=======================================================================||
-
-// Edited for mod11: changed AddButton & SubtractButton from standard unity buttons to PressEffectButton to allow for extra visual options/functionality
 
 public class CustomFloatPropertyPanel : MonoBehaviour
 {

@@ -14,6 +14,7 @@ public class AbilityUnlockPanel : MonoBehaviour
     [SerializeField] private GameObject         propertyTextPrefab;
 
     public event Action ContinueButtonPressEvent;
+    public event Action PanelAnimationDoneEvent;
 
     public void Setup(Item abilityItem, PlayerAbilityType abilityType, int unlockLevel)
     {
@@ -52,9 +53,15 @@ public class AbilityUnlockPanel : MonoBehaviour
         propertyTextGameObj.GetComponent<TextMeshProUGUI>().text = text;
     }
 
+    // Called by an animation event when the panel has entered
+    private void PanelAnimationDone()
+    {
+        PanelAnimationDoneEvent?.Invoke();
+    }
+
     public void ContinueButton()
     {
-        ContinueButtonPressEvent.Invoke();
+        ContinueButtonPressEvent?.Invoke();
 
         AudioManager.Instance.PlaySoundEffect2D("buttonClickMain2", true);
     }

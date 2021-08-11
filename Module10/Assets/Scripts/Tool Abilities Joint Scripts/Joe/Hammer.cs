@@ -6,10 +6,13 @@ using UnityEngine;
 // || Used on all prefabs in: HeldItems/Hammer                              ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Removed the launch functionality as this ability is now entirely    ||
+// ||    separate from the hammer tool.                                     ||
 // ||=======================================================================||
-
-// Updated in mod11: removed launch ability, now seperate from tool
 
 [RequireComponent(typeof(Animator))]
 public class Hammer : HeldTool

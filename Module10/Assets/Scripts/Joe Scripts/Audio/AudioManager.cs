@@ -3,6 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// ||=======================================================================||
+// || AudioManager: Handles playing music and sound effects                 ||
+// ||=======================================================================||
+// || Used on prefab: Joe/Audio/_AudioManager                               ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - PlaySoundEffect now returns AudioSource, useful for keeping a       ||
+// ||    reference to a sounf and adjusting its values while playing.       ||
+// || - Min/max distance can be altered when playing a sound in 3D space.   ||
+// || - Added globalVolumeMultiplier, for fading music in/out independent   ||
+// ||    of the saved volume values.                                        ||
+// || - Various other fixes and improvements                                ||
+// ||=======================================================================||
+
 //MusicPlayMode defines all of the different ways music can be played for a certain scene
 public enum MusicPlayMode
 {
@@ -17,20 +35,6 @@ public enum MusicPlayMode
 
     None                // No music will be played in the scene
 }
-
-// ||=======================================================================||
-// || AudioManager: Handles playing music and sound effects                 ||
-// ||=======================================================================||
-// || Used on prefab: Joe/Audio/_AudioManager                               ||
-// ||=======================================================================||
-// || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
-// ||=======================================================================||
-
-// Edited for mod11:
-// - PlaySoundEffect now returns audiosource, useful for e.g. keeping reference to + changing position of looping source while playing
-// - min/max distance can be changed for 3d sources
-// - globalVolumeMultiplier, for fading music in/out independent of saved volume values
 
 public class AudioManager : MonoBehaviour
 {
@@ -52,10 +56,10 @@ public class AudioManager : MonoBehaviour
     public SceneMusic               CurrentSceneMusic       { get { return currentSceneMusic; } }       
     public List<DynamicAudioArea>   ActiveDynamicAudioAreas { get { return activeDynamicAudioAreas; }
                                                               set { activeDynamicAudioAreas = value; } }
-    public float            GlobalVolumeMultiplier  { get { return globalVolumeMultiplier; } }
-
-    public int              SavedMusicVolume        { set { savedMusicVolume = value; } }
-    public int              SavedSoundEffectsVolume { set { savedSoundEffectsVolume = value; } }
+    public float                    GlobalVolumeMultiplier  { get { return globalVolumeMultiplier; } }
+                                    
+    public int                      SavedMusicVolume        { set { savedMusicVolume = value; } }
+    public int                      SavedSoundEffectsVolume { set { savedSoundEffectsVolume = value; } }
 
     #endregion
 
@@ -183,8 +187,10 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        // Reset global volume multiplier to its default value when a scene is loaded
         globalVolumeMultiplier = 1.0f;
 
+        // Update the volume of any active music sources
         UpdateMusicSourcesVolume();
     }
 
@@ -262,13 +268,18 @@ public class AudioManager : MonoBehaviour
 
         audioSource.clip        = sound.AudioClips[Random.Range(0, sound.AudioClips.Length)];
 
+        // By default, the sound volume will be multiplied by globalVolumeMultiplier
         float globalVolumeInfluence = globalVolumeMultiplier;
+
         if(overrideGlobalVolumeMultiplier)
         {
+            // Stop global volume multiplier from affecting volume if overridden
             globalVolumeInfluence = 1.0f;
         }
 
+        // Get the saved sound/music volume to use depending on which one was requested
         float savedVolume;
+
         if(useMusicVolume)
         {
             savedVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");
@@ -288,6 +299,7 @@ public class AudioManager : MonoBehaviour
             // Enable spatialBlend if playing sound in 3D space, so it will sound like it originates from sourcePosition
             audioSource.spatialBlend = 1.0f;
 
+            // Adjust the min/max 3D distance of the audio source if any values were given
             if(min3dDistance > 0.0f)
             {
                 audioSource.minDistance = min3dDistance;
@@ -298,6 +310,7 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        // Set bypassListenerEffects to the given bypassEffects value, if true effects such as reverb will be ignored
         audioSource.bypassListenerEffects = bypassEffects;
 
         if (loopType.LoopEnabled)
@@ -310,7 +323,7 @@ public class AudioManager : MonoBehaviour
             loopingSoundSources.Add(new LoopingSoundSource(audioSource, volume, overrideGlobalVolumeMultiplier));
         }
 
-        // Play the sound
+        // Play the sound and return the audioSource
         audioSource.Play();
 
         return audioSource;
@@ -321,7 +334,7 @@ public class AudioManager : MonoBehaviour
     {
         if (soundsDict.ContainsKey(id))
         {
-            // Play a sound with the given parameters
+            // Play a sound with the given parameters if a valid id was given
             return PlaySoundEffect(soundsDict[id], loopType, overrideGlobalVolumeMultiplier, use3DSpace, bypassEffects, sourcePosition, min3dDistance, max3dDistance, useMusicVolume);
         }
         else
@@ -369,6 +382,8 @@ public class AudioManager : MonoBehaviour
 
     public LoopingSoundSource GetLoopingSoundSourceFromId(string loopId)
     {
+        // Finds and returns a looping sound source with the given id if one exists
+
         foreach (LoopingSoundSource loopSource in loopingSoundSources)
         {
             if (loopSource.Source.gameObject.name == "LoopSound_" + loopId)
@@ -377,16 +392,8 @@ public class AudioManager : MonoBehaviour
             }
         }
 
+        // No matching source found
         return null;
-    }
-
-    public void SetLoopingSoundBaseVolume(LoopingSoundSource loopingSource, float volume)
-    {
-        // Saved volume is stored as an int between 0 and 20, multiplying to get a float from 0.0 to 1.0
-        float volumeMultiplier = GetSavedSoundEffectsVolume() * 0.05f * globalVolumeMultiplier;
-
-        loopingSource.BaseVolume = volume;
-        loopingSource.Source.volume = loopingSource.BaseVolume * volumeMultiplier;
     }
 
     public void StopAllLoopingSoundEffects()
@@ -463,11 +470,15 @@ public class AudioManager : MonoBehaviour
 
     public void RevertActiveDynamicAudioAreas()
     {
+        // Re-activates any dynamic audio areas that are waiting to be reverted to their 'on' state
+        //    after being temporarily disabled by another DynamicAudioArea
+
         foreach (DynamicAudioArea area in dynamicAudioAreas)
         {
             if(area != null && area.WaitingForRevert)
             {
-                if(!area.Active)
+                // Activate all inactive areas that are WaitingForRevert
+                if (!area.Active)
                 {
                     area.ActivateAudioArea(false);
                 }
@@ -478,23 +489,30 @@ public class AudioManager : MonoBehaviour
 
     public void FadeGlobalVolumeMultiplier(float fadeTo, float fadeTime)
     {
+        // Stop any existing fade coroutine to avoid multiple running at once
         if(fadeGlobalVolumeCoroutine != null)
         {
             StopCoroutine(fadeGlobalVolumeCoroutine);
         }
+
+        // Start a coroutine that fades global volume from its current value to [fadeTo] over [fadeTime] seconds
         fadeGlobalVolumeCoroutine = StartCoroutine(FadeGlobalVolumeMultiplierCoroutine(fadeTo, fadeTime, fadeTo > globalVolumeMultiplier));
     }
 
     private IEnumerator FadeGlobalVolumeMultiplierCoroutine(float fadeTo, float fadeTime, bool fadingIn)
     {
+        // Increase volume over time if fading in, or decrease if fading out
         float increaseMultiplier = fadingIn ? 1.0f : -1.0f;
 
         while((fadingIn && (globalVolumeMultiplier < fadeTo)) || ((!fadingIn) && (globalVolumeMultiplier > fadeTo)))
         {
+            // The fadeTo value has not been reached/surpassed. Increase/decrease volume slightly each frame
+
             UpdateGlobalVolumeMultiplier(globalVolumeMultiplier + increaseMultiplier * Time.unscaledDeltaTime / fadeTime);
             yield return null;
         }
 
+        // The fadeTo value was reached/surpassed - set the volume one more time to ensure it reached the exact target value
         UpdateGlobalVolumeMultiplier(fadeTo);
 
         fadeGlobalVolumeCoroutine = null;
@@ -504,9 +522,11 @@ public class AudioManager : MonoBehaviour
     {
         if(value < 0.0f)
         {
+            // Volume cannot be negative
             value = 0.0f;
         }
 
+        // Set the global volume value and update any active music/looping sound sources
         globalVolumeMultiplier = value;
 
         UpdateMusicSourcesVolume();
@@ -557,6 +577,8 @@ public class AudioManager : MonoBehaviour
 
     private float GetSavedSoundEffectsVolume()
     {
+        // Returns the stored saved sound effects volume, or loads it from player prefs if it hasn't already been loaded
+
         if (savedSoundEffectsVolume == -1)
         {
             savedSoundEffectsVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("soundEffectsVolume");
@@ -567,6 +589,8 @@ public class AudioManager : MonoBehaviour
 
     private float GetSavedMusicVolume()
     {
+        // Returns the stored saved music volume, or loads it from player prefs if it hasn't already been loaded
+
         if (savedMusicVolume == -1)
         {
             savedMusicVolume = SaveLoadManager.Instance.GetIntFromPlayerPrefs("musicVolume");

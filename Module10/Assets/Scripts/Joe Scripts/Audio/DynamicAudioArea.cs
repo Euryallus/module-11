@@ -8,10 +8,14 @@ using UnityEngine;
 // || Used on prefab: Joe/Audio/DynamicAudioArea                            ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added dynamicAudioLayer functionality: DynamicAudioAreas can now    ||
+// ||    exist on separate layers, meaning dynamic audio can overlap and    ||
+// ||    be triggered in more complex ways.                                 ||
 // ||=======================================================================||
-
-// Edited for mod 11: added dynamicAudioLayer functionality
 
 public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 {
@@ -60,13 +64,13 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     #endregion
 
-    private float           baseVolume;     // Volume of the music before fading is applied
-    private bool            fadingIn;       // Whether the audio source should be fading in
-    private bool            fadingOut;      // Whether the audio source should be fading out
-    private bool            active;
-    private bool            waitingForRevert;
+    private float           baseVolume;         // Volume of the music before fading is applied
+    private bool            fadingIn;           // Whether the audio source should be fading in
+    private bool            fadingOut;          // Whether the audio source should be fading out
+    private bool            active;             // Whether the area should be playing music (unless waitingForRevert)
+    private bool            waitingForRevert;   // If true, music is temporarily disabled and will be re-enabled when RevertActiveDynamicAudioAreas is called on AudioManager
 
-    public const int MaxDynamicAudioLayers = 10; // The number of layers that can be chosen from when setting a dynamicAudioLayer for the area
+    public const int MaxDynamicAudioLayers = 10; // The number of layers that can be chosen from when setting a dynamicAudioLayer in the inspector
 
     private void Awake()
     {
@@ -128,6 +132,8 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     public string GetMusicToTriggerName()
     {
+        // Returns the name of the music this area will trigger, or '[Silence]' if no music will be triggered
+
         if(musicToTrigger != null)
         {
             return musicToTrigger.name;
@@ -138,6 +144,8 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     public float GetMusicToTriggerLength()
     {
+        // Returns the length of the audio clip that this area plays
+
         if(musicToTrigger != null)
         {
             return musicToTrigger.AudioClip.length;
@@ -187,6 +195,7 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     private void OnTriggerEnter(Collider other)
     {
         // Only accept trigger events once loading is done and the player has been moved to the correct location
+
         if (!SaveLoadManager.Instance.LoadingSceneData)
         {
             if (other.gameObject.CompareTag("Player"))
@@ -212,8 +221,12 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
     protected void TriggerExitEvents()
     {
+        // The player has left the trigger area
+
         if (revertAudioOnExit)
         {
+            // Stop playing music and revert any areas that are waiting if revertAudioOnExit = true
+
             AudioManager.Instance.RevertActiveDynamicAudioAreas();
 
             DeactivateAudioArea();
@@ -224,16 +237,17 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
     {
         AudioManager audioManager = AudioManager.Instance;
 
-        // Player has entered the audio area trigger
-
         if (audioManager.CurrentSceneMusic.PlayMode == MusicPlayMode.Dynamic)
         {
             // The loaded scene is using dynamic audio
 
+            // Get a list of all DynamicAudioAreas that are currently active
             List<DynamicAudioArea> currentActiveAreas = audioManager.ActiveDynamicAudioAreas;
 
             if(revertAudioOnExit)
             {
+                // Tell all active areas to wait for a revert (essentially wait until the player leaves this area)
+                //   before they can continue to play music
                 foreach (DynamicAudioArea activeArea in currentActiveAreas)
                 {
                     activeArea.waitingForRevert = true;
@@ -242,6 +256,8 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
 
             if (affectOtherAreas)
             {
+                // affectOtherAreas = true, meaning other areas can be forced to fade out when this one is entered
+
                 for (int i = 0; i < currentActiveAreas.Count; i++)
                 {
                     DynamicAudioArea area = currentActiveAreas[i];
@@ -250,26 +266,30 @@ public class DynamicAudioArea : MonoBehaviour, IPersistentSceneObject
                     {
                         if (fadeOutOtherLayers || area.dynamicAudioLayer == dynamicAudioLayer)
                         {
-                            // If the player previously entered another area, fade its music out for a cross-fade effect
+                            // Found an area on the same layer (OR any area if fadeOutOtherLayers is allowed)
+
+                            // Deactivate the area to fade out its music
                             area.DeactivateAudioArea();
 
-                            // Remove the area from the ActiveDynamicAudioAreas list as it is no longer active
+                            // Remove the area from the ActiveDynamicAudioAreas list since it is no longer active
                             currentActiveAreas.Remove(area);
 
+                            // Decrement the iterator since an area was removed from the list
                             i--;
                         }
                     }
                 }
             }
 
-            if(!currentActiveAreas.Contains(this))
+            // Fade this area's music in
+            FadeIn();
+
+            // This is now an active audio area
+
+            if (!currentActiveAreas.Contains(this))
             {
-                // This is now the current/most recent dynamic audio area
                 currentActiveAreas.Add(this);
             }
-
-            // Fade music for this are in
-            FadeIn();
 
             active = true;
         }

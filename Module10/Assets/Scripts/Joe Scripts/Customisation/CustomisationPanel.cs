@@ -9,10 +9,18 @@ using System.Collections.Generic;
 // || Used on prefab: Joe/UI/Customisation/CustomisationPanel               ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added additionalRequiredCurrency (certain customisation options now ||
+// ||    increase the amount of currency required).                         ||
+// || - UI now allows changes to be previewed even if the player does not   ||
+// ||    have the reqired amount of currency.                               ||
+// || - Improved how the float value buttons respond to changes (they now   ||
+// ||    stop being interactable when a limit is reached.                   ||
+// || - Various minor changes/improvements to make the panel nicer to use.  ||
 // ||=======================================================================||
-
-// updated for mod11: added additionalRequiredCurrency, ui now allows changes to be previewed without having the required currency amount, and improved how float value buttons respond to changes
 
 public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 {
@@ -39,7 +47,8 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
     private ContainerSlot           resultSlot;        // The resulting item which is based on the original item with customisation options applied
     private List<TMP_InputField>    customInputFields; // List of all input fields used for altering custom string properties
 
-    private int additionalRequiredCurrency;
+    private int additionalRequiredCurrency; // The amount of extra currency that is required on top of CurrencyItemQuantity
+                                            //   depending on what item properties are being customised/upgraded
 
     private void Awake()
     {
@@ -71,6 +80,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
         itemManager = ItemManager.Instance;
 
+        // By default, hide the result slot cover that is used to stop the player taking an item when they don't have enough currency
         resultSlot.SlotUI.SetCoverFillAmount(0.0f);
 
         ShowDefaultInfoText();
@@ -326,8 +336,11 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
             SetupFloatPropertyValueText(propertyPanel.ValueText, addedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
 
+            // Add to the additional required currency count based on the property's currency increase value
             additionalRequiredCurrency += property.CurrencyIncrease;
 
+            // Check for valid item inputs, since the required currency was potentially increased
+            //   and the player may no longer have the necessary amount to customise their item
             CheckForValidItemInputs(out _);
 
             AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
@@ -359,8 +372,11 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             // Setup the UI text that shows the value of the property, and changes the text colour depending on if it matches that of the original item being customised
             SetupFloatPropertyValueText(propertyPanel.ValueText, subtractedValue, itemManager.GetItemWithId(customiseSlot.ItemStack.StackItemsID).GetCustomFloatPropertyWithName(propertyName).Value);
 
+            // Reduce the additional required currency count by the property's currency increase value
             additionalRequiredCurrency -= customisedProperty.CurrencyIncrease;
 
+            // Check for valid item inputs, since the required currency was potentially decreased
+            //   and the player may be able to customise their item when they previously could not
             CheckForValidItemInputs(out _);
 
             AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
@@ -369,8 +385,10 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
     private void UpdateFloatPropertyButtons(CustomFloatPropertyPanel propertyPanel, float propertyValue, float minValue, float maxValue)
     {
+        // Only allow the subtract button to be interacted with if the current property value has not reached the minimum
         propertyPanel.SubtractButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, minValue));
 
+        // Only allow the add button to be interacted with if the current property value has not reached the maximum
         propertyPanel.AddButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, maxValue));
     }
 
@@ -463,11 +481,13 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
 
         if (resultSlotEnabled)
         {
+            // The result should be enabled, allow the player to remove items and its the cover
             resultSlot.SlotUI.ClickToRemoveItems = true;
             resultSlot.SlotUI.SetCoverFillAmount(0.0f);
         }
         else
         {
+            // The result slot should not be enabled, don't the player to remove items and cover it so the item is visually 'blocked'
             resultSlot.SlotUI.ClickToRemoveItems = false;
             resultSlot.SlotUI.SetCoverFillAmount(1.0f);
         }
