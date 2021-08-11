@@ -13,12 +13,16 @@ public class QuestMenuButton : MonoBehaviour
 
     private void Start()
     {
-        buttonTitle.text = questDisplay.questName;
+        gameObject.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = questDisplay.questName;
     }
 
     public void DisplayQuestData()
     {
         QuestMenuButton button = gameObject.GetComponent<QuestMenuButton>();
+
+        
+
+        //buttonTitle.text = questDisplay.questName;
 
         ui.title.text = button.questDisplay.questName;
 

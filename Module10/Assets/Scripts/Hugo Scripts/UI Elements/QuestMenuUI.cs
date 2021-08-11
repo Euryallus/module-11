@@ -80,6 +80,7 @@ public class QuestMenuUI : UIPanel
 
         buttons.Add(newButton);
 
+        
 
         Vector2 buttonDimensions = buttonPrefab.GetComponent<RectTransform>().sizeDelta;
         questButtonContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonDimensions.x, (buttonDimensions.y + 20f) * buttons.Count);
@@ -88,6 +89,7 @@ public class QuestMenuUI : UIPanel
         SortButtonPosition();
 
         newButton.GetComponent<QuestMenuButton>().questDisplay = questToAdd;
+        newButton.GetComponent<QuestMenuButton>().buttonTitle.text = "Quest name";
         newButton.SetActive(true);
     }
 
