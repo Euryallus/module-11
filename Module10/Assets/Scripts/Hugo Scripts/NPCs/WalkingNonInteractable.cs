@@ -40,6 +40,7 @@ public class WalkingNonInteractable : MonoBehaviour
 
     private void Start()
     {
+        isMoving = false;
         wait = new WaitForSeconds(waitTimeAtPoint);
 
         if(moveSet != MovementType.noMovement && walkFromBeginning)
@@ -94,7 +95,10 @@ public class WalkingNonInteractable : MonoBehaviour
 
                     if(enableQuestsWhenStationary)
                     {
-                        NPCcollider.enabled = true;
+                        //NPCcollider.enabled = true;
+
+                        isMoving = false;
+                        currentPoint = -1;
                     }
                 }
                 else
@@ -152,7 +156,7 @@ public class WalkingNonInteractable : MonoBehaviour
                     StartCoroutine(WaitAtPoint());
                 }
             }
-            else
+            else if(currentPoint != -1)
             {
                 Vector3 direction = movementPoints[currentPoint].forward;
 
