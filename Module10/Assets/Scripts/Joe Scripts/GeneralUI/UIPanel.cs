@@ -7,10 +7,14 @@ using UnityEngine;
 // || UIPanel: A base class for UI panels that can be shown/hidden          ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added CanShowUIPanel - an easy way of checking if a UI panel can    ||
+// ||    be shown or is blocked by another UI element/game state.           ||
+// || - Added UIPanelHiddenEvent                                            ||
 // ||=======================================================================||
-
-// Edited for Mod11: added CanShowUIPanel
 
 [RequireComponent(typeof(CanvasGroup))]
 public class UIPanel : MonoBehaviour
@@ -21,11 +25,11 @@ public class UIPanel : MonoBehaviour
 
     #endregion
 
-    public event Action UIPanelHiddenEvent;
+    public event Action      UIPanelHiddenEvent;        // Invoked when the UI panel is hidden
 
-    protected   bool        showing;                        // Whether or not the panel is currently showing
-    protected   bool        isBlockingPanel = true;         // Whether this panel blocks certain other UI related input when being shown
-    private     CanvasGroup canvasGroup;                    // CanvasGroup attathed to the panel
+    protected    bool        showing;                   // Whether or not the panel is currently showing
+    protected    bool        isBlockingPanel = true;    // Whether this panel blocks certain other UI related input when being shown
+    private      CanvasGroup canvasGroup;               // CanvasGroup attathed to the panel
 
     private static List<UIPanel> uiPanels = new List<UIPanel>();    // List of all created UI panels
 
@@ -75,10 +79,8 @@ public class UIPanel : MonoBehaviour
         //  (Waiting a frame first so if multiple panels are opened/closed with esc, they will not all be triggered on the same frame)
         StartCoroutine(HideAfterFrame());
 
-        if(UIPanelHiddenEvent != null)
-        {
-            UIPanelHiddenEvent.Invoke();
-        }
+        // Trigger the panel hidden event
+        UIPanelHiddenEvent?.Invoke();
     }
 
     private IEnumerator HideAfterFrame()
@@ -109,6 +111,12 @@ public class UIPanel : MonoBehaviour
 
     public static bool CanShowUIPanel()
     {
+        // As a general rule, UI panels can be shown if all of the following are true:
+        //  - The player is not in the process of editing an input field
+        //  - A cinematics canvas is not currently being shown (which hides all other UI temporarily)
+        //  - Another UI panel is not blocking one from appearing
+        //  - The game is not paused
+
         return (!InputFieldSelection.AnyFieldSelected) && (!GameSceneUI.Instance.ShowingCinematicsCanvas) && (!AnyBlockingPanelShowing()) && Time.timeScale > 0.0f;
     }
 }

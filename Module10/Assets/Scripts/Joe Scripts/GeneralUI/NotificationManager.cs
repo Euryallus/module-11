@@ -3,6 +3,22 @@ using TMPro;
 using System.Collections.Generic;
 using System.Linq;
 
+// ||=======================================================================||
+// || NotificationManager: Queues notifications and displays them with an   ||
+// ||   animated UI popup.                                                  ||
+// ||=======================================================================||
+// || Used on prefab: Joe/UI/NotificationManager                            ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added a number of new notification types.                           ||
+// || - Added NotificationInterval: Now used to determine how much time     ||
+// ||    should pass (at a minumum) between notifications being shown.      ||
+// ||=======================================================================||
+
 // All possible types of messages that can be shown as a notification
 public enum NotificationMessageType
 {
@@ -29,16 +45,6 @@ public enum NotificationMessageType
     AutoSaveSuccess,
     SaveError
 }
-
-// ||=======================================================================||
-// || NotificationManager: Queues notifications and displays them with an   ||
-// ||   animated UI popup.                                                  ||
-// ||=======================================================================||
-// || Used on prefab: Joe/UI/NotificationManager                            ||
-// ||=======================================================================||
-// || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
-// ||=======================================================================||
 
 public class NotificationManager : MonoBehaviour
 {
@@ -113,11 +119,15 @@ public class NotificationManager : MonoBehaviour
     {
         if(activeNotification != null)
         {
+            // Increase the timer that keeps track of how long the active notification has been shown for
             activeNotification.ActiveTimer += Time.deltaTime;
         }
 
         if(activeNotification == null || activeNotification.ActiveTimer > NotificationInterval)
         {
+            // There is no active notification, or the active one has been shown for [NotificationInterval] seconds
+            //  Show the next notification in the queue, if any
+
             activeNotification = null;
 
             if (queuedNotifications.Count > 0)

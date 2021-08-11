@@ -147,12 +147,12 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
             if (unlockItem != null && GameSceneUI.Instance.PlayerInventory.ContainsItem(unlockItem))
             {
                 // The door required an unlock item and the player has it, shown a green 'ready to unlock' icon
-                lockedSymbol.SetIcon(DoorSymbolIcon.ReadyToUnlock);
+                lockedSymbol.SetIcon(true);
             }
             else
             {
                 // Otherwise show the standard red 'locked' icon
-                lockedSymbol.SetIcon(DoorSymbolIcon.Locked);
+                lockedSymbol.SetIcon(false);
             }
         }
         else

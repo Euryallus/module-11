@@ -7,16 +7,23 @@ using UnityEngine.SceneManagement;
 // || Used on prefab: Joe/UI/PausePanel                                     ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Now inherits from UIPanel (fixes a number of issues).               ||
 // ||=======================================================================||
-
-// Edited for Mod11: now inherits from UIPanel
 
 public class PausePanel : UIPanel
 {
+    #region InspectorVariables
+    // Variables in this region are set in the inspector
+
     [SerializeField] private CanvasGroup mainCanvasGroup;        // Canvas group on the main panel with pause option buttons (resume/menu/quit etc.)
     [SerializeField] private CanvasGroup menuConfirmCanvasGroup; // Canvas group on the panel for confirming the choice to exit to the main menu
     [SerializeField] private CanvasGroup quitConfirmCanvasGroup; // Canvas group on the panel for confirming the choice to quit the game
+
+    #endregion
 
     protected override void Start()
     {

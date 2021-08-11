@@ -1,10 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Contains references to all player stats UI that needs to be accessed by the player stats script. Variables are grouped here to keep PlayerStats cleaner 
+// ||=======================================================================||
+// || PlayerStatsUI: Contains references to all  UI elements for easy       ||
+// ||   from the PlayerStats script, which is on the Player prefab.         ||
+// ||=======================================================================||
+// || Used on prefab: Joe/UI/PlayerHotbarAndInfo                            ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || for the production phase (Module 11).                                 ||
+// ||=======================================================================||
 
 public class PlayerStatsUI : MonoBehaviour
 {
+    #region InspectorVariables
+    // Variables in this region are set in the inspector
+
     [SerializeField] private Slider      healthSlider;              // Slider displaying player health
     [SerializeField] private Slider      foodLevelSlider;           // Slider displaying food level (how full the player is)
     [SerializeField] private Slider      breathLevelSlider;         // Slider displaying remaining breath when underwater
@@ -15,6 +26,8 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private Animator    foodSliderBGAnimator;      // Handles animations for the food slider background image
     [SerializeField] private Animator    breathSliderAnimator;      // Handles animations for the breath slider fill
     [SerializeField] private Animator    breathSliderBGAnimator;    // Handles animations for the breath slider background image
+
+    #endregion
 
     public Slider       HealthSlider            { get { return healthSlider; } }
     public Slider       FoodLevelSlider         { get { return foodLevelSlider; } }

@@ -2,12 +2,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum ButtonPressInputType
-{
-    DepressOnHover, // The button will press down when it's hovered over
-    DepressOnClick  // The button will press down when it's clicked
-}
-
 // ||=======================================================================||
 // || PressEffectButton: A button with a 2.5D effect that visually          ||
 // ||   'presses' down when it is clicked or hovered over.                  ||
@@ -15,16 +9,27 @@ public enum ButtonPressInputType
 // || Used on prefab: Joe/UI/PressEffectButton                              ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added more customisation options: The button's side colour can be   ||
+// ||  dynamically changed, and the button can raise when hovered over.     ||
 // ||=======================================================================||
+
+public enum ButtonPressInputType
+{
+    DepressOnHover, // The button will press down when it's hovered over
+    DepressOnClick  // The button will press down when it's clicked
+}
 
 [RequireComponent(typeof(Image))]
 public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("Note: Pivots must be set to (0.5, 0.5)")]
-
     #region InspectorVariables
     // Variables in this region are set in the inspector
+
+    [Header("Note: Pivots must be set to (0.5, 0.5)")]
 
     [SerializeField] private Button                 button;                                          // The actual button component that handles click events
     [SerializeField] private GameObject             buttonTopGameObject;                             // The GameObject used as the top of the button that presses down
@@ -36,25 +41,31 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private Color                  buttonColour = Color.grey;                       // The base colour of the button, also partially determines 'shadow' colour of the button's side
     [SerializeField] private Color                  buttonDisabledColour = Color.grey;               // The base colour of the button when not interactable
     [SerializeField] private Color                  buttonShadowTint = new Color(0.8f, 0.8f, 0.8f);  // The base colour is multiplied by this colour to get the shadow/side colour
-    [SerializeField] private bool                   changeSideColourHover;
-    [SerializeField] private Color                  hoverSideColour;
 
-    [SerializeField] private bool                   raiseButtonOnHover;
-    [SerializeField] private float                  hoverRaiseAmount;
+    [SerializeField] private bool                   changeSideColourHover;  // Whether the side of the button should change colour when the button is hovered over
+    [SerializeField] private Color                  hoverSideColour;        // If changeSideColourHover = true, the colour to use
 
+    [SerializeField] private bool                   raiseButtonOnHover;     // Whether the button should visually raise when hovered over
+    [SerializeField] private float                  hoverRaiseAmount;       // If raiseButtonOnHover = true, how much the button should raise
 
     #endregion
 
+    #region Properties
+
     public Button   Button                  { get { return button; } }
-    public bool     ChangeSideColourHover   { set { changeSideColourHover = value; } }
+    public bool     ChangeSideColourHover   { get { return changeSideColourHover; } set { changeSideColourHover = value; } }
 
-    private Vector3 startPos;               // The default position of the top of the button
-    private Vector3 targetPos;              // The position the top of the button should move towards
-    private bool    interactable = true;    // Whether the button can currently be pressed
-    private float   pressSpeedMultiplier = 1.0f;
-    private Color   defaultButtonColour;
+    #endregion
 
-    private bool setupComplete;
+    private Vector3 startPos;                       // The default position of the top of the button
+    private Vector3 targetPos;                      // The position the top of the button should move towards
+    private bool    interactable = true;            // Whether the button can currently be pressed
+    private Color   defaultButtonColour;            // Keeps track of the button's original colour so it can be restored when needed
+    private bool    setupComplete;                  // Whether the setup process is complete
+
+    private float   pressSpeedMultiplier = 1.0f;    // pressSpeed is multiplied by this value when determining how quickly the top of the button should move
+                                                    //  The value is adjusted depending on if the button is being pressed down or raised up, raise movements are slower
+
 
     private void Awake()
     {
@@ -65,6 +76,9 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if(!setupComplete)
         {
+            // Store the original colour of the button - this needs to happen in setup before any other
+            //   code runs because the colour of the button may be changed on start from another script
+            
             defaultButtonColour = buttonColour;
             setupComplete = true;
         }
@@ -93,10 +107,12 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void SetInteractable(bool interactable)
     {
+        // Set whether the button can be interacted with
         button.interactable = interactable;
         this.interactable = interactable;
 
-        if(interactable)
+        // Update the button's colour depending on the interactable value
+        if (interactable)
         {
             SetButtonColour(defaultButtonColour);
         }
@@ -137,18 +153,23 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if(interactable)
         {
-            // Visually 'press' the button on hover if the input type is DepressOnHover
             if (inputType == ButtonPressInputType.DepressOnHover)
             {
+                // Visually 'press' the button on hover if the input type is DepressOnHover
+
                 Press();
             }
             else if (raiseButtonOnHover)
             {
+                // Visually 'raise' the button on hover if raiseButtonOnHover = true
+
                 Raise(hoverRaiseAmount);
             }
 
             if (changeSideColourHover)
             {
+                // Change the button's side colour on hover if changeSideColourHover = true
+
                 SetButtonSideColour(false, hoverSideColour);
             }
         }
@@ -156,7 +177,8 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Visually restore the button to its default state on hover end if the input type is DepressOnHover
+        // Visually restore the button to its default state on hover end if it was pressed down or raised
+
         if (inputType == ButtonPressInputType.DepressOnHover)
         {
             Depress();
@@ -166,6 +188,7 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
             Depress();
         }
 
+        // Also restore the original side colour
         if (changeSideColourHover)
         {
             SetButtonSideColour();
@@ -206,7 +229,10 @@ public class PressEffectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Raise(float raiseAmount)
     {
+        // Move the top of the button up slightly to visually raise the button
         targetPos = new Vector3(startPos.x, startPos.y + raiseAmount, startPos.z);
+
+        // A lower value is used for pressSpeedMultiplier when raising so the raise animation happens more slowly than the press one
         pressSpeedMultiplier = 0.25f;
     }
 }

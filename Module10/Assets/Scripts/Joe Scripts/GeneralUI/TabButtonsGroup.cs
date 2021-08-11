@@ -1,33 +1,52 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+// ||=======================================================================||
+// || TabButtonsGroup: Handles a collection of ResizableTabs that can be    ||
+// ||   toggled between and used to trigger other UI events.                ||
+// ||=======================================================================||
+// || Used on various prefabs.                                              ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || for the production phase (Module 11).                                 ||
+// ||=======================================================================||
 
 public class TabButtonsGroup : MonoBehaviour
 {
-    [SerializeField] private string groupName;
-    [SerializeField] private ResizableTabButton[] tabs;
+    #region InspectorVariables
+    // Variables in this region are set in the inspector
 
-    [SerializeField] private Color tabDefaultColour;
-    [SerializeField] private Color tabSelectedColour;
+    [SerializeField] private string                 groupName;          // Unique name for this tab group (used for saving)
+    [SerializeField] private ResizableTabButton[]   tabs;               // All tabs in the group
+    [SerializeField] private Color                  tabDefaultColour;   // Colour for unselected tabs
+    [SerializeField] private Color                  tabSelectedColour;  // Colour for selected tabs
+
+    #endregion
+
+    #region Properties
 
     public Color TabDefaultColour  { get { return tabDefaultColour; } }
     public Color TabSelectedColour { get { return tabSelectedColour; } }
 
-    public event Action<int, bool> TabSelectedEvent;
+    #endregion
 
-    private ResizableTabButton selectedTab;
+    public  event Action<int, bool> TabSelectedEvent;   // Invoked when a tab is selected. Parameters: tab index (int), player selected (bool)
+
+    private ResizableTabButton      selectedTab;        // The tab that is currently selected
 
     private void Start()
     {
+        // Setup all tabs in the group on start
         foreach (ResizableTabButton tab in tabs)
         {
             tab.Setup(this);
         }
 
-        SelectTab(SaveLoadManager.Instance.GetIntFromPlayerPrefs("optionsSelectedTab"), false);
+        // Select the tab that was selected last time this group was used (defaults to index 0 if never used)
+        SelectTab(SaveLoadManager.Instance.GetIntFromPlayerPrefs(groupName + "_selectedTab"), false);
     }
 
+    // Called by individual tabs when clicked
     public void SelectTabButton(int tabIndex)
     {
         SelectTab(tabIndex, true);
@@ -52,7 +71,8 @@ public class TabButtonsGroup : MonoBehaviour
             // Trigger the tab selected event
             TabSelectedEvent.Invoke(tabIndex, playerSelected);
 
-            SaveLoadManager.Instance.SaveIntToPlayerPrefs("optionsSelectedTab", tabIndex);
+            // Save the selected tab index
+            SaveLoadManager.Instance.SaveIntToPlayerPrefs(groupName + "_selectedTab", tabIndex);
         }
     }
 }

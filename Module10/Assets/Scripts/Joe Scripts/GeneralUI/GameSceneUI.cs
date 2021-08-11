@@ -1,19 +1,18 @@
 using UnityEngine;
 
 // ||=======================================================================||
-// || GameSceneMenuUI: Handles triggering the pause and options menus       ||
-// ||   in a game scene (a scene where gameplay happens as opposed to a     ||
-// ||   main menu etc).                                                     ||
+// || GameSceneUI: (Previously GameSceneMenuUI) Handles various game UI     ||
+// ||   such as the pause menu and cinematics canvas.                       ||
 // ||=======================================================================||
 // || Used on prefab: Joe/UI/JoeCanvas                                      ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added the option to show/hide the cinematics canvas and main UI     ||
 // ||=======================================================================||
-
-// Edited for mod11:
-// - added cinematics stuff
-// - changed name from GameSceneMenuUI to GameSceneUI
 
 public class GameSceneUI : MonoBehaviour
 {
@@ -22,11 +21,11 @@ public class GameSceneUI : MonoBehaviour
     #region InspectorVariables
     // Variables in this region are set in the inspector
 
-    [SerializeField] private Canvas[] canvases;
-    [SerializeField] private GameObject cinematicsCanvasPrefab;
+    [SerializeField] private Canvas[]   canvases;               // Canvases that make up the game scene UI
+    [SerializeField] private GameObject cinematicsCanvasPrefab; // Canvas to be instantiated during cinematics (see CinematicsCanvas)
 
-    [SerializeField] private GameObject pausePanelPrefab;
-    [SerializeField] private GameObject optionsPanelPrefab;
+    [SerializeField] private GameObject pausePanelPrefab;       // Pause UI, instantiated when the game is paused
+    [SerializeField] private GameObject optionsPanelPrefab;     // Options panel UI
 
     #endregion
 
@@ -38,16 +37,16 @@ public class GameSceneUI : MonoBehaviour
 
     #endregion
 
-    private PlayerMovement   playerMovement;             // Reference to the player movement script for disabling movement when the pause menu is open
-    private PausePanel       pausePanel;                 // UI panel shown when the game is paused
-    private OptionsPanel     optionsPanel;               // UI panel containing options that can be edited during gameplay
+    private PlayerMovement   playerMovement;            // Reference to the player movement script for disabling movement when the pause menu is open
+    private PausePanel       pausePanel;                // UI panel shown when the game is paused
+    private OptionsPanel     optionsPanel;              // UI panel containing options that can be edited during gameplay
 
-    private bool             showingCinematicsCanvas;
-    private CinematicsCanvas cinematicsCanvas;
+    private bool             showingCinematicsCanvas;   // Whether the cinematics canvas is currently being shown
+    private CinematicsCanvas cinematicsCanvas;          // The active cinematics canvas (null if one is not active)
 
-    private InventoryPanel   playerInventory;
+    private InventoryPanel   playerInventory;           // Reference to the player's inventory panel
 
-    private ItemInfoPopup itemInfoPopup;
+    private ItemInfoPopup    itemInfoPopup;             // Popup used for displaying info, usually about an item
 
     private void Awake()
     {
@@ -64,6 +63,7 @@ public class GameSceneUI : MonoBehaviour
             return;
         }
 
+        // Get a reference to the player's inventory panel
         FindPlayerInventory();
     }
 
@@ -78,6 +78,7 @@ public class GameSceneUI : MonoBehaviour
     {
         if(playerInventory == null)
         {
+            // Re-find the inventory panel if it becomed null, can happen when switching scenes
             FindPlayerInventory();
         }
 
@@ -189,6 +190,7 @@ public class GameSceneUI : MonoBehaviour
 
     public void SetUIShowing(bool show)
     {
+        // Enable/disable all canvases
         for (int i = 0; i < canvases.Length; i++)
         {
             if (canvases[i] != null)
@@ -197,6 +199,7 @@ public class GameSceneUI : MonoBehaviour
             }
         }
 
+        // Also show/hides the quest manager which contains various quest related UI
         GameObject.FindGameObjectWithTag("QuestManager").GetComponent<CanvasGroup>().alpha = show ? 1.0f : 0.0f;
     }
 
@@ -209,6 +212,7 @@ public class GameSceneUI : MonoBehaviour
 
     public void HideCinematicsCanvas()
     {
+        // Destroy the cinematics canvas if one is being shown
         if (cinematicsCanvas.gameObject != null)
         {
             Destroy(cinematicsCanvas.gameObject);
@@ -219,6 +223,8 @@ public class GameSceneUI : MonoBehaviour
 
     public CinematicsCanvas GetActiveCinematicsCanvas()
     {
+        // Returns the cinematics canvas being shown, or throws an error if there is no active canvas
+
         if(cinematicsCanvas == null)
         {
             Debug.LogWarning("Calling GetActiveCinematicsCanvas with null cinematics canvas");

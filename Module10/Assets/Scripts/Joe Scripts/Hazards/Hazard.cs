@@ -1,12 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-public enum HazardMode
-{
-    PlayerTrigger,  // The hazard will animate when the player enters a certain trigger area
-    Continuous      // The hazard will animate continuously at a set interval
-}
-
 // ||=======================================================================||
 // || Hazard: An obstacle with a triggerable animation that can kill        ||
 // ||   the player.                                                         ||
@@ -14,10 +8,19 @@ public enum HazardMode
 // || Used on all prefabs in: Joe/Environment/Hazards                       ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Allowed animations to be reversed for use in QTE hazards.           ||
+// || - Added an optional start delay for continuous animations.            ||
 // ||=======================================================================||
 
-// Edited for mod 11: allowed animations to be reversed for use in QTE hazards and added continuousStartDelay: an optional start delay for continuous animations
+public enum HazardMode
+{
+    PlayerTrigger,  // The hazard will animate when the player enters a certain trigger area
+    Continuous      // The hazard will animate continuously at a set interval
+}
 
 public class Hazard : MonoBehaviour, IExternalTriggerListener
 {
@@ -39,13 +42,13 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
     private float                               continuousStartDelay    = 0.0f;  // When using HazardMode.Continuous, the delay before the initial animation trigger
 
     [Header("Triggers")]
-    [SerializeField] private ExternalTrigger[]  hitTriggers;                // All triggers that will kill the player if entered
-    [SerializeField] private ExternalTrigger    areaTrigger;                // Trigger that activates the hazard when using HazardMode.PlayerTrigger
+    [SerializeField] private ExternalTrigger[]  hitTriggers;    // All triggers that will kill the player if entered
+    [SerializeField] private ExternalTrigger    areaTrigger;    // Trigger that activates the hazard when using HazardMode.PlayerTrigger
 
     #endregion
 
-    private bool playingAnimation   = false;
-    private bool reversingAnimation = false;
+    private bool playingAnimation   = false;    // Whether the hazard animation is being played
+    private bool reversingAnimation = false;    // Whether the animation is being reversed
 
     private void Awake()
     {
@@ -71,9 +74,12 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
     {
         if(reversingAnimation && animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0.0f)
         {
+            // If the ainmation is being reversed and it reaches the start, stop playing the animation
+
             reversingAnimation  = false;
             playingAnimation    = false;
 
+            // Tell the animator that animations should no longer be played in reverse
             animator.SetTrigger("DoneReversing");
         }
     }
@@ -92,6 +98,7 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
             }
             else if (triggerId == "hit")
             {
+                // The hazard hit the player
                 HazardHitPlayer();
             }
         }
@@ -117,6 +124,7 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
 
     private IEnumerator ContinuousTriggerCoroutine()
     {
+        // Wait for the start delay before triggering the continuous animation for the first time
         yield return new WaitForSeconds(continuousStartDelay);
 
         while(mode == HazardMode.Continuous)
@@ -164,6 +172,8 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
 
     private void StartAnimation()
     {
+        // Play the hazard animation at normal speed, not reversed
+
         animator.SetFloat("Speed", 1.0f);
 
         animator.SetTrigger("StartHazard");
@@ -173,6 +183,8 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
 
     public void ReverseAnimationAfterDelay(float delay)
     {
+        // Pause the animation and then reverse it after the given delay (seconds)
+
         StartCoroutine(ReverseAnimationCoroutine(delay));
     }
 
@@ -191,7 +203,7 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
         reversingAnimation = true;
     }
 
-    // Called by an animation event
+    // Called by an animation event when the hazard animation is complete
     public void AnimationDone()
     {
         playingAnimation = false;
