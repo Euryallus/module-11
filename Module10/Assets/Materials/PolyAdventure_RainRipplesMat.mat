@@ -66,7 +66,7 @@ Material:
     - Vector1_b20072a957614b2487ee126cc7632f7f: 1
     - Vector1_b31832860b8748d4b33e9244d90d383f: 0.15
     - Vector1_f2f5151eaaf94670b989fb9619115bb2: 2
-    - Vector1_f723487e2b784c49ad7470c34d41ccdf: 0.7
+    - Vector1_f723487e2b784c49ad7470c34d41ccdf: 0.31
     m_Colors:
     - Color_338c8268a4a848488bb92376a05904e9: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
     - Vector2_b74dc90dd8c0414bb21a3f9b5efd0542: {r: -1, g: 0, b: 0, a: 0}
