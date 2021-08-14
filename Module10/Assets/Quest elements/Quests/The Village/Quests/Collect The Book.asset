@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Collect The Book
   m_EditorClassIdentifier: 
   questName: Collect The Book
-  questDescription: Before you go, there's a book in the library I want to you to
-    pick up. It's in a chest. Get it for me and I'll send you on your way.
+  questDescription: Before you leave <b>The Castle</b>, there's a book in the library
+    I want to you to pick up for me. It's in a chest. Bring it here and I'll send
+    you on your way.
   questCompleteDialogue: Thank you for the book. I'll get one of the guards to read
     it to me at bedtime. I didn't need to tell you that. Anyway, here's the key to
-    leave the castle.
+    leave <b>The Castle</b>.
   nextQuests: []
   rewards:
   - Item: {fileID: 11400000, guid: a589843407f283d43b572b75cdd13c98, type: 2}
@@ -28,8 +29,8 @@ MonoBehaviour:
   handInNPCName: The King
   handOutNPCName: The King
   questLineName: 
-  questCompleted: 0
-  questHandedIn: 0
+  questCompleted: 1
+  questHandedIn: 1
   handInToGiver: 1
-  savedQuestCompleted: 0
-  savedQuestHandedIn: 0
+  savedQuestCompleted: 1
+  savedQuestHandedIn: 1

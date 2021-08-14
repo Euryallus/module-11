@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
   m_Name: GetSwordnBow
   m_EditorClassIdentifier: 
-  questName: Collect the Sword & Bow
-  questDescription: 'In the corner, on those benches. Go pick up the sword and bow,
+  questName: Collect the bow and sword
+  questDescription: 'In the corner, on those benches. Go pick up the bow and sword,
     and then come back to me. '
   questCompleteDialogue: At least you can follow basic instructions. Take this key
     and move forward through here.
@@ -29,8 +29,8 @@ MonoBehaviour:
   handInNPCName: Weapon Smith
   handOutNPCName: Weapon Smith
   questLineName: 
-  questCompleted: 0
-  questHandedIn: 0
+  questCompleted: 1
+  questHandedIn: 1
   handInToGiver: 1
-  savedQuestCompleted: 0
-  savedQuestHandedIn: 0
+  savedQuestCompleted: 1
+  savedQuestHandedIn: 1

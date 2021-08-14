@@ -16,7 +16,7 @@ public class DialogueUI : UIPanel
     [SerializeField]    private TMP_Text nameText;      // Ref. to NPC name in dialogue
 
     [SerializeField] private float timeBetweenLetterPrint = 0.005f;
-    private WaitForSeconds wait;
+    private WaitForSecondsRealtime wait;
 
     private string displayedDialogue;
     private string playerName;
@@ -26,7 +26,7 @@ public class DialogueUI : UIPanel
     {
         base.Start();
 
-        wait = new WaitForSeconds(timeBetweenLetterPrint);
+        wait = new WaitForSecondsRealtime(timeBetweenLetterPrint);
         playerName = PlayerStats.PlayerName;
     }
 

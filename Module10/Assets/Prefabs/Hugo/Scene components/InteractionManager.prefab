@@ -3027,8 +3027,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Objectives
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
-  m_sharedMaterial: {fileID: -5454262523263135715, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3523,8 +3523,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
-  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3128c565e5ff9d54b855a88c017e659c, type: 2}
+  m_sharedMaterial: {fileID: -1200101093768581536, guid: 3128c565e5ff9d54b855a88c017e659c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3657,8 +3657,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Dialogue
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
-  m_sharedMaterial: {fileID: -5454262523263135715, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4170,8 +4170,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Reward
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
-  m_sharedMaterial: {fileID: -5454262523263135715, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4973,8 +4973,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
-  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3128c565e5ff9d54b855a88c017e659c, type: 2}
+  m_sharedMaterial: {fileID: -1200101093768581536, guid: 3128c565e5ff9d54b855a88c017e659c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5510,8 +5510,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest description
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
-  m_sharedMaterial: {fileID: -5454262523263135715, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5994,8 +5994,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Follow up
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
-  m_sharedMaterial: {fileID: -5454262523263135715, guid: cfa94bb6f3197e74da45269d34fc4fa7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
+  m_sharedMaterial: {fileID: 3188062386169159019, guid: b43a8f7899fb14648b9987551179e22c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

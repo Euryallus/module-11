@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: obj_gotoEndChal
   m_EditorClassIdentifier: 
   objectiveType: 0
-  taskName: Get to the end of the challenge!
+  taskName: Reach the end of the challenge
   taskComplete: 0
   saveTaskComplete: 0
   positionToGoTo: {x: 537.436, y: 99.591, z: 821.727}

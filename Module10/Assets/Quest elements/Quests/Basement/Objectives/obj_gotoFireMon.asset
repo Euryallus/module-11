@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: obj_gotoFireMon
   m_EditorClassIdentifier: 
   objectiveType: 0
-  taskName: Go To Fire Monument
+  taskName: Light the <b>Fire Monument</b>
   taskComplete: 0
   saveTaskComplete: 0
   positionToGoTo: {x: 501.467, y: 105.9, z: 805.888}

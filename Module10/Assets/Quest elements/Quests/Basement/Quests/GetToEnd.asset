@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f7111d4de19c409f4cb88f65e1284, type: 3}
   m_Name: GetToEnd
   m_EditorClassIdentifier: 
-  questName: Reach the end of the Challenge
+  questName: Reach the end of the challenge
   questDescription: If you can make it through this challenge, you'll almost be ready
     to leave this place.
   questCompleteDialogue: Well done. Maybe the King was right about you. There's only

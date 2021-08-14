@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: obj_gatherbowsword
   m_EditorClassIdentifier: 
   objectiveType: 1
-  taskName: Get the Bow & Sword
+  taskName: Collect the bow and sword
   taskComplete: 0
   saveTaskComplete: 0
   toCollect:
