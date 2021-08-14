@@ -4995,7 +4995,7 @@ MonoBehaviour:
   safeYPos: 95.5
   waveMaterial: {fileID: 2100000, guid: 65c44505a977cd048800172cc795bdc0, type: 2}
   waveEnterParticlesPrefab: {fileID: 7787895859563246075, guid: cbfc317b534c9bd41abe36868317dde4, type: 3}
-  waveMesh: {fileID: 3334350430159168265}
+  waveMeshRenderer: {fileID: 3334350430159168265}
   waveParticles: {fileID: 8801734410476146451}
   deathTrigger: {fileID: 5571527116401753832}
   waterTrigger: {fileID: 5332549515331850585}

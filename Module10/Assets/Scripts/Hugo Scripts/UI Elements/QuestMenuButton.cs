@@ -46,5 +46,8 @@ public class QuestMenuButton : MonoBehaviour
         }
 
         ui.rewards.text = rewardsText;
+
+        // Plays a click sound
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
     }
 }

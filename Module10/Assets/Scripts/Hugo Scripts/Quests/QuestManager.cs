@@ -87,6 +87,9 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         UI.HideQuestAccept();
         // Stops camera from focusing on NPC
         npcManager.StopFocusCamera();
+
+        // Plays a click sound
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
     }
 
     // Called when "decline" UI button is pressed from quest UI
@@ -106,6 +109,9 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
 
         // Stops cam. from focusing on NPC
         npcManager.StopFocusCamera();
+
+        // Plays a click sound
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
     }
 
     // Used to check the completion of quests in player's backlog
@@ -291,6 +297,9 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         runupdate = true;
         npcManager.StopFocusCamera();
         playerMove.StartMoving();
+
+        // Plays a click sound
+        AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
     }
 
     public void OnGlobalLoadSetup(SaveData saveData)

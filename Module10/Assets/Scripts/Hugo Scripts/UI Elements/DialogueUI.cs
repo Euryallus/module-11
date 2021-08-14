@@ -78,6 +78,12 @@ public class DialogueUI : UIPanel
     //Hides dialogue
     public void HideDialogue()
     {
+        // Added by Joe: Plays a click sound if not loading and the dialogue is not already hidden
+        if(cg.alpha > 0.0f && !SaveLoadManager.Instance.LoadingSceneData)
+        {
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
+        }
+
         // Stops player from interacting w/ dialogue box & sets cursor back to "locked" state
         Cursor.lockState = CursorLockMode.Locked;
         cg.alpha = 0;

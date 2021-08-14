@@ -7,10 +7,13 @@ using TMPro;
 // ||   E while hovering over it within a certain range.                    ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added GetPopupScreenPos & GetPopupWorldPos, see code for details    ||
+// || - Bug fixes                                                           ||
 // ||=======================================================================||
-
-// Edited for mod 11: bug fixes and added GetPopupScreenPos & GetPopupWorldPos
 
 public abstract class InteractableObject : MonoBehaviour
 {
@@ -19,7 +22,7 @@ public abstract class InteractableObject : MonoBehaviour
 
     [Header("Interactable Properties")]
 
-    [Tooltip("How close the player needs to be to this object to interact with it")] // See tooltip
+    [Tooltip("How close the player needs to be to this object to interact with it")] // <--
     [SerializeField] private float      interactionRange        = 5.0f;
 
     [SerializeField] private GameObject interactTooltipPrefab;  // Prefab for the UI tooltip/popup shown while hovering over the object
@@ -38,7 +41,6 @@ public abstract class InteractableObject : MonoBehaviour
     protected bool          hoveringInRange;                // True if the mouse pointer is over the object AND the player is within range
     private float           hoverTimer;                     // How many seconds the player has been hovering over the object
 
-    private GameObject      playerGameObject;               // Player GameObject used to check for distance from the object
     private Camera          mainPlayerCamera;               // The player camera for calculating the position of the tooltip in screen space
 
     private Transform       canvasTransform;                // Canvas transform used as a parent for the UI tooltip
@@ -63,88 +65,89 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(playerGameObject == null)
-        {
-            playerGameObject = GameObject.FindGameObjectWithTag("Player");
-        }
-
         if(mainPlayerCamera == null)
         {
+            // Re-find the player camera if it becomes null (can happen when switching scenes)
             mainPlayerCamera = Camera.main;
         }
 
-        if (!canInteract)
+        if (canInteract)
         {
-            return;
-        }
+            // The player is allowed to interact with this object
 
-        // Interactables can only be interacted with when the cursor is locked (i.e. the player is moving around the world/not in a menu)
-        if(Cursor.lockState == CursorLockMode.Locked)
-        {
-            // Check whether the player is hovering within the valid range
-            UpdateHoverState();
-
-            if (hoveringInRange)
+            // Interactables can only be interacted with when the cursor is locked (i.e. the player is moving around the world/not in a menu)
+            if (Cursor.lockState == CursorLockMode.Locked)
             {
-                //  Ensure no input field is selected to prevent unintended behaviour when pressing E while typing
-                if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
-                {
-                    // The player has pressed E while hovering over the object, interact with it
-                    Interact();
-                }
+                // Check whether the player is hovering within the valid range
+                UpdateHoverState();
 
-                if (hoverTimer >= InteractPopupDelay && interactTooltipPrefab != null && mainPlayerCamera != null)
+                if (hoveringInRange)
                 {
-                    // Player has been hovering for longer than InteractPopupDelay, show the popup if
-                    //   it isn't already showing, otherwise move it to the object's position in screen space
-
-                    if (!overrideTooltipBehaviour && interactTooltip == null)
+                    //  Ensure no input field is selected to prevent unintended behaviour when pressing E while typing
+                    if (Input.GetKeyDown(KeyCode.E) && !InputFieldSelection.AnyFieldSelected && !GameSceneUI.Instance.ShowingCinematicsCanvas)
                     {
-                        ShowInteractTooltip();
+                        // The player has pressed E while hovering over the object, interact with it
+                        Interact();
+                    }
+
+                    if (hoverTimer >= InteractPopupDelay && interactTooltipPrefab != null && mainPlayerCamera != null)
+                    {
+                        // Player has been hovering for longer than InteractPopupDelay, show the popup if
+                        //   it isn't already showing, otherwise move it to the object's position in screen space
+
+                        if (!overrideTooltipBehaviour && interactTooltip == null)
+                        {
+                            ShowInteractTooltip();
+                        }
+                    }
+                    else
+                    {
+                        // Increment the hover timer until it reaches InteractPopupDelay
+                        hoverTimer += Time.unscaledDeltaTime;
                     }
                 }
-                else
-                {
-                    // Increment the hover timer until it reaches InteractPopupDelay
-                    hoverTimer += Time.unscaledDeltaTime;
-                }
-            }
-        }
-        else
-        {
-            // Cursor is not locked, the player is probably in a menu. End hovering
-            EndHoverInRange();
-        }
-
-        if (interactTooltip != null)
-        {
-            Vector3 popupScreenPos = GetPopupScreenPos();
-            if (popupScreenPos.z > 0.0f)
-            {
-                // The player is facing the target position of the tooltip, move it to 
-                //   the object's position + the world offset, all converted to screen space
-                interactTooltip.transform.position = popupScreenPos;
             }
             else
             {
-                // The player is facing away from the tooltip position, hide it off-screen
-                interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
+                // Cursor is not locked, the player is probably in a menu. End hovering
+                EndHoverInRange();
+            }
+
+            if (interactTooltip != null)
+            {
+                Vector3 popupScreenPos = GetPopupScreenPos();
+                if (popupScreenPos.z > 0.0f)
+                {
+                    // The player is facing the target position of the tooltip, move it to 
+                    //   the object's position + the world offset, all converted to screen space
+                    interactTooltip.transform.position = popupScreenPos;
+                }
+                else
+                {
+                    // The player is facing away from the tooltip position, hide it off-screen
+                    interactTooltip.transform.position = new Vector3(0.0f, -10000f, 0.0f);
+                }
             }
         }
     }
 
     public Vector3 GetPopupScreenPos(Vector3 offset = default)
     {
+        // If using the player's camera, returns the position of the popup tooltip in screen space
+
         if(mainPlayerCamera != null)
         {
             return mainPlayerCamera.WorldToScreenPoint(transform.position + offset + worldInteractTooltipOffset);
         }
 
+        // Player's camera is null, return a value that will hide any UI off-screen instead
         return new Vector3(0.0f, -10000.0f, 0.0f);
     }
 
     public Vector3 GetPopupWorldPos(Vector3 offset = default)
     {
+        // Returns the position of the popup tooltip in world space
+
         return (transform.position + offset + worldInteractTooltipOffset);
     }
 
@@ -248,14 +251,17 @@ public abstract class InteractableObject : MonoBehaviour
 
     private bool PlayerIsWithinRange()
     {
-        if((Vector3.Distance(playerGameObject.transform.position, transform.position) <= interactionRange) && !EventSystem.current.IsPointerOverGameObject())
+        if(PlayerInstance.ActivePlayer != null)
         {
-            // The distance between the player and the interactable is less than the interactionRange set in the inspector,
-            //   and the pointer is not over another GameObject. Player is in range.
-            return true;
+            if ((Vector3.Distance(PlayerInstance.ActivePlayer.gameObject.transform.position, transform.position) <= interactionRange) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // The distance between the player and the interactable is less than the interactionRange set in the inspector,
+                //   and the pointer is not over another GameObject. Player is in range.
+                return true;
+            }
         }
 
-        // Player is out of range
+        // Player is out of range/not yet in the scene
         return false;
     }
 

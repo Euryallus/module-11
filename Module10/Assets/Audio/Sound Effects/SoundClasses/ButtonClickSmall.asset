@@ -16,8 +16,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7cc62666f0f763743aa2f2c4fe19ab26, type: 3}
   m_id: buttonClickSmall
   m_volumeRange:
-    Min: 0.8
-    Max: 0.8
+    Min: 0.75
+    Max: 0.75
   m_pitchRange:
     Min: 1
     Max: 1

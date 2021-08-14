@@ -145,6 +145,9 @@ public class NPCManager : MonoBehaviour
         {
             // If the NPC has something else to say, show it
             UI.ShowDialogue(dialogueLine, interactingWith.displayName);
+
+            // Plays a click sound
+            AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
         }
         else
         {
