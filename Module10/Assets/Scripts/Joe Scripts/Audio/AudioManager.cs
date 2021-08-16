@@ -21,7 +21,7 @@ using UnityEngine.SceneManagement;
 // || - Various other fixes and improvements                                ||
 // ||=======================================================================||
 
-//MusicPlayMode defines all of the different ways music can be played for a certain scene
+//MusicPlayMode defines all of the different ways music can be played in a scene
 public enum MusicPlayMode
 {
     OrderedPlaylist,    // A playlist where songs are played in the listed order

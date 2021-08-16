@@ -6,10 +6,12 @@ using UnityEngine;
 // ||   to add behaviour when the player is holding the item.               ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added CanDrop and CanThrowAway                                      ||
 // ||=======================================================================||
-
-// mod 11: added candrop and canthrowaway
 
 [CreateAssetMenu(fileName = "Item", menuName = "Item/Item")]
 public class Item : ScriptableObject
@@ -39,6 +41,8 @@ public class Item : ScriptableObject
 
     #region InspectorVariables
     // Variables in this region are set in the inspector
+
+    // See tooltips for comments
 
     [Space]
     [Header("Info")]
@@ -241,13 +245,15 @@ public class CustomStringProperty
     [Tooltip("The default value of this property")]
     public string Value;
 
-    private const int MaxDisplayTextLength = 18;
+    private const int MaxDisplayTextLength = 18; // Maximum length of text that can be displayed in the UI before appending a '...'
 
     public string GetDisplayText()
     {
-        // Either show the full string value, or remove the end and append a "..." if it's longer than 10 characters
+        // Either show the full string value, or remove the end and append a "..." if it's longer than [MaxDisplayTextLength] characters
+
         string displayText;
 
+        // Either display the property's UI name and value, or just its value if there is no UI name
         if (string.IsNullOrEmpty(UIName))
         {
             displayText = Value;
@@ -259,6 +265,8 @@ public class CustomStringProperty
 
         if (displayText.Length > MaxDisplayTextLength)
         {
+            // The display text is longer than can be displayed, remove the end of the string and append '...'
+
             displayText = displayText.Remove(MaxDisplayTextLength - 1);
             displayText += "...";
         }

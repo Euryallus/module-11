@@ -8,18 +8,16 @@ using UnityEngine.EventSystems;
 // || Used on prefab: Joe/UI/Inventory/InventoryBinPanel                    ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Some items now cannot be binned, which triggers a notification      ||
 // ||=======================================================================||
-
-// Edited in module 11: some items cannot be binned, shows notification when trying to throw away one of these items
 
 public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public ItemContainer ParentContainer { get { return parentContainer; } }
-
-    [SerializeField] private ItemContainer parentContainer;
-
-    private HandSlotUI handSlotUI;
+    private HandSlotUI handSlotUI; // Reference to the hand container slot
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -33,6 +31,7 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
         if (handStackSize > 0)
         {
+            // Get the item type being held that will potentially be binned
             Item itemBeingBinned = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
 
             if(itemBeingBinned.CanThrowAway)
@@ -49,12 +48,13 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
                 handSlotUI.UpdateUI();
 
                 // Hide the popup that showed what would be binned
-                parentContainer.ItemInfoPopup.HidePopup();
+                GameSceneUI.Instance.ItemInfoPopup.HidePopup();
 
                 AudioManager.Instance.PlaySoundEffect2D("bin");
             }
             else
             {
+                // The item being held cannot be binned, notify the player
                 NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantThrowAwayItem, new string[] { itemBeingBinned.UIName });
             }
         }
@@ -70,25 +70,27 @@ public class InventoryBin : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
         if (heldItemCount == 0)
         {
             // Player is not holding items, show that this button will bin any items being held
-            parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", "Click while holding item(s)");
+            GameSceneUI.Instance.ItemInfoPopup.ShowPopupWithText("Bin Permanently", "Click while holding item(s)");
         }
         else
         {
             Item heldItemType = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
 
             // Player is holding items, show that this button will bin them, displaying the item count/name
-            parentContainer.ItemInfoPopup.ShowPopupWithText("Bin Permanently", heldItemCount + "x " + heldItemType.UIName);
+            GameSceneUI.Instance.ItemInfoPopup.ShowPopupWithText("Bin Permanently", heldItemCount + "x " + heldItemType.UIName);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        parentContainer.ItemInfoPopup.HidePopup();
+        // Hides the info popup when the pointer leaves the bin button
+        GameSceneUI.Instance.ItemInfoPopup.HidePopup();
     }
 
     private void FindHandSlotUI()
     {
-        if(handSlotUI == null)
+        // Finds the slot that acts as the player's 'hand' when they pick up an item from a chest/their hotbar/inventory
+        if (handSlotUI == null)
         {
             handSlotUI = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
         }

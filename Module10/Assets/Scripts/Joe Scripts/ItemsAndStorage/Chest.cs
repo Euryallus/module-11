@@ -8,7 +8,11 @@ using UnityEngine;
 // ||                  Joe/Environment/Crafting & Chests/Linked Chest       ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Now handles chest open/close animations                             ||
 // ||=======================================================================||
 
 public class Chest : InteractableWithOutline
@@ -29,8 +33,8 @@ public class Chest : InteractableWithOutline
 
     private void Awake()
     {
-        //Find the nventory panel and chest panel in the scene
-        chestPanel      = GameObject.FindGameObjectWithTag("ChestPanel").GetComponent<ChestPanel>();
+        //Find the chest panel (UI panel that displays chest contents) in the scene
+        chestPanel = GameObject.FindGameObjectWithTag("ChestPanel").GetComponent<ChestPanel>();
     }
 
     public override void Interact()

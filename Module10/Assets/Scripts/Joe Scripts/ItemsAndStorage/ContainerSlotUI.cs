@@ -10,11 +10,15 @@ using UnityEngine.EventSystems;
 // || Used on prefab: Joe/UI/ContainerSlot                                  ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Slots now animate when an item is added                             ||
+// || - Adjusted OnPointerDown code to allow item stacks to be 'swapped'    ||
+// ||    when clicking on a slot that contains items while already holding  ||
+// ||    items in the hand slot                                             ||
 // ||=======================================================================||
-
-//Updated for Mod11:
-//  - Allowed item stacks to be 'swapped' when clicking on a slot that contains items with items in the hand slot
 
 public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -77,6 +81,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
         this.slot = slot;
         slot.SlotUI = this;
 
+        // Trigger the OnItemAdded event when an item is added to the slot that this UI is linked to
         slot.ItemStack.ItemAddedEvent += OnItemAdded;
     }
 
@@ -262,6 +267,7 @@ public class ContainerSlotUI : MonoBehaviour, IPointerDownHandler, IPointerEnter
 
     private void OnItemAdded()
     {
+        // Trigger a slight 'bounce' animation on the slot when an item is added
         animator.SetTrigger("Bounce");
     }
 

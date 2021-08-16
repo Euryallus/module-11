@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 
 public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    private HandSlotUI handSlotUI;  // Reference to the hand container slot
+    private HandSlotUI handSlotUI; // Reference to the hand container slot
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -31,7 +31,7 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
         {
             // The player is holding something
 
-            // Get the item type being held
+            // Get the item type being held that will potentially be dropped
             Item itemBeingDropped = ItemManager.Instance.GetItemWithId(handSlotUI.Slot.ItemStack.StackItemsID);
 
             if(itemBeingDropped.CanDrop)
@@ -48,7 +48,6 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
             else
             {
                 // The item being held cannot be dropped, notify the player
-
                 NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.CantDropItem, new string[] { itemBeingDropped.UIName });
             }
         }
@@ -78,7 +77,7 @@ public class DropItemButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Hides the info popup when the pointer leaves the button
+        // Hides the info popup when the pointer leaves the drop button
         GameSceneUI.Instance.ItemInfoPopup.HidePopup();
     }
 

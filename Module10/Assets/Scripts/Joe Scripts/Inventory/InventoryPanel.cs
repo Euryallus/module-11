@@ -12,12 +12,14 @@ using System.Linq;
 // || Used on prefab: Joe/UI/Inventory/InventoryPanel                       ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Combined the inventory and hotbar SlotsUI to both be linked with    ||
+// ||    a single ItemContainer, so they both act as shared inventory space ||
+// || - Added the ability to drop items onto the ground as an 'item pickup' ||
 // ||=======================================================================||
-
-// EDITED FOR MODULE 11:
-// - Combined hotbar and inventory slotsUI lists to both be linked with a single itemContainer
-// - Added item stack dropping
 
 // InventoryShowMode defines different ways that the inventory panel can be displayed
 public enum InventoryShowMode
@@ -49,7 +51,7 @@ public class InventoryPanel : UIPanel
 
     [SerializeField] private float                  maxWeight;              //  Maximum amount of weight this inventory can hold
 
-    [SerializeField] private GameObject             itemStackPickupPrefab;
+    [SerializeField] private GameObject             itemStackPickupPrefab;  // GameObject instantiated for item pickups (collectibles that sit on the ground)
 
     #endregion
 
@@ -66,16 +68,14 @@ public class InventoryPanel : UIPanel
 
     #endregion
 
-    private PlayerMovement  playerMovement;      // Reference to the PlayerMovement script attached to the player character
-    private float           totalWeight = 0.0f;  // The weight of all items in the inventory combined
+    private HotbarPanel     hotbarPanel;         // Reference to the hotbar panel
     private HandSlotUI      handSlotUI;          // The slot that allows the player to hold/move items
-    private HotbarPanel     hotbarPanel;         // The script on the hotbar
+    private float           totalWeight = 0.0f;  // The weight of all items in the inventory combined (leftover from when inventory weight was planned to have an impact on gameplay)
 
     protected override void Awake()
     {
         base.Awake();
 
-        playerMovement  = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         handSlotUI      = GameObject.FindGameObjectWithTag("HandSlot").GetComponent<HandSlotUI>();
         hotbarPanel     = GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>();
 
@@ -126,10 +126,13 @@ public class InventoryPanel : UIPanel
 
     public bool AddOrDropItem(Item item, bool showDropNotification, bool allowInstantPickup)
     {
+        // First, attempts to add an item to the inventory/hotbar
         bool addedItem = TryAddItem(item);
 
         if(!addedItem)
         {
+            // The item could not be added, there probably was no space left in the inventory/hotbar
+            //  Drop the item on the ground instead
             DropItemGroup(new ItemGroup(item, 1), showDropNotification, allowInstantPickup);
         }
 
@@ -140,6 +143,9 @@ public class InventoryPanel : UIPanel
     {
         if(!string.IsNullOrEmpty(item.SpecialSlotId))
         {
+            // The item being added should be put in a special slot correspinding to the SpecialSlotId
+
+            // Attempt to add the item to a special slot, or replace an item in that slot if one already exists
             switch (item.SpecialSlotId)
             {
                 case "launchAbility":
@@ -163,12 +169,14 @@ public class InventoryPanel : UIPanel
                     return true;
             }
 
+            // The item's SpecialSlotId is not accounted for, throw an error
             Debug.LogError("Trying to add item to inventory with unknown SpecialSlotId: " + item.UIName + ", " + item.SpecialSlotId);
             return false;
         }
         else
         {
-            // For standard items: Attempts to add an item to the item container if there is enough space
+            // The item being added should be put in a standard inventory/hotbar slot
+            //   - attempt to add an item to the item container if there is enough space
             return mainContainer.TryAddItemToContainer(item);
         }
     }
@@ -181,6 +189,7 @@ public class InventoryPanel : UIPanel
 
     public bool ContainsItem(Item item)
     {
+        // Checks if the inventory/hotbar contains at least one of the given item type
         return mainContainer.CheckForQuantityOfItem(item) > 0;
     }
 
@@ -198,33 +207,37 @@ public class InventoryPanel : UIPanel
 
     public Item GetPlayerAbilityItem(PlayerAbilityType abilityType)
     {
-        ContainerSlot abilitySlot = LaunchAbilitySlot;
+        // Returns the ability item, if any, that is in the special ability slot that corresponds to the given ability type
 
+        ContainerSlot abilitySlot = null;
+
+        // Get the slot to be checked based on the type of ability item we are trying to obtain
         switch (abilityType)
         {
+            case PlayerAbilityType.Launch:
+                abilitySlot = LaunchAbilitySlot; break;
+
             case PlayerAbilityType.Freeze:
-                abilitySlot = FreezeAbilitySlot;
-                break;
+                abilitySlot = FreezeAbilitySlot; break;
+
             case PlayerAbilityType.Slam_Levitate:
-                abilitySlot = SlamAbilitySlot;
-                break;
+                abilitySlot = SlamAbilitySlot;   break;
+
             case PlayerAbilityType.Grab:
-                abilitySlot = GrabAbilitySlot;
-                break;
+                abilitySlot = GrabAbilitySlot;   break;
 
             case PlayerAbilityType.Glider:
-                abilitySlot = GliderAbilitySlot;
-                break;
+                abilitySlot = GliderAbilitySlot; break;
         }
 
-        // Check if the slot used for storint launch ability items contains an item
+        // Check if the slot used for storing the ability item contains an item
         if (abilitySlot.ItemStack.StackSize > 0)
         {
-            // The player has obtained a launch ability item, return it
+            // The player has obtained an item of the given type, return it
             return ItemManager.Instance.GetItemWithId(abilitySlot.ItemStack.StackItemsID);
         }
 
-        // The player has not obtained a launch ability item
+        // The player has not yet obtained an ability item of the given type
         return null;
     }
 
@@ -232,18 +245,19 @@ public class InventoryPanel : UIPanel
     {
         if(groupToDrop.Quantity > 0)
         {
-            Debug.Log("Dropping " + groupToDrop.Quantity + " " + groupToDrop.Item.UIName);
-
             const float dropPosOffset = 0.4f;
 
-            ItemStackPickup stackPickup = Instantiate(itemStackPickupPrefab, playerMovement.transform.position
+            // Instantiate an item stack at the position of the player with a small random offset to prevent all groups being at the exact same location
+            ItemStackPickup stackPickup = Instantiate(itemStackPickupPrefab,PlayerInstance.ActivePlayer.transform.position
                                                         - new Vector3(Random.Range(-dropPosOffset, dropPosOffset), 1.25f, Random.Range(-dropPosOffset, dropPosOffset)),
                                                         Quaternion.identity).GetComponent<ItemStackPickup>();
 
-            stackPickup.Setup(groupToDrop, this, allowInstantPickup);
+            // Setup the item pickup to show the correct item sprite/count based on what was dropped
+            stackPickup.Setup(groupToDrop, allowInstantPickup);
 
             if(showDropNotification)
             {
+                // Showing notifications is enabled, tell the player items were dropped
                 NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.NoSpaceItemsDropped);
             }
         }
@@ -251,6 +265,8 @@ public class InventoryPanel : UIPanel
 
     public void DropItemGroups(List<ItemGroup> groupsToDrop, bool showDropNotification, bool allowInstantPickup)
     {
+        // Drops multiple item groups on the ground by calling DropItemGroup for each group in the given list
+
         for (int i = 0; i < groupsToDrop.Count; i++)
         {
             DropItemGroup(groupsToDrop[i], showDropNotification, allowInstantPickup);
@@ -334,8 +350,9 @@ public class InventoryPanel : UIPanel
         base.Show();
 
         //Stop the player from moving and unlock/show the cursor so they can interact with the inventory
-        playerMovement.StopMoving();
+        PlayerInstance.ActivePlayer.PlayerMovement.StopMoving();
 
+        // Show/unlock the cursor so the inventory panel can be interacted with
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -357,16 +374,17 @@ public class InventoryPanel : UIPanel
             DropItemsInHand(true);
         }
 
-        //Allow the player to move and lock their cursor to screen centre
-        playerMovement.StartMoving();
+        // Allow the player to move and lock their cursor to screen centre
+        PlayerInstance.ActivePlayer.PlayerMovement.StartMoving();
 
+        // Lock the cursor to screen centre to be used for camera movement
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void UpdateTotalInventoryWeight()
     {
         // NOTE: The inventory weight functionality was a planned feature that has since been scrapped,
-        //   hence why this function is no longer called. It has been left here to show what progress was made.
+        //   hence why this function is no longer called. It has been left here to show what progress was made
 
         float weight = 0.0f;
 

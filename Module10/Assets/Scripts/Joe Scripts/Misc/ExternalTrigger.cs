@@ -8,10 +8,13 @@ using UnityEngine;
 // ||   be registered with another script.                                  ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - ExternalTriggers can now be enabled/disabled by setting             ||
+// ||    TriggerEnabled, and can return their Collider component            ||
 // ||=======================================================================||
-
-// Edited for Module 11: added triggerEnabled so external triggers can easily be enabled/disabled
 
 [RequireComponent(typeof(Collider))]
 public class ExternalTrigger : MonoBehaviour
@@ -32,8 +35,8 @@ public class ExternalTrigger : MonoBehaviour
 
     private List<IExternalTriggerListener> listeners = new List<IExternalTriggerListener>(); // List of all IExternalTriggerListeners to notify when a something enters/enters/stays in the trigger
 
-    private bool        triggerEnabled = true;
-    private Collider    triggerCollider;
+    private bool        triggerEnabled = true;  // Whether the trigger is currently enabled
+    private Collider    triggerCollider;        // The collider component that detects trigger events
 
     private void Awake()
     {
@@ -51,6 +54,8 @@ public class ExternalTrigger : MonoBehaviour
     {
         if(triggerEnabled)
         {
+            // The trigger is enabled, OnTriggerEnter events
+
             for (int i = 0; i < listeners.Count; i++)
             {
                 // Trigger was entered, call OnExternalTriggerEnter on all listeners
@@ -63,6 +68,8 @@ public class ExternalTrigger : MonoBehaviour
     {
         if(triggerEnabled)
         {
+            // The trigger is enabled, OnTriggerStay events
+
             for (int i = 0; i < listeners.Count; i++)
             {
                 // A collider is in the trigger, call OnExternalTriggerStay on all listeners
@@ -75,6 +82,8 @@ public class ExternalTrigger : MonoBehaviour
     {
         if(triggerEnabled)
         {
+            // The trigger is enabled, OnTriggerExit events
+
             for (int i = 0; i < listeners.Count; i++)
             {
                 // Trigger was exited, call OnExternalTriggerExit on all listeners

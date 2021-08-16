@@ -8,7 +8,13 @@ using TMPro;
 // || Used on prefab: Joe/UI/ItemInfoPopup                                  ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - ItemInfoPopups can now display custom item properties               ||
+// || - Can also now display any generic text using UpdatePopupInfo         ||
+// ||    overload that takes two string values                              ||
 // ||=======================================================================||
 
 [RequireComponent(typeof(CanvasGroup))] [RequireComponent(typeof(RectTransform))]
@@ -25,12 +31,12 @@ public class ItemInfoPopup : MonoBehaviour
 
     #endregion
 
-    private bool            canShowItemInfo;    // Whether popups containing item info are allowed to be shown
-    private bool            showing;            // Whether the popup is currently showing
-    private Canvas          canvas;             // The Canvas containing the popup
-    private RectTransform   rectTransform;      // The popup GameObject's RectTransform for getting its size
+    private bool            canShowItemInfo; // Whether popups containing item info are allowed to be shown
+    private bool            showing;         // Whether the popup is currently showing
+    private Canvas          canvas;          // The Canvas containing the popup
+    private RectTransform   rectTransform;   // The popup GameObject's RectTransform for getting its size
 
-    private readonly Vector3 MouseOffset = new Vector3(10.0f, -5.0f, 0.0f);
+    private readonly Vector3 MouseOffset = new Vector3(10.0f, -5.0f, 0.0f); // Offset from the mouse pointer when displaying the popup
 
     private void Awake()
     {

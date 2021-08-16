@@ -13,10 +13,15 @@ using UnityEngine;
 // ||                  Joe/Environment/Crafting & Chests/IC_LinkedChest     ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added globalSave bool - ItemContainers can now be saved/loaded      ||
+// ||    either globally or as part of a specific scene depending on what   ||
+// ||    they're being used for (e.g. inventory containers are saved        ||
+// ||    globally, standard chest containers are saved as scene objects)    ||
 // ||=======================================================================||
-
-// Updated for mod11: can now be saved/loaded globally or as a scene object
 
 public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentGlobalObject
 {
@@ -28,7 +33,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
 
     public string                               ContainerId;        // Unique id used when saving/loading the contents of this container
     [SerializeField] private int                numberOfSlots;      // The number of item slots in this container
-    [SerializeField] private bool               globalSave;         // Whether this container should use global save/load functions
+    [SerializeField] private bool               globalSave;         // Whether this container should use global or scene-specific save/load functions
 
     #endregion
 
@@ -45,7 +50,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
     private ContainerSlot[] slots;                      // All slots in the container that can hold items
     private bool            containerStateChanged;      // Set to true each time an action occurs that changes the item container's state
     private ItemInfoPopup   itemInfoPopup;              // Popup for showing info when items in the container's slots are hovered over
-    private bool loading;
+    private bool            loading;                    // Whether the contents of this container are currently being loaded
 
     private void Awake()
     {
@@ -70,7 +75,9 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         }
 
         // Subscribe to save/load events so the container's data will be saved/loaded with the game
-        if(globalSave)
+        //   Either global or scene save/load events are used depending on what the globalSave bool is set to in the inspector
+
+        if (globalSave)
         {
             SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
         }
@@ -83,6 +90,8 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
     private void OnDestroy()
     {
         // Unsubscribe from save/load events if the container is destroyed to prevent null reference errors
+        //   Either global or scene save/load events are used depending on what the globalSave bool is set to in the inspector
+
         if(globalSave)
         {
             SaveLoadManager.Instance.UnsubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
@@ -104,6 +113,7 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
 
         if(loading)
         {
+            // Loading happens before Update, reset the loading bool once the initial ContainerStateChanged events have been called
             loading = false;
         }
     }
@@ -118,6 +128,8 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         OnSave(saveData);
     }
 
+    // Seperated OnSave from the above functions to avoid code duplication since either OnSceneSave
+    //   or OnGlobalSave may be called depending on whether globalSave is true for this container
     private void OnSave(SaveData saveData)
     {
         Debug.Log("Saving item container data for " + ContainerId);
@@ -130,12 +142,9 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         }
     }
 
-    public void OnSceneLoadSetup(SaveData saveData)
-    {
-        // Loading for ItemContainer occurs in the OnLoadConfigure function since it
-        //   depends on data that is initialised by other objects in the OnLoadSetup function
-    }
-
+    // Add load code happens in On[Scene/Global]LoadConfigure since ItemContainers
+    //   depends on data that is initialised by other objects in the OnLoadSetup function
+    public void OnSceneLoadSetup(SaveData saveData) { }
     public void OnGlobalLoadSetup(SaveData saveData) { }
 
     public void OnSceneLoadConfigure(SaveData saveData)
@@ -148,6 +157,8 @@ public class ItemContainer : MonoBehaviour, IPersistentSceneObject, IPersistentG
         OnLoadConfigure(saveData);
     }
 
+    // Seperated OnLoadConfigure from the above functions to avoid code duplication since either OnSceneLoadConfigure
+    //   or OnGlobalLoadConfigure may be called depending on whether globalSave is true for this container
     private void OnLoadConfigure(SaveData saveData)
     {
         loading = true;
