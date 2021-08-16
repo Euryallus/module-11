@@ -382,7 +382,7 @@ MonoBehaviour:
   triggerKey: 114
   useDefaultBehaviour: 1
   maxUpgradeLevel: 0
-  chargeTime: 0.5
+  chargeTime: 0.3
   cooldownTime: 5
   initialFoodDecrease: 0.05
   continuousFoodDecrease: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
   abilityTriggerSound: {fileID: 11400000, guid: 8fb9993ecbeb7094eadc99ec284e57df, type: 2}
   iceLancePrefab: {fileID: 8668904131355023997, guid: 58561ab03e1eb534ca02793af1e5e264, type: 3}
   range: 100
-  FreezeDuration: 5
+  FreezeDuration: 4
   freezeMaterial: {fileID: 2100000, guid: a14ea78c4e8f8ed4e9fd9494c14c643e, type: 2}
   chainEnemyCount: 1
   chainDistance: 5

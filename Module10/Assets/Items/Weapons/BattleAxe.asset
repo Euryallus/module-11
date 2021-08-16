@@ -28,10 +28,10 @@ MonoBehaviour:
   m_customFloatProperties:
   - Name: damage
     UIName: Attack Damage
-    Value: 0.5
+    Value: 1
     UpgradeIncrease: 0.3
-    MinValue: 0.5
-    MaxValue: 1.1
+    MinValue: 0.8
+    MaxValue: 3
     CurrencyIncrease: 3
   - Name: attackSpeed
     UIName: Attack Speed

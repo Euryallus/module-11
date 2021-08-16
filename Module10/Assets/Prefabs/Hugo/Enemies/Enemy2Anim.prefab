@@ -142,17 +142,17 @@ MonoBehaviour:
   patrolWanderDistance: 15
   searchDiameter: 10
   centralHubPos: {x: 0, y: 0, z: 0}
-  baseDamage: 0.1
+  baseDamage: 2
   timeBetweenAttacks: 4
   attackDistance: 15
   manager: {fileID: 0}
   maxAtEachPatrolPoint: 1
   patrolSpeed: 1
   defaultSpeed: 2
-  evadeCooldown: 10
-  evadeDistanceFromPlayer: 15
   argoTime: 3
   canSee: 0
+  evadeCooldown: 10
+  evadeDistanceFromPlayer: 15
   projectilePrefab: {fileID: 4263906348936956817, guid: f652e8c3a6c7eb343a2fd48b1ca7937e, type: 3}
   projSpawnPoint: {fileID: 4965792044581229646}
   spawnToLaunchTime: 1.5
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e5ef0a0556cac4e9f6891821b8d3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
+  maxHealth: 2
   alive: 1
   anim: {fileID: 2576745352641797184}
   hurt: {fileID: 2100000, guid: d36c380edeee70148ba30733fdcd33a1, type: 2}
