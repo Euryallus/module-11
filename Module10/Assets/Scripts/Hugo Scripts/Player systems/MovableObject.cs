@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // Main author:         Hugo Bailey
-// Additional author:   N/A
+// Additional author:   Joe Allen (see comments)
 // Description:         Used by the Grab ability (currently tied to the Pickaxe) to pick up & move physics objects around
-// Development window:  Prototype phase (overhauled in Production phase)
+// Development window:  Prototype phase & production phase
 // Inherits from:       InteractableWithOutline & IPersistentSceneObject
 
 [RequireComponent(typeof(Rigidbody))]
@@ -41,6 +41,7 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
 
     protected void Awake()
     {
+        // Flags where object started (allows respawn if lost in lava or water)
         startPosition = transform.position;
     }
 
@@ -86,10 +87,9 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         }
     }
 
-
-
     protected override void Update()
     {
+        // Finds "hand" if hand hasnt been assigned yet
         if(hand == null)
         {
             GameObject playerHandGameObj = GameObject.FindGameObjectWithTag("PlayerHand");
@@ -99,16 +99,20 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             }
         }
 
+
+        // Finds "grab ability" ref is grab hasnt been assigned yet
         if(grabAbility == null)
         {
             grabAbility = PlayerInstance.ActivePlayer.gameObject.GetComponent<GrabAbility>();
         }
 
+        // Input detection for "throwing" object
         if (isHeld && Input.GetKeyDown(KeyCode.Mouse0))
         {
             ThrowObject(transform.position - GameObject.FindGameObjectWithTag("Player").transform.position);
         }
 
+        // Input detection for "dropping" object
         if (isHeld && Input.GetKeyDown(KeyCode.Mouse1))
         {
             DropObject();
@@ -125,24 +129,29 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     {
         UpdatePickUpStatus();
 
+        
         if(!isHeld && canPickUp)
         {
             base.Interact();
 
+            // Switches object to be affected by physics when first picked up
             rb.isKinematic = false;
             handTarget = hand.transform.gameObject.GetComponent<Rigidbody>();
 
+            // Childs object to "hand" of player 
             transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;
 
-
+            // Switches material to transparent (allows larger objects to not obscure play)
             gameObject.GetComponent<MeshRenderer>().material = player.GetComponent<GrabAbility>().objectPlacementMat;
 
+            // Sets up spring joint - allows object to "spring" towards player hand
             joint = gameObject.AddComponent<SpringJoint>();
             joint.spring = jointSpring;
             joint.damper = jointDamper;
 
             joint.connectedBody = handTarget;
 
+            // Stops object rotating when held
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
 
@@ -153,8 +162,10 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             rb.useGravity = false;
             isHeld = true;
 
+            // Displays carry tooltip (shows key bindings to place & throw object)
             ShowCarryingTooltip();
 
+            // Flags to grab ability script that object has been picked up - resets charge
             grabAbility.SetChargeAmount(1.0f);
         }
     }
@@ -170,32 +181,39 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     // Throws object in the direction the player is facing, re-enables grav etc.
     public void ThrowObject(Vector3 direction)
     {
+        // Removes all restraints attached
         StopHoldingObject();
         
+        // Adds force in direction player is facing
         rb.AddForce(direction.normalized * 300);
-
+        // Hides tooltips
         HideCarryingTooltip();
     }
 
     private void StopHoldingObject()
     {
+        // Removes any physics contraints
         rb.constraints = RigidbodyConstraints.None;
 
+        // Unchilds from players hand & removes spring joint component, re-enables gravilty
         transform.parent = null;
         Destroy(joint);
         isHeld = false;
         rb.useGravity = true;
 
+        // Returns mesh to original material
         gameObject.GetComponent<MeshRenderer>().material = originalMat;
         
+        // Resets charge on grab ability
         grabAbility.SetChargeAmount(0.0f);
 
+
+        // Added by Joe
         if(hoveringInRange)
         {
             grabAbility.SetCooldownAmount(1.0f);
         }
 
-        // Added by Joe
         // Move the GameObject back to the active scene. Since it was made a child of the player when picked up,
         //   it was moved to the DontDestroyOnLoad scene, and as such needs to be moved back.
         SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());

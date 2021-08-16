@@ -6,7 +6,7 @@ using UnityEngine.AI;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Base class used for all Enemy types within the game. Handles state behaviour & default attacks
-// Development window:  Prototype phase (with alterations done in Production phase)
+// Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
 public class EnemyBase : MonoBehaviour

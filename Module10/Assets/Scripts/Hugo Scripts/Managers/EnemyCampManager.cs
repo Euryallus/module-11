@@ -7,7 +7,7 @@ using UnityEngine.Events;
 // Main author:         Hugo Bailey
 // Additional author:   Joe Allen
 // Description:         Enemy camp entity - spawns & manages enemies that patrol an area surrounding it
-// Development window:  Prototype phase (with alterations done in Production phase)
+// Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
 public class EnemyCampManager : MonoBehaviour

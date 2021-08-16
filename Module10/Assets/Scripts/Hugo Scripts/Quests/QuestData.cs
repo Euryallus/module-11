@@ -41,6 +41,7 @@ public class QuestData : ScriptableObject
 
     public void SaveProgress()
     {
+        // Saves "state" at save point & prompts save from objectives
         savedQuestCompleted = questCompleted;
         savedQuestHandedIn  = questHandedIn;
 
@@ -54,6 +55,7 @@ public class QuestData : ScriptableObject
 
     public void LoadProgress()
     {
+        // Loads "state" from saved & prompts load from objectives
         questCompleted = savedQuestCompleted;
         questHandedIn  = savedQuestHandedIn;
 
@@ -64,7 +66,6 @@ public class QuestData : ScriptableObject
         }
     }    
            
-    // ReturList<QuestObjective> objectives = new List<QuestObjective>();ns whether all quest objectives have been completed
     public bool CheckCompleted()
     {
         int objectiveCount = 0;
@@ -91,6 +92,7 @@ public class QuestData : ScriptableObject
         return questCompleted;
     }
 
+    // Resets all progress for quest & all objectives
     public void ResetProgress()
     {
         savedQuestCompleted = false;

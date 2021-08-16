@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Main author:         Hugo Bailey
-// Additional author:   N/A
+// Additional author:   Joe Allen
 // Description:         Used to process player interactions with quest givers
 // Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
@@ -309,6 +309,7 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         //Debug.Log("LOADED SAVES");
     }
 
+    // Following added by Joe
     public void OnGlobalLoadConfigure(SaveData saveData)
     {
         playerQuestData.LoadProgress();

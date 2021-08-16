@@ -19,78 +19,64 @@ public class PlayerQuestBacklog : ScriptableObject
                         public List<QuestData> completedQuests = new List<QuestData>(); // List of quests player has completed and handed in
 
     [Header("NPCData obj.s must be added here!")]
-    public List<QuestGiverData> questGivers;                                            // List of quest givers in the scene
+    public List<QuestGiverData> questGivers;                                            // List of quest givers
 
     [Header("Array of all quests")]
-    public List<QuestData> quests;
+    public List<QuestData> quests;                                                      // List of all quests (allows to be reset & loaded)
 
     [Header("SAVE DATA")]
-    [SerializeField] private List<QuestData> savedQuestBacklog = new List<QuestData>();
-    [SerializeField] private List<QuestData> savedCompletedQuests = new List<QuestData>();
+    // Due to Joe's save system not liking my quest structs, all quest data is stored within the scriptableObjects
+    [SerializeField] private List<QuestData> savedQuestBacklog = new List<QuestData>();     // Stores quest backlog at last save
+    [SerializeField] private List<QuestData> savedCompletedQuests = new List<QuestData>();  // Stores completed quest list at last save
 
     public void SaveProgress()
     {
-        savedQuestBacklog = new List<QuestData>(questBacklog);
-        savedCompletedQuests = new List<QuestData>(completedQuests);
-
-        //foreach(QuestData quest in questBacklog)
-        //{
-        //    savedQuestBacklog.Add(quest);
-        //}
-        //
-        //foreach(QuestData quest in completedQuests)
-        //{
-        //    savedCompletedQuests.Add(quest);
-        //}
-        
-        //savedQuestBacklog = questBacklog;
-        //savedCompletedQuests = completedQuests;
+        savedQuestBacklog = new List<QuestData>(questBacklog);          // Copies questBacklog to savedQuestBacklog
+        savedCompletedQuests = new List<QuestData>(completedQuests);    // Copies completedQuests to savedCompletedQuests
 
         foreach(QuestData quest in quests)
         {
+            // Cycles each quest & prompts save
             quest.SaveProgress();
         }
 
         foreach (QuestGiverData questGiver in questGivers)
         {
+            // Cycles each quest giver & prompts save
             questGiver.SaveProgress();
         }
     }
 
     public void LoadProgress()
     {
-        questBacklog = new List<QuestData>(savedQuestBacklog);
-        completedQuests = new List<QuestData>(savedCompletedQuests);
+        questBacklog = new List<QuestData>(savedQuestBacklog);          // Copies savedQuestBacklog to questBacklog
+        completedQuests = new List<QuestData>(savedCompletedQuests);    // Copies savedCompletedQuests to completedQuests
 
-        //foreach (QuestData quest in savedQuestBacklog)
-        //{
-        //    questBacklog.Add(quest);
-        //}
-        //
-        //foreach (QuestData quest in savedCompletedQuests)
-        //{
-        //    completedQuests.Add(quest);
-        //}
 
         foreach (QuestData quest in quests)
         {
+            // Cycles each quest & prompts load
             quest.LoadProgress();
         }
 
         foreach (QuestGiverData questGiver in questGivers)
         {
+            // Cycles each quest giver & prompts load
             questGiver.LoadProgress();
         }
     }
 
+    // Resets all data to default
     public void ResetProgress()
     {
+        // Clears all saved quest data
         completedQuests = new List<QuestData>();
         questBacklog = new List<QuestData>();
 
         savedCompletedQuests = new List<QuestData>();
         savedQuestBacklog = new List<QuestData>();
 
+        // Cycles each list & prompts reset from all quests & quest givers
         foreach (QuestData quest in quests)
         {
             quest.ResetProgress();

@@ -18,16 +18,20 @@ public class QuestGiverData : ScriptableObject
 
     [SerializeField] private List<QuestData> saveQuestsToGive = new List<QuestData>();
 
+    // Saves list of quests to distribute at save point
     public void SaveProgress()
     {
         saveQuestsToGive = new List<QuestData>(questsToGive);
     }
 
+    // Loads list of saved quests when prompted
     public void LoadProgress()
     {
         questsToGive = new List<QuestData>(saveQuestsToGive);
     }
 
+
+    // Resets QuestsToGive to default value @ start of game
     public void ResetProgress()
     {
         saveQuestsToGive = new List<QuestData>(initialQuestList);

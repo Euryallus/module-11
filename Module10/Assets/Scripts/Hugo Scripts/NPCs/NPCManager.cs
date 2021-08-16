@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   Joe Allen (see "Added by Joe" comments)
 // Description:         Manages NPC interactions & passes data to QuestManager when NPC is also a quest giver. Communicates with DialogueUI to display dialogue on screen
-// Development window:  Prototype phase
+// Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
 public class NPCManager : MonoBehaviour
@@ -72,6 +72,7 @@ public class NPCManager : MonoBehaviour
         interactingWith = npc;
         string dialogueLine;
 
+        // Checks if NPC should switch dialogue to "end game state" dialogue
         if (!hasFinishedGame)
         {
             dialogueLine = npc.ReturnDialoguePoint();
@@ -181,6 +182,7 @@ public class NPCManager : MonoBehaviour
 
         if (interactingWith.gameObject.GetComponent<WalkingNonInteractable>() != null)
         {
+            // Checks if NPC should begin walking after interaction - if true, select a new point; if false, flag to NPC walk script that interaction has happened
             if (interactingWith.walkAfterConversation)
             {
                 interactingWith.gameObject.GetComponent<WalkingNonInteractable>().NewPoint();
@@ -192,6 +194,7 @@ public class NPCManager : MonoBehaviour
             
         }
 
+        // Switches from NPC focus camera to 
         StopFocusCamera();
     }
 
@@ -240,6 +243,7 @@ public class NPCManager : MonoBehaviour
         GameObject.FindGameObjectWithTag("Hotbar").GetComponent<HotbarPanel>().ShowHotbarAndStatPanels();
     }
 
+    // Returns the "focus" camera associated with the player
     private GameObject FindFocusCamera()
     {
         return GameObject.FindGameObjectWithTag("Player").transform.Find("FocusCamera").gameObject;

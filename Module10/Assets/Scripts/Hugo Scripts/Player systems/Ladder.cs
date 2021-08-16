@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   Base class written by Joe Allen
 // Description:         Allows player to interact & get on / off ladders
-// Development window:  Prototype phase (with alterations done in Production phase)
+// Development window:  Prototype phase & production phase
 // Inherits from:       InteractableWithOutline
 
 public class Ladder : InteractableWithOutline

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Handles player movement & movement states 
-// Development window:  Prototype phase
+// Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
 public class PlayerMovement : MonoBehaviour
@@ -686,32 +686,39 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Used to calculate how much damage player should take from falling
     private void CalculateFallDamage()
     {
         if(groundedStatusLastUpdate != true && controller.isGrounded)
         {
-            // Calculate fall damage
+            // Calculates damage based off time in air & fallDamageMod value
             if(timeFalling > benchmarkTimeInAirDamage)
             {
+                // If player has been in the air for > benchmarkTimeInAirDamage and they've just hit the floor, calculate damage
                 float damage = timeFalling * fallDamageMod;
+
 
                 gameObject.GetComponent<PlayerStats>().DecreaseHealth(damage, PlayerDeathCause.FellOutOfWorld);
                 Debug.Log("Takes " + damage + " points of Damage after " + timeFalling);
                 
             }
             
+            // Resets timeFalling when ground is hit
             timeFalling = 0f;
         }
 
         if(canMove && !controller.isGrounded && velocityY < 0 && (currentMovementState == MovementStates.walk || currentMovementState == MovementStates.run || currentMovementState == MovementStates.crouch))
         {
+            // Checks if player should be accumilating air time (e.g. not on the ground, not gliding, not swimming etc.) & adds deltaTime
             timeFalling += Time.deltaTime;
         }
         else
         {
+            // If player stops accumilating air time (e.g. opens glider) reset timeFalling
             timeFalling = 0f;
         }
 
+        // Stores value of isGrounded from last update - used to check if player JUST landed
         groundedStatusLastUpdate = controller.isGrounded;
     }
 }

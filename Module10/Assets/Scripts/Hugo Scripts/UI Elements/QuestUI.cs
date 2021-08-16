@@ -7,8 +7,8 @@ using TMPro;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Handles quest UI elements (e.g. HUD quest list, player accept screen etc.)
-// Development window:  Prototype phase
-// Inherits from:       MonoBehaviour
+// Development window:  Prototype phase & production phase
+// Inherits from:       UIPanel
 
 public class QuestUI : UIPanel
 {
@@ -80,6 +80,7 @@ public class QuestUI : UIPanel
         // Once calculated, displays list of objectives
         questObjectives.text = objectivesText;
 
+        // Checks if quest HAS to be accepted - if so, grey out "decline" button
         if(forceAccept)
         {
             rejectButton.interactable = false;
@@ -120,6 +121,7 @@ public class QuestUI : UIPanel
         // Rewards system still being worked out - will be added in production phase
         string rewardText = "";
 
+        // Cycles each reward & creates readable list to display
         foreach(ItemGroup reward in quest.rewards)
         {
             rewardText += reward.Item.UIName + " x" + reward.Quantity.ToString() + "\n";
@@ -149,30 +151,7 @@ public class QuestUI : UIPanel
     // Adds quest name to HUD side bar
     public void AddHUDQuestName(QuestData quest)
     {
-        //if(questNamesHUD.Count < 6)
-        //{
-        //    // Creates new HUD quest name object, enables it & sets transform parent
-        //    TMP_Text newName = Instantiate(defaultName);
-        //    newName.transform.gameObject.SetActive(true);
-        //    newName.transform.SetParent(questMarkerBackground.transform);
-        //
-        //    // If there are already quest names in list, adjust position to be at bottom of list
-        //    if(questNamesHUD.Count != 0)
-        //    {
-        //        newName.rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - ((questNameHeight + 5) * questNamesHUD.Count));
-        //    }
-        //    else
-        //    {
-        //        // If no other names are in the list, set to top of list (*default* position)
-        //        newName.rectTransform.anchoredPosition = defaultName.rectTransform.anchoredPosition;
-        //    }
-        //
-        //    // Set display name to corrispond with quest
-        //    newName.text = name;
-        //    // Add new naame to list
-        //    questNamesHUD.Add(newName);
-        //}
-
+        // Assigns quest name to the HUD element
         latestQuestNameText.text = quest.questName;
 
         // Cycles each objective display & if the quest has that many tasks it displays them (if not spare objective displays set to "")
@@ -195,6 +174,7 @@ public class QuestUI : UIPanel
     // Changes quest HUD display to reflect when quest is complete but not handed in
     public void SetHUDQuestNameCompleted(QuestData quest)
     {
+        // Cycles each objective in the quest being displayed on the HUD - if any objectives are complete, mark them as done by striking through
         for(int i = 0; i < quest.objectives.Count; i++)
         {
             if(quest.objectives[i].taskComplete)
@@ -210,28 +190,7 @@ public class QuestUI : UIPanel
     // Removes name of HUD quest list (used when quest is completed)
     public void RemoveHUDQuestName()
     {
-        //for(int i = 0; i < questNamesHUD.Count; i++)
-        //{
-        //    // Cycles each name in list to find match with name passed as param
-        //    if(questNamesHUD[i].text == name)
-        //    {
-        //        // Destroys quest name HUD element
-        //        Destroy(questNamesHUD[i]);
-        //        questNamesHUD.RemoveAt(i);
-        //
-        //        // Shifts all other quest names around so no gaps appear
-        //        if(questNamesHUD.Count != 0)
-        //        {
-        //            for(int j = 0; j < questNamesHUD.Count; j ++)
-        //            {
-        //                questNamesHUD[j].rectTransform.anchoredPosition = new Vector2(defaultName.rectTransform.anchoredPosition.x, defaultName.rectTransform.anchoredPosition.y - (60 * j));
-        //            }
-        //        }
-        //        // Drops out of func. once name has been found & adjusted
-        //        return;
-        //    }
-        //}
-
+        // Sets display of all quest HUD elements to "" (empty)
         latestQuestNameText.text = "";
         foreach(TMP_Text textDis in latestQuestObjectivesText)
         {

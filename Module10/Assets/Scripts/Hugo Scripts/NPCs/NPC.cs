@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Stores data retaining to the NPC component is attached to. Manages dialogue & flags if NPC is also a quest giver
-// Development window:  Prototype phase (with alterations done in Production phase)
+// Development window:  Prototype phase & production phase
 // Inherits from:       MonoBehaviour
 
 public class NPC : MonoBehaviour

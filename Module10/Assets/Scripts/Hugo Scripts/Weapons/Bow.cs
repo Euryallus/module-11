@@ -5,7 +5,7 @@ using UnityEngine;
 // Main author:         Hugo Bailey
 // Additional author:   N/A
 // Description:         Ranged bow weapon
-// Development window:  Prototype phase
+// Development window:  Prototype phase & production phase
 // Inherits from:       Weapon
 public class Bow : Weapon
 {
@@ -20,9 +20,9 @@ public class Bow : Weapon
     private bool isHeld     = false;            // Flags if bow is being drawn
     private float heldTime  = 0;                // Time bow has been drawn
 
-    [SerializeField] private float bowDetectRange = 100f;
+    [SerializeField] private float bowDetectRange = 100f;   // Range arrow can hit to while still being accurate
 
-    private GameObject playerCam;
+    private GameObject playerCam;   // Ref. to player's camera
 
     public override void StartSecondardAbility()
     {
@@ -68,23 +68,30 @@ public class Bow : Weapon
         //Checks inventory for required arrows - if found, remove arrows from inventory & fire arrow
         if (inventory.ContainsQuantityOfItem(arrowRequired, out _))
         {
+            // Creates new instance of arrow
             GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
 
+            // Raycasts forwards from camera - if it hits something, that's the arrow's target
             RaycastHit hit;
             Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, bowDetectRange);
 
+            // Calculate directional vector for arrow to go in - defaults to camera's forward
             Vector3 direction = playerCam.transform.forward;
 
+            // If the raycast hit something, calculate direction arrow must travel in to hit that point
             if (hit.transform != null)
             {
                 direction = -((newArrow.transform.position - hit.point).normalized);
             }
 
+            // Fire arrow in direction given
             newArrow.GetComponent<Arrow>().Fire(direction, arrowReleaseVelocity);
 
+            // Reset values now arrow has been shot
             isHeld = false;
             cooldown = 0f;
 
+            // Attempt to remove arrow item from inventory
             for (int i = 0; i < arrowRequired.Quantity; i++)
             {
                 inventory.TryRemoveItem(arrowRequired.Item);
@@ -94,6 +101,7 @@ public class Bow : Weapon
         }
         else
         {
+            // If no arrows in inventory reset scale
             transform.localScale = new Vector3(1, 1, 1);
             // No arrows are available
             Debug.LogWarning("No arrow in inventory or hotbar!");
@@ -102,7 +110,6 @@ public class Bow : Weapon
 
         // Resets bow scale
         transform.localScale = new Vector3(1, 1, 1);
-
     }
 
 }
