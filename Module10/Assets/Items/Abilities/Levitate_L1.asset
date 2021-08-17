@@ -15,7 +15,7 @@ MonoBehaviour:
   m_id: slam_level1
   m_specialSlotId: slamAbility
   m_uiName: Levitate Ability
-  m_uiDescription: Levitate enemies & prevent attacks.
+  m_uiDescription: Levitate enemies, pausing attacks.
   m_stackSize: 1
   m_weight: 0
   m_sprite: {fileID: 21300000, guid: 843da3456471bcf4b809afc8ec6eafde, type: 3}
@@ -26,4 +26,10 @@ MonoBehaviour:
   m_currencyItemId: 
   m_currencyItemQuantity: 0
   m_customFloatProperties: []
-  m_customStringProperties: []
+  m_customStringProperties:
+  - Name: control
+    UIName: 
+    Value: Hold T to target
+  - Name: control
+    UIName: 
+    Value: nearby enemies.

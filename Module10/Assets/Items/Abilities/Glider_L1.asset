@@ -26,4 +26,10 @@ MonoBehaviour:
   m_currencyItemId: 
   m_currencyItemQuantity: 0
   m_customFloatProperties: []
-  m_customStringProperties: []
+  m_customStringProperties:
+  - Name: control
+    UIName: 
+    Value: Press Space while
+  - Name: control2
+    UIName: 
+    Value: in mid-air.

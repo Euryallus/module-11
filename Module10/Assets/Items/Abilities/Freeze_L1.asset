@@ -26,4 +26,10 @@ MonoBehaviour:
   m_currencyItemId: 
   m_currencyItemQuantity: 0
   m_customFloatProperties: []
-  m_customStringProperties: []
+  m_customStringProperties:
+  - Name: control
+    UIName: 
+    Value: Aim at an enemy
+  - Name: control
+    UIName: 
+    Value: and hold R.

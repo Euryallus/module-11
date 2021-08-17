@@ -38,7 +38,7 @@ public enum MusicPlayMode
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager Instance; // Static instance of the class for simple access
 
     #region InspectorVariables
     // Variables in this region are set in the inspector

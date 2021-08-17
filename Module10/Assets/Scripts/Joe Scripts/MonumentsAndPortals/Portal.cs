@@ -1,5 +1,15 @@
 using UnityEngine;
 
+// ||=======================================================================||
+// || Portal: Allows the player to move between areas/scenes. Portals can   ||
+// ||    be hidden, and generally emerge when a FireMonument is lit.        ||
+// ||=======================================================================||
+// || Used on prefab: Joe/Environment/Portal                                ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || for the production phase (Module 11).                                 ||
+// ||=======================================================================||
+
 public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPersistentSceneObject
 {
     #region InspectorVariables
@@ -24,7 +34,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     private Transform           respawnTransform;
 
     [SerializeField]
-    private Animator            animator;
+    private Animator            animator; // Handles portal animations
 
     [SerializeField] [Tooltip("The parent transform of all portal meshes to be moved when hiding/showing the portal")]
     private Transform           mainPortalTransform;
@@ -62,17 +72,22 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
         // Subscribe to save/load events so the fire monument's data will be saved/loaded with the game
         SaveLoadManager.Instance.SubscribeSceneSaveLoadEvents(OnSceneSave, OnSceneLoadSetup, OnSceneLoadConfigure);
 
+        // Create a new instance of the portal material, set its colour and apply it to the renderer
         Material portalMaterialInstance = new Material(portalMaterial);
         portalMaterialInstance.SetColor("_Tint", portalColour);
         portalRenderer.material = portalMaterialInstance;
-
+        
+        // Display the set emblem sprite on each side of the portal
         portalEmblemRenderers[0].sprite = portalEmblem;
         portalEmblemRenderers[1].sprite = portalEmblem;
 
+        // Add this class as a listener of the portal trigger which detects when the player enters the portal
         portalTrigger.AddListener(this);
 
+        // Show the portal by default if it's marked as always active, otherwise hide it by default
         SetShowing(alwaysActive);
 
+        // Throw an error if an id was not set, which will break save/load code
         if(string.IsNullOrWhiteSpace(id))
         {
             Debug.LogError("IMPORTANT: Portal exists without id. All portals require a *unique* id for saving/loading data. Click this message to view the problematic GameObject.", gameObject);
@@ -93,6 +108,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     {
         if(!alwaysActive)
         {
+            // Get whether this portal should be showing from PortalSave, and show/hide it accordingly
             SetShowing(PortalsSave.Instance.IsPortalShowing(GetSavePointId()));
         }
     }
@@ -101,10 +117,16 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     {
         if(other.CompareTag("Player") && triggerId == "portal")
         {
+            // The player entered the portal
+
+            // Set this as the last used save point
             SetAsUsed();
 
+            // Save the game, ensuring the player will be spawned in the scene with name: sceneToLoadName
+            //   if they respawn after dying or exit the game after using the portal and reload later
             SaveLoadManager.Instance.SaveGameData(sceneToLoadName);
 
+            // Load data for the new scene
             SaveLoadManager.Instance.LoadGameScene(sceneToLoadName);
         }
     }
@@ -115,21 +137,27 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     public void ShowWithAnimation()
     {
+        // Animate the portal emerging from the ground
         animator.SetTrigger("Enter");
 
+        // The portal is now showing
         SetShowing(true);
     }
 
     private void SetShowing(bool show)
     {
+        // Enable the trigger if the portal is being shown, otherwise disable it
         portalTrigger.TriggerEnabled = show;
-
+        
+        // Tell the animator if the portal is showing, determines its position when idle
         animator.SetBool("Showing", show);
 
+        // Tell the PortalsSave whether this portal is showing, so that info can be saved/loaded in any scene
         PortalsSave.Instance.SetPortalShowing(GetSavePointId(), show);
 
         if(show && !playingSound)
         {
+            // The portal is being shown and sound is not already playing, play a looping portal sound
             AudioManager.Instance.PlayLoopingSoundEffect("portalLoop", "portalLoop_" + id, true, false, transform.position, 4.0f);
             playingSound = true;
         }
@@ -137,11 +165,13 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
 
     public Vector3 GetRespawnPosition()
     {
+        // Returns the position to spawn the player at if they last saved at this portal
         return respawnTransform.position;
     }
 
     public string GetSavePointId()
     {
+        // Returns the unique id used for saving
         return id;
     }
 
@@ -149,6 +179,7 @@ public class Portal : MonoBehaviour, ISavePoint, IExternalTriggerListener, IPers
     {
         WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
 
+        // Set this portal to be the last save point that was used
         SaveLoadManager.SetLastUsedSavePoint(this);
     }
 

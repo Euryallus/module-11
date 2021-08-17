@@ -32,7 +32,11 @@ MonoBehaviour:
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0
+    CurrencyIncrease: 0
   m_customStringProperties:
-  - Name: extraInfo
+  - Name: control
     UIName: 
-    Value: Heavy Objects
+    Value: Press E to grab
+  - Name: control2
+    UIName: 
+    Value: light/heavy objects.
