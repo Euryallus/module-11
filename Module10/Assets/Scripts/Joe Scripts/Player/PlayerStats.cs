@@ -22,7 +22,10 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     #region InspectorVariables
     // Variables in this region are set in the inspector. See tooltips for more info.
 
-    [Header("Hunger (See tooltips for info)")]
+    [Header("Hunger/Food Level (See tooltips for info)")]
+
+    [SerializeField] [Tooltip("The value the player's food level starts at when starting a game/respawning after death.")]
+    private float   foodLevelDefaultValue   = 1.0f;
 
     [SerializeField] [Tooltip("The number of seconds it will take for the player to starve if they are idle.")]
     private float   baseTimeToStarve        = 600.0f;
@@ -43,6 +46,10 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private float   starveDamageInterval    = 2.0f;
 
     [Header("Health")]
+
+    [SerializeField] [Tooltip("The value the player's health starts at when starting a game/respawning after death.")]
+    private float   healthDefaultValue      = 1.0f;
+
     [SerializeField] [Tooltip("How quickly the player's health will increase over time (adjusted based on food level).")]
     private float   healthIncreaseSpeed     = 0.04f;
 
@@ -64,14 +71,19 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     #region Properties
 
+    public float MaxHealth      { get { return healthDefaultValue; } }
+    public float Health         { get { return health; } }
+    public float MaxFoodLevel   { get { return foodLevelDefaultValue; } }
+    public float FoodLevel      { get { return foodLevel; } }
+
     public static string PlayerName { get { return playerName; } set { playerName = value; } }
 
     #endregion
 
     private Transform       canvasTransform;
-    private float           health    = 1.0f;       // The player's health (0 = death, 1 = full)
-    private float           foodLevel = 1.0f;       // The player's food level (0 = starving, 1 = full)
-                                                       
+    private float           health;                 // The player's health (0 = death, [healthDefaultValue] = full)
+    private float           foodLevel;              // The player's food level (0 = starving, [foodLevelDefaultValue] = full)
+
     // Added by Hugo       
     private float           breath    = 1.0f;       // The player's breath level (0 = drowning, 1 = full)
                                                        
@@ -93,6 +105,9 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     protected void Start()
     {
+        // Initialise default health/food level values
+        ResetDefaultStatValues();
+
         // Subscribe to save/load events so player stats are saved/loaded with the game
         SaveLoadManager.Instance.SubscribeGlobalSaveLoadEvents(OnGlobalSave, OnGlobalLoadSetup, OnGlobalLoadConfigure);
     }
@@ -140,27 +155,10 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         saveData.AddData("playerHealth", health);
 
         saveData.AddData("playerBreath", breath);
-
-        // Save player's grab ability status
-        //saveData.AddData("playerGrabUpgrade", unlockedGrabUpgrade);
     }
 
     public void OnGlobalLoadSetup(SaveData saveData)
     {
-
-        // Loads grab ability status
-        //bool loadedGrabAbilityStatus = saveData.GetData<bool>("playerGrabUpgrade", out bool grabLoadSuccess);
-        //if (grabLoadSuccess)
-        //{
-        //    unlockedGrabUpgrade = loadedGrabAbilityStatus;
-
-        //    if(unlockedGrabUpgrade)
-        //    {
-        //        FlagMoveables();
-        //    }
-        //}
-
-
         // Only load in health/food/breath values if the game is being loaded from the menu
         //   rather than after a death. If the player died, values will instead be set to their
         //   default values to restore full health/hunger
@@ -190,11 +188,15 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         }
         else
         {
-            // The player died, reset stat values to be full
-            foodLevel   = 1.0f;
-            health      = 1.0f;
-            breath      = 1.0f;
+            ResetDefaultStatValues();
         }
+    }
+
+    private void ResetDefaultStatValues()
+    {
+        foodLevel = foodLevelDefaultValue;
+        health = healthDefaultValue;
+        breath = 1.0f;
     }
 
     public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
@@ -236,7 +238,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     private void UpdateHealth()
     {
-        IncreaseHealth(Time.deltaTime * healthIncreaseSpeed * foodLevel);
+        IncreaseHealth(Time.deltaTime * healthIncreaseSpeed * (foodLevel / foodLevelDefaultValue));
     }
 
     private void UpdateBreathLevel(float breathDecreaseAmount)
@@ -279,7 +281,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
         foodLevel += amount;
 
-        foodLevel = Mathf.Clamp(foodLevel, 0.0f, 1.0f);
+        foodLevel = Mathf.Clamp(foodLevel, 0.0f, foodLevelDefaultValue);
     }
 
     public void DecreaseFoodLevel(float amount)
@@ -288,7 +290,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
         foodLevel -= amount;
 
-        foodLevel = Mathf.Clamp(foodLevel, 0.0f, 1.0f);
+        foodLevel = Mathf.Clamp(foodLevel, 0.0f, foodLevelDefaultValue);
     }
 
     public void IncreaseHealth(float amount)
@@ -297,7 +299,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
         health += amount;
 
-        health = Mathf.Clamp(health, 0.0f, 1.0f);
+        health = Mathf.Clamp(health, 0.0f, healthDefaultValue);
     }
 
     public void DecreaseHealth(float amount, PlayerDeathCause potentialDeathCause)
@@ -306,11 +308,13 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
         health -= amount;
 
-        health = Mathf.Clamp(health, 0.0f, 1.0f);
+        health = Mathf.Clamp(health, 0.0f, healthDefaultValue);
 
-        if(health == 0.0f)
+        if (health == 0.0f)
         {
             GetComponent<PlayerDeath>().KillPlayer(potentialDeathCause);
+
+            ResetDefaultStatValues();
         }
         else
         {
@@ -351,7 +355,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private void UpdateFoodLevelUI()
     {
         // Lerp the food slider value towards foodLevel so the value smoothly changes
-        statsUI.FoodLevelSlider.value = Mathf.Lerp(statsUI.FoodLevelSlider.value, foodLevel, Time.unscaledDeltaTime * 25.0f);
+        statsUI.FoodLevelSlider.value = Mathf.Lerp(statsUI.FoodLevelSlider.value, (foodLevel / foodLevelDefaultValue), Time.unscaledDeltaTime * 25.0f);
 
         //Flash the food slider bar or background red depending on how low the level is
         statsUI.FoodSliderAnimator.SetBool("Flash", (foodLevel < StatWarningThreshold));
@@ -362,7 +366,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private void UpdateHealthUI()
     {
         // Lerp the health slider value towards health so the value smoothly changes
-        statsUI.HealthSlider.value = Mathf.Lerp(statsUI.HealthSlider.value, health, Time.unscaledDeltaTime * 25.0f);
+        statsUI.HealthSlider.value = Mathf.Lerp(statsUI.HealthSlider.value, (health / healthDefaultValue), Time.unscaledDeltaTime * 25.0f);
 
         //Flash the health slider red if health is getting low
         statsUI.HealthSliderAnimator.SetBool("Flash", (health < StatWarningThreshold));
@@ -374,27 +378,4 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
         return (foodLevel > fullThreshold);
     }
-
-    // Added by Hugo
-    //public void UpgradeGrabAbility()
-    //{
-    //    unlockedGrabUpgrade = true;
-    //    GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
-
-    //    foreach(GameObject moveable in moveables)
-    //    {
-    //        moveable.GetComponent<MovableObject>().EnablePickUp();
-    //    }    
-    //}
-
-    //private void FlagMoveables()
-    //{
-    //    GameObject[] moveables = GameObject.FindGameObjectsWithTag("MovableObj");
-
-    //    foreach (GameObject moveable in moveables)
-    //    {
-    //        moveable.GetComponent<MovableObject>().EnablePickUp();
-    //    }
-    //}
-
 }

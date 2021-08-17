@@ -247,7 +247,7 @@ public class WaveHazard : CutsceneTriggerer, IExternalTriggerListener
         yield return new WaitForSecondsRealtime(delay);
 
         // Decrease the player's health by a large amount to kill them
-        PlayerInstance.ActivePlayer.PlayerStats.DecreaseHealth(100.0f, PlayerDeathCause.WaveHit);
+        PlayerInstance.ActivePlayer.PlayerStats.DecreaseHealth(10000.0f, PlayerDeathCause.WaveHit);
 
         // Play a splash sound to emphasise death by water
         AudioManager.Instance.PlaySoundEffect2D("waterExit");

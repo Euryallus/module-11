@@ -58,7 +58,7 @@ public class FireMonument : CutsceneTriggerer, IPersistentSceneObject, ISavePoin
         // Kill the player if they enter the fire trigger when the monument is lit
         if (lit && other.gameObject.CompareTag("Player") && triggerId == "fire")
         {
-            playerStats.DecreaseHealth(100.0f, PlayerDeathCause.Fire);
+            playerStats.DecreaseHealth(10000.0f, PlayerDeathCause.Fire);
         }
     }
 

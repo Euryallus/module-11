@@ -276,13 +276,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b5962898e17a74e92990f5504ff2c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodLevelDefaultValue: 10
   baseTimeToStarve: 600
   walkHungerMultiplier: 1.25
   runHungerMultiplier: 1.5
-  fullThreshold: 0.9
-  starveDamage: 0.05
+  fullThreshold: 9
+  starveDamage: 0.5
   starveDamageInterval: 2
-  healthIncreaseSpeed: 0.04
+  healthDefaultValue: 10
+  healthIncreaseSpeed: 0.4
   drownDamage: 0.2
   drownDamageInterval: 2
   baseTimeToDrown: 30
