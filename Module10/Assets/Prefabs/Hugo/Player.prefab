@@ -281,10 +281,10 @@ MonoBehaviour:
   walkHungerMultiplier: 1.25
   runHungerMultiplier: 1.5
   fullThreshold: 9
-  starveDamage: 0.5
+  starveDamage: 1
   starveDamageInterval: 2
   healthDefaultValue: 10
-  healthIncreaseSpeed: 0.4
+  healthIncreaseSpeed: 1
   drownDamage: 0.2
   drownDamageInterval: 2
   baseTimeToDrown: 30
@@ -363,7 +363,7 @@ MonoBehaviour:
   maxUpgradeLevel: 3
   chargeTime: 0.5
   cooldownTime: 5
-  initialFoodDecrease: 0.01
+  initialFoodDecrease: 0.5
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
@@ -385,8 +385,8 @@ MonoBehaviour:
   useDefaultBehaviour: 1
   maxUpgradeLevel: 0
   chargeTime: 0.3
-  cooldownTime: 5
-  initialFoodDecrease: 0.05
+  cooldownTime: 4
+  initialFoodDecrease: 1
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
@@ -412,9 +412,9 @@ MonoBehaviour:
   triggerKey: 116
   useDefaultBehaviour: 1
   maxUpgradeLevel: 0
-  chargeTime: 0.5
-  cooldownTime: 20
-  initialFoodDecrease: 0.05
+  chargeTime: 1
+  cooldownTime: 10
+  initialFoodDecrease: 2
   continuousFoodDecrease: 0
   chargeSound: {fileID: 11400000, guid: 85cae1d4f39292b4b984afa014be8696, type: 2}
   chargeEndSound: {fileID: 11400000, guid: 9fd9c66914882f74ebcb1046750f2b57, type: 2}
@@ -425,7 +425,7 @@ MonoBehaviour:
   playerCameraShake: {fileID: 4740927130316203150}
   effectRadius: 15
   enemyLiftHeight: 6
-  enemyDropDamage: 0.5
+  enemyDropDamage: 1
 --- !u!114 &918040319109814595
 MonoBehaviour:
   m_ObjectHideFlags: 0

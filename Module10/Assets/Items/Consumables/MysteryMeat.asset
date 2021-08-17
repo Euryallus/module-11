@@ -29,5 +29,5 @@ MonoBehaviour:
   m_customStringProperties:
   - Name: foodLevelIncrease
     UIName: 
-    Value: Food Level +0.4
-  m_hungerIncrease: 0.4
+    Value: Food Level +3
+  m_hungerIncrease: 3

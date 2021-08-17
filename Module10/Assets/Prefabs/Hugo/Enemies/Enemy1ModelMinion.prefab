@@ -81,17 +81,17 @@ MonoBehaviour:
   patrolWanderDistance: 25
   searchDiameter: 10
   centralHubPos: {x: 0, y: 0, z: 0}
-  baseDamage: 0.04
+  baseDamage: 3
   timeBetweenAttacks: 2
   attackDistance: 3
   manager: {fileID: 0}
   maxAtEachPatrolPoint: 3
   patrolSpeed: 1.5
   defaultSpeed: 0
-  evadeCooldown: 0
-  evadeDistanceFromPlayer: 15
   argoTime: 3
   canSee: 0
+  evadeCooldown: 0
+  evadeDistanceFromPlayer: 15
   numberOfDuplicates: 0
   duplicatePrefab: {fileID: 0}
   children: []
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e5ef0a0556cac4e9f6891821b8d3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0.5
+  maxHealth: 0.7
   alive: 1
   anim: {fileID: 5931105488403266674}
   hurt: {fileID: 2100000, guid: 0de92c44f337a9e489f8eac8d03973fa, type: 2}
