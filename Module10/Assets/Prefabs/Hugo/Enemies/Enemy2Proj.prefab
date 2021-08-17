@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   launchVelocity: 15
   explosionRadius: 5
-  explosionDamage: 0.2
+  explosionDamage: 3
 --- !u!135 &1935291860876309092
 SphereCollider:
   m_ObjectHideFlags: 0

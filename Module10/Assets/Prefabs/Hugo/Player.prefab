@@ -425,7 +425,7 @@ MonoBehaviour:
   playerCameraShake: {fileID: 4740927130316203150}
   effectRadius: 15
   enemyLiftHeight: 6
-  enemyDropDamage: 1
+  enemyDropDamage: 0.7
 --- !u!114 &918040319109814595
 MonoBehaviour:
   m_ObjectHideFlags: 0
