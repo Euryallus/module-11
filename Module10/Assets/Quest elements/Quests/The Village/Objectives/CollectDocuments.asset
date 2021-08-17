@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CollectDocuments
   m_EditorClassIdentifier: 
   objectiveType: 1
-  taskName: Collect documents
+  taskName: Find badge
   taskComplete: 0
   saveTaskComplete: 0
   toCollect:
