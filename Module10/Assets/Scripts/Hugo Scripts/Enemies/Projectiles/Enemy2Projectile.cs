@@ -29,6 +29,7 @@ public class Enemy2Projectile : MonoBehaviour
     {
         // Remomves all constraints to allow movement
         rb.constraints = RigidbodyConstraints.None;
+        rb.isKinematic = false;
 
         // Source:
         // ##################################################################################################

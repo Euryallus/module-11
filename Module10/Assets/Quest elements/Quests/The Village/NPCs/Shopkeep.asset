@@ -15,5 +15,7 @@ MonoBehaviour:
   QuestGiverName: shopkeep
   initialQuestList:
   - {fileID: 11400000, guid: 0b6837a0db6cb374981f03f4950bf516, type: 2}
-  questsToGive: []
-  saveQuestsToGive: []
+  questsToGive:
+  - {fileID: 11400000, guid: 0b6837a0db6cb374981f03f4950bf516, type: 2}
+  saveQuestsToGive:
+  - {fileID: 11400000, guid: 0b6837a0db6cb374981f03f4950bf516, type: 2}

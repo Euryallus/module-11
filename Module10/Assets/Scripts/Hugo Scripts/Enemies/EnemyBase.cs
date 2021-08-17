@@ -442,18 +442,20 @@ public class EnemyBase : MonoBehaviour
                     // If raycast does hit player
                     if (hit.transform != null)
                     {
-                            if(hit.transform.gameObject.CompareTag("Player"))
-                            {
-                                // Draw a debug line to show connection, store position player was seen at, and return true
-                                Debug.DrawLine(transform.position, hit.transform.position, Color.red);
-                                playerLastSeen = player.transform.position;
-                                searchPointsVisited = 0;
-                                return true;
-                            }
+                        if(hit.transform.gameObject.CompareTag("Player"))
+                        {
+                            // Draw a debug line to show connection, store position player was seen at, and return true
+                            Debug.DrawLine(transform.position, hit.transform.position, Color.red);
+                            playerLastSeen = player.transform.position;
+                            canSee = true;
+                            searchPointsVisited = 0;
+                            return true;
+                        }
                     }
                 }
             }
         }
+        canSee = false;
         // If player is not visible, return false
         return false;
     }

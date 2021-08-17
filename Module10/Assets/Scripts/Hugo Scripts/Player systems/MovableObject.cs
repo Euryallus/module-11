@@ -34,6 +34,8 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
     private GrabAbility grabAbility;    // Ref. to GrabAbility main component
     private Vector3 startPosition;      // The position of the object on scene load, used to generate a unique position id
 
+    [SerializeField] private bool isProjectile = false;
+
     // Added by Joe, the tooltip text to show be default when the object can be picked up (as originally set in the inspector)
     private string defaultTooltipNameText;
 
@@ -60,9 +62,12 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         rb.isKinematic = true;
 
         defaultTooltipNameText = tooltipNameText;
-        
-        // Saves originalMat as material used on start
-        originalMat = gameObject.GetComponent<MeshRenderer>().material;
+
+        if (!isProjectile)
+        {
+            // Saves originalMat as material used on start
+            originalMat = gameObject.GetComponent<MeshRenderer>().material;
+        }
         // Saves ref. to player
         player = GameObject.FindGameObjectWithTag("Player");
     }
@@ -141,8 +146,11 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
             // Childs object to "hand" of player 
             transform.parent = hand.transform;//GameObject.FindGameObjectWithTag("Player").transform;
 
-            // Switches material to transparent (allows larger objects to not obscure play)
-            gameObject.GetComponent<MeshRenderer>().material = player.GetComponent<GrabAbility>().objectPlacementMat;
+            if(!isProjectile)
+            {
+                // Switches material to transparent (allows larger objects to not obscure play)
+                gameObject.GetComponent<MeshRenderer>().material = player.GetComponent<GrabAbility>().objectPlacementMat;
+            }
 
             // Sets up spring joint - allows object to "spring" towards player hand
             joint = gameObject.AddComponent<SpringJoint>();
@@ -201,8 +209,12 @@ public class MovableObject : InteractableWithOutline, IPersistentSceneObject
         isHeld = false;
         rb.useGravity = true;
 
-        // Returns mesh to original material
-        gameObject.GetComponent<MeshRenderer>().material = originalMat;
+        if(!isProjectile)
+        {
+            // Returns mesh to original material
+            gameObject.GetComponent<MeshRenderer>().material = originalMat;
+        }
+
         
         // Resets charge on grab ability
         grabAbility.SetChargeAmount(0.0f);

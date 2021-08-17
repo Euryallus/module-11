@@ -15,5 +15,7 @@ MonoBehaviour:
   QuestGiverName: Tequila
   initialQuestList:
   - {fileID: 11400000, guid: df00d69b3a77c1b4c9a17d38f1b19b53, type: 2}
-  questsToGive: []
-  saveQuestsToGive: []
+  questsToGive:
+  - {fileID: 11400000, guid: df00d69b3a77c1b4c9a17d38f1b19b53, type: 2}
+  saveQuestsToGive:
+  - {fileID: 11400000, guid: df00d69b3a77c1b4c9a17d38f1b19b53, type: 2}

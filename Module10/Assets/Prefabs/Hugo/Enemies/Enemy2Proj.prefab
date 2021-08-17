@@ -92,10 +92,9 @@ GameObject:
   - component: {fileID: 2291829882524797312}
   - component: {fileID: 7597882784080311199}
   - component: {fileID: 7507750580172435408}
-  - component: {fileID: -3575882583199144125}
-  - component: {fileID: -5926244523749408485}
   - component: {fileID: 1935291860876309092}
-  - component: {fileID: 5899683504812570361}
+  - component: {fileID: 8657780999475406708}
+  - component: {fileID: 581807586691311101}
   m_Layer: 0
   m_Name: Enemy2Proj
   m_TagString: Untagged
@@ -149,45 +148,6 @@ MonoBehaviour:
   launchVelocity: 15
   explosionRadius: 5
   explosionDamage: 0.2
---- !u!114 &-3575882583199144125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4263906348936956817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea18d9375b40584ab3c4c2acec05473, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attachedRB: {fileID: 7597882784080311199}
-  originalRBConstraints: 0
---- !u!114 &-5926244523749408485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4263906348936956817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a24fa3f3dfaf64fa92caecb211635c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionRange: 5
-  interactTooltipPrefab: {fileID: 0}
-  interactTooltipOffset: {x: 0, y: 0, z: 0}
-  tooltipNameText: 
-  interactionSound: buttonClickMain1
-  externalOutline: {fileID: 0}
-  isHeld: 0
-  target: {fileID: 0}
-  rb: {fileID: 7597882784080311199}
-  jointSpring: 5
-  jointDamper: 10
-  movementDampen: 0.3
-  hand: {fileID: 0}
 --- !u!135 &1935291860876309092
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -201,7 +161,34 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5899683504812570361
+--- !u!114 &8657780999475406708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4263906348936956817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a24fa3f3dfaf64fa92caecb211635c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionRange: 5
+  interactTooltipPrefab: {fileID: 7833637479385031685, guid: 00b3961c78315924bb78ec4054eb5813, type: 3}
+  interactTooltipOffset: {x: 0, y: 0, z: 0}
+  tooltipNameText: 
+  interactionSound: buttonClickMain1
+  externalOutline: {fileID: 581807586691311101}
+  isHeld: 0
+  target: {fileID: 0}
+  rb: {fileID: 7597882784080311199}
+  jointSpring: 5
+  jointDamper: 10
+  movementDampen: 0.3
+  hand: {fileID: 0}
+  isLargeObject: 0
+  isProjectile: 1
+--- !u!114 &581807586691311101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,7 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 0.43867922, g: 0.83893776, b: 1, a: 1}
-  outlineWidth: 4
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []

@@ -65,10 +65,12 @@ public class Enemy2 : EnemyBase
         // Checks if player is still in LOS - if it is, launch the projectile, and if not just destroy the projectile
         if (CheckForPlayer())
         {
+            Debug.Log("FIRE DAMN YOU");
             lastProjectile.GetComponent<Enemy2Projectile>().Launch(dir, player.transform);
         }
         else
         {
+            Debug.Log("Cant see");
             Destroy(lastProjectile);
         }
     }
