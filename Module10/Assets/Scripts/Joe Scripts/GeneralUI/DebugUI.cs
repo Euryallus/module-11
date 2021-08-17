@@ -20,8 +20,8 @@ public class DebugUI : MonoBehaviour
 
     [SerializeField] private TMP_InputField itemSpawnInputField; // Input field for entering an item id to spawn
 
-    [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private TextMeshProUGUI foodLevelText;
+    [SerializeField] private TextMeshProUGUI healthText;         // Text for showing current and max health values
+    [SerializeField] private TextMeshProUGUI foodLevelText;      // Text for showing current and max food level values
 
     #endregion
 
@@ -52,9 +52,11 @@ public class DebugUI : MonoBehaviour
         {
             if (PlayerInstance.ActivePlayer != null)
             {
+                // Update text that displays the player's current health and food level
+
                 PlayerStats playerStats = PlayerInstance.ActivePlayer.PlayerStats;
 
-                healthText.text     = "Health: " + System.Math.Round(playerStats.Health, 2) + "/" + playerStats.MaxHealth;
+                healthText.text     = "Health: "     + System.Math.Round(playerStats.Health, 2)    + "/" + playerStats.MaxHealth;
                 foodLevelText.text  = "Food Level: " + System.Math.Round(playerStats.FoodLevel, 2) + "/" + playerStats.MaxFoodLevel;
             }
         }
@@ -88,8 +90,6 @@ public class DebugUI : MonoBehaviour
     // Shows/hides the debug UI panel
     private void SetShowing(bool show)
     {
-        Debug.Log("Set showing: " + show);
-
         canvGroup.alpha = show ? 1.0f : 0.0f;
         canvGroup.blocksRaycasts = show;
         canvGroup.interactable = show;

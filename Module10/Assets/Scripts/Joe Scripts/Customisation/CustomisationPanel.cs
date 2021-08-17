@@ -265,7 +265,7 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
             propertyPanel.AddButton.Setup();
             propertyPanel.SubtractButton.Setup();
 
-            UpdateFloatPropertyButtons(propertyPanel, baseProperty.Value, baseProperty.Value, baseProperty.MaxValue);
+            UpdateFloatPropertyButtons(propertyPanel, baseProperty.Value, baseProperty.Value, baseProperty.MaxValue, baseProperty.UpgradeIncrease);
         }
 
         customInputFields = new List<TMP_InputField>();
@@ -321,14 +321,15 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         CustomFloatProperty property = customResultItem.GetCustomFloatPropertyWithName(propertyName);
 
         // Add the upgrade increase to the current property value to get the new added value
-        float addedValue = property.Value + property.UpgradeIncrease;
+        //  Rounding the resulting value to 1 d.p. to prevent float accuracy errors causing a number like 1.0000001
+        float addedValue = (float)System.Math.Round(property.Value + property.UpgradeIncrease, 1);
 
         // Adding 0.01 to prevent errors caused by float inaccuracies when comparing the two values
         if (FloatHelper.FloatIsLessThanOrEqualTo(addedValue, property.MaxValue))
         {
             // The added value is within the allowed value range
 
-            UpdateFloatPropertyButtons(propertyPanel, addedValue, property.Value, property.MaxValue);
+            UpdateFloatPropertyButtons(propertyPanel, addedValue, property.Value, property.MaxValue, property.UpgradeIncrease);
 
             // Set the custom float property on the item being customised to have the new value
             itemManager.SetCustomFloatItemData(itemManager.GetUniqueCustomItemId(), propertyName, addedValue);
@@ -357,14 +358,15 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         CustomFloatProperty customisedProperty = customResultItem.GetCustomFloatPropertyWithName(propertyName);
 
         // Subtract the upgrade increase (in this case decrease) from the current property value to get the new added value
-        float subtractedValue = customisedProperty.Value - customisedProperty.UpgradeIncrease;
+        //  Rounding the resulting value to 1 d.p. to prevent float accuracy errors causing a number like 1.0000001
+        float subtractedValue = (float)System.Math.Round(customisedProperty.Value - customisedProperty.UpgradeIncrease, 1);
 
         // Subtracting 0.01 to prevent errors caused by float inaccuracies when comparing the two values
         if (FloatHelper.FloatIsGreaterThanOrEqualTo(subtractedValue, property.Value))
         {
             // The subtracted value is within the allowed value range
 
-            UpdateFloatPropertyButtons(propertyPanel, subtractedValue, property.Value, property.MaxValue);
+            UpdateFloatPropertyButtons(propertyPanel, subtractedValue, property.Value, property.MaxValue, property.UpgradeIncrease);
 
             // Set the custom float property on the item being customised to have the new value
             itemManager.SetCustomFloatItemData(itemManager.GetUniqueCustomItemId(), propertyName, subtractedValue);
@@ -383,13 +385,13 @@ public class CustomisationPanel : MonoBehaviour, IPersistentGlobalObject
         }
     }
 
-    private void UpdateFloatPropertyButtons(CustomFloatPropertyPanel propertyPanel, float propertyValue, float minValue, float maxValue)
+    private void UpdateFloatPropertyButtons(CustomFloatPropertyPanel propertyPanel, float propertyValue, float minValue, float maxValue, float upgradeIncrease)
     {
         // Only allow the subtract button to be interacted with if the current property value has not reached the minimum
         propertyPanel.SubtractButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, minValue));
 
         // Only allow the add button to be interacted with if the current property value has not reached the maximum
-        propertyPanel.AddButton.SetInteractable(!FloatHelper.FloatsAreEqual(propertyValue, maxValue));
+        propertyPanel.AddButton.SetInteractable(!FloatHelper.FloatIsGreaterThanOrEqualTo(propertyValue + upgradeIncrease, maxValue));
     }
 
     private void SetupFloatPropertyValueText(TextMeshProUGUI valueText, float value, float baseValue)
