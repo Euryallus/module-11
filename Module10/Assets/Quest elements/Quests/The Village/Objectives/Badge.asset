@@ -15,8 +15,7 @@ MonoBehaviour:
   m_id: badge
   m_specialSlotId: 
   m_uiName: Citizens Militia badge
-  m_uiDescription: 'Thick blue piece of acryllic with the officer''s name and rank
-    on it '
+  m_uiDescription: 'Thick blue acryllic '
   m_stackSize: 1
   m_weight: 0
   m_sprite: {fileID: 21300000, guid: 4c8dda4fa2293a741a8d9ce3abb266cb, type: 3}
