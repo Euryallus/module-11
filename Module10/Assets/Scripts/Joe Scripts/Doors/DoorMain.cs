@@ -122,11 +122,18 @@ public class DoorMain : MonoBehaviour, IPersistentSceneObject, IExternalTriggerL
 
     private void Update()
     {
-        // Update the lock symbol and the timer that keeps track of how long the door is open
-
-        LockSymbolUpdates();
+        // Update the timer that keeps track of how long the door is open
 
         OpenTimerUpdates();
+    }
+
+    private void LateUpdate()
+    {
+        // Update the lock symbol (checks whether it should be drawn and updates where it will be drawn)
+        //  Called in LateUpdate since the position of the player's camera is set in Update, and this
+        //  function depends on the camera position to determine where the lock symbol should be drawn
+
+        LockSymbolUpdates();
     }
 
     private void LockSymbolUpdates()
