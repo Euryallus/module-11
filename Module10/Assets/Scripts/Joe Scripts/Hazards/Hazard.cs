@@ -109,7 +109,7 @@ public class Hazard : MonoBehaviour, IExternalTriggerListener
         // The player was hit by the obstacle, kill them and give the death cause that was set in the inspector
 
         PlayerStats playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-        playerStats.DecreaseHealth(1.0f, deathCause);
+        playerStats.DecreaseHealth(10000.0f, deathCause);
 
         // Play an impact sound if one was set in the inspector
         if (impactSound != null)

@@ -200,7 +200,7 @@ public class SlamAbility : PlayerAbility
         if(enemy.Suspended && targetedEnemies.Contains(enemy))
         {
             // Drop the enemy and apply a huge amount of damage to kill it instantly once it lands
-            StartCoroutine(DropEnemyCoroutine(targetedEnemies.IndexOf(enemy), 0.0f, frozen, 100.0f));
+            StartCoroutine(DropEnemyCoroutine(targetedEnemies.IndexOf(enemy), 0.0f, frozen, 10000.0f));
         }
     }
 

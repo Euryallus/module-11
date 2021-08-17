@@ -20,6 +20,9 @@ public class DebugUI : MonoBehaviour
 
     [SerializeField] private TMP_InputField itemSpawnInputField; // Input field for entering an item id to spawn
 
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI foodLevelText;
+
     #endregion
 
     private CanvasGroup canvGroup;
@@ -39,10 +42,21 @@ public class DebugUI : MonoBehaviour
 
     private void Update()
     {
-        // Ctl + Alt + D toggles debug options
-        if(!InputFieldSelection.AnyFieldSelected && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D))
+        if(showing)
         {
-            SetShowing(!showing);
+            // Ctl + Alt + D toggles debug options
+            if (!InputFieldSelection.AnyFieldSelected && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D))
+            {
+                SetShowing(!showing);
+            }
+
+            if (PlayerInstance.ActivePlayer != null)
+            {
+                PlayerStats playerStats = PlayerInstance.ActivePlayer.PlayerStats;
+
+                healthText.text     = "Health: " + System.Math.Round(playerStats.Health, 2) + "/" + playerStats.MaxHealth;
+                foodLevelText.text  = "Food Level: " + System.Math.Round(playerStats.FoodLevel, 2) + "/" + playerStats.MaxFoodLevel;
+            }
         }
     }
 
