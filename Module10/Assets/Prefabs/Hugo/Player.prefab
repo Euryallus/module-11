@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerKey: 113
   useDefaultBehaviour: 1
-  maxUpgradeLevel: 3
+  maxUpgradeLevel: 2
   chargeTime: 0.5
   cooldownTime: 5
   initialFoodDecrease: 0.5
