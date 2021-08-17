@@ -158,7 +158,7 @@ public class AudioManager : MonoBehaviour
                 {
                     // Loop the first (and ideally only) track in the playlist for the duration of the scene
                     currentPlaylistIndex = 0;
-                    PlayMusic(sceneMusic.Playlist[0], true);
+                    PlayMusic(sceneMusic.Playlist[0], true, false);
                 }
                 else if(sceneMusic.PlayMode == MusicPlayMode.Dynamic)
                 {
@@ -194,7 +194,7 @@ public class AudioManager : MonoBehaviour
         UpdateMusicSourcesVolume();
     }
 
-    public void PlayMusic(MusicClass music, bool loop)
+    public void PlayMusic(MusicClass music, bool loop, bool updateWithSavedVolume = true)
     {
         // Play the given music track, adjusting volume/loop to match parameters
 
@@ -203,6 +203,12 @@ public class AudioManager : MonoBehaviour
         musicSource.loop    = loop;
 
         musicSource.Play();
+
+        if(updateWithSavedVolume)
+        {
+            // Updates the volume of all music sources using saved volume values
+            UpdateMusicSourcesVolume();
+        }
     }
 
     private void PlayNextMusicFromPlaylist()
@@ -249,7 +255,7 @@ public class AudioManager : MonoBehaviour
         }
 
         // Play a track from the playlist based on the index set above
-        PlayMusic(currentSceneMusic.Playlist[currentPlaylistIndex], false);
+        PlayMusic(currentSceneMusic.Playlist[currentPlaylistIndex], false, false);
     }
 
     private AudioSource PlaySoundEffect(SoundClass sound, LoopType loopType, bool overrideGlobalVolumeMultiplier, bool use3DSpace, bool bypassEffects,
