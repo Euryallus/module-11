@@ -42,14 +42,14 @@ public class DebugUI : MonoBehaviour
 
     private void Update()
     {
-        if(showing)
+        // Ctl + Alt + D toggles debug options
+        if (!InputFieldSelection.AnyFieldSelected && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D))
         {
-            // Ctl + Alt + D toggles debug options
-            if (!InputFieldSelection.AnyFieldSelected && Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D))
-            {
-                SetShowing(!showing);
-            }
+            SetShowing(!showing);
+        }
 
+        if (showing)
+        {
             if (PlayerInstance.ActivePlayer != null)
             {
                 PlayerStats playerStats = PlayerInstance.ActivePlayer.PlayerStats;
@@ -88,6 +88,8 @@ public class DebugUI : MonoBehaviour
     // Shows/hides the debug UI panel
     private void SetShowing(bool show)
     {
+        Debug.Log("Set showing: " + show);
+
         canvGroup.alpha = show ? 1.0f : 0.0f;
         canvGroup.blocksRaycasts = show;
         canvGroup.interactable = show;
