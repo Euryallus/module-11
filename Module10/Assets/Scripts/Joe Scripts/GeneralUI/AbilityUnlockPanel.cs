@@ -58,20 +58,26 @@ public class AbilityUnlockPanel : MonoBehaviour
             // Add some extra text displaying any custom float properties that are not the upgrade level (which is already shown, see above)
             if (property.Name != "upgradeLevel")
             {
-                AddPropertyText(property.GetDisplayText());
+                AddPropertyText(property.Name, property.GetDisplayText());
             }
         }
 
         foreach (CustomStringProperty property in abilityItem.CustomStringProperties)
         {
             // Add some extra text displaying any custom string properties on the ability item
-            AddPropertyText(property.GetDisplayText());
+            AddPropertyText(property.Name, property.GetDisplayText());
         }
     }
 
-    private void AddPropertyText(string text)
+    private void AddPropertyText(string propertyName, string text)
     {
         // Add some extra text to the panel and set it to display the given value
+
+        if(propertyName.Contains("control"))
+        {
+            // Use a different text colour for a property displaying control info
+            text = "<color=#FF915D>" + text;
+        }
 
         GameObject propertyTextGameObj = Instantiate(propertyTextPrefab, propertyTextParent);
         propertyTextGameObj.GetComponent<TextMeshProUGUI>().text = text;

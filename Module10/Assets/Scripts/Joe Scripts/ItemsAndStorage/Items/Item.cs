@@ -245,7 +245,7 @@ public class CustomStringProperty
     [Tooltip("The default value of this property")]
     public string Value;
 
-    private const int MaxDisplayTextLength = 18; // Maximum length of text that can be displayed in the UI before appending a '...'
+    private const int MaxDisplayTextLength = 20; // Maximum length of text that can be displayed in the UI before appending a '...'
 
     public string GetDisplayText()
     {

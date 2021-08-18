@@ -199,14 +199,15 @@ public class ItemInfoPopup : MonoBehaviour
         int shownPropertyCount = customFloatProperties.Length; // Number of custom properties (and hence lines of text) to show
 
         // Loop through all custom float properties
-        for (int i = 0; i < customFloatProperties.Length; i++)
+
+        foreach (var property in customFloatProperties)
         {
             // Add a line of text showing info about each custom float property - the property name and value
-            string floatValText = customFloatProperties[i].GetDisplayText();
+            string floatValText = property.GetDisplayText();
 
-            if(showMaxFloatValues)
+            if (showMaxFloatValues)
             {
-                floatValText += " <color=#FFFFA0>(Max: " + customFloatProperties[i].MaxValue + ")</color>";
+                floatValText += " <color=#FFFFA0>(Max: " + property.MaxValue + ")</color>";
             }
 
             customPropertiesText.text += floatValText;
@@ -214,15 +215,22 @@ public class ItemInfoPopup : MonoBehaviour
         }
 
         // Loop through all custom string properties
-        for (int i = 0; i < customStringProperties.Length; i++)
+
+        foreach (var property in customStringProperties)
         {
-            if (!string.IsNullOrWhiteSpace(customStringProperties[i].Value))
+            if (!string.IsNullOrWhiteSpace(property.Value))
             {
                 // The current property is not an empty string, show info about it
                 shownPropertyCount++;
 
+                if (property.Name.Contains("control"))
+                {
+                    // Use a different text colour for a property displaying control info
+                    customPropertiesText.text += "<color=#FF915D>";
+                }
+
                 // Add a line of text showing the property name and value
-                customPropertiesText.text += (customStringProperties[i].GetDisplayText());
+                customPropertiesText.text += (property.GetDisplayText());
                 customPropertiesText.text += "\n";
             }
         }

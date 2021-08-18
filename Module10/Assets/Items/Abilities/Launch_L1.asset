@@ -32,10 +32,18 @@ MonoBehaviour:
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0
+    CurrencyIncrease: 0
   - Name: launchPower
     UIName: Launch Power
     Value: 20
     UpgradeIncrease: 0
     MinValue: 0
     MaxValue: 0
-  m_customStringProperties: []
+    CurrencyIncrease: 0
+  m_customStringProperties:
+  - Name: control
+    UIName: 
+    Value: Hold Q while
+  - Name: control2
+    UIName: 
+    Value: on the ground.
