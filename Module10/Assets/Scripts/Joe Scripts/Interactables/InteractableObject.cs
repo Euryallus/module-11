@@ -23,11 +23,11 @@ public abstract class InteractableObject : MonoBehaviour
     [Header("Interactable Properties")]
 
     [Tooltip("How close the player needs to be to this object to interact with it")] // <--
-    [SerializeField] private float      interactionRange        = 5.0f;
+    [SerializeField] protected float      interactionRange        = 5.0f;
 
-    [SerializeField] private GameObject interactTooltipPrefab;  // Prefab for the UI tooltip/popup shown while hovering over the object
-    [SerializeField] protected Vector3  interactTooltipOffset;  // Offset relative to the object's origin position to use when displaying the above tooltip
-    [SerializeField] protected string   tooltipNameText;        // The object name to be displayed on the above tooltip, e.g. 'Crafting Table', 'Door'
+    [SerializeField] protected GameObject interactTooltipPrefab;  // Prefab for the UI tooltip/popup shown while hovering over the object
+    [SerializeField] protected Vector3    interactTooltipOffset;  // Offset relative to the object's origin position to use when displaying the above tooltip
+    [SerializeField] protected string     tooltipNameText;        // The object name to be displayed on the above tooltip, e.g. 'Crafting Table', 'Door'
 
     #endregion
 

@@ -42,10 +42,11 @@ public class InteractableWithOutline : InteractableObject
 
         if(outline == null)
         {
-            // No outline found, remove this script from the GameObject
-            Debug.LogWarning(gameObject.name + " has InteractibleWithOutline script with no outline set. Removing script.", gameObject);
-            Destroy(this);
-            return;
+            // No outline found, add one with default paramaters
+            outline = gameObject.AddComponent<Outline>();
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineWidth = 5.0f;
+            outline.OutlineColor = new Color32(255, 255, 160, 255);
         }
 
         outline.enabled = false;

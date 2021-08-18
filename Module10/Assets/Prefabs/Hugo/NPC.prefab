@@ -478,6 +478,7 @@ GameObject:
   - component: {fileID: 8094159871707046445}
   - component: {fileID: 2398426087988305441}
   - component: {fileID: 237309711106493730}
+  - component: {fileID: 7861126778074600412}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -579,11 +580,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a79de8a4e828b428d03e73306caa54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionRange: 5
+  interactTooltipPrefab: {fileID: 0}
+  interactTooltipOffset: {x: 0, y: 0, z: 0}
+  tooltipNameText: 
+  interactionSound: buttonClickMain1
+  externalOutline: {fileID: 0}
   npcName: Default
   isQuestGiver: 0
+  displayName: A Stranger
+  walkAfterConversation: 0
   dialogueLines:
   - Hi, I'm a default NPC
   - This is a piece of dialogue
   - Goodbye!
+  endGameDialogueLines: []
   haveTalkedToBefore: 0
   cameraFocusPoint: {fileID: 2093080338}
+--- !u!114 &7861126778074600412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8008736737730732537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 0.627451, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

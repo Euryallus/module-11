@@ -22,6 +22,8 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
 
     [SerializeField] private QuestMenuUI questMenuUI;
 
+    public PlayerQuestBacklog PlayerQuestData { get { return playerQuestData; } }
+
     private void Awake()
     {
         // Added by Joe: Load progress to restore default quest completion values if there is no save file
@@ -87,6 +89,9 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
         UI.HideQuestAccept();
         // Stops camera from focusing on NPC
         npcManager.StopFocusCamera();
+
+        // Added by Joe: Hides the indicator that showed the player a quest was available
+        npcManager.interactingWith.SetIndicatorShowMode(NPC.IndicatorShowMode.None);
 
         // Plays a click sound
         AudioManager.Instance.PlaySoundEffect2D("buttonClickSmall", true);
@@ -226,13 +231,13 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
     }
 
     // Returns true if player interacts with quest giver & they have quests to give / recieve
-    public bool InteractWith(string questGiverName)
+    public bool InteractWith(NPC questGiverNPC)
     {
         // Cycles each quest giver in list saved in PlayerQuestData
         foreach(QuestGiverData giver in playerQuestData.questGivers)
         {
             // Compares name of quest giver with NPC name currently interacting with
-            if (giver.QuestGiverName == questGiverName)
+            if (giver.QuestGiverName == questGiverNPC.npcName)
             {
                 // Cycles each quest in the player's backlog
                 for (int i = 0; i < playerQuestData.questBacklog.Count; i++)
@@ -247,6 +252,9 @@ public class QuestManager : MonoBehaviour, IPersistentGlobalObject
                         {
                             // Complete the quest
                             CompleteQuest(quest);
+
+                            // Added by Joe - Stop showing the 'accept quest' indicator above the NPC that gave it
+                            questGiverNPC.SetIndicatorShowMode(NPC.IndicatorShowMode.None);
 
                             // Checks if quest just handed in had any leading on from it (quest line)
                             if (quest.nextQuests.Count != 0)

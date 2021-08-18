@@ -110,7 +110,7 @@ public class NPCManager : MonoBehaviour
 
             if (interactingWith.isQuestGiver)
             {
-                if (qmanager.InteractWith(interactingWith.npcName))
+                if (qmanager.InteractWith(interactingWith))
                 {
                     // If the NPC is a quest giver and has something to say to the player, do that instead of this
 
@@ -158,7 +158,7 @@ public class NPCManager : MonoBehaviour
 
             if (interactingWith.isQuestGiver)
             {
-                if (qmanager.InteractWith(interactingWith.npcName))
+                if (qmanager.InteractWith(interactingWith))
                 {
                     // If npc has quests to accept / give, do that instead of this
                     return;

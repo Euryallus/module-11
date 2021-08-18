@@ -27,6 +27,9 @@ public class GameSceneUI : MonoBehaviour
     [SerializeField] private GameObject pausePanelPrefab;       // Pause UI, instantiated when the game is paused
     [SerializeField] private GameObject optionsPanelPrefab;     // Options panel UI
 
+    [SerializeField] private GameObject npcIndicatorPrefab;     // The indicator instantiated above the head of NPCs in the scene
+    [SerializeField] private Sprite[]   npcIndicatorSprites;    // All sprites that can be used on the NPC indicators
+
     #endregion
 
     #region Properties
@@ -34,6 +37,8 @@ public class GameSceneUI : MonoBehaviour
     public InventoryPanel   PlayerInventory         { get { return playerInventory; } }
     public ItemInfoPopup    ItemInfoPopup           { get { return itemInfoPopup; } }
     public bool             ShowingCinematicsCanvas { get { return showingCinematicsCanvas; } }
+    public GameObject       NPCIndicatorPrefab      { get { return npcIndicatorPrefab; } }
+    public Sprite[]         NPCIndicatorSprites     { get { return npcIndicatorSprites; } }
 
     #endregion
 
