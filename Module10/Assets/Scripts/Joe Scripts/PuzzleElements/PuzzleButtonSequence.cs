@@ -8,7 +8,12 @@ using UnityEngine;
 // || Used on prefab: Joe/PuzzleElements/PuzzleButtonSequence               ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added new sounds and completeSequenceButtonColour (buttons change   ||
+// ||    colour when the sequence is complete)                              ||
 // ||=======================================================================||
 
 public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
@@ -22,7 +27,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
     [SerializeField] private DoorPuzzleData[]    connectedDoors;        // Doors that will be opened/closed when the sequence is complete
 
     [SerializeField] [ColorUsage(true, true)]
-    private Color completeSequenceButtonColour;
+    private Color completeSequenceButtonColour; // HDR colour that the buttons in the sequence's emission will be set to when completed
 
     #endregion
 
@@ -131,6 +136,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
 
         for (int i = 0; i < buttonsInSequence.Count; i++)
         {
+            // Set all buttons to have the completed emission colour
             buttonsInSequence[i].SetMaterialColour(completeSequenceButtonColour);
         }
 
@@ -159,6 +165,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
 
         for (int i = 0; i < buttonsInSequence.Count; i++)
         {
+            // Set all buttons to their standard/unpressed colours
             buttonsInSequence[i].SetToStandardColour();
         }
 
@@ -171,6 +178,7 @@ public class PuzzleButtonSequence : MonoBehaviour, IPersistentSceneObject
 
     private string GetUniquePositionId()
     {
+        // Returns a unique id based on the sequence's position in the world, used for saving
         return "puzzleButtonSequence_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 }

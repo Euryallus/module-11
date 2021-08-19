@@ -75,6 +75,7 @@ public class PuzzleButton : InteractableObject
     {
         base.Start();
 
+        // Create an instance of the baseButtonMaterial to be used on this button and set its base colour
         buttonMeshRenderer.material = new Material(baseButtonMaterial);
         buttonMeshRenderer.material.SetColor("_BaseColor", buttonBaseColour);
 
@@ -83,6 +84,7 @@ public class PuzzleButton : InteractableObject
 
         if(sequence != null)
         {
+            // If the button is not part of a sequence, reset to its standard colour by default
             SetToStandardColour();
         }
     }
@@ -118,11 +120,14 @@ public class PuzzleButton : InteractableObject
 
     private void ButtonPressedEvents()
     {
+        // Hide the interaction tooltip
         enableTooltip = false;
         HideInteractTooltip();
 
+        // Disable the collider now the button is pressed down
         buttonCollider.enabled = false;
 
+        // Set the button to the pressed colour
         SetToPressedColour();
 
         for (int i = 0; i < connectedDoors.Length; i++)
@@ -161,6 +166,7 @@ public class PuzzleButton : InteractableObject
             sequence.ButtonInSequencePressed(this);
         }
 
+        // Play the 'button on' sound if not loading data (prevents sounds playing while setting up objecs on load)
         if (!SaveLoadManager.Instance.LoadingSceneData)
         {
             AudioManager.Instance.PlaySoundEffect3D("puzzleButtonOn", transform.position);
@@ -169,12 +175,16 @@ public class PuzzleButton : InteractableObject
 
     private void ButtonReleasedEvents()
     {
+        // Allow the interaction tooltip to be shown again
         enableTooltip = true;
 
+        // Re-enable collisions since the button is no longer pressed down
         buttonCollider.enabled = true;
 
         if(sequence == null)
         {
+            // The button is not in a sequence, reset its colour
+            //   (buttons in a sequence retain their pressed colour until the sequence is failed)
             SetToStandardColour();
         }
 
@@ -206,7 +216,8 @@ public class PuzzleButton : InteractableObject
             }
         }
 
-        if(!SaveLoadManager.Instance.LoadingSceneData)
+        // Play the 'button off' sound if not loading data (prevents sounds playing while setting up objecs on load)
+        if (!SaveLoadManager.Instance.LoadingSceneData)
         {
             AudioManager.Instance.PlaySoundEffect3D("puzzleButtonOff", transform.position);
         }
@@ -214,16 +225,19 @@ public class PuzzleButton : InteractableObject
 
     public void SetToStandardColour()
     {
+        // Sets the button's emission colour to the standard colour
         buttonMeshRenderer.material.SetColor("_EmissionColor", standardEmissionColour);
     }
 
     public void SetToPressedColour()
     {
+        // Sets the button's emission colour to the pressed colour
         buttonMeshRenderer.material.SetColor("_EmissionColor", pressedEmissionColour);
     }
 
     public void SetMaterialColour(Color colour)
     {
+        // Sets the button's emission colour to the given colour
         buttonMeshRenderer.material.SetColor("_EmissionColor", colour);
     }
 
@@ -261,6 +275,8 @@ public class PuzzleButton : InteractableObject
 
     protected override void ShowInteractTooltip(string overridePressEText = null)
     {
+        // Override for the ShowInteractTooltip function, forcing it to show 'To Activate'
+        //   title text instead of the standard 'Press E to Interact' message
         base.ShowInteractTooltip("To Activate");
     }
 }

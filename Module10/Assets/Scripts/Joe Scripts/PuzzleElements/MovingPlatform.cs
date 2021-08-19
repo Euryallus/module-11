@@ -1,6 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// ||=======================================================================||
+// || MovingPlatform: A platform that moves on a set path, can be triggered ||
+// ||   by a PuzzleButton or move automatically.                            ||
+// ||=======================================================================||
+// || Used on prefab: Joe/PuzzleElements/MovingPlatform                     ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || for the prototype phase.                                              ||
+// ||=======================================================================||
+
 // PlatformButtonBehaviour: defines how moving platforms react to
 //   button presses/releases when connected to a PuzzleButton
 public enum PlatformButtonBehaviour
@@ -24,16 +34,6 @@ public enum PlatformMoveDirection
     Backwards,
     None
 }
-
-// ||=======================================================================||
-// || MovingPlatform: A platform that moves on a set path, can be triggered ||
-// ||   by a PuzzleButton or move automatically.                            ||
-// ||=======================================================================||
-// || Used on prefab: Joe/PuzzleElements/MovingPlatform                     ||
-// ||=======================================================================||
-// || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
-// ||=======================================================================||
 
 public class MovingPlatform : MonoBehaviour
 {

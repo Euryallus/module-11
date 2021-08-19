@@ -7,7 +7,11 @@ using UnityEngine;
 // || Used on prefab: Joe/Environment/AutoSaveArea                          ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Implemented new functions from the ISavePoint interface             ||
 // ||=======================================================================||
 
 [RequireComponent(typeof(BoxCollider))]
@@ -19,18 +23,20 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     [Header("Auto Save Area")]
 
     [SerializeField]
-    private Transform respawnPointTransform;
+    private Transform respawnPointTransform;    // The player will respawn at the position of this transform if they reload after saving here
 
     [SerializeField]
-    private bool disableWhenUsed = true;    //Whether the trigger should be permenantly disabled after being used once
+    private bool disableWhenUsed = true;        //Whether the trigger should be permenantly disabled after being used once
 
     #endregion
 
-    private bool        colliderDisabled;   // Whether the collider is currently disabled
-    private BoxCollider boxCollider;        // The collider for player detection
+    private bool        colliderDisabled;       // Whether the collider is currently disabled
+    private BoxCollider boxCollider;            // The collider for player detection
 
     private void Awake()
     {
+        // Get the box collider that detects the player and update colliderDisabled
+        //   to reflect if the collider is disabled by default
         boxCollider = GetComponent<BoxCollider>();
         colliderDisabled = !boxCollider.enabled;
     }
@@ -77,32 +83,36 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (SaveLoadManager.Instance.LoadingSceneData)
-            return;
-
-        if(other.gameObject.CompareTag("Player"))
+        // Ignore player interactions if the game is still being loaded
+        if (!SaveLoadManager.Instance.LoadingSceneData)
         {
-            if (disableWhenUsed)
+            if (other.gameObject.CompareTag("Player"))
             {
-                // The collider is set to be disabled on use, disable it
-                DisableCollider();
-            }
+                // The player entered the save area
 
-            Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
+                if (disableWhenUsed)
+                {
+                    // The collider is set to be disabled on use, disable it
+                    DisableCollider();
+                }
 
-            SetAsUsed();
+                Debug.Log("Attempting to save game at save auto save point: " + GetSavePointId());
 
-            // Try to save the game
-            bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
+                // This is now the last save point that was used
+                SetAsUsed();
 
-            // Show a notification to tell the player is the save was successful
-            if (saveSuccess)
-            {
-                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.AutoSaveSuccess);
-            }
-            else
-            {
-                NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveError);
+                // Try to save the game
+                bool saveSuccess = SaveLoadManager.Instance.SaveGameData();
+
+                // Show a notification to tell the player is the save was successful
+                if (saveSuccess)
+                {
+                    NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.AutoSaveSuccess);
+                }
+                else
+                {
+                    NotificationManager.Instance.AddNotificationToQueue(NotificationMessageType.SaveError);
+                }
             }
         }
     }
@@ -123,11 +133,13 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
 
     public string GetSavePointId()
     {
+        // Returns a unique id based on the save area's position, used for saving
         return "autoSaveArea_" + transform.position.x + "_" + transform.position.y + "_" + transform.position.z;
     }
 
     public Vector3 GetRespawnPosition()
     {
+        // Returns the position to spawn the player at if they last saved at this area
         return respawnPointTransform.position;
     }
 
@@ -135,6 +147,7 @@ public class AutoSaveArea : MonoBehaviour, ISavePoint, IPersistentSceneObject
     {
         WorldSave.Instance.UsedSceneSavePointId = GetSavePointId();
 
+        // Set this area to be the last save point that was used
         SaveLoadManager.SetLastUsedSavePoint(this);
     }
 
