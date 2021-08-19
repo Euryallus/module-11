@@ -31,6 +31,13 @@ public class EnemyHealthAnim : EnemyHealth
     {
         // Stops all coroutines & destroys self (playing Death anim caused issues with tracking when a fight was over)
         gameObject.GetComponent<EnemyBase>().StopAllCoroutines();
+
+        if(ParticleManager.Instance != null)
+        {
+            ParticleManager.Instance.SpawnParticle(transform.position + Vector3.up, "EnemyDeath", transform.forward);
+        }
+
+
         Destroy(gameObject);
     }
 

@@ -53,3 +53,6 @@ MonoBehaviour:
   - sysName: IceImpact
     effect: {fileID: 5974251325292428337, guid: 5afa9aa064a52b544a00a5a638e51cd7, type: 3}
     loop: 0
+  - sysName: EnemyDeath
+    effect: {fileID: 6122444082515449867, guid: 5639d249db29ccd4db02734119868b0f, type: 3}
+    loop: 0
