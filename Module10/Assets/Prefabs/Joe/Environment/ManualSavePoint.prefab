@@ -288,6 +288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_19
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 36e09d8dfe5dbd2419cebd3f5a1bad65, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 36e09d8dfe5dbd2419cebd3f5a1bad65, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -366,6 +370,10 @@ PrefabInstance:
     - target: {fileID: 794930279730652231, guid: 462744d4504c94f40890a6592a874f48, type: 3}
       propertyPath: m_Name
       value: GlowSphereRing
+      objectReference: {fileID: 0}
+    - target: {fileID: 794930279730652231, guid: 462744d4504c94f40890a6592a874f48, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3179671855704999082, guid: 462744d4504c94f40890a6592a874f48, type: 3}
       propertyPath: m_Materials.Array.data[0]

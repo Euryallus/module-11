@@ -1,6 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// ||=======================================================================||
+// || PlayerDeath: Handles 'killing' the player; showing a death message    ||
+// ||   and reloading the game ready to restore the last save point.        ||
+// ||=======================================================================||
+// || Used on prefab: Player                                                ||
+// ||=======================================================================||
+// || Written by Joseph Allen                                               ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added more death causes (more ways to die!)                         ||
+// ||=======================================================================||
+
 // PlayerDeathCause: All of the possible death reasons that can be shown
 public enum PlayerDeathCause
 {
@@ -9,23 +23,13 @@ public enum PlayerDeathCause
     Enemy,
     EnemyProjectile,
     FellOutOfWorld,
-    Crushed,       
+    Crushed,
     Skewered,
     SwingHit,
     WaveHit,
     Fire,
     Lava
 }
-
-// ||=======================================================================||
-// || PlayerDeath: Handles 'killing' the player; showing a death message    ||
-// ||   and reloading the game ready to restore the last save point.        ||
-// ||=======================================================================||
-// || Used on prefab: Player                                                ||
-// ||=======================================================================||
-// || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
-// ||=======================================================================||
 
 public class PlayerDeath : MonoBehaviour
 {
@@ -107,6 +111,7 @@ public class PlayerDeath : MonoBehaviour
 
         GameSceneUI gameUI = GameSceneUI.Instance;
 
+        // Hide the cinematics canvas if one is showing
         if(gameUI.ShowingCinematicsCanvas)
         {
             gameUI.HideCinematicsCanvas();

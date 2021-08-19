@@ -7,8 +7,16 @@ using UnityEngine;
 // ||=======================================================================||
 // || Used on prefab: Player                                                ||
 // ||=======================================================================||
-// || Written by Joseph Allen for the prototype phase.                      ||
-// || Additional code by Hugo Bailey (see comments).                        ||
+// || Written by Joseph Allen                                               ||
+// || originally for the prototype phase.                                   ||
+// || Additional code by Hugo Bailey (see comments)                         ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added a player damage effect                                        ||
+// || - Health now increases over time based on the player's food level     ||
+// || - Player now dies when health reaches 0                               ||
+// || - Allowed the default/starting food & health values to be adjusted    ||
 // ||=======================================================================||
 
 // Edited for mod11:
@@ -80,7 +88,7 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     #endregion
 
-    private Transform       canvasTransform;
+    private Transform       canvasTransform;        // Transform of the canvas used as a parent for the damage effect
     private float           health;                 // The player's health (0 = death, [healthDefaultValue] = full)
     private float           foodLevel;              // The player's food level (0 = starving, [foodLevelDefaultValue] = full)
 
@@ -88,20 +96,12 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     private float           breath    = 1.0f;       // The player's breath level (0 = drowning, 1 = full)
                                                        
     private float           starveDamageTimer;      // Keeps track of seconds passed since damage was taken from starving
-    private float           drownDamageTimer;          
-    private PlayerMovement  playerMovement;   
+    private float           drownDamageTimer;       // Keeps trrack of seconds passed since damage was taken from drowning
     private PlayerStatsUI   statsUI;
 
     private static string playerName = "Player";        // The name set by the player
 
     private const float StatWarningThreshold = 0.15f;   // How low a stat value has to get before the related slider flashes red as a warning
-
-    private void Awake()
-    {
-        // Get player movement script and animators for various UI elements
-
-        playerMovement = GetComponent<PlayerMovement>();
-    }
 
     protected void Start()
     {
@@ -122,11 +122,13 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
     {
         if(statsUI == null)
         {
+            // Find the player hotbar/stats UI if it's null, happens on start or when switching scenes
             statsUI = GameObject.FindGameObjectWithTag("HotbarAndStats").GetComponent<PlayerStatsUI>();
         }
 
         if (canvasTransform == null)
         {
+            // Find the canvas transform if it's null, happens on start or when switching scenes
             canvasTransform = GameObject.FindGameObjectWithTag("JoeCanvas").transform;
         }
 
@@ -134,13 +136,16 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         float foodLevelDecreaseAmount = Time.deltaTime / baseTimeToStarve;
         float breathDecreaseAmount = Time.deltaTime / baseTimeToDrown;
 
+        // Update the player's food level value
         UpdateFoodLevel(foodLevelDecreaseAmount);
 
+        // Update the player's health value
         UpdateHealth();
 
         // Breath/drowning code added by hugo
         UpdateBreathLevel(breathDecreaseAmount);
 
+        // Update UI for all stats
         UpdateHealthUI();
         UpdateFoodLevelUI();
         UpdateBreathUI();
@@ -188,15 +193,18 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         }
         else
         {
+            // Loading after the player died, restore stats to their default values
             ResetDefaultStatValues();
         }
     }
 
     private void ResetDefaultStatValues()
     {
+        // Resets stat variables to their default values
+
         foodLevel = foodLevelDefaultValue;
-        health = healthDefaultValue;
-        breath = 1.0f;
+        health    = healthDefaultValue;
+        breath    = 1.0f;
     }
 
     public void OnGlobalLoadConfigure(SaveData saveData) { } // Nothing to configure
@@ -206,6 +214,8 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
         if (foodLevel > 0.0f)
         {
             // Decrease food level depending on player state
+
+            PlayerMovement playerMovement = PlayerInstance.ActivePlayer.PlayerMovement;
 
             if (playerMovement.PlayerIsMoving())
             {
@@ -238,16 +248,18 @@ public class PlayerStats : MonoBehaviour, IPersistentGlobalObject
 
     private void UpdateHealth()
     {
+        // Increase health over time based on healthIncreaseSpeed, and multiplied by the food level as a fraction
+        //   of its max value to give a value between 0.0 (no increase) and 1.0 (full speed increase)
         IncreaseHealth(Time.deltaTime * healthIncreaseSpeed * (foodLevel / foodLevelDefaultValue));
     }
 
     private void UpdateBreathLevel(float breathDecreaseAmount)
     {
-        // Added by Hugo
+        // Added by Hugo - decreases breath while in water, or increases it otherwise
 
         statsUI.BreathCanvasGroup.alpha = breath < 1.0 ? 1 : 0;
 
-        if (playerMovement.currentMovementState == PlayerMovement.MovementStates.dive)
+        if (PlayerInstance.ActivePlayer.PlayerMovement.currentMovementState == PlayerMovement.MovementStates.dive)
         {
             DecreaseBreath(breathDecreaseAmount);
         }

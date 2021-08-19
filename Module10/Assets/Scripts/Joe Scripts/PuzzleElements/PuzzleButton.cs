@@ -7,7 +7,12 @@ using UnityEngine;
 // || Used on prefab: Joe/PuzzleElements/PuzzleButton                       ||
 // ||=======================================================================||
 // || Written by Joseph Allen                                               ||
-// || for the prototype phase.                                              ||
+// || originally for the prototype phase.                                   ||
+// ||                                                                       ||
+// || Changes made during the production phase (Module 11):                 ||
+// ||                                                                       ||
+// || - Added the ability to change the look of button by adjusting its     ||
+// ||    material when pressed/released                                     ||
 // ||=======================================================================||
 
 public class PuzzleButton : InteractableObject
@@ -23,21 +28,23 @@ public class PuzzleButton : InteractableObject
     [SerializeField] private PlatformPuzzleData[]   connectedPlatforms;            // Platforms that will be activated/paused by the button
     
     [SerializeField] private Animator               animator;                      // Controls button press/release animations
-    [SerializeField] private BoxCollider            buttonCollider;
+    [SerializeField] private BoxCollider            buttonCollider;                // Collider that detects when the player/an object is on the button
 
     [Header("Appearance")]
 
-    [SerializeField] private MeshRenderer           buttonMeshRenderer;
-    [SerializeField] private Material               baseButtonMaterial;
+    [SerializeField] private MeshRenderer           buttonMeshRenderer;     // Renderer that the button material is applied to
+    [SerializeField] private Material               baseButtonMaterial;     // Base material, an instance of which is used on the button
+
+    // Button colours:
 
     [SerializeField]
-    private Color buttonBaseColour;
+    private Color buttonBaseColour;         // Albedo colour of the button
 
     [SerializeField] [ColorUsage(true, true)]
-    private Color standardEmissionColour;
+    private Color standardEmissionColour;   // Emission colour of the button when not pressed
 
     [SerializeField] [ColorUsage(true, true)]
-    private Color pressedEmissionColour;
+    private Color pressedEmissionColour;    // Emission colour of the button when pressed
 
     #endregion
 
