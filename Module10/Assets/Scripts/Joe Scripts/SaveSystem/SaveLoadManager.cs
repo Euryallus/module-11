@@ -437,7 +437,7 @@ public class SaveLoadManager : MonoBehaviour
 
         PlayerInstance activePlayer = PlayerInstance.ActivePlayer;
 
-        if(activePlayer != null)
+        if(activePlayer != null && activePlayer.PlayerController != null)
         {
             // An active player exists in the new scene, ensure its controller is disabled so no movement can occur while loading
             activePlayer.PlayerController.enabled = false;
