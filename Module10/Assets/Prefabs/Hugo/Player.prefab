@@ -285,7 +285,7 @@ MonoBehaviour:
   starveDamageInterval: 2
   healthDefaultValue: 10
   healthIncreaseSpeed: 1
-  drownDamage: 0.2
+  drownDamage: 1
   drownDamageInterval: 2
   baseTimeToDrown: 30
   damageEffectPrefab: {fileID: 3342926187353654585, guid: 38135b846d9b4854d825cb5f5717235e, type: 3}
