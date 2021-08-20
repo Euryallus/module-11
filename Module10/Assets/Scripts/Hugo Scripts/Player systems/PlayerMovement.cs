@@ -207,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
                         currentCrouchState = CrouchState.gettingUp;
                     }
 
-                    // Added by Joe: Scales the camera y to 1/transform.y so counteract the stretching caused by making the player shorter
+                    // Added by Joe: Scales the camera y to 1/transform.y to counteract the distortion caused by making the player shorter
                     gameObject.transform.GetChild(1).localScale = new Vector3(1, 1 / gameObject.transform.localScale.y, 1);
 
                     break;
@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
                         currentCrouchState = CrouchState.standing;
                     }
 
-                    // Added by Joe: Scales the camera y to 1/transform.y so counteract the stretching caused by making the player shorter
+                    // Added by Joe: Scales the camera y to 1/transform.y to counteract the distortion caused by making the player shorter
                     gameObject.transform.GetChild(1).localScale = new Vector3(1, 1 / gameObject.transform.localScale.y, 1);
 
                     break;
