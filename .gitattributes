@@ -1,1 +1,1 @@
-*.unity filter=lfs diff=lfs -text
+*.unity -text
